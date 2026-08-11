@@ -87,28 +87,28 @@ export default function Navbar() {
                             </Link>
 
                             <Link
-                                href="/#event"
+                                href="/event"
                                 className="text-[#3d2314] hover:text-[#8c5a3c] transition duration-200 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]"
                             >
                                 EVENT & WORKSHOP
                             </Link>
 
                             <Link
-                                href="/#adventure"
+                                href="/merchandise"
                                 className="text-[#3d2314] hover:text-[#8c5a3c] transition duration-200 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]"
                             >
                                 MERCHANDISE
                             </Link>
 
                             <Link
-                                href="/#roblox"
+                                href="/roblox"
                                 className="text-[#3d2314] hover:text-[#8c5a3c] transition duration-200 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]"
                             >
                                 ROBLOX
                             </Link>
 
                             <Link
-                                href="/#event"
+                                href="/birthday"
                                 className="text-[#3d2314] hover:text-[#8c5a3c] transition duration-200 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]"
                             >
                                 BIRTHDAY
@@ -195,7 +195,7 @@ export default function Navbar() {
                         </Link>
 
                         <Link
-                            href="/#adventure"
+                            href="/menu"
                             onClick={() => setIsMobileMenuOpen(false)}
                             className="p-2.5 rounded-xl text-[#3d2314] hover:bg-[#f4ece1] hover:text-[#8c5a3c] transition"
                         >
@@ -203,7 +203,7 @@ export default function Navbar() {
                         </Link>
 
                         <Link
-                            href="/#event"
+                            href="/event"
                             onClick={() => setIsMobileMenuOpen(false)}
                             className="p-2.5 rounded-xl text-[#3d2314] hover:bg-[#f4ece1] hover:text-[#8c5a3c] transition"
                         >
@@ -211,7 +211,7 @@ export default function Navbar() {
                         </Link>
 
                         <Link
-                            href="/#adventure"
+                            href="/merchandise"
                             onClick={() => setIsMobileMenuOpen(false)}
                             className="p-2.5 rounded-xl text-[#3d2314] hover:bg-[#f4ece1] hover:text-[#8c5a3c] transition"
                         >
@@ -219,7 +219,7 @@ export default function Navbar() {
                         </Link>
 
                         <Link
-                            href="/#roblox"
+                            href="/roblox"
                             onClick={() => setIsMobileMenuOpen(false)}
                             className="p-2.5 rounded-xl text-[#3d2314] hover:bg-[#f4ece1] hover:text-[#8c5a3c] transition"
                         >
@@ -227,7 +227,7 @@ export default function Navbar() {
                         </Link>
 
                         <Link
-                            href="/#event"
+                            href="/birthday"
                             onClick={() => setIsMobileMenuOpen(false)}
                             className="p-2.5 rounded-xl text-[#3d2314] hover:bg-[#f4ece1] hover:text-[#8c5a3c] transition"
                         >
@@ -237,7 +237,7 @@ export default function Navbar() {
                 </div>
 
                 <a
-                    href="https://wa.me/628123456789"
+                    href="https://wa.me/6282141609328"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full py-3 bg-[#8c5a3c] hover:bg-[#73482f] text-white text-xs font-black rounded-full shadow-md text-center flex items-center justify-center gap-2 tracking-wider transition"

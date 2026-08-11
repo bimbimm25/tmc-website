@@ -472,7 +472,7 @@ function MenuProductCard({ item }: { item: MenuItem }) {
                 </div>
                 <button
                     title="Pesan via WhatsApp"
-                    onClick={() => window.open(`https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20pesan%20${encodeURIComponent(item.name)}`, '_blank')}
+                    onClick={() => window.open(`https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20pesan%20${encodeURIComponent(item.name)}`, '_blank')}
                     className="w-7 h-7 rounded-full bg-[#f4ece1] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition shadow-2xs cursor-pointer"
                 >
                     <ShoppingBag className="w-3.5 h-3.5" />
