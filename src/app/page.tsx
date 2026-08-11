@@ -52,63 +52,69 @@ export default async function Home() {
     <div className="space-y-12 lg:space-y-16 pb-16 bg-[#faf6f0]">
 
       {/* ================================================= */}
-      {/* 1. HERO SECTION (BALON TEKS DI ATAS KEPALA BERUANG) */}
+      {/* 1. HERO SECTION (PAS 100% SE-LAYAR DI SEMUA HP)   */}
       {/* ================================================= */}
       <section
-        className="w-full relative h-screen min-h-[600px] flex items-center bg-cover bg-center bg-no-repeat border-b border-[#e6ccb2]/60 pt-20 pb-6 overflow-hidden"
+        className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[800px] flex items-center bg-cover bg-center sm:bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden"
         style={{ backgroundImage: "url('/img/hero-home.png')" }}
       >
-        {/* Soft Overlay Halus Sisi Kiri */}
-        <div className="absolute inset-0 bg-linear-to-r from-[#faf6f0]/95 via-[#faf6f0]/75 to-transparent max-w-2xl" />
+        {/* Soft Overlay Gradien Desktop */}
+        <div className="hidden lg:block absolute inset-0 bg-linear-to-r from-[#faf6f0]/95 via-[#faf6f0]/80 to-transparent max-w-2xl lg:max-w-3xl" />
+
+        {/* Soft Overlay HP untuk Kontras Sempurna */}
+        <div className="block lg:hidden absolute inset-0 bg-black/20" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
 
-            {/* Teks Kiri */}
-            <div className="lg:col-span-7 space-y-4 text-center sm:text-left">
-              <div className="space-y-1">
-                <span className="text-md sm:text-2xl font-extrabold text-[#3d2314] tracking-tight block">
+            {/* Card Kontainer Teks - Pas & Compact di HP, Clean di Laptop */}
+            <div className="lg:col-span-7 bg-[#faf6f0]/95 sm:bg-[#faf6f0]/90 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-3xl border border-[#e6ccb2]/80 lg:border-none shadow-xl lg:shadow-none space-y-3 sm:space-y-4 text-center sm:text-left">
+
+              <div className="space-y-1 max-w-lg lg:max-w-xl mx-auto sm:mx-0">
+                <span className="text-xs sm:text-base lg:text-xl font-extrabold text-[#8c5a3c] tracking-wide block uppercase">
                   Welcome to
                 </span>
-                <h1 className="text-md sm:text-6xl lg:text-7md   font-black text-[#3d2314] tracking-tight leading-none">
+                <h1 className="text-2xl sm:text-4xl lg:text-6xl font-black text-[#3d2314] tracking-tight leading-[1.15]">
                   TO MEET<br />
-                  <span className="text-[#3d2314]">Universe</span>
-                  <Sparkles className="inline-block w-6 h-6 ml-2 text-[#e85a4f]" />
+                  <span className="text-[#8c5a3c] lg:text-[#3d2314]">Universe</span>
+                  <Sparkles className="inline-block w-5 h-5 sm:w-7 sm:h-7 ml-1.5 text-[#e85a4f]" />
                 </h1>
               </div>
 
-              <p className="text-xs sm:text-sm text-[#6c584c] font-bold leading-relaxed max-w-md mx-auto sm:mx-0">
-                A cozy cafe, a world of friends, <br></br>and endless sweet adventures await you!
-                <Heart className="inline-block w-3.5 h-3.5 ml-1 text-[#e85a4f] fill-current" />
+              <p className="text-[11px] sm:text-sm lg:text-base text-[#5a4232] font-extrabold sm:font-bold leading-relaxed max-w-xs sm:max-w-lg mx-auto sm:mx-0">
+                A cozy cafe, a world of friends, and endless sweet adventures await you!
+                <Heart className="inline-block w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 text-[#e85a4f] fill-current" />
               </p>
 
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 pt-2">
+              {/* Tombol CTA */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center sm:justify-start gap-2 sm:gap-3 pt-1 sm:pt-2">
                 <a
                   href="#locations"
-                  className="px-6 py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-extrabold rounded-full text-xs transition duration-200 shadow-md shadow-rose-500/20 flex items-center gap-2 tracking-wider uppercase"
+                  className="px-5 py-2.5 sm:py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-extrabold rounded-full text-xs sm:text-sm transition duration-200 shadow-md shadow-rose-500/20 flex items-center justify-center gap-2 tracking-wider uppercase cursor-pointer"
                 >
-                  <MapPin className="w-4 h-4" />
+                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span>VISIT OUR CAFE</span>
                 </a>
                 <a
                   href="#adventure"
-                  className="px-6 py-3 bg-[#3d2314] hover:bg-[#281208] text-white font-extrabold rounded-full text-xs transition duration-200 shadow-md flex items-center gap-2 tracking-wider uppercase"
+                  className="px-5 py-2.5 sm:py-3 bg-[#3d2314] hover:bg-[#281208] text-white font-extrabold rounded-full text-xs sm:text-sm transition duration-200 shadow-md flex items-center justify-center gap-2 tracking-wider uppercase cursor-pointer"
                 >
                   <span>EXPLORE TO MEET</span>
                   <Sparkles className="w-3.5 h-3.5" />
                 </a>
               </div>
+
             </div>
 
-            {/* Balon Percakapan Diposisikan Tepat di Atas Kepala Beruang */}
+            {/* Balon Percakapan Statis Beruang (Desktop Only) */}
             <div className="lg:col-span-5 hidden lg:flex justify-end relative h-full">
-              <div className="absolute right-12 sm:right-16 -top-14 xl:-top-16 z-20">
-                <div className="bg-white/95 backdrop-blur-md px-4 py-2 rounded-2xl shadow-xl border border-[#e6ccb2] text-center text-[#3d2314] font-black text-xs inline-flex items-center gap-1.5 relative">
+              <div className="absolute right-8 xl:right-12 -top-12 z-20">
+                <div className="bg-white/95 backdrop-blur-md px-4 py-2 rounded-2xl shadow-md border border-[#e6ccb2] text-center text-[#3d2314] font-black text-xs inline-flex items-center gap-1.5 relative">
                   <span>Hi, I&apos;m To Meet Bear!</span>
                   <Heart className="w-3.5 h-3.5 text-[#e85a4f] fill-current" />
 
-                  {/* Segitiga Ekor Balon Menunjuk ke Beruang */}
-                  <div className="absolute -bottom-2 right-8 w-0 h-0 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-t-[8px] border-t-white" />
+                  {/* Ekor Balon */}
+                  <div className="absolute -bottom-1.5 right-8 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-white" />
                 </div>
               </div>
             </div>
