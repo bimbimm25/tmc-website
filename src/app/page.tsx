@@ -1,30 +1,46 @@
+import Link from 'next/link';
 import {
   Coffee, MapPin, Utensils, Calendar,
   ShoppingBag, Gamepad2, PartyPopper, Sparkles,
-  Heart, Star, Compass, Phone, MessageCircle
+  Heart, Star, Compass, Phone, MessageCircle, Clock, Play, ArrowRight
 } from 'lucide-react';
+
+import { FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
+
 import type { HomeDataResponse, Menu, Event, RobloxMission } from '@/types/api';
 
-// Custom SVG Social Icons
-function InstagramIcon({ className = "w-4 h-4" }: { className?: string }) {
+// Interface Data Banner dari Backend
+interface BannerData {
+  id: number;
+  page_key: string;
+  title?: string | null;
+  subtitle?: string | null;
+  image?: string | null;
+  cta_text?: string | null;
+  cta_link?: string | null;
+  is_active: boolean | number;
+}
+
+// Helper Komponen: Render string yang mengandung tag <br> atau Enter (\n) menjadi baris baru asli
+function FormatTextWithBreak({ text }: { text?: string | null }) {
+  if (!text) return null;
+
+  // Memecah teks berdasarkan <br>, <br/>, <br />, atau newline \n
+  const lines = text.split(/<br\s*\/?>|\n/gi);
+
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-    </svg>
+    <>
+      {lines.map((line, index) => (
+        <span key={index}>
+          {line}
+          {index < lines.length - 1 && <br />}
+        </span>
+      ))}
+    </>
   );
 }
 
-function YoutubeIcon({ className = "w-4 h-4" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M2.5 17a24.12 2.5 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 2.5 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
-      <polygon points="10 15 15 12 10 9 10 15" />
-    </svg>
-  );
-}
-
+// Fetch Data Utama Homepage
 async function getHomeData(): Promise<HomeDataResponse['data'] | null> {
   try {
     const res = await fetch('http://127.0.0.1:8000/api/home-data', {
@@ -41,48 +57,87 @@ async function getHomeData(): Promise<HomeDataResponse['data'] | null> {
   }
 }
 
+// Fetch Banner Dinamis dari Dashboard Admin (Target: page_key 'home')
+async function getHomeBanner(): Promise<BannerData | null> {
+  try {
+    const res = await fetch('http://127.0.0.1:8000/api/banners/home', {
+      cache: 'no-store',
+    });
+
+    if (!res.ok) return null;
+
+    const json = await res.json();
+    return json.data || null;
+  } catch (error) {
+    console.warn("Banner API offline / fallback used:", error);
+    return null;
+  }
+}
+
 export default async function Home() {
-  const homeData = await getHomeData();
+  const [homeData, homeBanner] = await Promise.all([
+    getHomeData(),
+    getHomeBanner()
+  ]);
 
   const highlightMenus: Menu[] = homeData?.highlight_menus || [];
   const latestEvent: Event | null = homeData?.latest_event || null;
   const activeMission: RobloxMission | null = homeData?.active_mission || null;
 
+  // Tentukan gambar banner (Dinamis dari Dashboard Admin atau Fallback Default)
+  const heroBackgroundImage = homeBanner?.image
+    ? (homeBanner.image.startsWith('http')
+      ? homeBanner.image
+      : homeBanner.image.startsWith('/img')
+        ? homeBanner.image
+        : `http://127.0.0.1:8000/storage/${homeBanner.image}`)
+    : '/img/hero-home.png';
+
   return (
     <div className="space-y-12 lg:space-y-16 pb-16 bg-[#faf6f0]">
 
       {/* ================================================= */}
-      {/* 1. HERO SECTION (PAS 100% SE-LAYAR DI SEMUA HP)   */}
+      {/* 1. HERO SECTION (DINAMIS & SUPPORTS <BR>)         */}
       {/* ================================================= */}
       <section
-        className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[800px] flex items-center bg-cover bg-center sm:bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden"
-        style={{ backgroundImage: "url('/img/hero-home.png')" }}
+        className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[800px] flex items-center bg-cover bg-center sm:bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden transition-all duration-300"
+        style={{ backgroundImage: `url('${heroBackgroundImage}')` }}
       >
         {/* Soft Overlay Gradien Desktop */}
         <div className="hidden lg:block absolute inset-0 bg-linear-to-r from-[#faf6f0]/95 via-[#faf6f0]/80 to-transparent max-w-2xl lg:max-w-3xl" />
 
         {/* Soft Overlay HP untuk Kontras Sempurna */}
-        <div className="block lg:hidden absolute inset-0 bg-black/20" />
+        <div className="block lg:hidden absolute inset-0 bg-black/25" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
 
-            {/* Card Kontainer Teks - Pas & Compact di HP, Clean di Laptop */}
+            {/* Card Kontainer Teks */}
             <div className="lg:col-span-7 bg-[#faf6f0]/95 sm:bg-[#faf6f0]/90 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-3xl border border-[#e6ccb2]/80 lg:border-none shadow-xl lg:shadow-none space-y-3 sm:space-y-4 text-center sm:text-left">
 
               <div className="space-y-1 max-w-lg lg:max-w-xl mx-auto sm:mx-0">
                 <span className="text-xs sm:text-base lg:text-xl font-extrabold text-[#8c5a3c] tracking-wide block uppercase">
                   Welcome to
                 </span>
-                <h1 className="text-2xl sm:text-4xl lg:text-6xl font-black text-[#3d2314] tracking-tight leading-[1.15]">
-                  TO MEET<br />
-                  <span className="text-[#8c5a3c] lg:text-[#3d2314]">Universe</span>
+                <h1 className="text-2xl sm:text-3xl lg:text-5xl font-black text-[#3d2314] tracking-tight leading-[1.15]">
+                  {homeBanner?.title ? (
+                    <FormatTextWithBreak text={homeBanner.title} />
+                  ) : (
+                    <>
+                      TO MEET<br />
+                      <span className="text-[#8c5a3c] lg:text-[#3d2314]">Universe</span>
+                    </>
+                  )}
                   <Sparkles className="inline-block w-5 h-5 sm:w-7 sm:h-7 ml-1.5 text-[#e85a4f]" />
                 </h1>
               </div>
 
               <p className="text-[11px] sm:text-sm lg:text-base text-[#5a4232] font-extrabold sm:font-bold leading-relaxed max-w-xs sm:max-w-lg mx-auto sm:mx-0">
-                A cozy cafe, a world of friends, and endless sweet adventures await you!
+                {homeBanner?.subtitle ? (
+                  <FormatTextWithBreak text={homeBanner.subtitle} />
+                ) : (
+                  'A cozy cafe, a world of friends, and endless sweet adventures await you!'
+                )}
                 <Heart className="inline-block w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 text-[#e85a4f] fill-current" />
               </p>
 
@@ -124,78 +179,153 @@ export default async function Home() {
       </section>
 
       {/* ================================================= */}
-      {/* 2. CHOOSE YOUR ADVENTURE                          */}
+      {/* SECTION: CHOOSE YOUR ADVENTURE                    */}
       {/* ================================================= */}
-      <section id="adventure" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="adventure" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+
+        {/* Header Title */}
         <div className="text-center space-y-1 mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-black text-[#8c5a3c] tracking-widest uppercase">
-            <Compass className="w-3.5 h-3.5" />
-            <span>CHOOSE YOUR ADVENTURE</span>
-            <Compass className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-black text-[#8c5a3c] tracking-widest uppercase">
+            <Compass className="w-4 h-4 text-[#8c5a3c]" />
+            <h2>CHOOSE YOUR ADVENTURE</h2>
+            <Compass className="w-4 h-4 text-[#8c5a3c]" />
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+        {/* Adventure Cards Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
 
-          <a href="#locations" className="bg-[#fffcf7] p-4 rounded-2xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group">
-            <div className="w-14 h-14 rounded-full bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center group-hover:scale-105 transition duration-200">
-              <MapPin className="w-6 h-6" />
+          {/* 1. Visit Cafe */}
+          <a
+            href="#locations"
+            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+          >
+            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+              <img
+                src="/img/icon-visit-cafe.png"
+                alt="Visit Cafe"
+                className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+              />
             </div>
-            <div>
-              <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">VISIT CAFE</h3>
-              <p className="text-[10px] text-[#6c584c] font-semibold mt-0.5 leading-tight">Enjoy our cozy place, food & playground</p>
+            <div className="space-y-1 w-full">
+              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
+                VISIT CAFE
+              </h3>
+              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
+                Cek lokasi buat makan yang enak, main, dan seru-seruan bareng keluarga.
+              </p>
             </div>
           </a>
 
-          <a href="#highlights" className="bg-[#fffcf7] p-4 rounded-2xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group">
-            <div className="w-14 h-14 rounded-full bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center group-hover:scale-105 transition duration-200">
-              <Utensils className="w-6 h-6" />
+          {/* 2. Menu */}
+          <Link
+            href="/menu"
+            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+          >
+            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+              <img
+                src="/img/icon-menu.png"
+                alt="Menu"
+                className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+              />
             </div>
-            <div>
-              <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">MENU</h3>
-              <p className="text-[10px] text-[#6c584c] font-semibold mt-0.5 leading-tight">Delicious food & drinks made with love</p>
+            <div className="space-y-1 w-full">
+              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
+                MENU
+              </h3>
+              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
+                Makanan dan minuman yang enak dan dibuat dengan cinta
+              </p>
             </div>
-          </a>
+          </Link>
 
-          <a href="#event" className="bg-[#fffcf7] p-4 rounded-2xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group">
-            <div className="w-14 h-14 rounded-full bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center group-hover:scale-105 transition duration-200">
-              <Calendar className="w-6 h-6" />
+          {/* 3. Event & Workshop */}
+          <Link
+            href="/event"
+            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+          >
+            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+              <img
+                src="/img/icon-event.png"
+                alt="Event & Workshop"
+                className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+              />
             </div>
-            <div>
-              <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">EVENT & WORKSHOP</h3>
-              <p className="text-[10px] text-[#6c584c] font-semibold mt-0.5 leading-tight">Fun activities & creative workshops</p>
+            <div className="space-y-1 w-full">
+              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+                EVENT & WORKSHOP
+              </h3>
+              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
+                Bikin, belajar, dan seru-seruan bareng lewat aktivitas seru di To Meet.
+              </p>
             </div>
-          </a>
+          </Link>
 
-          <a href="#adventure" className="bg-[#fffcf7] p-4 rounded-2xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group">
-            <div className="w-14 h-14 rounded-full bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center group-hover:scale-105 transition duration-200">
-              <ShoppingBag className="w-6 h-6" />
+          {/* 4. Merchandise */}
+          <Link
+            href="/merchandise"
+            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+          >
+            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+              <img
+                src="/img/icon-merchandise.png"
+                alt="Merchandise"
+                className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+              />
             </div>
-            <div>
-              <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">MERCHANDISE</h3>
-              <p className="text-[10px] text-[#6c584c] font-semibold mt-0.5 leading-tight">Cute collections just for you!</p>
+            <div className="space-y-1 w-full">
+              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
+                MERCHANDISE
+              </h3>
+              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
+                Bawa pulang koleksi favoritmu dari To Meet.
+              </p>
             </div>
-          </a>
+          </Link>
 
-          <a href="#roblox" className="bg-[#fffcf7] p-4 rounded-2xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group">
-            <div className="w-14 h-14 rounded-full bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center group-hover:scale-105 transition duration-200">
-              <Gamepad2 className="w-6 h-6" />
+          {/* 5. Roblox */}
+          <Link
+            href="/roblox"
+            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+          >
+            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+              <img
+                src="/img/icon-roblox.png"
+                alt="Roblox"
+                className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+              />
             </div>
-            <div>
-              <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">ROBLOX</h3>
-              <p className="text-[10px] text-[#6c584c] font-semibold mt-0.5 leading-tight">Play, explore, and complete missions!</p>
+            <div className="space-y-1 w-full">
+              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
+                ROBLOX
+              </h3>
+              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
+                Yuk, masuk ke dunia To Meet di Roblox dan jelajahi map-nya!
+              </p>
             </div>
-          </a>
+          </Link>
 
-          <a href="#event" className="bg-[#fffcf7] p-4 rounded-2xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group">
-            <div className="w-14 h-14 rounded-full bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center group-hover:scale-105 transition duration-200">
-              <PartyPopper className="w-6 h-6" />
+          {/* 6. Birthday / Private Event */}
+          <Link
+            href="/birthday"
+            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+          >
+            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+              <img
+                src="/img/icon-birthday.png"
+                alt="Birthday / Private Event"
+                className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+              />
             </div>
-            <div>
-              <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">BIRTHDAY / PRIVATE EVENT</h3>
-              <p className="text-[10px] text-[#6c584c] font-semibold mt-0.5 leading-tight">Make your special day unforgettable</p>
+            <div className="space-y-1 w-full">
+              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+                BIRTHDAY / PRIVATE EVENT
+              </h3>
+              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
+                Ulang tahun jadi makin seru kalau dirayain bareng To Meet!
+              </p>
             </div>
-          </a>
+          </Link>
 
         </div>
       </section>
@@ -214,13 +344,13 @@ export default async function Home() {
               </h2>
             </div>
 
-            <a
-              href="#adventure"
+            <Link
+              href="/menu"
               className="px-3.5 py-1.5 bg-[#f4ece1] hover:bg-[#8c5a3c] hover:text-white text-[#8c5a3c] font-bold rounded-full text-xs transition duration-200 flex items-center gap-1.5 self-start sm:self-auto"
             >
               <span>SEE FULL MENU</span>
               <Sparkles className="w-3.5 h-3.5" />
-            </a>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -276,241 +406,374 @@ export default async function Home() {
       </section>
 
       {/* ================================================= */}
-      {/* 4. UPCOMING EVENT BANNER                          */}
+      {/* 4. VIDEO EXPERIENCE SECTION (YOUTUBE EMBED)       */}
+      {/* ================================================= */}
+      <section id="experience" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-[#fffcf7] p-5 sm:p-8 lg:p-10 rounded-[2.5rem] border border-[#e6ccb2]/80 shadow-2xs">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+
+            {/* Kolom Kiri: Video Player Responsive */}
+            <div className="lg:col-span-7">
+              <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-lg border-2 border-[#e6ccb2]/70 bg-black">
+                <iframe
+                  src="https://www.youtube.com/embed/EpK4HAGh1zc"
+                  title="Cafe dengan playground anak ter estetik di sidoarjo"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            {/* Kolom Kanan: Deskripsi & Informasi Video */}
+            <div className="lg:col-span-5 space-y-4 text-center lg:text-left">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#f4ece1] rounded-full text-[10px] sm:text-xs font-black text-[#8c5a3c] tracking-widest uppercase border border-[#e6ccb2]/80">
+                <Play className="w-3 h-3 fill-current text-[#8c5a3c]" />
+                <span>EXPERIENCE TO MEET</span>
+              </div>
+
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight leading-tight">
+                Cafe & Playground Ter-Estetik di Sidoarjo
+              </h2>
+
+              <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
+                Yuk intip keseruan suasana di To Meet Cafe! Nikmati menu makanan & minuman lezat bertema beruang yang menggemaskan, spot foto estetik, serta area playground yang aman dan nyaman untuk si kecil.
+              </p>
+
+              <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                <a
+                  href="https://www.youtube.com/watch?v=EpK4HAGh1zc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-2.5 bg-[#c4302b] hover:bg-[#a8241f] text-white font-extrabold rounded-full text-xs transition duration-200 shadow-sm flex items-center gap-2 uppercase tracking-wider cursor-pointer"
+                >
+                  <FaYoutube className="w-4 h-4" />
+                  <span>WATCH ON YOUTUBE</span>
+                </a>
+                <a
+                  href="#locations"
+                  className="px-5 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-extrabold rounded-full text-xs transition duration-200 shadow-sm flex items-center gap-2 uppercase tracking-wider cursor-pointer"
+                >
+                  <MapPin className="w-3.5 h-3.5" />
+                  <span>KUNJUNGI KAMI</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================= */}
+      {/* 5. UPCOMING EVENT SECTION (CLEAN SINGLE CARD)     */}
       {/* ================================================= */}
       <section id="event" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#f4ece1] border border-[#e6ccb2] rounded-3xl p-5 sm:p-8 text-[#3d2314] shadow-2xs grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <div className="bg-[#fffcf7] border border-[#e6ccb2]/80 rounded-[2.5rem] p-5 sm:p-7 lg:p-8 shadow-2xs">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
 
-          <div className="lg:col-span-7 space-y-3 text-center lg:text-left">
-            <div className="inline-flex items-center gap-1 px-3 py-1 bg-white/80 text-[#8c5a3c] text-[10px] font-black uppercase rounded-full tracking-wider border border-[#e6ccb2]">
-              <Calendar className="w-3 h-3" />
-              <span>UPCOMING EVENT</span>
-            </div>
-
-            <h2 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight uppercase">
-              {latestEvent?.title || 'CLAY ART DIY'}
-              <Sparkles className="inline-block w-5 h-5 ml-1 text-amber-600" />
-            </h2>
-
-            <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed max-w-xl">
-              {latestEvent?.description || 'Create your own clay bear and take it home! Join our fun creative workshop for all ages.'}
-            </p>
-
-            <div className="pt-2">
-              <a
-                href={`https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20booking%20event%20${encodeURIComponent(latestEvent?.title || 'Clay Art DIY')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 bg-[#3d2314] hover:bg-[#251208] text-white font-black text-xs rounded-full shadow-sm transition duration-200 inline-flex items-center gap-2 tracking-wider uppercase cursor-pointer"
+            {/* Sisi Kiri: Frame Gambar Banner Utuh */}
+            <div className="lg:col-span-6 flex justify-center">
+              <Link
+                href="/event"
+                className="group relative w-full aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/10] rounded-2xl overflow-hidden bg-white border border-[#e6ccb2]/60 shadow-xs flex items-center justify-center p-3 transition duration-300 hover:border-[#8c5a3c] hover:shadow-md"
               >
-                <span>BOOK NOW VIA WHATSAPP</span>
-                <Phone className="w-3.5 h-3.5 fill-current" />
-              </a>
+                <img
+                  src="/img/HEADER-CLAY-ART.png"
+                  alt="To Meet Cafe Events & Workshops"
+                  className="w-full h-full object-contain object-center group-hover:scale-[1.02] transition-transform duration-300"
+                />
+              </Link>
             </div>
-          </div>
 
-          <div className="lg:col-span-5 flex justify-center lg:justify-end gap-3">
-            <div className="w-32 h-40 bg-white p-2 rounded-2xl shadow-sm transform -rotate-3 hover:rotate-0 transition duration-200 text-[#3d2314] text-center flex flex-col justify-between border border-[#e6ccb2]">
-              <div className="w-full h-28 bg-[#faf6f0] rounded-xl flex items-center justify-center font-black text-[10px] text-[#8c5a3c]">
-                CLAY BEAR
+            {/* Sisi Kanan: Konten Informasi & Tombol Aksi */}
+            <div className="lg:col-span-6 space-y-4 text-center lg:text-left">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#f4ece1] rounded-full text-[10px] sm:text-xs font-black text-[#8c5a3c] tracking-widest uppercase border border-[#e6ccb2]/80">
+                <Calendar className="w-3.5 h-3.5 text-[#8c5a3c]" />
+                <span>EVENTS & WORKSHOPS</span>
               </div>
-              <span className="text-[8px] font-black uppercase tracking-wide">CLAY WORKSHOP</span>
-            </div>
-            <div className="w-32 h-40 bg-white p-2 rounded-2xl shadow-sm transform rotate-3 hover:rotate-0 transition duration-200 text-[#3d2314] text-center flex flex-col justify-between border border-[#e6ccb2]">
-              <div className="w-full h-28 bg-[#f4ece1] rounded-xl flex items-center justify-center font-black text-[10px] text-[#8c5a3c]">
-                BEAR CRAFT
-              </div>
-              <span className="text-[8px] font-black uppercase tracking-wide">DIY ART</span>
-            </div>
-          </div>
 
-        </div>
-      </section>
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
+                Temukan Keseruan Event & Workshop Menarik
+              </h2>
 
-      {/* ================================================= */}
-      {/* 5. PLAY TO MEET ON ROBLOX                         */}
-      {/* ================================================= */}
-      <section id="roblox" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#d0e1f9] border border-blue-200 rounded-3xl p-5 sm:p-8 text-[#1e3a8a] shadow-2xs grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-
-          <div className="lg:col-span-7 space-y-3 text-center lg:text-left">
-            <h2 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight uppercase">
-              PLAY TO MEET<br />
-              <span className="text-blue-700">ON ROBLOX!</span>
-            </h2>
-
-            <p className="text-xs sm:text-sm text-blue-900/80 font-semibold leading-relaxed max-w-xl">
-              Explore the cafe, complete missions, collect rewards, and have fun!
-            </p>
-
-            <div className="pt-2">
-              <a
-                href={activeMission?.roblox_map_link || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 bg-[#c28457] hover:bg-[#a86a3d] text-white font-black text-xs rounded-full shadow-sm transition duration-200 inline-flex items-center gap-2 tracking-wider uppercase cursor-pointer"
-              >
-                <Gamepad2 className="w-4 h-4" />
-                <span>PLAY NOW</span>
-              </a>
-            </div>
-          </div>
-
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-blue-100 max-w-xs w-full text-left space-y-2 shadow-sm">
-              <div className="flex items-center justify-between text-[#8c5a3c] text-[10px] font-black uppercase tracking-wider">
-                <span className="flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                  THIS WEEK&apos;S MISSION
-                </span>
-              </div>
-              <p className="text-xs font-black text-[#3d2314]">
-                {activeMission?.title || 'Take a selfie at To Meet Cafe in Roblox!'}
+              <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
+                Mulai dari kelas kreasi seni edukatif hingga perayaan ulang tahun spesial keluarga. Cek jadwal kegiatan seru terbaru dan reservasi tempatmu sekarang!
               </p>
-              <div className="text-[10px] text-[#6c584c] font-bold pt-1 border-t border-stone-100 flex items-center justify-between">
-                <span>Reward:</span>
-                <span className="font-black text-[#8c5a3c]">{activeMission?.reward_title || '100 EXP'}</span>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-1 justify-center lg:justify-start">
+                <Link
+                  href="/event"
+                  className="px-6 py-2.5 sm:py-3 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-xs rounded-full shadow-md shadow-[#8c5a3c]/15 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
+                >
+                  <span>LIHAT SEMUA EVENT</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+
+                <a
+                  href="https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20tanya%20info%20event%20dan%20workshop"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-2.5 sm:py-3 bg-white hover:bg-[#faf6f0] text-[#3d2314] font-black text-xs rounded-full border border-[#e6ccb2] transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer shadow-2xs"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#8c5a3c] fill-current" />
+                  <span>BOOK VIA WA</span>
+                </a>
               </div>
             </div>
-          </div>
 
+          </div>
         </div>
       </section>
 
       {/* ================================================= */}
-      {/* 6. VISIT US (OUTLETS & CONTACT)                   */}
+      {/* 6. PLAY TO MEET ON ROBLOX                         */}
       {/* ================================================= */}
-      <section id="locations" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-4">
+      <section id="roblox" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div
+          className="relative overflow-hidden rounded-[2.5rem] p-6 sm:p-10 lg:p-12 border border-[#e6ccb2]/60 shadow-md bg-cover bg-center text-white"
+          style={{ backgroundImage: "url('/img/BANNER-ROBLOX.png')" }}
+        >
+          {/* Overlay agar teks terbaca tajam */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/30 lg:to-transparent" />
 
-          <div className="text-center space-y-0.5">
-            <h2 className="text-xl sm:text-2xl font-black text-[#3d2314] inline-flex items-center gap-1.5">
-              <span>VISIT US</span>
-              <Heart className="w-4 h-4 text-[#e85a4f]" />
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+            {/* Sisi Kiri: Headline & Tombol Aksi */}
+            <div className="lg:col-span-7 space-y-3.5 text-center lg:text-left">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] sm:text-xs font-black tracking-widest uppercase border border-white/30 text-amber-300">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>ROBLOX UNIVERSE</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight uppercase drop-shadow-md">
+                PLAY TO MEET<br />
+                <span className="text-amber-300">ON ROBLOX!</span>
+              </h2>
+
+              <p className="text-xs sm:text-sm text-stone-100 font-semibold leading-relaxed max-w-xl drop-shadow-xs">
+                Jelajahi dunia virtual cafe kami, selesaikan misi mingguan, dan kumpulkan reward menarik bersama teman-teman!
+              </p>
+
+              <div className="pt-2">
+                <a
+                  href={activeMission?.roblox_map_link || 'https://www.roblox.com'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 sm:px-8 sm:py-3.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-xs rounded-full shadow-lg shadow-rose-600/30 transition duration-200 inline-flex items-center gap-2 tracking-wider uppercase cursor-pointer"
+                >
+                  <Gamepad2 className="w-4 h-4" />
+                  <span>PLAY NOW</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Sisi Kanan: Card Misi Aktif dari Admin */}
+            <div className="lg:col-span-5 flex justify-center lg:justify-end">
+              <div className="bg-[#fffcf7]/95 backdrop-blur-md p-5 sm:p-6 rounded-3xl border border-[#e6ccb2] max-w-sm w-full text-left space-y-3 shadow-xl">
+
+                <div className="flex items-center justify-between text-[#8c5a3c] text-[10px] sm:text-xs font-black uppercase tracking-wider border-b border-[#e6ccb2]/40 pb-2">
+                  <span className="flex items-center gap-1.5">
+                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <span>THIS WEEK&apos;S MISSION</span>
+                  </span>
+                  <span className="px-2 py-0.5 bg-amber-100 text-amber-900 rounded-md text-[9px] font-black">
+                    ACTIVE
+                  </span>
+                </div>
+
+                <p className="text-xs sm:text-sm font-black text-[#3d2314] leading-snug">
+                  {activeMission?.title || 'Take a selfie at To Meet Cafe in Roblox!'}
+                </p>
+
+                <div className="text-[11px] text-[#6c584c] font-bold pt-2 border-t border-[#e6ccb2]/40 flex items-center justify-between">
+                  <span>Reward:</span>
+                  <span className="font-black text-[#8c5a3c] bg-[#f4ece1] px-2.5 py-0.5 rounded-lg border border-[#e6ccb2]/60">
+                    {activeMission?.reward_title || 'Free EXP / Sticker'}
+                  </span>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================= */}
+      {/* SECTION: VISIT US (LOCATIONS & CONTACT)           */}
+      {/* ================================================= */}
+      <section id="locations" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-12 sm:pb-16 scroll-mt-24">
+        <div className="space-y-6 sm:space-y-8">
+
+          {/* Title Section dengan Spacing Lega */}
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight uppercase">
+              VISIT US
             </h2>
+            <Heart className="w-5 h-5 text-[#e85a4f] fill-current" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Cards Container: Grid 3 Kolom di Laptop, Stack di HP */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch">
 
-            {/* Outlet 1 */}
-            <div className="bg-[#fffcf7] p-5 rounded-2xl border border-[#e6ccb2]/70 shadow-2xs flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <h3 className="font-black text-[#3d2314] text-sm uppercase">HEAVENLAND PARK</h3>
-                <p className="text-xs text-[#6c584c] font-semibold leading-relaxed">
-                  Jl. Raya Prajurit, Heavenland Park, Sidoarjo, Jawa Timur
-                </p>
-                <div className="text-[11px] font-black text-[#8c5a3c] pt-1">
-                  Open Daily: 10.00 - 22.00 WIB
-                </div>
-              </div>
-              <a
-                href="https://maps.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-full text-center transition tracking-wider flex items-center justify-center gap-1.5 uppercase shadow-2xs"
-              >
-                <MapPin className="w-3.5 h-3.5" />
-                <span>DIRECTION</span>
-              </a>
-            </div>
+            {/* 1. Outlet Heavenland Park */}
+            <div className="bg-[#fcf7f0] p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-5">
+              <div className="grid grid-cols-12 gap-3.5 items-center">
 
-            {/* Outlet 2 */}
-            <div className="bg-[#fffcf7] p-5 rounded-2xl border border-[#e6ccb2]/70 shadow-2xs flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <h3 className="font-black text-[#3d2314] text-sm uppercase">PONDOK MUTIARA</h3>
-                <p className="text-xs text-[#6c584c] font-semibold leading-relaxed">
-                  Jl. Pondok Mutiara No.1, Sidoarjo, Jawa Timur
-                </p>
-                <div className="text-[11px] font-black text-[#8c5a3c] pt-1">
-                  Open Daily: 10.00 - 22.00 WIB
-                </div>
-              </div>
-              <a
-                href="https://maps.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-full text-center transition tracking-wider flex items-center justify-center gap-1.5 uppercase shadow-2xs"
-              >
-                <MapPin className="w-3.5 h-3.5" />
-                <span>DIRECTION</span>
-              </a>
-            </div>
-
-            {/* Social & Contact Card */}
-            <div className="bg-[#fffcf7] p-5 rounded-2xl border border-[#e6ccb2]/70 shadow-2xs flex flex-col justify-between space-y-4">
-              <div className="space-y-3">
-                <div className="space-y-1">
-                  <span className="text-[10px] font-black text-[#8c5a3c] uppercase tracking-wider block">Follow us!</span>
-                  <div className="flex items-center gap-2">
-                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-[#f4ece1] text-[#3d2314] flex items-center justify-center hover:bg-[#8c5a3c] hover:text-white transition">
-                      <InstagramIcon className="w-4 h-4" />
-                    </a>
-                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-[#f4ece1] text-[#3d2314] flex items-center justify-center hover:bg-[#8c5a3c] hover:text-white transition">
-                      <YoutubeIcon className="w-4 h-4" />
-                    </a>
+                {/* Teks Kiri */}
+                <div className="col-span-7 space-y-2">
+                  <h3 className="font-black text-[#3d2314] text-sm uppercase tracking-wide">
+                    HEAVENLAND PARK
+                  </h3>
+                  <p className="text-[11px] text-[#6c584c] font-bold leading-relaxed">
+                    Jl. Raya Prajurit, Heavenland Park<br />
+                    Sidoarjo, Jawa Timur
+                  </p>
+                  <div className="pt-1">
+                    <span className="text-[10px] text-[#8c5a3c] font-black uppercase tracking-wider block">
+                      Open Daily
+                    </span>
+                    <span className="text-xs text-[#3d2314] font-black">
+                      10.00 – 22.00 WIB
+                    </span>
                   </div>
                 </div>
 
-                <div className="space-y-1 pt-1">
-                  <span className="text-[10px] font-black text-[#8c5a3c] uppercase tracking-wider block">Chat with us!</span>
+                {/* Foto Kanan */}
+                <div className="col-span-5 aspect-square bg-[#f4ece1] rounded-2xl overflow-hidden border border-[#e6ccb2]/60 shadow-2xs">
+                  <img
+                    src="/img/tmc-heaveland-park.png"
+                    alt="To Meet Cafe Heavenland Park"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+
+              </div>
+
+              {/* Tombol Direction */}
+              <div>
+                <a
+                  href="https://maps.google.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-32 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-xs rounded-full text-center transition tracking-wider flex items-center justify-center gap-1.5 uppercase shadow-xs cursor-pointer"
+                >
+                  <span>DIRECTION</span>
+                  <MapPin className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+
+            {/* 2. Outlet Pondok Mutiara */}
+            <div className="bg-[#fcf7f0] p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-5">
+              <div className="grid grid-cols-12 gap-3.5 items-center">
+
+                {/* Teks Kiri */}
+                <div className="col-span-7 space-y-2">
+                  <h3 className="font-black text-[#3d2314] text-sm uppercase tracking-wide">
+                    PONDOK MUTIARA
+                  </h3>
+                  <p className="text-[11px] text-[#6c584c] font-bold leading-relaxed">
+                    Jl. Pondok Mutiara No.1<br />
+                    Sidoarjo, Jawa Timur
+                  </p>
+                  <div className="pt-1">
+                    <span className="text-[10px] text-[#8c5a3c] font-black uppercase tracking-wider block">
+                      Open Daily
+                    </span>
+                    <span className="text-xs text-[#3d2314] font-black">
+                      10.00 – 22.00 WIB
+                    </span>
+                  </div>
+                </div>
+
+                {/* Foto Kanan */}
+                <div className="col-span-5 aspect-square bg-[#f4ece1] rounded-2xl overflow-hidden border border-[#e6ccb2]/60 shadow-2xs">
+                  <img
+                    src="/img/tmc-pondok-mutiara.png"
+                    alt="To Meet Cafe Pondok Mutiara"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+
+              </div>
+
+              {/* Tombol Direction */}
+              <div>
+                <a
+                  href="https://maps.google.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-32 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-xs rounded-full text-center transition tracking-wider flex items-center justify-center gap-1.5 uppercase shadow-xs cursor-pointer"
+                >
+                  <span>DIRECTION</span>
+                  <MapPin className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+
+            {/* 3. Social & Contact Card */}
+            <div className="bg-[#fcf7f0] p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs flex flex-col justify-between space-y-4 relative overflow-hidden">
+
+              {/* Follow Us */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#e85a4f]" />
+                  <span className="text-xs font-black text-[#3d2314]">Follow us!</span>
+                </div>
+                <div className="flex items-center gap-2 pt-0.5">
+                  <a
+                    href="https://instagram.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-xl bg-[#3d2314] text-white flex items-center justify-center hover:bg-[#8c5a3c] transition duration-200 shadow-2xs"
+                    title="Instagram"
+                  >
+                    <FaInstagram className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="https://tiktok.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-xl bg-[#3d2314] text-white flex items-center justify-center hover:bg-[#8c5a3c] transition duration-200 shadow-2xs"
+                    title="TikTok"
+                  >
+                    <FaTiktok className="w-4 h-4" />
+                  </a>
+                  <a 
+                    href="https://youtube.com/@tomeetcafe"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-xl bg-[#3d2314] text-white flex items-center justify-center hover:bg-[#8c5a3c] transition duration-200 shadow-2xs"
+                    title="YouTube"
+                  >
+                    <FaYoutube className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Chat With Us */}
+              <div className="space-y-2 pt-1">
+                <div className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#e85a4f]" />
+                  <span className="text-xs font-black text-[#3d2314]">Chat with us!</span>
+                </div>
+                <div>
                   <a
                     href="https://wa.me/628123456789"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs rounded-full text-center transition flex items-center justify-center gap-1.5 tracking-wider uppercase shadow-2xs"
+                    className="w-full sm:w-auto px-6 py-3 bg-[#5cb85c] hover:bg-[#4cae4c] active:bg-[#449d44] text-white font-black text-xs rounded-full text-center transition flex items-center justify-center gap-2 tracking-wider uppercase shadow-xs cursor-pointer"
                   >
                     <MessageCircle className="w-4 h-4 fill-current" />
                     <span>CHAT VIA WHATSAPP</span>
                   </a>
                 </div>
               </div>
+
             </div>
 
-          </div>
-
-        </div>
-      </section>
-
-      {/* ================================================= */}
-      {/* 7. FOLLOW OUR JOURNEY & INSTAGRAM CTA            */}
-      {/* ================================================= */}
-      <section id="journey" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-5">
-
-          <div className="text-center space-y-0.5">
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-black text-[#8c5a3c] tracking-widest uppercase">
-              <Compass className="w-3.5 h-3.5" />
-              <span>FOLLOW OUR JOURNEY</span>
-              <Compass className="w-3.5 h-3.5" />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {[1, 2, 3, 4, 5, 6].map((idx) => (
-              <a
-                key={idx}
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full h-36 bg-[#f4ece1] rounded-2xl overflow-hidden border border-[#e6ccb2]/80 shadow-2xs flex items-center justify-center group relative"
-              >
-                <div className="w-9 h-9 rounded-xl bg-white/90 text-[#8c5a3c] flex items-center justify-center group-hover:scale-105 transition duration-200 shadow-2xs">
-                  <Coffee className="w-4 h-4" />
-                </div>
-              </a>
-            ))}
-          </div>
-
-          <div className="text-center pt-2">
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-3 bg-white hover:bg-[#8c5a3c] hover:text-white text-[#8c5a3c] font-black text-xs rounded-full border border-[#8c5a3c] transition duration-200 inline-flex items-center gap-2 shadow-2xs tracking-wider uppercase cursor-pointer"
-            >
-              <InstagramIcon className="w-4 h-4" />
-              <span>FOLLOW US ON INSTAGRAM</span>
-            </a>
           </div>
 
         </div>

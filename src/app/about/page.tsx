@@ -2,14 +2,43 @@ import Link from 'next/link';
 import {
     Heart, Users, Sparkles, Award, MapPin,
     Calendar, ShoppingBag, Gamepad2,
-    Smile, Utensils, Star, ExternalLink
+    Smile, Utensils, Star, ExternalLink, Coffee
 } from 'lucide-react';
+
+// Interface Data Banner dari Backend
+interface BannerData {
+    id: number;
+    page_key: string;
+    title?: string | null;
+    subtitle?: string | null;
+    image?: string | null;
+    cta_text?: string | null;
+    cta_link?: string | null;
+    is_active: boolean | number;
+}
+
+// Fetch Banner Dinamis dari Dashboard Admin (Target: page_key 'about')
+async function getAboutBanner(): Promise<BannerData | null> {
+    try {
+        const res = await fetch('http://127.0.0.1:8000/api/banners/about', {
+            cache: 'no-store',
+        });
+
+        if (!res.ok) return null;
+
+        const json = await res.json();
+        return json.data || null;
+    } catch (error) {
+        console.warn("About Banner API offline / fallback used:", error);
+        return null;
+    }
+}
 
 // Custom SVG Icons (Nol Emoji)
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     return (
         <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 14c-2.8 0-5 1.8-5 4 0 1.2.7 2 1.8 2 1.3 0 2.2-.6 3.2-.6s1.9.6 3.2.6c1.1 0 1.8-.8 1.8-2 0-2.2-2.2-4-5-4zm-5.5-3.5c.8 0 1.5-.9 1.5-2s-.7-2-1.5-2S5 7.4 5 8.5s.7 2 1.5 2zm11 0c.8 0 1.5-.9 1.5-2s-.7-2-1.5-2-1.5.9-1.5 2 .7 2 1.5 2zm-7.5-3c.9 0 1.6-1.1 1.6-2.5S10.9 2.5 10 2.5 8.4 3.6 8.4 5s.7 2.5 1.6 2.5zm4 0c.9 0 1.6-1.1 1.6-2.5s-.7-2.5-1.6-2.5-1.6 1.1-1.6 2.5.7 2.5 1.6 2.5z" />
+            <path d="M12 14c-2.8 0-5 1.8-5 4 0 1.2.7 2 1.8 2 1.3 0 2.2-.6 3.2-.6s1.9.6 3.2.6c1.1 0 1.8-.8 1.8-2 0-2.2-2.2-4-5-4zm-5.5-3.5c.8 0 1.5-.9 1.5-2s-.7-2-1.5-2S5 7.4 5 8.5s.7 2 1.5 2zm11 0c.8 0 1.5-.9 1.5-2s-.7-2-1.5-2-1.5.9-1.5 2 .7 2 1.5 2zm-7.5-3c.9 0 1.6-1.1 1.6-2.5S10.9 2.5 10 2.5 8.4 3.6 8.4 5s.7 2.5 1.6 2.5zm4 0c.9 0 1.6-1.1 1.6-2.5s-.7-2.5-1.6-2.5.7 2.5 1.6 2.5z" />
         </svg>
     );
 }
@@ -24,14 +53,25 @@ function BearFaceIcon({ className = "w-5 h-5" }: { className?: string }) {
     );
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+    const aboutBanner = await getAboutBanner();
+
+    // Tentukan URL Foto Hero About (Dinamis dari Dashboard Admin atau Fallback Default)
+    const heroImageSrc = aboutBanner?.image
+        ? (aboutBanner.image.startsWith('http')
+            ? aboutBanner.image
+            : aboutBanner.image.startsWith('/img')
+                ? aboutBanner.image
+                : `http://127.0.0.1:8000/storage/${aboutBanner.image}`)
+        : '/img/hero-home.png';
+
     return (
         <div className="bg-[#faf6f0] min-h-screen overflow-hidden space-y-0">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION (100% PAS PRESISI 1 LAYAR LAPTOP) */}
+            {/* 1. HERO SECTION (DINAMIS DARI DASHBOARD BANNER)   */}
             {/* ================================================= */}
-            <section className="w-full relative h-screen min-h-[600px] flex items-center bg-[#faf6f0] border-b border-[#e6ccb2]/60 pt-20 pb-6 lg:py-0 overflow-hidden">
+            <section className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[720px] flex items-center bg-[#faf6f0] border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-4 sm:pb-6 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
 
@@ -43,33 +83,39 @@ export default function AboutPage() {
                             </div>
 
                             <h1 className="text-2xl sm:text-4xl lg:text-[2.65rem] font-black text-[#3d2314] tracking-tight leading-[1.15]">
-                                More than a cafe,<br />
-                                It&apos;s a happy place to meet & create memories.
+                                {aboutBanner?.title ? (
+                                    aboutBanner.title
+                                ) : (
+                                    <>
+                                        More than a cafe,<br />
+                                        It&apos;s a happy place to meet & create memories.
+                                    </>
+                                )}
                                 <Heart className="inline-block w-5 h-5 sm:w-6 sm:h-6 ml-2 text-[#e85a4f] fill-transparent" strokeWidth={3} />
                             </h1>
 
                             <p className="text-xs sm:text-sm text-[#5a4232] leading-relaxed font-bold max-w-md mx-auto lg:mx-0">
-                                To Meet is a cozy bear-themed cafe & playground created for everyone to enjoy sweet treats, good times, and heartwarming moments together.
+                                {aboutBanner?.subtitle || 'To Meet is a cozy bear-themed cafe & playground created for everyone to enjoy sweet treats, good times, and heartwarming moments together.'}
                             </p>
 
                             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1">
                                 <a
                                     href="#story"
-                                    className="px-6 py-2.5 sm:py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-extrabold rounded-full text-xs transition duration-200 shadow-md shadow-rose-500/20 flex items-center gap-2 tracking-wider"
+                                    className="px-6 py-2.5 sm:py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-extrabold rounded-full text-xs transition duration-200 shadow-md shadow-rose-500/20 flex items-center gap-2 tracking-wider uppercase cursor-pointer"
                                 >
-                                    <span>OUR STORY</span>
+                                    <span>{aboutBanner?.cta_text || 'OUR STORY'}</span>
                                     <BearPawIcon className="w-3.5 h-3.5" />
                                 </a>
                             </div>
                         </div>
 
-                        {/* Gambar Kanan Separuh */}
+                        {/* Gambar Kanan (Dinamis dari Dashboard Admin) */}
                         <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center lg:justify-end">
-                            <div className="relative w-full max-w-lg aspect-[4/3] lg:aspect-[16/11] rounded-[2.25rem] overflow-hidden shadow-xl border-4 border-white">
+                            <div className="relative w-full max-w-md lg:max-w-lg aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/10] rounded-[2rem] overflow-hidden shadow-lg border-3 border-white">
                                 <img
-                                    src="/img/hero-home.png"
+                                    src={heroImageSrc}
                                     alt="To Meet Cafe Atmosphere"
-                                    className="w-full h-full object-cover object-right"
+                                    className="w-full h-full object-cover object-center"
                                 />
                             </div>
                         </div>
@@ -85,40 +131,70 @@ export default function AboutPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
 
+                        {/* Kolom Kiri: Visual Gambar About dengan Dekorasi Ikon */}
                         <div className="lg:col-span-6 flex justify-center">
-                            <div className="w-full max-w-md aspect-[4/3] bg-[#f4ece1] rounded-[2rem] border border-[#e6ccb2] flex flex-col items-center justify-center p-8 text-center space-y-4 shadow-2xs relative">
-                                <div className="absolute top-4 left-4 text-[#e85a4f]/20"><Heart className="w-12 h-12 fill-current" /></div>
-                                <div className="absolute bottom-4 right-4 text-[#8c5a3c]/10"><BearPawIcon className="w-16 h-16" /></div>
+                            <div className="w-full max-w-md bg-[#fcf7f0] rounded-[2.5rem] border border-[#e6ccb2] p-3 sm:p-4 shadow-sm relative group">
 
-                                <div className="w-16 h-16 rounded-2xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-md relative z-10 border border-[#e6ccb2]/60">
-                                    <BearFaceIcon className="w-8 h-8" />
+                                {/* Ikon Floating Badge & Dekorasi */}
+                                <div className="absolute -top-4 -left-3 z-20 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-md border border-[#e6ccb2]/70 group-hover:scale-110 transition duration-300">
+                                    <BearFaceIcon className="w-6 h-6 sm:w-7 sm:h-7" />
                                 </div>
-                                <div className="relative z-10">
-                                    <h4 className="font-black text-lg text-[#3d2314] tracking-tight">TO MEET STORE</h4>
-                                    <p className="text-xs text-[#6c584c] font-semibold mt-1">The first warm place we built.</p>
+
+                                <div className="absolute -top-2 -right-2 text-[#e85a4f]/25 z-10 pointer-events-none">
+                                    <Heart className="w-10 h-10 fill-current" />
                                 </div>
+
+                                <div className="absolute -bottom-3 -left-3 text-[#8c5a3c]/15 z-10 pointer-events-none">
+                                    <BearPawIcon className="w-12 h-12" />
+                                </div>
+
+                                {/* Container Gambar Utama */}
+                                <div className="w-full aspect-[4/3] bg-[#f4ece1] rounded-[2rem] overflow-hidden border border-[#e6ccb2]/60 relative shadow-2xs">
+                                    <img
+                                        src="/img/about-img.png"
+                                        alt="To Meet Cafe Story"
+                                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                                    />
+
+                                    {/* Overlay Gradient Halus Bawah */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#3d2314]/50 via-transparent to-transparent opacity-80" />
+
+                                    {/* Label Teks Melayang di Pojok Bawah Gambar */}
+                                    <div className="absolute bottom-3 left-4 right-4 z-10 text-white flex items-center justify-between">
+                                        <div>
+                                            <h4 className="font-black text-xs sm:text-sm tracking-wide uppercase drop-shadow-xs">
+                                                TO MEET CAFE HEAVENLAND PARK
+                                            </h4>
+                                            <p className="text-[10px] sm:text-[11px] text-stone-200 font-semibold drop-shadow-xs">
+                                                The first warm place we built
+                                            </p>
+                                        </div>
+                                        <div className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white shrink-0">
+                                            <BearPawIcon className="w-3.5 h-3.5" />
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
+                        {/* Kolom Kanan: Narasi Cerita */}
                         <div className="lg:col-span-6 space-y-4 text-center lg:text-left">
                             <div className="inline-flex items-center gap-2 text-[#e85a4f] font-black tracking-widest text-[11px] uppercase">
                                 <span>OUR STORY</span>
                                 <BearPawIcon className="w-3.5 h-3.5" />
                             </div>
 
-                            <h2 className="text-2xl sm:text-3xl font-black text-[#3d2314] tracking-tight">
-                                How To Meet Universe Started
+                            <h2 className="text-2xl sm:text-3xl font-black text-[#3d2314] tracking-tight leading-tight">
+                                How To Meet Cafe Started
                             </h2>
 
                             <div className="space-y-3 text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed">
                                 <p>
-                                    To Meet started with a simple dream — to create a place where people can come together, relax, and feel at home.
+                                    To Meet lahir pada tahun 2023 dari sebuah café kecil di Heavenland Park, Sidoarjo dengan satu tujuan sederhana: menghadirkan dessert yang lucu, suasana yang hangat, dan momen yang menyenangkan untuk dinikmati bersama.
                                 </p>
                                 <p>
-                                    From our very first cafe, we put our hearts into every little detail: from our bear friends, cozy interior, to the treats we serve.
-                                </p>
-                                <p>
-                                    Today, To Meet is more than just a cafe. It&apos;s a space for laughter, celebrations, creativity, and unforgettable memories.
+                                    Seiring waktu, To Meet tumbuh menjadi lebih dari sekadar café. Kami ingin menciptakan tempat di mana keluarga, teman, dan anak-anak bisa berkumpul, bermain, berbagi cerita, dan membawa pulang kenangan manis di setiap kunjungan.
                                 </p>
                             </div>
                         </div>
@@ -189,84 +265,170 @@ export default function AboutPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 4. TO MEET UNIVERSE ECOSYSTEM                     */}
+            {/* 4. TO MEET UNIVERSE ECOSYSTEM (6 PILAR SIMETRIS)  */}
             {/* ================================================= */}
             <section className="w-full py-16 lg:py-20 bg-white border-y border-[#e6ccb2]/40">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
-                        <div className="lg:col-span-3 text-center lg:text-left space-y-3">
+                    {/* Header Ekosistem */}
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-[#e6ccb2]/50 pb-6 text-center md:text-left">
+                        <div className="space-y-1.5">
+                            <div className="inline-flex items-center gap-1.5 text-[10px] font-black text-[#e85a4f] tracking-widest uppercase">
+                                <span>ECOSYSTEM</span>
+                                <Sparkles className="w-3.5 h-3.5" />
+                            </div>
                             <h2 className="text-2xl sm:text-3xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
-                                TO MEET<br />UNIVERSE
-                                <Sparkles className="inline-block w-5 h-5 ml-2 text-[#e85a4f]" />
+                                TO MEET UNIVERSE
                             </h2>
-                            <p className="text-xs text-[#6c584c] font-semibold leading-relaxed">
-                                To Meet Universe is our world filled with bear friends, cozy places, and exciting adventures.
+                            <p className="text-xs text-[#6c584c] font-semibold max-w-xl">
+                                Dunia penuh kehangatan bersama teman beruang, tempat nongkrong nyaman, dan petualangan seru untuk seluruh keluarga.
                             </p>
-                            <div className="pt-1">
-                                <a
-                                    href="/#roblox"
-                                    className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-extrabold rounded-full text-[10px] uppercase transition duration-200 shadow-sm inline-flex items-center gap-1.5"
-                                >
-                                    <span>EXPLORE ROBLOX MAP</span>
-                                    <ExternalLink className="w-3.5 h-3.5" />
-                                </a>
-                            </div>
                         </div>
 
-                        <div className="lg:col-span-9 grid grid-cols-2 md:grid-cols-5 gap-3.5">
+                        <Link
+                            href="/#roblox"
+                            className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-extrabold rounded-full text-[10px] uppercase tracking-wider transition duration-200 shadow-md shadow-rose-500/20 inline-flex items-center gap-1.5 cursor-pointer shrink-0"
+                        >
+                            <span>EXPLORE ROBLOX MAP</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                        </Link>
+                    </div>
 
-                            <div className="space-y-2.5 text-center">
-                                <div className="w-full aspect-[4/5] bg-[#faf6f0] rounded-2xl flex items-center justify-center border border-[#e6ccb2]/60">
-                                    <MapPin className="w-7 h-7 text-[#8c5a3c]" />
-                                </div>
-                                <div>
-                                    <h4 className="font-black text-[10px] text-[#3d2314] uppercase">CAFE & PLAYGROUND</h4>
-                                    <p className="text-[9px] text-[#6c584c] font-semibold mt-0.5">Enjoy yummy food & drinks in a fun playground!</p>
-                                </div>
+                    {/* 6 Grid Card Ekosistem (2 Kolom HP, 3 Kolom Tablet, 6 Kolom Desktop) */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 sm:gap-4">
+
+                        {/* 1. Visit Cafe */}
+                        <Link
+                            href="/#locations"
+                            className="bg-[#fffcf7] p-3.5 sm:p-4 rounded-3xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-2.5 group cursor-pointer"
+                        >
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 aspect-square flex items-center justify-center shrink-0">
+                                <img
+                                    src="/img/icon-visit-cafe.png"
+                                    alt="Visit Cafe"
+                                    className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+                                />
                             </div>
-
-                            <div className="space-y-2.5 text-center">
-                                <div className="w-full aspect-[4/5] bg-[#faf6f0] rounded-2xl flex items-center justify-center border border-[#e6ccb2]/60">
-                                    <Gamepad2 className="w-7 h-7 text-[#8c5a3c]" />
-                                </div>
-                                <div>
-                                    <h4 className="font-black text-[10px] text-[#3d2314] uppercase">ROBLOX WORLD</h4>
-                                    <p className="text-[9px] text-[#6c584c] font-semibold mt-0.5">Step into our virtual world on Roblox and play!</p>
-                                </div>
+                            <div className="space-y-1">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] uppercase tracking-wide leading-tight">
+                                    CAFE & PLAYGROUND
+                                </h4>
+                                <p className="text-[9px] sm:text-[10px] text-[#6c584c] font-semibold leading-tight">
+                                    Nikmati hidangan lezat dan area playground ramah anak.
+                                </p>
                             </div>
+                        </Link>
 
-                            <div className="space-y-2.5 text-center">
-                                <div className="w-full aspect-[4/5] bg-[#faf6f0] rounded-2xl flex items-center justify-center border border-[#e6ccb2]/60">
-                                    <Calendar className="w-7 h-7 text-[#8c5a3c]" />
-                                </div>
-                                <div>
-                                    <h4 className="font-black text-[10px] text-[#3d2314] uppercase">EVENTS & WORKSHOPS</h4>
-                                    <p className="text-[9px] text-[#6c584c] font-semibold mt-0.5">Join our exciting events and creative workshops!</p>
-                                </div>
+                        {/* 2. Digital Menu */}
+                        <Link
+                            href="/menu"
+                            className="bg-[#fffcf7] p-3.5 sm:p-4 rounded-3xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-2.5 group cursor-pointer"
+                        >
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 aspect-square flex items-center justify-center shrink-0">
+                                <img
+                                    src="/img/icon-menu.png"
+                                    alt="Digital Menu"
+                                    className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+                                />
                             </div>
-
-                            <div className="space-y-2.5 text-center">
-                                <div className="w-full aspect-[4/5] bg-[#faf6f0] rounded-2xl flex items-center justify-center border border-[#e6ccb2]/60">
-                                    <ShoppingBag className="w-7 h-7 text-[#8c5a3c]" />
-                                </div>
-                                <div>
-                                    <h4 className="font-black text-[10px] text-[#3d2314] uppercase">MERCHANDISE</h4>
-                                    <p className="text-[9px] text-[#6c584c] font-semibold mt-0.5">Take home our cute merch and keep memories.</p>
-                                </div>
+                            <div className="space-y-1">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] uppercase tracking-wide leading-tight">
+                                    DIGITAL MENU
+                                </h4>
+                                <p className="text-[9px] sm:text-[10px] text-[#6c584c] font-semibold leading-tight">
+                                    Kue, makanan, dan minuman lezat bertema beruang.
+                                </p>
                             </div>
+                        </Link>
 
-                            <div className="space-y-2.5 text-center col-span-2 md:col-span-1">
-                                <div className="w-full aspect-[4/5] bg-[#faf6f0] rounded-2xl flex items-center justify-center border border-[#e6ccb2]/60">
-                                    <Heart className="w-7 h-7 text-[#8c5a3c]" />
-                                </div>
-                                <div>
-                                    <h4 className="font-black text-[10px] text-[#3d2314] uppercase">SWEET MEMORIES</h4>
-                                    <p className="text-[9px] text-[#6c584c] font-semibold mt-0.5">Because at To Meet, every moment is sweet.</p>
-                                </div>
+                        {/* 3. Event & Workshop */}
+                        <Link
+                            href="/event"
+                            className="bg-[#fffcf7] p-3.5 sm:p-4 rounded-3xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-2.5 group cursor-pointer"
+                        >
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 aspect-square flex items-center justify-center shrink-0">
+                                <img
+                                    src="/img/icon-event.png"
+                                    alt="Event & Workshop"
+                                    className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+                                />
                             </div>
+                            <div className="space-y-1">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] uppercase tracking-wide leading-tight">
+                                    EVENT & WORKSHOP
+                                </h4>
+                                <p className="text-[9px] sm:text-[10px] text-[#6c584c] font-semibold leading-tight">
+                                    Aktivitas edukatif dan kelas kreatif mengasah bakat.
+                                </p>
+                            </div>
+                        </Link>
 
-                        </div>
+                        {/* 4. Merchandise */}
+                        <Link
+                            href="/merchandise"
+                            className="bg-[#fffcf7] p-3.5 sm:p-4 rounded-3xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-2.5 group cursor-pointer"
+                        >
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 aspect-square flex items-center justify-center shrink-0">
+                                <img
+                                    src="/img/icon-merchandise.png"
+                                    alt="Merchandise"
+                                    className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] uppercase tracking-wide leading-tight">
+                                    MERCHANDISE
+                                </h4>
+                                <p className="text-[9px] sm:text-[10px] text-[#6c584c] font-semibold leading-tight">
+                                    Koleksi boneka dan suvenir lucu khas To Meet.
+                                </p>
+                            </div>
+                        </Link>
+
+                        {/* 5. Roblox World */}
+                        <Link
+                            href="/roblox"
+                            className="bg-[#fffcf7] p-3.5 sm:p-4 rounded-3xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-2.5 group cursor-pointer"
+                        >
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 aspect-square flex items-center justify-center shrink-0">
+                                <img
+                                    src="/img/icon-roblox.png"
+                                    alt="Roblox World"
+                                    className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] uppercase tracking-wide leading-tight">
+                                    ROBLOX WORLD
+                                </h4>
+                                <p className="text-[9px] sm:text-[10px] text-[#6c584c] font-semibold leading-tight">
+                                    Dunia virtual interaktif dan selesaikan misi seru.
+                                </p>
+                            </div>
+                        </Link>
+
+                        {/* 6. Birthday / Private Event */}
+                        <Link
+                            href="/birthday"
+                            className="bg-[#fffcf7] p-3.5 sm:p-4 rounded-3xl border border-[#e6ccb2]/70 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-2.5 group cursor-pointer"
+                        >
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 aspect-square flex items-center justify-center shrink-0">
+                                <img
+                                    src="/img/icon-birthday.png"
+                                    alt="Birthday & Party"
+                                    className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] uppercase tracking-wide leading-tight">
+                                    BIRTHDAY & PARTY
+                                </h4>
+                                <p className="text-[9px] sm:text-[10px] text-[#6c584c] font-semibold leading-tight">
+                                    Rayakan momen spesial dengan paket perayaan privat.
+                                </p>
+                            </div>
+                        </Link>
+
                     </div>
                 </div>
             </section>
@@ -325,7 +487,7 @@ export default function AboutPage() {
                             <div className="space-y-0.5">
                                 <div className="flex items-center justify-center gap-1 text-[#e85a4f] mb-0.5">
                                     <Star className="w-4 h-4" />
-                                    <span className="text-2xl sm:text-3xl font-black">5+</span>
+                                    <span className="text-2xl sm:text-3xl font-black">2+</span>
                                 </div>
                                 <div className="text-[11px] font-black text-[#3d2314] uppercase">YEARS OF HAPPINESS</div>
                                 <p className="text-[9px] text-[#6c584c] font-semibold">Thank you for being part of our journey!</p>
@@ -380,7 +542,7 @@ export default function AboutPage() {
                     <div className="flex justify-center pt-1">
                         <Link
                             href="/#locations"
-                            className="px-7 py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-extrabold rounded-full text-xs transition duration-200 shadow-md shadow-rose-500/20 inline-flex items-center gap-2 tracking-wider"
+                            className="px-7 py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-extrabold rounded-full text-xs transition duration-200 shadow-md shadow-rose-500/20 inline-flex items-center gap-2 tracking-wider uppercase cursor-pointer"
                         >
                             <MapPin className="w-4 h-4" />
                             <span>VISIT OUR CAFES</span>
