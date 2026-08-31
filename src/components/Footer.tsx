@@ -31,7 +31,7 @@ export default function Footer() {
                         {/* Social Media Links */}
                         <div className="flex items-center gap-2.5 pt-1">
                             <a
-                                href="https://instagram.com"
+                                href="https://instagram.com/@tomeetcafe"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Instagram"
@@ -40,7 +40,7 @@ export default function Footer() {
                                 <FaInstagram className="w-4 h-4" />
                             </a>
                             <a
-                                href="https://tiktok.com"
+                                href="https://tiktok.com/@tomeetcafe"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="TikTok"
@@ -84,7 +84,7 @@ export default function Footer() {
                                 </li>
                                 <li>
                                     <Link href="/roblox" className="hover:text-[#8c5a3c] transition">
-                                        Roblox World
+                                        Roblox 
                                     </Link>
                                 </li>
                             </ul>
@@ -106,19 +106,14 @@ export default function Footer() {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/#locations" className="hover:text-[#8c5a3c] transition">
+                                    <Link href="/visit-us" className="hover:text-[#8c5a3c] transition">
                                         Outlet Locations
                                     </Link>
                                 </li>
                                 <li>
-                                    <a
-                                        href="http://127.0.0.1:8000/login"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:text-[#8c5a3c] transition"
-                                    >
-                                        Admin Panel
-                                    </a>
+                                    <Link href="/career" className="hover:text-[#8c5a3c] transition">
+                                        Career
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
@@ -130,7 +125,7 @@ export default function Footer() {
                             <ul className="space-y-2 text-xs font-bold text-[#6c584c]">
                                 <li>
                                     <a
-                                        href="https://wa.me/628123456789"
+                                        href="https://wa.me/6282141609328"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="hover:text-[#8c5a3c] transition"
@@ -139,13 +134,8 @@ export default function Footer() {
                                     </a>
                                 </li>
                                 <li>
-                                    <Link href="/#locations" className="hover:text-[#8c5a3c] transition">
-                                        FAQ & Reservation
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/#locations" className="hover:text-[#8c5a3c] transition">
-                                        House Rules
+                                    <Link href="/faq" className="hover:text-[#8c5a3c] transition">
+                                        FAQ
                                     </Link>
                                 </li>
                             </ul>

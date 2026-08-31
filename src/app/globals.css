@@ -1,65 +1,50 @@
 @import "tailwindcss";
 
 @layer base {
-
-  /* Memastikan scroll animasi mulus di seluruh halaman */
   html {
     scroll-behavior: smooth !important;
-    background-color: #faf6f0 !important;
+    background-color: #E4CFB8 !important;
     color: #3d2314 !important;
     color-scheme: light !important;
   }
 
   body {
-    background-color: #faf6f0 !important;
+    background-color: #E4CFB8 !important;
     color: #3d2314 !important;
     overflow-x: hidden;
   }
 }
 
-/* ========================================================== */
-/* KUSTUMISASI SCROLLBAR ESTETIK & TRANSPARAN (Webkit/Chrome/Edge/Safari) */
-/* ========================================================== */
-
-/* 1. Lebar & Tinggi Scrollbar */
+/* Scrollbar Style */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-/* 2. Track Background (Transparan Menyatu Dengan Halaman) */
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* 3. Handle Scrollbar (Membulat, Transparan Soft, & Estetik) */
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(140, 90, 60, 0.25);
-  /* Warna cokelat transparan soft */
+  background-color: rgba(140, 90, 60, 0.4);
   border-radius: 9999px;
   border: 2px solid transparent;
   background-clip: content-box;
-  transition: background-color 0.3s ease;
 }
 
-/* 4. Efek Hover Handle Scrollbar */
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(140, 90, 60, 0.6);
-  /* Cokelat lebih pekat saat di-hover */
+  background-color: rgba(140, 90, 60, 0.75);
 }
 
-/* 5. Kustomisasi Scrollbar untuk Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(140, 90, 60, 0.3) transparent;
+  scrollbar-color: rgba(140, 90, 60, 0.4) transparent;
 }
 
-/* Mematikan paksa Dark Mode bawaan OS agar tetap tema Krem & Cokelat Warm */
 @media (prefers-color-scheme: dark) {
-
   html,
   body {
-    background-color: #faf6f0 !important;
+    background-color: #E4CFB8 !important;
     color: #3d2314 !important;
   }
 }

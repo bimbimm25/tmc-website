@@ -9,6 +9,8 @@ import {
     Mail, X
 } from 'lucide-react';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
 function BearFaceIcon({ className = "w-5 h-5" }: { className?: string }) {
     return (
         <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -25,6 +27,21 @@ function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
             <path d="M12 14c-2.8 0-5 1.8-5 4 0 1.2.7 2 1.8 2 1.3 0 2.2-.6 3.2-.6s1.9.6 3.2.6c1.1 0 1.8-.8 1.8-2 0-2.2-2.2-4-5-4zm-5.5-3.5c.8 0 1.5-.9 1.5-2s-.7-2-1.5-2S5 7.4 5 8.5s.7 2 1.5 2zm11 0c.8 0 1.5-.9 1.5-2s-.7-2-1.5-2-1.5.9-1.5 2 .7 2 1.5 2zm-7.5-3c.9 0 1.6-1.1 1.6-2.5S10.9 2.5 10 2.5 8.4 3.6 8.4 5s.7 2.5 1.6 2.5zm4 0c.9 0 1.6-1.1 1.6-2.5s-.7-2.5-1.6-2.5.7 2.5 1.6 2.5z" />
         </svg>
     );
+}
+
+// Helper function untuk parsing tag <br> dan enter (\n)
+function renderFormattedText(text?: string | null, fallback?: React.ReactNode) {
+    if (!text) return fallback;
+
+    const normalized = text.replace(/<br\s*\/?>/gi, '\n');
+    const lines = normalized.split('\n');
+
+    return lines.map((line, idx) => (
+        <span key={idx}>
+            {line}
+            {idx < lines.length - 1 && <br />}
+        </span>
+    ));
 }
 
 interface FAQItem {
@@ -167,16 +184,22 @@ export default function FAQPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [expandedIds, setExpandedIds] = useState<string[]>(['gen-1']);
     const [bannerImage, setBannerImage] = useState<string>('/img/hero-home.png');
+    const [bannerTitle, setBannerTitle] = useState<string | null>(null);
+    const [bannerSubtitle, setBannerSubtitle] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchBanner() {
             try {
-                const res = await fetch('http://127.0.0.1:8000/api/banners/faq', { cache: 'no-store' });
+                const res = await fetch(`${API_BASE_URL}/api/banners/faq`, { cache: 'no-store' });
                 if (res.ok) {
                     const json = await res.json();
-                    if (json?.data?.image) {
-                        const img = json.data.image;
-                        setBannerImage(img.startsWith('http') || img.startsWith('/img') ? img : `http://127.0.0.1:8000/storage/${img}`);
+                    if (json?.data) {
+                        if (json.data.image) {
+                            const img = json.data.image;
+                            setBannerImage(img.startsWith('http') || img.startsWith('/img') ? img : `${API_BASE_URL}/storage/${img}`);
+                        }
+                        if (json.data.title) setBannerTitle(json.data.title);
+                        if (json.data.subtitle) setBannerSubtitle(json.data.subtitle);
                     }
                 }
             } catch {
@@ -205,47 +228,66 @@ export default function FAQPage() {
     const activeCategoryInfo = CATEGORIES.find((c) => c.id === selectedCategory) || CATEGORIES[0];
 
     return (
-        <div className="bg-[#faf6f0] min-h-screen space-y-10 sm:space-y-14 pb-14">
+        <div className="min-h-screen space-y-10 sm:space-y-14 pb-14">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION (CLEAN & FOCUS)                   */}
+            {/* 1. HERO SECTION FULL 1 LAYAR (FAQ BANNER)         */}
             {/* ================================================= */}
-            <section className="w-full relative min-h-dvh lg:h-screen lg:max-h-160 flex items-center bg-[#faf6f0] border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+                {/* Background Image Full Cover */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src={bannerImage}
+                        alt="To Meet Cafe FAQ Showcase"
+                        className="w-full h-full object-cover object-right lg:object-center"
+                    />
+                    {/* Gradient Overlay Putih Sebelah Kiri */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                </div>
 
-                        {/* Kolom Kiri: Breadcrumb & Headline */}
-                        <div className="lg:col-span-6 space-y-3 text-center lg:text-left order-2 lg:order-1">
-                            <div className="flex items-center justify-center lg:justify-start gap-1.5 text-xs font-bold text-[#8c5a3c]">
-                                <Link href="/" className="hover:underline">Beranda</Link>
-                                <span>&gt;</span>
-                                <span className="text-[#3d2314]">FAQ</span>
-                            </div>
+                {/* Konten Text Hero */}
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
+                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
 
-                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#3d2314] tracking-tight leading-[1.05] uppercase">
-                                FAQ
-                            </h1>
+                        {/* Pill Badge */}
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
+                            <span>HELP CENTER</span>
+                            <BearPawIcon className="w-3 h-3" />
+                        </div>
 
-                            <div className="text-xl sm:text-2xl font-black text-[#8c5a3c] tracking-tight">
+                        {/* Title Proporsional */}
+                        <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
+                            {renderFormattedText(
+                                bannerTitle,
+                                <>
+                                    FREQUENTLY ASKED <br />
+                                    <span className="text-[#8c5a3c]">QUESTIONS (FAQ)</span>
+                                </>
+                            )}
+                        </h1>
+
+                        {/* Subtitle */}
+                        <div className="space-y-1 text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                            <p className="font-bold text-[#3d2314]">
                                 Kami siap membantu Anda!
-                            </div>
-
-                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md mx-auto lg:mx-0">
-                                Temukan jawaban seputar To Meet Cafe, menu lezat kami, reservasi, event seru, dan segala hal yang ingin Anda ketahui.
+                            </p>
+                            <p className="text-[11px] sm:text-xs text-[#6c584c]">
+                                {renderFormattedText(
+                                    bannerSubtitle,
+                                    'Temukan jawaban seputar To Meet Cafe, menu lezat kami, reservasi, event seru, dan segala hal yang ingin Anda ketahui.'
+                                )}
                             </p>
                         </div>
 
-                        {/* Kolom Kanan: Foto Showcase Cafe */}
-                        <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center lg:justify-end relative">
-                            <div className="relative w-full max-w-md lg:max-w-lg aspect-16/10 rounded-3xl overflow-hidden shadow-xl border-3 border-white bg-stone-100">
-                                <img
-                                    src={bannerImage}
-                                    alt="To Meet Cafe FAQ Showcase"
-                                    className="w-full h-full object-cover object-center"
-                                />
+                        {/* Badge Sambutan */}
+                        <div className="inline-flex items-center gap-2 py-1.5 px-3 rounded-xl bg-white/90 border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
+                            <div className="w-5 h-5 rounded-lg bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
+                                <BearFaceIcon className="w-3.5 h-3.5" />
                             </div>
+                            <span className="text-[10.5px] font-black text-[#3d2314]">
+                                Punya pertanyaan lain? Kami siap menjawab!
+                            </span>
                         </div>
-
                     </div>
                 </div>
             </section>
@@ -254,7 +296,7 @@ export default function FAQPage() {
             {/* 2. CATEGORY NAVIGATION HORIZONTAL TABS            */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#fffcf7] p-3 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-x-auto scrollbar-none">
+                <div className="bg-white p-3 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-x-auto scrollbar-none">
                     <div className="flex items-center gap-2 min-w-max lg:min-w-0 lg:grid lg:grid-cols-7">
                         {CATEGORIES.map((cat) => {
                             const IconComponent = cat.icon;
@@ -266,20 +308,17 @@ export default function FAQPage() {
                                         setSelectedCategory(cat.id);
                                         setSearchQuery('');
                                     }}
-                                    className={`p-3 rounded-2xl transition flex flex-col items-center text-center space-y-1 cursor-pointer w-36 lg:w-full ${
-                                        isActive
-                                            ? 'bg-[#f4ece1] border border-[#e6ccb2] shadow-2xs'
-                                            : 'hover:bg-[#faf6f0] border border-transparent'
-                                    }`}
+                                    className={`p-3 rounded-2xl transition flex flex-col items-center text-center space-y-1 cursor-pointer w-36 lg:w-full ${isActive
+                                        ? 'bg-[#FAF0E6] border border-[#e6ccb2] shadow-2xs'
+                                        : 'hover:bg-[#FAF0E6]/50 border border-transparent'
+                                        }`}
                                 >
-                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
-                                        isActive ? 'bg-[#8c5a3c] text-white shadow-xs' : 'bg-[#faf6f0] text-[#8c5a3c]'
-                                    }`}>
+                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isActive ? 'bg-[#8c5a3c] text-white shadow-xs' : 'bg-[#FAF0E6] text-[#8c5a3c]'
+                                        }`}>
                                         <IconComponent className="w-4 h-4" />
                                     </div>
-                                    <div className={`text-[11px] font-black tracking-wider uppercase leading-tight ${
-                                        isActive ? 'text-[#8c5a3c]' : 'text-[#3d2314]'
-                                    }`}>
+                                    <div className={`text-[11px] font-black tracking-wider uppercase leading-tight ${isActive ? 'text-[#8c5a3c]' : 'text-[#3d2314]'
+                                        }`}>
                                         {cat.name}
                                     </div>
                                     <div className="text-[9.5px] text-[#6c584c] font-semibold line-clamp-1">
@@ -300,16 +339,16 @@ export default function FAQPage() {
 
                     {/* KOLOM KIRI: SEARCH INPUT + ACCORDION FAQ */}
                     <div className="lg:col-span-8 space-y-4">
-                        
+
                         {/* SEARCH INPUT BAR DI ATAS FAQ */}
-                        <div className="bg-[#fffcf7] p-2 rounded-2xl border border-[#e6ccb2]/80 shadow-2xs">
+                        <div className="bg-white p-2 rounded-2xl border border-[#e6ccb2]/80 shadow-2xs">
                             <div className="relative flex items-center">
                                 <input
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Cari pertanyaan kamu di sini..."
-                                    className="w-full bg-[#faf6f0] border border-[#e6ccb2]/60 rounded-xl pl-10 pr-10 py-2.5 text-xs text-[#3d2314] font-semibold focus:outline-none focus:border-[#8c5a3c] placeholder:text-stone-400 transition"
+                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/60 rounded-xl pl-10 pr-10 py-2.5 text-xs text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] placeholder:text-stone-400 transition"
                                 />
                                 <Search className="w-4 h-4 text-stone-400 absolute left-3.5" />
                                 {searchQuery && (
@@ -342,7 +381,7 @@ export default function FAQPage() {
                         {/* Accordion List */}
                         <div className="space-y-3">
                             {filteredFAQs.length === 0 ? (
-                                <div className="bg-[#fffcf7] p-10 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
+                                <div className="bg-white p-10 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
                                     <HelpCircle className="w-8 h-8 text-[#8c5a3c] mx-auto opacity-60" />
                                     <h3 className="font-black text-sm text-[#3d2314]">Pertanyaan Tidak Ditemukan</h3>
                                     <p className="text-xs text-[#6c584c]">
@@ -355,11 +394,10 @@ export default function FAQPage() {
                                     return (
                                         <div
                                             key={item.id}
-                                            className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
-                                                isExpanded
-                                                    ? 'bg-[#fffcf7] border-[#8c5a3c] shadow-xs'
-                                                    : 'bg-[#fffcf7] border-[#e6ccb2]/80 hover:border-[#8c5a3c]/60'
-                                            }`}
+                                            className={`rounded-2xl border transition-all duration-200 overflow-hidden ${isExpanded
+                                                ? 'bg-white border-[#8c5a3c] shadow-xs'
+                                                : 'bg-white border-[#e6ccb2]/80 hover:border-[#8c5a3c]/60'
+                                                }`}
                                         >
                                             <button
                                                 onClick={() => toggleAccordion(item.id)}
@@ -367,11 +405,10 @@ export default function FAQPage() {
                                                 aria-expanded={isExpanded}
                                             >
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-xs font-black ${
-                                                        isExpanded
-                                                            ? 'bg-[#e85a4f] text-white'
-                                                            : 'bg-[#f4ece1] text-[#8c5a3c]'
-                                                    }`}>
+                                                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-xs font-black ${isExpanded
+                                                        ? 'bg-[#e85a4f] text-white'
+                                                        : 'bg-[#FAF0E6] text-[#8c5a3c]'
+                                                        }`}>
                                                         ?
                                                     </div>
                                                     <span className="font-black text-xs sm:text-sm text-[#3d2314] leading-snug">
@@ -404,7 +441,7 @@ export default function FAQPage() {
                     <div className="lg:col-span-4 space-y-6">
 
                         {/* CARD 1: MASIH ADA PERTANYAAN? */}
-                        <div className="bg-[#fffcf7] p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
+                        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
                             <div className="space-y-1">
                                 <div className="flex items-center justify-between">
                                     <h3 className="font-black text-sm sm:text-base text-[#3d2314]">
@@ -429,7 +466,7 @@ export default function FAQPage() {
                         </div>
 
                         {/* CARD 2: TAUTAN CEPAT (QUICK LINKS) */}
-                        <div className="bg-[#fffcf7] p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
+                        <div className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
                             <div className="flex items-center justify-between border-b border-[#e6ccb2]/50 pb-2.5">
                                 <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wider">
                                     TAUTAN CEPAT
@@ -440,42 +477,42 @@ export default function FAQPage() {
                             <div className="space-y-1 text-xs font-bold">
                                 <Link
                                     href="/menu"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#faf6f0] hover:text-[#8c5a3c] transition"
+                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>Menu Cafe</span>
                                     <ArrowRight className="w-3.5 h-3.5" />
                                 </Link>
                                 <Link
                                     href="/event"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#faf6f0] hover:text-[#8c5a3c] transition"
+                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>Event & Workshop</span>
                                     <ArrowRight className="w-3.5 h-3.5" />
                                 </Link>
                                 <Link
                                     href="/birthday"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#faf6f0] hover:text-[#8c5a3c] transition"
+                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>Ulang Tahun & Acara Privat</span>
                                     <ArrowRight className="w-3.5 h-3.5" />
                                 </Link>
                                 <Link
                                     href="/merchandise"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#faf6f0] hover:text-[#8c5a3c] transition"
+                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>Katalog Merchandise</span>
                                     <ArrowRight className="w-3.5 h-3.5" />
                                 </Link>
                                 <Link
                                     href="/roblox"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#faf6f0] hover:text-[#8c5a3c] transition"
+                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>To Meet di Roblox</span>
                                     <ArrowRight className="w-3.5 h-3.5" />
                                 </Link>
                                 <Link
                                     href="/blog"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#faf6f0] hover:text-[#8c5a3c] transition"
+                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>Blog & Cerita</span>
                                     <ArrowRight className="w-3.5 h-3.5" />
@@ -484,7 +521,8 @@ export default function FAQPage() {
                         </div>
 
                         {/* CARD 3: JAM BUKA CAFE */}
-                        <div className="bg-[#fffcf7] p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
+                        <div className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3.5">
+                            {/* Header Card */}
                             <div className="flex items-center gap-2 border-b border-[#e6ccb2]/50 pb-2.5">
                                 <Clock className="w-4 h-4 text-[#8c5a3c]" />
                                 <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wider">
@@ -492,21 +530,44 @@ export default function FAQPage() {
                                 </h3>
                             </div>
 
-                            <div className="space-y-2 text-xs">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-[#6c584c] font-semibold">Senin – Jumat</span>
-                                    <span className="font-bold text-[#3d2314]">10.00 – 22.00 WIB</span>
+                            {/* Daftar Jam Operasional Per Cabang */}
+                            <div className="space-y-3 text-xs">
+
+                                {/* Cabang 1: Heavenland Park */}
+                                <div className="bg-[#FAF0E6]/50 p-3 rounded-2xl border border-[#e6ccb2]/60 space-y-1.5">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-black text-[#e85a4f] uppercase tracking-wider">
+                                            HEAVENLAND PARK
+                                        </span>
+                                        <span className="text-[9px] font-black text-rose-600 bg-rose-50 border border-rose-200/80 px-1.5 py-0.5 rounded">
+                                            Senin Libur
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-[#3d2314]">
+                                        <span className="text-[#6c584c] font-semibold">Selasa – Minggu</span>
+                                        <span className="font-black text-xs">12.00 – 19.00 WIB</span>
+                                    </div>
                                 </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-[#6c584c] font-semibold">Sabtu – Minggu</span>
-                                    <span className="font-bold text-[#3d2314]">09.00 – 22.00 WIB</span>
+
+                                {/* Cabang 2: Pondok Mutiara */}
+                                <div className="bg-[#FAF0E6]/50 p-3 rounded-2xl border border-[#e6ccb2]/60 space-y-1.5">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-black text-[#8c5a3c] uppercase tracking-wider">
+                                            PONDOK MUTIARA
+                                        </span>
+                                        <span className="text-[9px] font-black text-rose-600 bg-rose-50 border border-rose-200/80 px-1.5 py-0.5 rounded">
+                                            Senin Libur
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-[#3d2314]">
+                                        <span className="text-[#6c584c] font-semibold">Selasa – Minggu</span>
+                                        <span className="font-black text-xs">12.00 – 21.00 WIB</span>
+                                    </div>
                                 </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-[#6c584c] font-semibold">Hari Libur Nasional</span>
-                                    <span className="font-bold text-[#3d2314]">09.00 – 22.00 WIB</span>
-                                </div>
+
                             </div>
 
+                            {/* Footer Note */}
                             <div className="pt-2 border-t border-[#e6ccb2]/40 text-center">
                                 <span className="text-[10px] font-black text-[#8c5a3c] uppercase">
                                     Sampai jumpa di To Meet Cafe!
@@ -523,9 +584,9 @@ export default function FAQPage() {
             {/* 4. BOTTOM CONTACT CTA SECTION                     */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#fffcf7] p-6 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+                <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
+                        <div className="w-12 h-12 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
                             <BearFaceIcon className="w-7 h-7" />
                         </div>
                         <div>

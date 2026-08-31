@@ -8,6 +8,8 @@ import {
     Gift, Palette, Smile, AlertCircle, RefreshCw, Info, ImageOff, MapPin, X
 } from 'lucide-react';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
 function BearPawIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
     return (
         <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -47,7 +49,6 @@ export interface BannerItem {
 function FormatDescription({ text }: { text?: string | null }) {
     if (!text) return <span>Aktivitas seru dan edukatif di To Meet Cafe.</span>;
 
-    // Normalisasi tag <br> menjadi baris baru
     const cleanText = text.replace(/<br\s*\/?>/gi, '\n');
     const lines = cleanText.split('\n');
 
@@ -57,7 +58,6 @@ function FormatDescription({ text }: { text?: string | null }) {
                 const trimmed = line.trim();
                 if (!trimmed) return null;
 
-                // Cek apakah baris diawali tanda minus (-), bintang (*), atau bullet (•)
                 if (trimmed.startsWith('-') || trimmed.startsWith('*') || trimmed.startsWith('•')) {
                     const content = trimmed.replace(/^[-*•]\s*/, '');
                     return (
@@ -68,7 +68,6 @@ function FormatDescription({ text }: { text?: string | null }) {
                     );
                 }
 
-                // Baris teks reguler
                 return (
                     <p key={idx} className="text-[10.5px] leading-relaxed text-[#6c584c] font-semibold">
                         {trimmed}
@@ -79,7 +78,7 @@ function FormatDescription({ text }: { text?: string | null }) {
     );
 }
 
-// Helper Komponen: Format Teks Banner dengan Dukungan <br>
+// Helper Komponen: Format Teks Banner dengan Dukungan <br> & enter
 function FormatTextWithBreak({ text }: { text?: string | null }) {
     if (!text) return null;
     const lines = text.split(/<br\s*\/?>|\n/gi);
@@ -109,8 +108,8 @@ export default function EventPage() {
             setIsError(false);
 
             const [resEvents, resBanner] = await Promise.all([
-                fetch('http://127.0.0.1:8000/api/events', { cache: 'no-store' }),
-                fetch('http://127.0.0.1:8000/api/banners/event', { cache: 'no-store' }).catch(() => null)
+                fetch(`${API_BASE_URL}/api/events`, { cache: 'no-store' }),
+                fetch(`${API_BASE_URL}/api/banners/event`, { cache: 'no-store' }).catch(() => null)
             ]);
 
             if (!resEvents.ok) {
@@ -119,7 +118,6 @@ export default function EventPage() {
 
             const jsonEvents = await resEvents.json();
             if (jsonEvents && Array.isArray(jsonEvents.data)) {
-                // Filter hanya data event & workshop (kecualikan birthday)
                 const filtered = jsonEvents.data.filter((item: EventItem) => {
                     const type = (item.type || '').toLowerCase();
                     const cat = (item.category || '').toLowerCase();
@@ -147,7 +145,6 @@ export default function EventPage() {
         fetchEventPageData();
     }, []);
 
-    // Mengumpulkan kategori unik secara dinamis dari produk admin
     const availableCategories = useMemo(() => {
         if (events.length === 0) return ['all'];
         const unique = Array.from(new Set(
@@ -156,7 +153,6 @@ export default function EventPage() {
         return ['all', ...unique];
     }, [events]);
 
-    // Filter daftar event berdasarkan tab kategori terpilih
     const filteredEvents = useMemo(() => {
         return events.filter((item) => {
             if (item.is_active === false) return false;
@@ -172,66 +168,78 @@ export default function EventPage() {
             ? eventBanner.image
             : eventBanner.image.startsWith('/img')
                 ? eventBanner.image
-                : `http://127.0.0.1:8000/storage/${eventBanner.image}`)
+                : `${API_BASE_URL}/storage/${eventBanner.image}`)
         : '/img/hero-home.png';
 
     return (
-        <div className="bg-[#faf6f0] min-h-screen pb-12 space-y-6 sm:space-y-8">
+        <div className="min-h-screen pb-12 space-y-8 sm:space-y-10">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION (DINAMIS DARI DASHBOARD ADMIN)    */}
+            {/* 1. HERO BANNER FULL 1 LAYAR (UKURAN PAS)          */}
             {/* ================================================= */}
-            <section className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[720px] flex items-center bg-[#faf6f0] border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-4 sm:pb-6 overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+                {/* Background Image Full Cover */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src={heroImageSrc}
+                        alt="To Meet Event & Workshop"
+                        className="w-full h-full object-cover object-right lg:object-center"
+                    />
+                    {/* Gradient Overlay Putih Sebelah Kiri */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                </div>
 
-                        {/* Kolom Kiri: Teks & CTA */}
-                        <div className="lg:col-span-6 space-y-3 sm:space-y-4 text-center lg:text-left order-2 lg:order-1">
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f4ece1] text-[#8c5a3c] text-[10px] font-black tracking-wider uppercase border border-[#e6ccb2]/80">
-                                <span>CREATE. PLAY. MAKE MEMORIES.</span>
-                                <BearPawIcon className="w-3 h-3" />
-                            </div>
+                {/* Konten Text Hero */}
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
+                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
 
-                            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
-                                {eventBanner?.title ? (
-                                    <FormatTextWithBreak text={eventBanner.title} />
-                                ) : (
-                                    'EVENT & WORKSHOP'
-                                )}
-                            </h1>
-
-                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md mx-auto lg:mx-0">
-                                {eventBanner?.subtitle ? (
-                                    <FormatTextWithBreak text={eventBanner.subtitle} />
-                                ) : (
-                                    'Ikuti berbagai kelas seni edukatif, workshop kreasi seru, dan aktivitas akhir pekan menyenangkan di To Meet Cafe.'
-                                )}
-                            </p>
-
-                            <div className="pt-1 flex justify-center lg:justify-start">
-                                <a
-                                    href={eventBanner?.cta_link || "https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20booking%20event%20dan%20workshop"}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="px-5 py-2.5 sm:px-6 sm:py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
-                                >
-                                    <span>{eventBanner?.cta_text || 'BOOK VIA WHATSAPP'}</span>
-                                    <Phone className="w-3.5 h-3.5 fill-current" />
-                                </a>
-                            </div>
+                        {/* Pill Badge */}
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
+                            <span>CREATE. PLAY. MAKE MEMORIES.</span>
+                            <BearPawIcon className="w-3 h-3" />
                         </div>
 
-                        {/* Kolom Kanan: Foto Hero Banner Dinamis */}
-                        <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center lg:justify-end">
-                            <div className="relative w-full max-w-md lg:max-w-lg aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/10] rounded-[2rem] overflow-hidden shadow-lg border-3 border-white">
-                                <img
-                                    src={heroImageSrc}
-                                    alt="To Meet Event & Workshop Activities"
-                                    className="w-full h-full object-cover object-center"
-                                />
-                            </div>
-                        </div>
+                        {/* Title dengan Ukuran Pas */}
+                        <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
+                            {eventBanner?.title ? (
+                                <FormatTextWithBreak text={eventBanner.title} />
+                            ) : (
+                                <>
+                                    EVENT & <br />
+                                    <span className="text-[#8c5a3c]">WORKSHOP</span>
+                                </>
+                            )}
+                        </h1>
 
+                        {/* Subtitle */}
+                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                            {eventBanner?.subtitle ? (
+                                <FormatTextWithBreak text={eventBanner.subtitle} />
+                            ) : (
+                                'Ikuti berbagai kelas seni edukatif, workshop kreasi seru, dan aktivitas akhir pekan menyenangkan di To Meet Cafe.'
+                            )}
+                        </p>
+
+                        {/* Tombol Aksi */}
+                        <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
+                            <a
+                                href={eventBanner?.cta_link || "https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20booking%20event%20dan%20workshop"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                            >
+                                <span>{eventBanner?.cta_text || 'BOOK VIA WHATSAPP'}</span>
+                                <Phone className="w-3.5 h-3.5 fill-current" />
+                            </a>
+
+                            <a
+                                href="#activities"
+                                className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md"
+                            >
+                                <Calendar className="w-3.5 h-3.5" />
+                                <span>LIHAT JADWAL</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -239,8 +247,8 @@ export default function EventPage() {
             {/* ================================================= */}
             {/* 2. DAFTAR EVENT & WORKSHOP                        */}
             {/* ================================================= */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#fffcf7] p-4 sm:p-6 lg:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-5">
+            <section id="activities" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14">
+                <div className="bg-white p-4 sm:p-6 lg:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-5">
 
                     {/* Header & Filter Tabs Dinamis */}
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-[#e6ccb2]/50 pb-3">
@@ -259,7 +267,7 @@ export default function EventPage() {
                                         onClick={() => setSelectedCategory(cat)}
                                         className={`px-3 py-1.5 rounded-full text-[11px] font-black transition tracking-wider shrink-0 cursor-pointer flex items-center gap-1.5 uppercase ${isSelected
                                                 ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                                : 'bg-[#faf6f0] text-[#6c584c] hover:bg-[#f4ece1] border border-[#e6ccb2]/60'
+                                                : 'bg-[#FAF0E6]/50 text-[#6c584c] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
                                             }`}
                                     >
                                         <Palette className="w-3 h-3" />
@@ -282,19 +290,19 @@ export default function EventPage() {
 
                     {/* Error State */}
                     {!isLoading && isError && (
-                        <div className="py-8 text-center space-y-2.5 bg-[#faf6f0] rounded-2xl border border-rose-200 p-5">
+                        <div className="py-8 text-center space-y-2.5 bg-[#FAF0E6]/50 rounded-2xl border border-rose-200 p-5">
                             <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
                                 <AlertCircle className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-xs text-[#3d2314]">Gagal Memuat Data</h4>
                             <p className="text-[11px] text-[#6c584c] font-semibold max-w-xs mx-auto">
-                                Pastikan server backend Laravel sudah berjalan.
+                                Ada Kesalahan Saat Memuat Data
                             </p>
                             <button
                                 onClick={fetchEventPageData}
                                 className="px-3.5 py-1.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-bold text-[10px] rounded-full transition inline-flex items-center gap-1.5 cursor-pointer shadow-xs"
                             >
-                                <RefreshCw className="w-3 h-3" />
+                                <RefreshCw className="w-3.5 h-3.5" />
                                 <span>Coba Lagi</span>
                             </button>
                         </div>
@@ -302,8 +310,8 @@ export default function EventPage() {
 
                     {/* Empty State */}
                     {!isLoading && !isError && filteredEvents.length === 0 && (
-                        <div className="py-12 text-center space-y-1.5 bg-[#faf6f0] rounded-2xl border border-[#e6ccb2]/60 p-5">
-                            <div className="w-9 h-9 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                        <div className="py-12 text-center space-y-1.5 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/60 p-5">
+                            <div className="w-9 h-9 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/60">
                                 <Info className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-xs text-[#3d2314]">Belum Ada Kegiatan</h4>
@@ -320,16 +328,15 @@ export default function EventPage() {
                                 const isPopular = Boolean(item.is_popular);
                                 const hasImage = Boolean(item.image && item.image.trim() !== '');
                                 const imageSrc = hasImage
-                                    ? (item.image!.startsWith('http') ? item.image! : (item.image!.startsWith('/img') ? item.image! : `http://127.0.0.1:8000/storage/${item.image}`))
+                                    ? (item.image!.startsWith('http') ? item.image! : (item.image!.startsWith('/img') ? item.image! : `${API_BASE_URL}/storage/${item.image}`))
                                     : null;
 
                                 return (
                                     <div
                                         key={item.id}
                                         onClick={() => setSelectedEvent(item)}
-                                        className="bg-[#faf6f0] rounded-2xl p-3 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-2.5 relative group hover:shadow-md hover:border-[#8c5a3c] transition duration-200 cursor-pointer"
+                                        className="bg-[#FAF0E6]/60 rounded-2xl p-3 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-2.5 relative group hover:shadow-md hover:border-[#8c5a3c] transition duration-200 cursor-pointer"
                                     >
-
                                         {isPopular && (
                                             <div className="absolute top-4 left-4 z-10">
                                                 <span className="px-2 py-0.5 bg-emerald-600 text-white text-[8px] font-black uppercase rounded-full shadow-2xs tracking-wider">
@@ -361,7 +368,7 @@ export default function EventPage() {
                                                     {item.category || item.type || 'WORKSHOP'}
                                                 </span>
                                                 {item.location_name && (
-                                                    <span className="text-[8px] font-bold text-stone-500 bg-stone-100 px-1.5 py-0.5 rounded">
+                                                    <span className="text-[8px] font-bold text-stone-600 bg-white px-1.5 py-0.5 rounded border border-[#e6ccb2]/50">
                                                         {item.location_name}
                                                     </span>
                                                 )}
@@ -371,7 +378,7 @@ export default function EventPage() {
                                                 {item.title}
                                             </h3>
 
-                                            {/* Render Deskripsi Cerdas (List Bullet & Enter) */}
+                                            {/* Render Deskripsi Cerdas */}
                                             <div className="line-clamp-3 pt-0.5">
                                                 <FormatDescription text={item.description} />
                                             </div>
@@ -392,7 +399,7 @@ export default function EventPage() {
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    window.open(`https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20booking%20kegiatan%20${encodeURIComponent(item.title)}`, '_blank');
+                                                    window.open(`https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20booking%20kegiatan%20${encodeURIComponent(item.title)}`, '_blank');
                                                 }}
                                                 className="w-full py-2 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-[10px] rounded-xl text-center transition flex items-center justify-center gap-1.5 uppercase shadow-2xs tracking-wider cursor-pointer"
                                             >
@@ -400,7 +407,6 @@ export default function EventPage() {
                                                 <Phone className="w-3 h-3 fill-current" />
                                             </button>
                                         </div>
-
                                     </div>
                                 );
                             })}
@@ -420,16 +426,16 @@ export default function EventPage() {
                 >
                     <div
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-[#fffcf7] w-full max-w-lg rounded-3xl p-5 sm:p-6 border border-[#e6ccb2] shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-150 my-auto max-h-[90vh] overflow-y-auto"
+                        className="bg-white w-full max-w-lg rounded-3xl p-5 sm:p-6 border border-[#e6ccb2] shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-150 my-auto max-h-[90vh] overflow-y-auto"
                     >
                         <button
                             onClick={() => setSelectedEvent(null)}
-                            className="absolute right-4 top-4 w-8 h-8 rounded-full bg-[#f4ece1] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition cursor-pointer z-10"
+                            className="absolute right-4 top-4 w-8 h-8 rounded-full bg-[#FAF0E6] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition cursor-pointer z-10"
                         >
                             <X className="w-4 h-4" />
                         </button>
 
-                        <div className="w-full aspect-[16/10] bg-white rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center">
+                        <div className="w-full aspect-[16/10] bg-stone-50 rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center">
                             {selectedEvent.image ? (
                                 <img
                                     src={
@@ -437,7 +443,7 @@ export default function EventPage() {
                                             ? selectedEvent.image
                                             : selectedEvent.image.startsWith('/img')
                                                 ? selectedEvent.image
-                                                : `http://127.0.0.1:8000/storage/${selectedEvent.image}`
+                                                : `${API_BASE_URL}/storage/${selectedEvent.image}`
                                     }
                                     alt={selectedEvent.title}
                                     className="w-full h-full object-cover"
@@ -452,7 +458,7 @@ export default function EventPage() {
                                 <span className="text-[10px] font-black text-[#8c5a3c] uppercase tracking-wider">
                                     {selectedEvent.category || selectedEvent.type || 'WORKSHOP'}
                                 </span>
-                                <span className="px-2 py-0.5 bg-[#f4ece1] text-[#8c5a3c] text-[9px] font-black uppercase rounded-md">
+                                <span className="px-2 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9px] font-black uppercase rounded-md">
                                     {selectedEvent.location_name || 'Semua Lokasi'}
                                 </span>
                             </div>
@@ -461,7 +467,7 @@ export default function EventPage() {
                                 {selectedEvent.title}
                             </h3>
 
-                            {/* Render Full Deskripsi & List Fasilitas */}
+                            {/* Render Full Deskripsi */}
                             <div className="py-2 border-y border-[#e6ccb2]/40 space-y-1.5">
                                 <span className="text-[10px] font-black text-[#3d2314] uppercase block">
                                     Fasilitas & Detail Acara:
@@ -479,7 +485,7 @@ export default function EventPage() {
                             </div>
 
                             <a
-                                href={`https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20booking%20kegiatan%20${encodeURIComponent(selectedEvent.title)}`}
+                                href={`https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20booking%20kegiatan%20${encodeURIComponent(selectedEvent.title)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="px-5 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-full transition flex items-center gap-1.5 uppercase shadow-xs"
@@ -496,7 +502,7 @@ export default function EventPage() {
             {/* 4. EASY BOOKING STEPS                             */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#fdf3f1] p-4 sm:p-6 lg:p-7 rounded-3xl border border-rose-100/80 shadow-2xs grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+                <div className="bg-[#ffffff] p-4 sm:p-6 lg:p-7 rounded-3xl border border-rose-100/80 shadow-2xs grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
                     <div className="lg:col-span-4 space-y-2 text-center lg:text-left">
                         <div className="text-[9px] font-black text-[#8c5a3c] tracking-widest uppercase">
                             EASY BOOKING
@@ -509,7 +515,7 @@ export default function EventPage() {
                         </p>
                         <div className="pt-1">
                             <a
-                                href="https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20booking%20activity"
+                                href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20booking%20activity"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="px-5 py-2 bg-[#3d2314] hover:bg-[#201007] text-white font-black text-[11px] rounded-full shadow-xs transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
@@ -521,32 +527,32 @@ export default function EventPage() {
                     </div>
 
                     <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-2.5">
-                        <div className="bg-white/80 p-3 rounded-2xl border border-rose-100/80 text-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                        <div className="bg-white p-3 rounded-2xl border border-rose-100/80 text-center space-y-1">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center mx-auto">
                                 <Calendar className="w-4 h-4" />
                             </div>
                             <div className="font-black text-[#8c5a3c] text-[10px]">1</div>
                             <div className="font-bold text-[10px] sm:text-[11px] text-[#3d2314]">Pilih Acara</div>
                         </div>
 
-                        <div className="bg-white/80 p-3 rounded-2xl border border-rose-100/80 text-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-emerald-600 flex items-center justify-center mx-auto">
+                        <div className="bg-white p-3 rounded-2xl border border-rose-100/80 text-center space-y-1">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-emerald-600 flex items-center justify-center mx-auto">
                                 <Phone className="w-4 h-4 fill-current" />
                             </div>
                             <div className="font-black text-[#8c5a3c] text-[10px]">2</div>
                             <div className="font-bold text-[10px] sm:text-[11px] text-[#3d2314]">Chat Admin</div>
                         </div>
 
-                        <div className="bg-white/80 p-3 rounded-2xl border border-rose-100/80 text-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-emerald-600 flex items-center justify-center mx-auto">
+                        <div className="bg-white p-3 rounded-2xl border border-rose-100/80 text-center space-y-1">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-emerald-600 flex items-center justify-center mx-auto">
                                 <CheckCircle2 className="w-4 h-4" />
                             </div>
                             <div className="font-black text-[#8c5a3c] text-[10px]">3</div>
                             <div className="font-bold text-[10px] sm:text-[11px] text-[#3d2314]">Konfirmasi</div>
                         </div>
 
-                        <div className="bg-white/80 p-3 rounded-2xl border border-rose-100/80 text-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-[#e85a4f] flex items-center justify-center mx-auto">
+                        <div className="bg-white p-3 rounded-2xl border border-rose-100/80 text-center space-y-1">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#e85a4f] flex items-center justify-center mx-auto">
                                 <Gift className="w-4 h-4" />
                             </div>
                             <div className="font-black text-[#8c5a3c] text-[10px]">4</div>
@@ -560,11 +566,11 @@ export default function EventPage() {
             {/* 5. BENEFITS SECTION                               */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#fffcf7] p-4 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
+                <div className="bg-white p-4 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
 
                         <div className="flex flex-col items-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <Smile className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-[11px] text-[#3d2314] uppercase">All Ages Welcome</h4>
@@ -572,7 +578,7 @@ export default function EventPage() {
                         </div>
 
                         <div className="flex flex-col items-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <Palette className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-[11px] text-[#3d2314] uppercase">Materials Provided</h4>
@@ -580,7 +586,7 @@ export default function EventPage() {
                         </div>
 
                         <div className="flex flex-col items-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <Users className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-[11px] text-[#3d2314] uppercase">Small Groups</h4>
@@ -588,7 +594,7 @@ export default function EventPage() {
                         </div>
 
                         <div className="flex flex-col items-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <Heart className="w-4 h-4 text-[#e85a4f] fill-current" />
                             </div>
                             <h4 className="font-black text-[11px] text-[#3d2314] uppercase">Sweet Memories</h4>

@@ -9,6 +9,8 @@ import {
     Search, AlertCircle, RefreshCw, Info, ImageOff
 } from 'lucide-react';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     return (
         <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -25,6 +27,21 @@ function BearFaceIcon({ className = "w-5 h-5" }: { className?: string }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15a2 2 0 100-4 2 2 0 000 4z" />
         </svg>
     );
+}
+
+// Helper function parsing tag <br> dan enter (\n)
+function renderFormattedText(text?: string | null, fallback?: React.ReactNode) {
+    if (!text) return fallback;
+
+    const normalized = text.replace(/<br\s*\/?>/gi, '\n');
+    const lines = normalized.split('\n');
+
+    return lines.map((line, idx) => (
+        <span key={idx}>
+            {line}
+            {idx < lines.length - 1 && <br />}
+        </span>
+    ));
 }
 
 export interface MerchandiseItem {
@@ -68,8 +85,8 @@ export default function MerchandisePage() {
             setIsError(false);
 
             const [resMerch, resBanner] = await Promise.all([
-                fetch('http://127.0.0.1:8000/api/merchandise', { cache: 'no-store' }),
-                fetch('http://127.0.0.1:8000/api/banners/merchandise', { cache: 'no-store' }).catch(() => null)
+                fetch(`${API_BASE_URL}/api/merchandise`, { cache: 'no-store' }),
+                fetch(`${API_BASE_URL}/api/banners/merchandise`, { cache: 'no-store' }).catch(() => null)
             ]);
 
             if (!resMerch.ok) {
@@ -144,75 +161,104 @@ export default function MerchandisePage() {
         ? (merchBanner.image.startsWith('http')
             ? merchBanner.image
             : merchBanner.image.startsWith('/img')
-            ? merchBanner.image
-            : `http://127.0.0.1:8000/storage/${merchBanner.image}`)
+                ? merchBanner.image
+                : `${API_BASE_URL}/storage/${merchBanner.image}`)
         : '/img/hero-home.png';
 
     return (
-        <div className="bg-[#faf6f0] min-h-screen pb-16 space-y-10 lg:space-y-14">
+        <div className="min-h-screen pb-16 space-y-8 sm:space-y-10">
 
             {/* ================================================= */}
-            {/* 1. HERO MERCHANDISE SECTION (DINAMIS ADMIN)       */}
+            {/* 1. HERO BANNER FULL 1 LAYAR (UKURAN PROPORSIONAL) */}
             {/* ================================================= */}
-            <section className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[720px] flex items-center bg-[#faf6f0] border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-4 sm:pb-6 overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+                {/* Background Image Full Cover */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src={heroImageSrc}
+                        alt="To Meet Official Merchandise"
+                        className="w-full h-full object-cover object-right lg:object-center"
+                    />
+                    {/* Gradient Overlay Putih Sebelah Kiri */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                </div>
 
-                        {/* Teks Kiri */}
-                        <div className="lg:col-span-6 space-y-3 sm:space-y-4 text-center lg:text-left order-2 lg:order-1">
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f4ece1] text-[#8c5a3c] text-[10px] font-black border border-[#e6ccb2]/80">
-                                <span>OFFICIAL MERCHANDISE</span>
-                                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                {/* Konten Text Hero */}
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
+                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+
+                        {/* Pill Badge */}
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
+                            <span>OFFICIAL MERCHANDISE</span>
+                            <Sparkles className="w-3 h-3 text-amber-500" />
+                        </div>
+
+                        {/* Title Proporsional */}
+                        <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
+                            {renderFormattedText(
+                                merchBanner?.title,
+                                <>
+                                    TO MEET <br />
+                                    <span className="text-[#8c5a3c]">MERCHANDISE</span>
+                                </>
+                            )}
+                        </h1>
+
+                        {/* Subtitle */}
+                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                            {renderFormattedText(
+                                merchBanner?.subtitle,
+                                'Bawa pulang koleksi boneka dan suvenir lucu khas To Meet Cafe untuk teman atau koleksi pribadimu.'
+                            )}
+                        </p>
+
+                        {/* 3 Values Mini */}
+                        <div className="pt-1 grid grid-cols-3 gap-2 max-w-sm text-center">
+                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                                    <BearFaceIcon className="w-3.5 h-3.5" />
+                                </div>
+                                <div className="text-[9px] font-black text-[#3d2314] uppercase leading-tight">100% Original</div>
+                                <div className="text-[7.5px] text-[#6c584c] font-semibold">Official Product</div>
                             </div>
 
-                            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
-                                {merchBanner?.title || 'To Meet Merchandise'}
-                            </h1>
-
-                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md mx-auto lg:mx-0">
-                                {merchBanner?.subtitle || 'Bawa pulang koleksi boneka dan suvenir lucu khas To Meet Cafe untuk teman atau koleksi pribadimu.'}
-                                <Heart className="inline-block w-3.5 h-3.5 ml-1 text-[#e85a4f] fill-current" />
-                            </p>
-
-                            {/* 3 Values Mini */}
-                            <div className="pt-2 grid grid-cols-3 gap-2 max-w-md mx-auto lg:mx-0 text-center">
-                                <div className="bg-[#fffcf7] p-2 sm:p-2.5 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-1">
-                                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center mx-auto">
-                                        <BearFaceIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                                    </div>
-                                    <div className="text-[9px] font-black text-[#3d2314] uppercase leading-tight">100% Original</div>
-                                    <div className="text-[8px] text-[#6c584c] font-semibold">Official Product</div>
+                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                                    <Sparkles className="w-3.5 h-3.5" />
                                 </div>
+                                <div className="text-[9px] font-black text-[#3d2314] uppercase leading-tight">Cute Design</div>
+                                <div className="text-[7.5px] text-[#6c584c] font-semibold">Aesthetic & Cozy</div>
+                            </div>
 
-                                <div className="bg-[#fffcf7] p-2 sm:p-2.5 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-1">
-                                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center mx-auto">
-                                        <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                                    </div>
-                                    <div className="text-[9px] font-black text-[#3d2314] uppercase leading-tight">Cute Design</div>
-                                    <div className="text-[8px] text-[#6c584c] font-semibold">Aesthetic & Cozy</div>
+                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                                    <Gift className="w-3.5 h-3.5" />
                                 </div>
-
-                                <div className="bg-[#fffcf7] p-2 sm:p-2.5 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-1">
-                                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center mx-auto">
-                                        <Gift className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                                    </div>
-                                    <div className="text-[9px] font-black text-[#3d2314] uppercase leading-tight">Great Gift</div>
-                                    <div className="text-[8px] text-[#6c584c] font-semibold">For Loved Ones</div>
-                                </div>
+                                <div className="text-[9px] font-black text-[#3d2314] uppercase leading-tight">Great Gift</div>
+                                <div className="text-[7.5px] text-[#6c584c] font-semibold">For Loved Ones</div>
                             </div>
                         </div>
 
-                        {/* Visual Kanan Dinamis */}
-                        <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center lg:justify-end">
-                            <div className="relative w-full max-w-md lg:max-w-lg aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/10] rounded-[2rem] overflow-hidden shadow-lg border-3 border-white">
-                                <img
-                                    src={heroImageSrc}
-                                    alt="To Meet Official Merchandise"
-                                    className="w-full h-full object-cover object-center"
-                                />
-                            </div>
-                        </div>
+                        {/* Tombol Aksi */}
+                        <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
+                            <a
+                                href="#catalog"
+                                className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                            >
+                                <span>{merchBanner?.cta_text || 'LIHAT KATALOG'}</span>
+                                <ShoppingBag className="w-3.5 h-3.5" />
+                            </a>
 
+                            <a
+                                href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20tanya%20stok%20merchandise"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md"
+                            >
+                                <Phone className="w-3.5 h-3.5 fill-current" />
+                                <span>TANYA ADMIN</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -220,8 +266,8 @@ export default function MerchandisePage() {
             {/* ================================================= */}
             {/* 2. MAIN MERCHANDISE SECTION                       */}
             {/* ================================================= */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#fffcf7] p-4 sm:p-6 lg:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
+            <section id="catalog" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14">
+                <div className="bg-white p-4 sm:p-6 lg:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
                         {/* SIDEBAR FILTER (KIRI) */}
@@ -233,7 +279,7 @@ export default function MerchandisePage() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Cari produk merchandise..."
-                                    className="w-full bg-[#faf6f0] border border-[#e6ccb2]/80 rounded-2xl pl-10 pr-9 py-2.5 text-xs text-[#3d2314] font-semibold focus:outline-none focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
+                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-2xl pl-10 pr-9 py-2.5 text-xs text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
                                 />
                                 <Search className="w-4 h-4 text-[#8c5a3c] absolute left-3.5 top-3" />
                                 {searchQuery && (
@@ -254,7 +300,7 @@ export default function MerchandisePage() {
                             </div>
 
                             {/* Daftar Kategori Dinamis */}
-                            <div className="bg-[#faf6f0]/60 p-2 rounded-2xl border border-[#e6ccb2]/40">
+                            <div className="bg-[#FAF0E6]/40 p-2 rounded-2xl border border-[#e6ccb2]/40">
                                 <nav className="flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-y-auto lg:max-h-[320px] pr-1 scrollbar-thin text-xs font-black uppercase tracking-wide">
                                     {availableCategories.map((cat) => {
                                         const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
@@ -265,11 +311,10 @@ export default function MerchandisePage() {
                                                     setSelectedCategory(cat);
                                                     setDisplayCount(8);
                                                 }}
-                                                className={`flex items-center justify-between px-3.5 py-2 rounded-xl transition shrink-0 cursor-pointer text-left ${
-                                                    isSelected
-                                                        ? 'bg-[#8c5a3c] text-white shadow-2xs font-extrabold'
-                                                        : 'bg-white/80 text-[#3d2314] hover:bg-[#f4ece1] hover:text-[#8c5a3c]'
-                                                }`}
+                                                className={`flex items-center justify-between px-3.5 py-2 rounded-xl transition shrink-0 cursor-pointer text-left ${isSelected
+                                                    ? 'bg-[#8c5a3c] text-white shadow-2xs font-extrabold'
+                                                    : 'bg-white/80 text-[#3d2314] hover:bg-[#FAF0E6] hover:text-[#8c5a3c]'
+                                                    }`}
                                             >
                                                 <span className="flex items-center gap-2">
                                                     <BearPawIcon className={`w-3 h-3 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`} />
@@ -284,7 +329,7 @@ export default function MerchandisePage() {
 
                             {/* Promo Card Chat WA */}
                             <div className="hidden lg:block bg-[#fdf3f1] p-4 rounded-2xl border border-rose-100 space-y-2.5 text-center">
-                                <h4 className="font-black text-xs text-[#3d2314]">Cant find what you're looking for?</h4>
+                                <h4 className="font-black text-xs text-[#3d2314]">Cant find what you&apos;re looking for?</h4>
                                 <p className="text-[10px] text-[#6c584c] font-semibold">Tanyakan ketersediaan stok produk langsung ke admin.</p>
                                 <a
                                     href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20tanya%20stok%20merchandise"
@@ -319,7 +364,7 @@ export default function MerchandisePage() {
                                             id="sortBy"
                                             value={sortBy}
                                             onChange={(e) => setSortBy(e.target.value)}
-                                            className="bg-[#faf6f0] border border-[#e6ccb2]/80 rounded-xl px-3 py-1.5 text-xs text-[#3d2314] font-black focus:outline-none appearance-none pr-8 cursor-pointer"
+                                            className="bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-xl px-3 py-1.5 text-xs text-[#3d2314] font-black focus:outline-none appearance-none pr-8 cursor-pointer"
                                         >
                                             <option value="featured">Paling Populer</option>
                                             <option value="newest">Produk Terbaru</option>
@@ -343,7 +388,7 @@ export default function MerchandisePage() {
 
                             {/* Error State */}
                             {!isLoading && isError && (
-                                <div className="py-10 text-center space-y-2.5 bg-[#faf6f0] rounded-2xl border border-rose-200 p-5">
+                                <div className="py-10 text-center space-y-2.5 bg-[#FAF0E6]/50 rounded-2xl border border-rose-200 p-5">
                                     <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
                                         <AlertCircle className="w-4 h-4" />
                                     </div>
@@ -355,7 +400,7 @@ export default function MerchandisePage() {
                                         onClick={fetchMerchandiseData}
                                         className="px-3.5 py-1.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-bold text-[10px] rounded-full transition inline-flex items-center gap-1.5 cursor-pointer shadow-xs"
                                     >
-                                        <RefreshCw className="w-3 h-3" />
+                                        <RefreshCw className="w-3.5 h-3.5" />
                                         <span>Coba Lagi</span>
                                     </button>
                                 </div>
@@ -363,8 +408,8 @@ export default function MerchandisePage() {
 
                             {/* Empty State */}
                             {!isLoading && !isError && filteredAndSortedItems.length === 0 && (
-                                <div className="py-12 text-center space-y-1.5 bg-[#faf6f0] rounded-2xl border border-[#e6ccb2]/60 p-5">
-                                    <div className="w-9 h-9 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                                <div className="py-12 text-center space-y-1.5 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/60 p-5">
+                                    <div className="w-9 h-9 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/60">
                                         <Info className="w-4 h-4" />
                                     </div>
                                     <h4 className="font-black text-xs text-[#3d2314]">Belum Ada Produk</h4>
@@ -390,7 +435,7 @@ export default function MerchandisePage() {
                                 <div className="pt-2 text-center">
                                     <button
                                         onClick={() => setDisplayCount(prev => prev + 4)}
-                                        className="px-5 py-2 bg-[#f4ece1] hover:bg-[#8c5a3c] hover:text-white text-[#8c5a3c] font-black text-xs rounded-full border border-[#e6ccb2] transition uppercase tracking-wider inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                                        className="px-5 py-2 bg-[#FAF0E6] hover:bg-[#8c5a3c] hover:text-white text-[#8c5a3c] font-black text-xs rounded-full border border-[#e6ccb2] transition uppercase tracking-wider inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
                                     >
                                         <span>LOAD MORE PRODUCTS</span>
                                         <ChevronDown className="w-3.5 h-3.5" />
@@ -405,14 +450,14 @@ export default function MerchandisePage() {
             </section>
 
             {/* ================================================= */}
-            {/* 3. BENEFITS / FEATURES SECTION                    */}
+            {/* 3. BENEFITS / FEATURES SECTION                   */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#fffcf7] p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
+                <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
 
                         <div className="flex flex-col items-center space-y-1">
-                            <div className="w-9 h-9 rounded-2xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center">
+                            <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <BearFaceIcon className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-xs text-[#3d2314] uppercase">100% Official</h4>
@@ -420,7 +465,7 @@ export default function MerchandisePage() {
                         </div>
 
                         <div className="flex flex-col items-center space-y-1">
-                            <div className="w-9 h-9 rounded-2xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center">
+                            <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <Gift className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-xs text-[#3d2314] uppercase">Great for Gift</h4>
@@ -428,7 +473,7 @@ export default function MerchandisePage() {
                         </div>
 
                         <div className="flex flex-col items-center space-y-1">
-                            <div className="w-9 h-9 rounded-2xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center">
+                            <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <ShieldCheck className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-xs text-[#3d2314] uppercase">Quality You Can</h4>
@@ -436,7 +481,7 @@ export default function MerchandisePage() {
                         </div>
 
                         <div className="flex flex-col items-center space-y-1">
-                            <div className="w-9 h-9 rounded-2xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center">
+                            <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <Heart className="w-4 h-4 text-[#e85a4f] fill-current" />
                             </div>
                             <h4 className="font-black text-xs text-[#3d2314] uppercase">Support To Meet</h4>
@@ -451,7 +496,7 @@ export default function MerchandisePage() {
             {/* 4. ORDER / WHATSAPP CTA SECTION                   */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#fdf3f1] p-5 sm:p-7 rounded-3xl border border-rose-100/80 shadow-2xs grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+                <div className="    bg-[#ffffff] p-5 sm:p-7 rounded-3xl border border-rose-100/80 shadow-2xs grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
 
                     <div className="lg:col-span-7 space-y-2 text-center lg:text-left">
                         <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
@@ -476,16 +521,12 @@ export default function MerchandisePage() {
 
                     <div className="lg:col-span-5 flex justify-center lg:justify-end gap-3">
                         <div className="w-28 h-36 bg-white p-2 rounded-2xl shadow-xs transform -rotate-3 hover:rotate-0 transition duration-200 text-[#3d2314] text-center flex flex-col justify-between border border-[#e6ccb2]">
-                            <div className="w-full h-24 bg-[#faf6f0] rounded-xl flex items-center justify-center font-black text-[9px] text-[#8c5a3c]">
-                                FOR YOU
-                            </div>
+                            <img src="/img/mc-1.png" alt="Merchandise 1" className="w-full h-24 object-cover rounded-xl" />
                             <span className="text-[8px] font-black uppercase tracking-wide">For You</span>
                         </div>
 
                         <div className="w-28 h-36 bg-white p-2 rounded-2xl shadow-xs transform rotate-3 hover:rotate-0 transition duration-200 text-[#3d2314] text-center flex flex-col justify-between border border-[#e6ccb2]">
-                            <div className="w-full h-24 bg-[#f4ece1] rounded-xl flex items-center justify-center font-black text-[9px] text-[#8c5a3c]">
-                                FRIEND
-                            </div>
+                            <img src="/img/mc-2.png" alt="Merchandise 2" className="w-full h-24 object-cover rounded-xl" />
                             <span className="text-[8px] font-black uppercase tracking-wide">For Your Friend</span>
                         </div>
                     </div>
@@ -506,12 +547,12 @@ function MerchandiseProductCard({ item }: { item: MerchandiseItem }) {
         ? (item.image!.startsWith('http')
             ? item.image!
             : item.image!.startsWith('/img')
-            ? item.image!
-            : `http://127.0.0.1:8000/storage/${item.image}`)
+                ? item.image!
+                : `${API_BASE_URL}/storage/${item.image}`)
         : null;
 
     return (
-        <div className="bg-[#faf6f0] rounded-3xl p-3 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-2.5 relative group hover:shadow-md hover:border-[#8c5a3c] transition duration-200">
+        <div className="bg-[#FAF0E6]/60 rounded-3xl p-3 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-2.5 relative group hover:shadow-md hover:border-[#8c5a3c] transition duration-200">
 
             {/* Badges Status */}
             <div className="absolute top-4 left-4 flex flex-col gap-1 z-10">
@@ -563,7 +604,7 @@ function MerchandiseProductCard({ item }: { item: MerchandiseItem }) {
                 <button
                     title="Pesan via WhatsApp"
                     onClick={() => window.open(`https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20pesan%20merchandise%20${encodeURIComponent(item.name)}`, '_blank')}
-                    className="w-7 h-7 rounded-full bg-[#f4ece1] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition shadow-2xs cursor-pointer"
+                    className="w-7 h-7 rounded-full bg-white hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition shadow-2xs border border-[#e6ccb2]/50 cursor-pointer"
                 >
                     <ShoppingBag className="w-3.5 h-3.5" />
                 </button>

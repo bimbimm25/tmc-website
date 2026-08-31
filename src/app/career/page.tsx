@@ -9,6 +9,8 @@ import {
     Send, X, Quote, ChevronRight, AlertCircle, Compass
 } from 'lucide-react';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
 function BearFaceIcon({ className = "w-5 h-5" }: { className?: string }) {
     return (
         <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -25,6 +27,21 @@ function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
             <path d="M12 14c-2.8 0-5 1.8-5 4 0 1.2.7 2 1.8 2 1.3 0 2.2-.6 3.2-.6s1.9.6 3.2.6c1.1 0 1.8-.8 1.8-2 0-2.2-2.2-4-5-4zm-5.5-3.5c.8 0 1.5-.9 1.5-2s-.7-2-1.5-2S5 7.4 5 8.5s.7 2 1.5 2zm11 0c.8 0 1.5-.9 1.5-2s-.7-2-1.5-2-1.5.9-1.5 2 .7 2 1.5 2zm-7.5-3c.9 0 1.6-1.1 1.6-2.5S10.9 2.5 10 2.5 8.4 3.6 8.4 5s.7 2.5 1.6 2.5zm4 0c.9 0 1.6-1.1 1.6-2.5s-.7-2.5-1.6-2.5.7 2.5 1.6 2.5z" />
         </svg>
     );
+}
+
+// Fungsi parsing tag <br> dan karakter enter \n
+function renderFormattedText(text?: string | null, fallback?: React.ReactNode) {
+    if (!text) return fallback;
+
+    const normalized = text.replace(/<br\s*\/?>/gi, '\n');
+    const lines = normalized.split('\n');
+
+    return lines.map((line, idx) => (
+        <span key={idx}>
+            {line}
+            {idx < lines.length - 1 && <br />}
+        </span>
+    ));
 }
 
 export interface CareerItem {
@@ -69,8 +86,8 @@ export default function CareerPage() {
         try {
             setIsLoading(true);
             const [bannerRes, careersRes] = await Promise.all([
-                fetch('http://127.0.0.1:8000/api/banners/career', { cache: 'no-store' }),
-                fetch('http://127.0.0.1:8000/api/careers', { cache: 'no-store' })
+                fetch(`${API_BASE_URL}/api/banners/career`, { cache: 'no-store' }),
+                fetch(`${API_BASE_URL}/api/careers`, { cache: 'no-store' })
             ]);
 
             if (bannerRes.ok) {
@@ -123,7 +140,7 @@ export default function CareerPage() {
             formData.append('cover_letter', coverLetter);
             formData.append('resume', resumeFile);
 
-            const res = await fetch('http://127.0.0.1:8000/api/careers/apply', {
+            const res = await fetch(`${API_BASE_URL}/api/careers/apply`, {
                 method: 'POST',
                 body: formData,
             });
@@ -151,17 +168,17 @@ export default function CareerPage() {
         ? (banner.image.startsWith('http')
             ? banner.image
             : banner.image.startsWith('/img')
-            ? banner.image
-            : `http://127.0.0.1:8000/storage/${banner.image}`)
+                ? banner.image
+                : `${API_BASE_URL}/storage/${banner.image}`)
         : '/img/hero-home.png';
 
     return (
-        <div className="bg-[#faf6f0] min-h-screen space-y-10 sm:space-y-14 pb-14">
+        <div className="min-h-screen space-y-10 sm:space-y-14 pb-14">
 
             {/* ================================================= */}
             {/* 1. HERO SECTION FULL 1 LAYAR (HOMEPAGE STYLE)     */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center bg-[#faf6f0] overflow-hidden">
+            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
                 {/* Background Image Full Cover */}
                 <div className="absolute inset-0 z-0">
                     <img
@@ -170,7 +187,7 @@ export default function CareerPage() {
                         className="w-full h-full object-cover object-right lg:object-center"
                     />
                     {/* Gradient Overlay Sebelah Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#faf6f0] via-[#faf6f0]/90 to-transparent sm:w-3/4 lg:w-3/5" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent sm:w-3/4 lg:w-3/5" />
                 </div>
 
                 {/* Konten Text Hero */}
@@ -180,21 +197,20 @@ export default function CareerPage() {
                             CAREER OPPORTUNITIES
                         </span>
 
-                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#3d2314] tracking-tight leading-[1.05] uppercase">
-                            {banner?.title ? (
-                                <span dangerouslySetInnerHTML={{ __html: banner.title }} />
-                            ) : (
+                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#3d2314] tracking-tight leading-[1.08] uppercase">
+                            {renderFormattedText(
+                                banner?.title,
                                 <>
-                                    GROW TOGETHER <br /> create happines <br />
+                                    GROW TOGETHER <br />
+                                    CREATE HAPPINESS <br />
                                     <span className="text-[#8c5a3c]">TOGETHER</span>
                                 </>
                             )}
                         </h1>
 
                         <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed">
-                            {banner?.subtitle ? (
-                                <span dangerouslySetInnerHTML={{ __html: banner.subtitle }} />
-                            ) : (
+                            {renderFormattedText(
+                                banner?.subtitle,
                                 'Mari bertumbuh dan menciptakan momen kebahagiaan manis bersama To Meet Cafe & Playground.'
                             )}
                         </p>
@@ -213,7 +229,7 @@ export default function CareerPage() {
                                 className="px-6 py-3 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-xs rounded-full transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer shadow-md"
                             >
                                 <span>OUR VALUES</span>
-                                
+                                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                             </a>
                         </div>
                     </div>
@@ -238,8 +254,8 @@ export default function CareerPage() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-                    <div className="bg-[#fffcf7] p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
-                        <div className="w-9 h-9 rounded-2xl bg-[#f4ece1] text-[#e85a4f] mx-auto flex items-center justify-center">
+                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
+                        <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#e85a4f] mx-auto flex items-center justify-center">
                             <Heart className="w-4 h-4" />
                         </div>
                         <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase">Heartfelt Hospitality</h3>
@@ -248,8 +264,8 @@ export default function CareerPage() {
                         </p>
                     </div>
 
-                    <div className="bg-[#fffcf7] p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
-                        <div className="w-9 h-9 rounded-2xl bg-[#f4ece1] text-[#8c5a3c] mx-auto flex items-center justify-center">
+                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
+                        <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
                             <Smile className="w-4 h-4" />
                         </div>
                         <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase">Playful Creativity</h3>
@@ -258,8 +274,8 @@ export default function CareerPage() {
                         </p>
                     </div>
 
-                    <div className="bg-[#fffcf7] p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
-                        <div className="w-9 h-9 rounded-2xl bg-[#f4ece1] text-amber-600 mx-auto flex items-center justify-center">
+                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
+                        <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-amber-600 mx-auto flex items-center justify-center">
                             <Users className="w-4 h-4" />
                         </div>
                         <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase">One Big Family</h3>
@@ -268,8 +284,8 @@ export default function CareerPage() {
                         </p>
                     </div>
 
-                    <div className="bg-[#fffcf7] p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
-                        <div className="w-9 h-9 rounded-2xl bg-[#f4ece1] text-emerald-600 mx-auto flex items-center justify-center">
+                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
+                        <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-emerald-600 mx-auto flex items-center justify-center">
                             <Award className="w-4 h-4" />
                         </div>
                         <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase">Quality Excellence</h3>
@@ -287,7 +303,7 @@ export default function CareerPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
                     {/* Kiri: Alasan Bergabung */}
-                    <div className="lg:col-span-5 bg-[#fffcf7] p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
+                    <div className="lg:col-span-5 bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
                         <div className="space-y-1">
                             <div className="inline-flex items-center gap-1.5 text-[10px] font-black text-[#8c5a3c] uppercase">
                                 <BearPawIcon className="w-3.5 h-3.5" />
@@ -303,7 +319,7 @@ export default function CareerPage() {
 
                         <div className="space-y-2.5 pt-1">
                             <div className="flex items-start gap-2.5">
-                                <div className="w-5 h-5 rounded-md bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
+                                <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
                                     <CheckCircle2 className="w-3.5 h-3.5" />
                                 </div>
                                 <div>
@@ -313,7 +329,7 @@ export default function CareerPage() {
                             </div>
 
                             <div className="flex items-start gap-2.5">
-                                <div className="w-5 h-5 rounded-md bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
+                                <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
                                     <CheckCircle2 className="w-3.5 h-3.5" />
                                 </div>
                                 <div>
@@ -323,7 +339,7 @@ export default function CareerPage() {
                             </div>
 
                             <div className="flex items-start gap-2.5">
-                                <div className="w-5 h-5 rounded-md bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
+                                <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
                                     <CheckCircle2 className="w-3.5 h-3.5" />
                                 </div>
                                 <div>
@@ -333,7 +349,7 @@ export default function CareerPage() {
                             </div>
                         </div>
 
-                        <div className="p-3 bg-[#faf6f0] rounded-2xl border border-[#e6ccb2]/60 text-center">
+                        <div className="p-3 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/60 text-center">
                             <div className="text-xs font-black text-[#8c5a3c]">Pertanyaan Rekrutmen?</div>
                             <div className="text-[11px] text-[#6c584c]">Hubungi HR kami di <span className="font-bold text-[#3d2314]">hr@tomeetcafe.com</span></div>
                         </div>
@@ -354,14 +370,14 @@ export default function CareerPage() {
                         </div>
 
                         {isLoading && (
-                            <div className="bg-[#fffcf7] p-8 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
+                            <div className="bg-white p-8 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
                                 <div className="w-6 h-6 border-2 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
                                 <p className="text-xs font-bold text-[#8c5a3c]">Memuat daftar lowongan...</p>
                             </div>
                         )}
 
                         {!isLoading && careers.length === 0 && (
-                            <div className="bg-[#fffcf7] p-8 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
+                            <div className="bg-white p-8 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
                                 <BearFaceIcon className="w-7 h-7 text-[#8c5a3c] mx-auto" />
                                 <h3 className="font-black text-xs sm:text-sm text-[#3d2314]">Belum Ada Lowongan Aktif</h3>
                                 <p className="text-[11px] text-[#6c584c]">Saat ini semua posisi terisi penuh. Silakan pantau halaman ini secara berkala!</p>
@@ -371,11 +387,11 @@ export default function CareerPage() {
                         {!isLoading && careers.map((job) => (
                             <div
                                 key={job.id}
-                                className="bg-[#fffcf7] p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs hover:border-[#8c5a3c] transition duration-200 space-y-2.5"
+                                className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs hover:border-[#8c5a3c] transition duration-200 space-y-2.5"
                             >
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
                                     <div>
-                                        <span className="px-2 py-0.5 bg-[#f4ece1] text-[#8c5a3c] text-[9px] font-black uppercase rounded-md">
+                                        <span className="px-2 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9px] font-black uppercase rounded-md">
                                             {job.department || 'Operasional Cafe'}
                                         </span>
                                         <h3 className="text-sm sm:text-base font-black text-[#3d2314] mt-0.5">{job.title}</h3>
@@ -410,7 +426,7 @@ export default function CareerPage() {
                                         className="px-4 py-1.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-[10.5px] rounded-xl shadow-xs transition inline-flex items-center gap-1 uppercase tracking-wider cursor-pointer"
                                     >
                                         <span>APPLY NOW</span>
-                                        <ArrowRight className="w-3 h-3" />
+                                        <ArrowRight className="w-3.5 h-3.5" />
                                     </button>
                                 </div>
                             </div>
@@ -424,7 +440,7 @@ export default function CareerPage() {
             {/* 4. OUR BENEFITS (COMPACT STRIP)                   */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#fffcf7] p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3.5">
+                <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3.5">
                     <div className="text-center space-y-0.5">
                         <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide">
                             OUR TEAM BENEFITS
@@ -433,37 +449,37 @@ export default function CareerPage() {
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-center">
-                        <div className="bg-[#faf6f0] p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
+                        <div className="bg-[#FAF0E6]/50 p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
                             <DollarSign className="w-3.5 h-3.5 text-emerald-600 mx-auto" />
                             <div className="text-[10.5px] font-black text-[#3d2314]">Gaji Kompetitif</div>
                             <div className="text-[9px] text-[#6c584c]">Plus bonus performa</div>
                         </div>
 
-                        <div className="bg-[#faf6f0] p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
-                            <ShieldCheck className="w-3.5 h-3.5 text-[#8c5a3c] mx-auto" />
+                        <div className="bg-[#FAF0E6]/50 p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
+                            <ShieldCheck className="w-3.5 h-3.5 text-[#8c5a3c]" />
                             <div className="text-[10.5px] font-black text-[#3d2314]">BPJS Kerja</div>
                             <div className="text-[9px] text-[#6c584c]">Jaminan perlindungan</div>
                         </div>
 
-                        <div className="bg-[#faf6f0] p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
+                        <div className="bg-[#FAF0E6]/50 p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
                             <Coffee className="w-3.5 h-3.5 text-amber-600 mx-auto" />
                             <div className="text-[10.5px] font-black text-[#3d2314]">Free Meal & Drink</div>
                             <div className="text-[9px] text-[#6c584c]">Makan & minum harian</div>
                         </div>
 
-                        <div className="bg-[#faf6f0] p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
+                        <div className="bg-[#FAF0E6]/50 p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
                             <GraduationCap className="w-3.5 h-3.5 text-[#8c5a3c] mx-auto" />
                             <div className="text-[10.5px] font-black text-[#3d2314]">Training Rutin</div>
                             <div className="text-[9px] text-[#6c584c]">Pengembangan skill</div>
                         </div>
 
-                        <div className="bg-[#faf6f0] p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
+                        <div className="bg-[#FAF0E6]/50 p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
                             <PartyPopper className="w-3.5 h-3.5 text-rose-500 mx-auto" />
                             <div className="text-[10.5px] font-black text-[#3d2314]">Team Gathering</div>
                             <div className="text-[9px] text-[#6c584c]">Acara seru & liburan</div>
                         </div>
 
-                        <div className="bg-[#faf6f0] p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
+                        <div className="bg-[#FAF0E6]/50 p-2.5 rounded-2xl border border-[#e6ccb2]/60 space-y-0.5">
                             <Award className="w-3.5 h-3.5 text-amber-500 mx-auto" />
                             <div className="text-[10.5px] font-black text-[#3d2314]">Diskon Khusus</div>
                             <div className="text-[9px] text-[#6c584c]">Menu & merchandise</div>
@@ -485,36 +501,36 @@ export default function CareerPage() {
                     </div>
                     <button
                         onClick={scrollToPositions}
-                        className="px-3.5 py-1.5 bg-[#f4ece1] hover:bg-[#e6ccb2] text-[#8c5a3c] font-black text-[10.5px] rounded-full transition uppercase tracking-wider self-start sm:self-auto cursor-pointer"
+                        className="px-3.5 py-1.5 bg-[#FAF0E6] hover:bg-[#e6ccb2] text-[#8c5a3c] font-black text-[10.5px] rounded-full transition uppercase tracking-wider self-start sm:self-auto cursor-pointer"
                     >
                         GABUNG BERSAMA KAMI
                     </button>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div className="bg-[#fffcf7] p-2 rounded-2xl border border-[#e6ccb2]/80 space-y-1 text-center shadow-2xs">
-                        <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
+                    <div className="bg-white p-2 rounded-2xl border border-[#e6ccb2]/80 space-y-1 text-center shadow-2xs">
+                        <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100 border border-[#e6ccb2]/50">
                             <img src="/img/hero-home.png" alt="Barista Training" className="w-full h-full object-cover" />
                         </div>
                         <div className="text-[11px] font-black text-[#3d2314]">Barista Training</div>
                     </div>
 
-                    <div className="bg-[#fffcf7] p-2 rounded-2xl border border-[#e6ccb2]/80 space-y-1 text-center shadow-2xs">
-                        <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
+                    <div className="bg-white p-2 rounded-2xl border border-[#e6ccb2]/80 space-y-1 text-center shadow-2xs">
+                        <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100 border border-[#e6ccb2]/50">
                             <img src="/img/hero-home.png" alt="Playground Crew" className="w-full h-full object-cover" />
                         </div>
                         <div className="text-[11px] font-black text-[#3d2314]">Playground Crew</div>
                     </div>
 
-                    <div className="bg-[#fffcf7] p-2 rounded-2xl border border-[#e6ccb2]/80 space-y-1 text-center shadow-2xs">
-                        <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
+                    <div className="bg-white p-2 rounded-2xl border border-[#e6ccb2]/80 space-y-1 text-center shadow-2xs">
+                        <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100 border border-[#e6ccb2]/50">
                             <img src="/img/hero-home.png" alt="Birthday Party Support" className="w-full h-full object-cover" />
                         </div>
                         <div className="text-[11px] font-black text-[#3d2314]">Birthday Event Crew</div>
                     </div>
 
-                    <div className="bg-[#fffcf7] p-2 rounded-2xl border border-[#e6ccb2]/80 space-y-1 text-center shadow-2xs">
-                        <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
+                    <div className="bg-white p-2 rounded-2xl border border-[#e6ccb2]/80 space-y-1 text-center shadow-2xs">
+                        <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100 border border-[#e6ccb2]/50">
                             <img src="/img/hero-home.png" alt="Team Outing" className="w-full h-full object-cover" />
                         </div>
                         <div className="text-[11px] font-black text-[#3d2314]">Annual Team Outing</div>
@@ -534,7 +550,7 @@ export default function CareerPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-[#fffcf7] p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3 flex flex-col justify-between">
+                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3 flex flex-col justify-between">
                         <div className="space-y-2">
                             <Quote className="w-5 h-5 text-[#8c5a3c]/30" />
                             <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed italic">
@@ -542,7 +558,7 @@ export default function CareerPage() {
                             </p>
                         </div>
                         <div className="flex items-center gap-2.5 pt-2 border-t border-[#e6ccb2]/50">
-                            <div className="w-8 h-8 rounded-full bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center font-black text-xs">
+                            <div className="w-8 h-8 rounded-full bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center font-black text-xs">
                                 DA
                             </div>
                             <div>
@@ -552,7 +568,7 @@ export default function CareerPage() {
                         </div>
                     </div>
 
-                    <div className="bg-[#fffcf7] p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3 flex flex-col justify-between">
+                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3 flex flex-col justify-between">
                         <div className="space-y-2">
                             <Quote className="w-5 h-5 text-[#8c5a3c]/30" />
                             <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed italic">
@@ -560,7 +576,7 @@ export default function CareerPage() {
                             </p>
                         </div>
                         <div className="flex items-center gap-2.5 pt-2 border-t border-[#e6ccb2]/50">
-                            <div className="w-8 h-8 rounded-full bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center font-black text-xs">
+                            <div className="w-8 h-8 rounded-full bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center font-black text-xs">
                                 SN
                             </div>
                             <div>
@@ -570,7 +586,7 @@ export default function CareerPage() {
                         </div>
                     </div>
 
-                    <div className="bg-[#fffcf7] p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3 flex flex-col justify-between">
+                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3 flex flex-col justify-between">
                         <div className="space-y-2">
                             <Quote className="w-5 h-5 text-[#8c5a3c]/30" />
                             <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed italic">
@@ -578,7 +594,7 @@ export default function CareerPage() {
                             </p>
                         </div>
                         <div className="flex items-center gap-2.5 pt-2 border-t border-[#e6ccb2]/50">
-                            <div className="w-8 h-8 rounded-full bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center font-black text-xs">
+                            <div className="w-8 h-8 rounded-full bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center font-black text-xs">
                                 RZ
                             </div>
                             <div>
@@ -611,7 +627,7 @@ export default function CareerPage() {
                     <div className="z-10 shrink-0">
                         <button
                             onClick={scrollToPositions}
-                            className="px-6 py-3 bg-white hover:bg-[#faf6f0] active:bg-stone-200 text-[#3d2314] font-black text-xs rounded-full shadow-md transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
+                            className="px-6 py-3 bg-white hover:bg-[#FAF0E6] active:bg-stone-200 text-[#3d2314] font-black text-xs rounded-full shadow-md transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
                         >
                             <span>APPLY SEKARANG</span>
                             <ArrowRight className="w-3.5 h-3.5 text-[#8c5a3c]" />
@@ -621,12 +637,12 @@ export default function CareerPage() {
             </section>
 
             {/* ================================================= */}
-            {/* MODAL APPLY CV (FORM LAMARAN KERJA)               */}
+            {/* MODAL APPLY CV                                    */}
             {/* ================================================= */}
             {isApplyModalOpen && selectedJob && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/50 backdrop-blur-xs p-4 overflow-y-auto">
                     <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-stone-100 overflow-hidden transform transition-all my-auto">
-                        
+
                         <div className="px-5 py-3.5 border-b border-stone-100 flex items-center justify-between bg-stone-50/70">
                             <div>
                                 <h3 className="font-bold text-stone-900 text-sm sm:text-base">

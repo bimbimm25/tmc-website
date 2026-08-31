@@ -3,8 +3,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
-    Search, Clock, ArrowRight, Sparkles, ChevronRight,
-    Mail, Send, TrendingUp, BookOpen, AlertCircle, RefreshCw
+    Search, Clock, ArrowRight, Sparkles,
+    Mail, Send, TrendingUp, BookOpen, AlertCircle, RefreshCw,
+    ImageOff
 } from 'lucide-react';
 
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
@@ -23,6 +24,19 @@ function BearFaceIcon({ className = "w-5 h-5" }: { className?: string }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15a2 2 0 100-4 2 2 0 000 4z" />
         </svg>
     );
+}
+
+function renderFormattedText(text?: string | null, fallback?: React.ReactNode) {
+    if (!text) return fallback;
+    const normalized = text.replace(/<br\s*\/?>/gi, '\n');
+    const lines = normalized.split('\n');
+
+    return lines.map((line, idx) => (
+        <span key={idx}>
+            {line}
+            {idx < lines.length - 1 && <br />}
+        </span>
+    ));
 }
 
 export interface PostItem {
@@ -117,7 +131,7 @@ export default function BlogPage() {
         : '/img/hero-home.png';
 
     const getImageUrl = (img?: string | null) => {
-        if (!img) return '/img/hero-home.png';
+        if (!img || img.trim() === '') return null;
         if (img.startsWith('http') || img.startsWith('/img')) return img;
         return `http://127.0.0.1:8000/storage/${img}`;
     };
@@ -132,66 +146,86 @@ export default function BlogPage() {
     };
 
     return (
-        <div className="bg-[#faf6f0] min-h-screen space-y-8 sm:space-y-12 pb-14">
+        <div className="bg-[#faf6f0] min-h-screen space-y-10 sm:space-y-14 pb-16">
 
             {/* ================================================= */}
-            {/* 1. HERO BLOG (DARI DASHBOARD ADMIN)               */}
+            {/* 1. HERO SECTION FULL 1 LAYAR (BLOG BANNER)        */}
             {/* ================================================= */}
-            <section className="w-full relative min-h-dvh lg:h-screen lg:max-h-160 flex items-center bg-[#faf6f0] border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+            <section className="relative w-full h-screen min-h-dvh flex items-center bg-[#faf6f0] overflow-hidden">
+                {/* Background Image Full Cover */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src={heroImage}
+                        alt="To Meet Blog Showcase"
+                        className="w-full h-full object-cover object-right lg:object-center"
+                    />
+                    {/* Gradient Overlay Sebelah Kiri */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#faf6f0] via-[#faf6f0]/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                </div>
 
-                        <div className="lg:col-span-5 space-y-3.5 text-center lg:text-left order-2 lg:order-1">
-                            <div className="space-y-1.5">
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f4ece1] text-[#8c5a3c] text-[10px] sm:text-xs font-black tracking-wider uppercase border border-[#e6ccb2]/80">
-                                    <span>TO MEET STORIES & TIPS</span>
-                                    <Sparkles className="w-3 h-3 text-amber-500" />
-                                </div>
+                {/* Konten Text Hero */}
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
+                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
 
-                                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#3d2314] tracking-tight leading-[1.05] uppercase">
-                                    {banner?.title || 'To Meet Blog'}
-                                </h1>
+                        {/* Pill Badge */}
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f4ece1]/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
+                            <span>TO MEET STORIES & TIPS</span>
+                            <Sparkles className="w-3 h-3 text-amber-500" />
+                        </div>
 
-                                <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed max-w-sm mx-auto lg:mx-0">
-                                    {banner?.subtitle || 'Cerita seru, resep lezat, info acara, dan update terbaru seputar dunia To Meet Cafe.'}
-                                </p>
+                        {/* Title Proporsional */}
+                        <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
+                            {renderFormattedText(
+                                banner?.title,
+                                <>
+                                    TO MEET <br />
+                                    <span className="text-[#8c5a3c]">BLOG & STORIES</span>
+                                </>
+                            )}
+                        </h1>
+
+                        {/* Subtitle */}
+                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                            {renderFormattedText(
+                                banner?.subtitle,
+                                'Cerita seru, resep lezat, info acara, dan update terbaru seputar dunia To Meet Cafe.'
+                            )}
+                        </p>
+
+                        {/* Feature Badges Mini */}
+                        <div className="pt-1 grid grid-cols-3 gap-2 max-w-sm text-center">
+                            <div className="bg-[#fffcf7]/90 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                                <div className="text-[9.5px] font-black text-[#8c5a3c] uppercase">Cerita Cafe</div>
+                                <div className="text-[8px] text-[#6c584c] font-semibold">Behind the scenes</div>
                             </div>
-
-                            {/* Floating Feature Bar */}
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1 max-w-md mx-auto lg:mx-0">
-                                <div className="bg-[#fffcf7] p-2.5 rounded-2xl border border-[#e6ccb2]/60 text-left space-y-0.5">
-                                    <div className="text-[10px] font-black text-[#8c5a3c] uppercase">Cerita Cafe</div>
-                                    <div className="text-[9.5px] text-[#6c584c] font-semibold">Behind the scenes</div>
-                                </div>
-                                <div className="bg-[#fffcf7] p-2.5 rounded-2xl border border-[#e6ccb2]/60 text-left space-y-0.5">
-                                    <div className="text-[10px] font-black text-[#8c5a3c] uppercase">Menu & Resep</div>
-                                    <div className="text-[9.5px] text-[#6c584c] font-semibold">Inspirasi kuliner</div>
-                                </div>
-                                <div className="bg-[#fffcf7] p-2.5 rounded-2xl border border-[#e6ccb2]/60 text-left space-y-0.5 col-span-2 sm:col-span-1">
-                                    <div className="text-[10px] font-black text-[#8c5a3c] uppercase">Aktivitas & Tips</div>
-                                    <div className="text-[9.5px] text-[#6c584c] font-semibold">Tips seru si kecil</div>
-                                </div>
+                            <div className="bg-[#fffcf7]/90 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                                <div className="text-[9.5px] font-black text-[#8c5a3c] uppercase">Menu & Resep</div>
+                                <div className="text-[8px] text-[#6c584c] font-semibold">Inspirasi kuliner</div>
+                            </div>
+                            <div className="bg-[#fffcf7]/90 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                                <div className="text-[9.5px] font-black text-[#8c5a3c] uppercase">Aktivitas & Tips</div>
+                                <div className="text-[8px] text-[#6c584c] font-semibold">Tips seru si kecil</div>
                             </div>
                         </div>
 
-                        <div className="lg:col-span-7 order-1 lg:order-2 flex justify-center lg:justify-end relative">
-                            <div className="relative w-full max-w-md lg:max-w-lg aspect-16/10 rounded-3xl overflow-hidden shadow-xl border-3 border-white">
-                                <img
-                                    src={heroImage}
-                                    alt="To Meet Blog Showcase"
-                                    className="w-full h-full object-cover object-center"
-                                />
-                            </div>
+                        {/* Tombol Aksi */}
+                        <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
+                            <a
+                                href="#articles"
+                                className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                            >
+                                <span>BACA ARTIKEL</span>
+                                <ArrowRight className="w-3.5 h-3.5" />
+                            </a>
                         </div>
-
                     </div>
                 </div>
             </section>
 
             {/* ================================================= */}
-            {/* 2. MAIN BLOG CONTENT (DUAL COLUMN: POSTS vs SIDEBAR) */}
+            {/* 2. MAIN BLOG CONTENT                              */}
             {/* ================================================= */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section id="articles" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
                     {/* KOLOM KIRI (FEATURED ARTICLE & LATEST POSTS) */}
@@ -209,12 +243,19 @@ export default function BlogPage() {
 
                                 <div className="bg-[#fffcf7] rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden hover:border-[#8c5a3c] transition duration-200">
                                     <div className="grid grid-cols-1 sm:grid-cols-12 gap-0 items-center">
-                                        <div className="sm:col-span-6 aspect-16/10 sm:aspect-auto sm:h-full bg-stone-100 overflow-hidden">
-                                            <img
-                                                src={getImageUrl(featured.image)}
-                                                alt={featured.title}
-                                                className="w-full h-full object-cover"
-                                            />
+                                        <div className="sm:col-span-6 aspect-16/10 sm:aspect-auto sm:h-full bg-[#fcf7f0] overflow-hidden flex items-center justify-center">
+                                            {getImageUrl(featured.image) ? (
+                                                <img
+                                                    src={getImageUrl(featured.image)!}
+                                                    alt={featured.title}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center text-center p-6 space-y-1 text-[#a08a7b]">
+                                                    <ImageOff className="w-7 h-7 opacity-60" />
+                                                    <span className="text-[10px] font-black tracking-wider uppercase">Belum ada gambar</span>
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="sm:col-span-6 p-5 sm:p-6 space-y-3">
@@ -296,47 +337,59 @@ export default function BlogPage() {
 
                             {!isLoading && !isError && filteredPosts.length > 0 && (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                                    {filteredPosts.slice(0, visibleCount).map((post) => (
-                                        <div
-                                            key={post.id}
-                                            className="bg-[#fffcf7] rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden flex flex-col justify-between hover:border-[#8c5a3c] transition duration-200 group"
-                                        >
-                                            <div>
-                                                <div className="relative w-full aspect-16/10 bg-stone-100 overflow-hidden">
-                                                    <img
-                                                        src={getImageUrl(post.image)}
-                                                        alt={post.title}
-                                                        className="w-full h-full object-cover group-hover:scale-103 transition duration-300"
-                                                    />
-                                                    <div className="absolute top-2.5 left-2.5 bg-[#3d2314]/80 backdrop-blur-xs text-white px-2 py-0.5 rounded-md text-[8.5px] font-black uppercase tracking-wider">
-                                                        {post.category?.name || 'Blog'}
+                                    {filteredPosts.slice(0, visibleCount).map((post) => {
+                                        const postImg = getImageUrl(post.image);
+
+                                        return (
+                                            <div
+                                                key={post.id}
+                                                className="bg-[#fffcf7] rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden flex flex-col justify-between hover:border-[#8c5a3c] transition duration-200 group"
+                                            >
+                                                <div>
+                                                    <div className="relative w-full aspect-16/10 bg-[#fcf7f0] overflow-hidden flex items-center justify-center border-b border-[#e6ccb2]/40">
+                                                        {postImg ? (
+                                                            <img
+                                                                src={postImg}
+                                                                alt={post.title}
+                                                                className="w-full h-full object-cover group-hover:scale-103 transition duration-300"
+                                                            />
+                                                        ) : (
+                                                            <div className="flex flex-col items-center justify-center text-center p-4 space-y-1 text-[#a08a7b]">
+                                                                <ImageOff className="w-5 h-5 opacity-60" />
+                                                                <span className="text-[9px] font-black tracking-wider uppercase">Belum ada gambar</span>
+                                                            </div>
+                                                        )}
+
+                                                        <div className="absolute top-2.5 left-2.5 bg-[#3d2314]/80 backdrop-blur-xs text-white px-2 py-0.5 rounded-md text-[8.5px] font-black uppercase tracking-wider">
+                                                            {post.category?.name || 'Blog'}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="p-4 space-y-1.5">
+                                                        <h3 className="font-black text-xs sm:text-[13px] text-[#3d2314] leading-snug line-clamp-2">
+                                                            <Link href={`/blog/${post.slug}`} className="hover:text-[#8c5a3c] transition">
+                                                                {post.title}
+                                                            </Link>
+                                                        </h3>
+
+                                                        <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed line-clamp-2">
+                                                            {post.meta_description || post.content.slice(0, 80) + '...'}
+                                                        </p>
                                                     </div>
                                                 </div>
 
-                                                <div className="p-4 space-y-1.5">
-                                                    <h3 className="font-black text-xs sm:text-[13px] text-[#3d2314] leading-snug line-clamp-2">
-                                                        <Link href={`/blog/${post.slug}`} className="hover:text-[#8c5a3c] transition">
-                                                            {post.title}
-                                                        </Link>
-                                                    </h3>
-
-                                                    <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed line-clamp-2">
-                                                        {post.meta_description || post.content.slice(0, 80) + '...'}
-                                                    </p>
+                                                <div className="p-4 pt-0 flex items-center justify-between border-t border-[#e6ccb2]/40 text-[10px] font-bold text-[#6c584c]">
+                                                    <span>{formatDate(post.created_at)}</span>
+                                                    <Link
+                                                        href={`/blog/${post.slug}`}
+                                                        className="w-6 h-6 rounded-full bg-[#f4ece1] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition"
+                                                    >
+                                                        <ArrowRight className="w-3 h-3" />
+                                                    </Link>
                                                 </div>
                                             </div>
-
-                                            <div className="p-4 pt-0 flex items-center justify-between border-t border-[#e6ccb2]/40 text-[10px] font-bold text-[#6c584c]">
-                                                <span>{formatDate(post.created_at)}</span>
-                                                <Link
-                                                    href={`/blog/${post.slug}`}
-                                                    className="w-6 h-6 rounded-full bg-[#f4ece1] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition"
-                                                >
-                                                    <ArrowRight className="w-3 h-3" />
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             )}
 
@@ -406,35 +459,6 @@ export default function BlogPage() {
                                 ))}
                             </div>
                         </div>
-
-                        {/* Newsletter Subscribe Box */}
-                        <div className="bg-[#fdf3f1] p-5 rounded-3xl border border-rose-200/80 shadow-2xs space-y-3">
-                            <div className="space-y-1">
-                                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] leading-tight">
-                                    Never miss a sweet story!
-                                </h3>
-                                <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
-                                    Dapatkan update artikel terbaru, tips resep, dan promo event langsung ke email Anda.
-                                </p>
-                            </div>
-
-                            <form onSubmit={(e) => { e.preventDefault(); alert('Terima kasih sudah berlangganan newsletter!'); }} className="space-y-2">
-                                <input
-                                    type="email"
-                                    required
-                                    placeholder="Your email address"
-                                    className="w-full bg-white border border-rose-200 rounded-xl px-3 py-2 text-xs text-[#3d2314] font-semibold focus:outline-none focus:border-[#e85a4f]"
-                                />
-                                <button
-                                    type="submit"
-                                    className="w-full py-2 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-xl transition uppercase tracking-wider shadow-2xs cursor-pointer flex items-center justify-center gap-1.5"
-                                >
-                                    <Send className="w-3 h-3" />
-                                    <span>SUBSCRIBE</span>
-                                </button>
-                            </form>
-                        </div>
-
                         {/* Popular Articles Box */}
                         <div className="bg-[#fffcf7] p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
                             <div className="flex items-center gap-1.5 border-b border-[#e6ccb2]/50 pb-2.5">

@@ -9,6 +9,8 @@ import { FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
 
 import type { HomeDataResponse, Menu, Event, RobloxMission } from '@/types/api';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
 // Interface Data Banner dari Backend
 interface BannerData {
   id: number;
@@ -43,7 +45,7 @@ function FormatTextWithBreak({ text }: { text?: string | null }) {
 // Fetch Data Utama Homepage
 async function getHomeData(): Promise<HomeDataResponse['data'] | null> {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/home-data', {
+    const res = await fetch(`${API_BASE_URL}/api/home-data`, {
       cache: 'no-store',
     });
 
@@ -60,7 +62,7 @@ async function getHomeData(): Promise<HomeDataResponse['data'] | null> {
 // Fetch Banner Dinamis dari Dashboard Admin (Target: page_key 'home')
 async function getHomeBanner(): Promise<BannerData | null> {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/banners/home', {
+    const res = await fetch(`${API_BASE_URL}/api/banners/home`, {
       cache: 'no-store',
     });
 
@@ -90,11 +92,11 @@ export default async function Home() {
       ? homeBanner.image
       : homeBanner.image.startsWith('/img')
         ? homeBanner.image
-        : `http://127.0.0.1:8000/storage/${homeBanner.image}`)
+        : `${API_BASE_URL}/storage/${homeBanner.image}`)
     : '/img/hero-home.png';
 
   return (
-    <div className="space-y-12 lg:space-y-16 pb-16 bg-[#faf6f0]">
+    <div className="space-y-12 lg:space-y-16 pb-16">
 
       {/* ================================================= */}
       {/* 1. HERO SECTION (DINAMIS & SUPPORTS <BR>)         */}
@@ -103,8 +105,8 @@ export default async function Home() {
         className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[800px] flex items-center bg-cover bg-center sm:bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden transition-all duration-300"
         style={{ backgroundImage: `url('${heroBackgroundImage}')` }}
       >
-        {/* Soft Overlay Gradien Desktop */}
-        <div className="hidden lg:block absolute inset-0 bg-linear-to-r from-[#faf6f0]/95 via-[#faf6f0]/80 to-transparent max-w-2xl lg:max-w-3xl" />
+        {/* Soft Overlay Gradien Putih Desktop */}
+        <div className="hidden lg:block absolute inset-0 bg-linear-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl" />
 
         {/* Soft Overlay HP untuk Kontras Sempurna */}
         <div className="block lg:hidden absolute inset-0 bg-black/25" />
@@ -113,7 +115,7 @@ export default async function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
 
             {/* Card Kontainer Teks */}
-            <div className="lg:col-span-7 bg-[#faf6f0]/95 sm:bg-[#faf6f0]/90 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-3xl border border-[#e6ccb2]/80 lg:border-none shadow-xl lg:shadow-none space-y-3 sm:space-y-4 text-center sm:text-left">
+            <div className="lg:col-span-7 bg-white/95 sm:bg-white/90 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-3xl border border-[#e6ccb2]/80 lg:border-none shadow-xl lg:shadow-none space-y-3 sm:space-y-4 text-center sm:text-left">
 
               <div className="space-y-1 max-w-lg lg:max-w-xl mx-auto sm:mx-0">
                 <span className="text-xs sm:text-base lg:text-xl font-extrabold text-[#8c5a3c] tracking-wide block uppercase">
@@ -198,7 +200,7 @@ export default async function Home() {
           {/* 1. Visit Cafe */}
           <a
             href="#locations"
-            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
           >
             <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
               <img
@@ -220,7 +222,7 @@ export default async function Home() {
           {/* 2. Menu */}
           <Link
             href="/menu"
-            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
           >
             <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
               <img
@@ -242,7 +244,7 @@ export default async function Home() {
           {/* 3. Event & Workshop */}
           <Link
             href="/event"
-            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
           >
             <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
               <img
@@ -264,7 +266,7 @@ export default async function Home() {
           {/* 4. Merchandise */}
           <Link
             href="/merchandise"
-            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
           >
             <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
               <img
@@ -286,7 +288,7 @@ export default async function Home() {
           {/* 5. Roblox */}
           <Link
             href="/roblox"
-            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
           >
             <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
               <img
@@ -308,7 +310,7 @@ export default async function Home() {
           {/* 6. Birthday / Private Event */}
           <Link
             href="/birthday"
-            className="bg-[#fffcf7] p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
           >
             <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
               <img
@@ -334,7 +336,7 @@ export default async function Home() {
       {/* 3. TODAY'S HIGHLIGHTS                             */}
       {/* ================================================= */}
       <section id="highlights" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#fffcf7] p-5 sm:p-8 rounded-3xl border border-[#e6ccb2]/70 shadow-2xs space-y-5">
+        <div className="bg-white p-5 sm:p-8 rounded-3xl border border-[#e6ccb2]/70 shadow-2xs space-y-5">
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#e6ccb2]/50 pb-3 gap-2">
             <div className="space-y-0.5">
@@ -356,7 +358,7 @@ export default async function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {highlightMenus.length > 0 ? (
               highlightMenus.map((menu: Menu) => (
-                <div key={menu.id} className="bg-[#faf6f0] rounded-2xl p-3.5 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-3 relative group hover:shadow-md transition duration-200">
+                <div key={menu.id} className="bg-[#FAF0E6]/60 rounded-2xl p-3.5 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-3 relative group hover:shadow-md transition duration-200">
 
                   {/* Badges */}
                   <div className="absolute top-5 left-5 flex flex-col gap-1 z-10">
@@ -376,7 +378,7 @@ export default async function Home() {
                   <div className="w-full h-40 bg-white rounded-xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center relative">
                     {menu.image ? (
                       <img
-                        src={`http://127.0.0.1:8000/storage/${menu.image}`}
+                        src={`${API_BASE_URL}/storage/${menu.image}`}
                         alt={menu.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                       />
@@ -409,7 +411,7 @@ export default async function Home() {
       {/* 4. VIDEO EXPERIENCE SECTION (YOUTUBE EMBED)       */}
       {/* ================================================= */}
       <section id="experience" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#fffcf7] p-5 sm:p-8 lg:p-10 rounded-[2.5rem] border border-[#e6ccb2]/80 shadow-2xs">
+        <div className="bg-white p-5 sm:p-8 lg:p-10 rounded-[2.5rem] border border-[#e6ccb2]/80 shadow-2xs">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
 
             {/* Kolom Kiri: Video Player Responsive */}
@@ -468,7 +470,7 @@ export default async function Home() {
       {/* 5. UPCOMING EVENT SECTION (CLEAN SINGLE CARD)     */}
       {/* ================================================= */}
       <section id="event" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#fffcf7] border border-[#e6ccb2]/80 rounded-[2.5rem] p-5 sm:p-7 lg:p-8 shadow-2xs">
+        <div className="bg-white border border-[#e6ccb2]/80 rounded-[2.5rem] p-5 sm:p-7 lg:p-8 shadow-2xs">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
 
             {/* Sisi Kiri: Frame Gambar Banner Utuh */}
@@ -570,7 +572,7 @@ export default async function Home() {
 
             {/* Sisi Kanan: Card Misi Aktif dari Admin */}
             <div className="lg:col-span-5 flex justify-center lg:justify-end">
-              <div className="bg-[#fffcf7]/95 backdrop-blur-md p-5 sm:p-6 rounded-3xl border border-[#e6ccb2] max-w-sm w-full text-left space-y-3 shadow-xl">
+              <div className="bg-white/95 backdrop-blur-md p-5 sm:p-6 rounded-3xl border border-[#e6ccb2] max-w-sm w-full text-left space-y-3 shadow-xl">
 
                 <div className="flex items-center justify-between text-[#8c5a3c] text-[10px] sm:text-xs font-black uppercase tracking-wider border-b border-[#e6ccb2]/40 pb-2">
                   <span className="flex items-center gap-1.5">
@@ -618,7 +620,7 @@ export default async function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch">
 
             {/* 1. Outlet Heavenland Park */}
-            <div className="bg-[#fcf7f0] p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-5">
+            <div className="bg-white p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-5">
               <div className="grid grid-cols-12 gap-3.5 items-center">
 
                 {/* Teks Kiri */}
@@ -654,7 +656,7 @@ export default async function Home() {
               {/* Tombol Direction */}
               <div>
                 <a
-                  href="https://maps.google.com"
+                  href="https://maps.google.com/?q=Heavenland+Park+Sidoarjo"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-32 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-xs rounded-full text-center transition tracking-wider flex items-center justify-center gap-1.5 uppercase shadow-xs cursor-pointer"
@@ -666,7 +668,7 @@ export default async function Home() {
             </div>
 
             {/* 2. Outlet Pondok Mutiara */}
-            <div className="bg-[#fcf7f0] p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-5">
+            <div className="bg-white p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-5">
               <div className="grid grid-cols-12 gap-3.5 items-center">
 
                 {/* Teks Kiri */}
@@ -702,7 +704,7 @@ export default async function Home() {
               {/* Tombol Direction */}
               <div>
                 <a
-                  href="https://maps.google.com"
+                  href="https://maps.google.com/?q=Pondok+Mutiara+Sidoarjo"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-32 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-xs rounded-full text-center transition tracking-wider flex items-center justify-center gap-1.5 uppercase shadow-xs cursor-pointer"
@@ -714,7 +716,7 @@ export default async function Home() {
             </div>
 
             {/* 3. Social & Contact Card */}
-            <div className="bg-[#fcf7f0] p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs flex flex-col justify-between space-y-4 relative overflow-hidden">
+            <div className="bg-white p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs flex flex-col justify-between space-y-4 relative overflow-hidden">
 
               {/* Follow Us */}
               <div className="space-y-2">

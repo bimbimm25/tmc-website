@@ -7,6 +7,8 @@ import {
     Info, ChevronRight, Coffee, X, MapPin, AlertCircle, RefreshCw
 } from 'lucide-react';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
 // Custom SVG Icon
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     return (
@@ -45,7 +47,7 @@ export default function DigitalMenuPage() {
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
     const [menuBanner, setMenuBanner] = useState<BannerItem | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
-    const [selectedLocation, setSelectedLocation] = useState<string>('all'); // 'all', 'heavenland', 'pondok_mutiara'
+    const [selectedLocation, setSelectedLocation] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
@@ -56,10 +58,9 @@ export default function DigitalMenuPage() {
             setIsLoading(true);
             setIsError(false);
 
-            // Ambil Data Menu dan Banner secara paralel
             const [resMenu, resBanner] = await Promise.all([
-                fetch('http://127.0.0.1:8000/api/menus', { cache: 'no-store' }),
-                fetch('http://127.0.0.1:8000/api/banners/menu', { cache: 'no-store' }).catch(() => null)
+                fetch(`${API_BASE_URL}/api/menus`, { cache: 'no-store' }),
+                fetch(`${API_BASE_URL}/api/banners/menu`, { cache: 'no-store' }).catch(() => null)
             ]);
 
             if (!resMenu.ok) {
@@ -90,26 +91,22 @@ export default function DigitalMenuPage() {
         fetchMenuPageData();
     }, []);
 
-    // Filter dinamis kategori berdasarkan data yang diinput dari Admin
     const availableCategories = useMemo(() => {
         if (menuItems.length === 0) return ['all'];
         const unique = Array.from(new Set(menuItems.map(m => m.category).filter(Boolean)));
         return ['all', 'bestseller', ...unique.filter(c => c.toLowerCase() !== 'bestseller' && c.toLowerCase() !== 'best seller')];
     }, [menuItems]);
 
-    // Filter produk berdasarkan search, kategori, dan lokasi outlet
     const filteredMenuItems = useMemo(() => {
         return menuItems.filter((item) => {
             if (item.is_active === false) return false;
 
-            // 1. Filter Pencarian
             const matchesSearch =
                 item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 (item.description && item.description.toLowerCase().includes(searchQuery.toLowerCase()));
 
             if (!matchesSearch) return false;
 
-            // 2. Filter Lokasi Outlet
             if (selectedLocation !== 'all') {
                 const itemLoc = item.location || 'all';
                 if (itemLoc !== 'all' && itemLoc !== selectedLocation) {
@@ -117,7 +114,6 @@ export default function DigitalMenuPage() {
                 }
             }
 
-            // 3. Filter Kategori
             if (selectedCategory === 'all') return true;
             if (selectedCategory === 'bestseller') return Boolean(item.is_bestseller);
 
@@ -125,17 +121,16 @@ export default function DigitalMenuPage() {
         });
     }, [menuItems, selectedCategory, selectedLocation, searchQuery]);
 
-    // Background Hero Image dari Banner Manager atau Fallback Default
     const heroBackgroundImage = menuBanner?.image
         ? (menuBanner.image.startsWith('http')
             ? menuBanner.image
             : menuBanner.image.startsWith('/img')
                 ? menuBanner.image
-                : `http://127.0.0.1:8000/storage/${menuBanner.image}`)
+                : `${API_BASE_URL}/storage/${menuBanner.image}`)
         : '/img/hero-home.png';
 
     return (
-        <div className="bg-[#faf6f0] min-h-screen pb-16 space-y-8">
+        <div className="min-h-screen pb-16 space-y-8">
 
             {/* ================================================= */}
             {/* 1. HERO SECTION (DINAMIS DARI DASHBOARD BANNER)   */}
@@ -144,10 +139,14 @@ export default function DigitalMenuPage() {
                 className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[750px] flex items-center bg-cover bg-center sm:bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden transition-all duration-300"
                 style={{ backgroundImage: `url('${heroBackgroundImage}')` }}
             >
+                {/* Soft Overlay Gradien Putih Desktop */}
+                <div className="hidden lg:block absolute inset-0 bg-linear-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl" />
+
+                {/* Soft Overlay HP untuk Kontras Sempurna */}
                 <div className="block lg:hidden absolute inset-0 bg-black/25" />
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
-                    <div className="w-full max-w-lg lg:w-1/2 bg-[#faf6f0]/95 sm:bg-[#faf6f0]/90 lg:bg-[#faf6f0]/95 backdrop-blur-md p-5 sm:p-8 lg:p-10 rounded-3xl border border-[#e6ccb2]/80 shadow-xl space-y-2.5 sm:space-y-3.5 text-center sm:text-left mx-auto sm:mx-0">
+                    <div className="w-full max-w-lg lg:w-1/2 bg-white/95 sm:bg-white/90 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-3xl border border-[#e6ccb2]/80 lg:border-none shadow-xl lg:shadow-none space-y-2.5 sm:space-y-3.5 text-center sm:text-left mx-auto sm:mx-0">
                         <div className="inline-flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-[#8c5a3c] tracking-widest uppercase">
                             <Link href="/" className="hover:underline">HOME</Link>
                             <ChevronRight className="w-3 h-3 text-[#8c5a3c]" />
@@ -179,10 +178,10 @@ export default function DigitalMenuPage() {
             {/* 2. MAIN CONTENT AREA & LOCATION FILTER            */}
             {/* ================================================= */}
             <section id="menu-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-                <div className="bg-[#fffcf7] p-4 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6">
+                <div className="bg-white p-4 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6">
 
                     {/* Filter Tab Lokasi Outlet */}
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 sm:p-4 bg-[#faf6f0] rounded-2xl border border-[#e6ccb2]/70">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 sm:p-4 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/70">
                         <div className="flex items-center gap-2 text-xs font-black text-[#3d2314] uppercase tracking-wide">
                             <MapPin className="w-4 h-4 text-[#8c5a3c]" />
                             <span>PILIH OUTLET:</span>
@@ -192,7 +191,7 @@ export default function DigitalMenuPage() {
                                 onClick={() => setSelectedLocation('all')}
                                 className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'all'
                                     ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                    : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#f4ece1]'
+                                    : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
                                     }`}
                             >
                                 Semua Outlet
@@ -201,7 +200,7 @@ export default function DigitalMenuPage() {
                                 onClick={() => setSelectedLocation('pondok_mutiara')}
                                 className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'pondok_mutiara'
                                     ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                    : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#f4ece1]'
+                                    : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
                                     }`}
                             >
                                 Pondok Mutiara
@@ -210,7 +209,7 @@ export default function DigitalMenuPage() {
                                 onClick={() => setSelectedLocation('heavenland')}
                                 className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'heavenland'
                                     ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                    : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#f4ece1]'
+                                    : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
                                     }`}
                             >
                                 Heavenland Park
@@ -229,7 +228,7 @@ export default function DigitalMenuPage() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Cari makanan / minuman..."
-                                    className="w-full bg-[#faf6f0] border border-[#e6ccb2]/80 rounded-2xl pl-10 pr-9 py-2.5 text-xs text-[#3d2314] font-semibold focus:outline-none focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
+                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-2xl pl-10 pr-9 py-2.5 text-xs text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
                                 />
                                 <Search className="w-4 h-4 text-[#8c5a3c] absolute left-3.5 top-3" />
                                 {searchQuery && (
@@ -256,7 +255,7 @@ export default function DigitalMenuPage() {
                                             onClick={() => setSelectedCategory(cat)}
                                             className={`flex items-center justify-between px-4 py-3 rounded-2xl transition shrink-0 cursor-pointer ${isSelected
                                                 ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                                : 'bg-[#faf6f0] text-[#3d2314] hover:bg-[#f4ece1] border border-[#e6ccb2]/60'
+                                                : 'bg-[#FAF0E6]/50 text-[#3d2314] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
                                                 }`}
                                         >
                                             <span className="flex items-center gap-2.5">
@@ -293,7 +292,7 @@ export default function DigitalMenuPage() {
 
                             {/* Error State */}
                             {!isLoading && isError && (
-                                <div className="py-16 text-center space-y-3.5 bg-[#faf6f0] rounded-3xl border border-rose-200/80 p-6">
+                                <div className="py-16 text-center space-y-3.5 bg-[#FAF0E6]/50 rounded-3xl border border-rose-200/80 p-6">
                                     <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
                                         <AlertCircle className="w-6 h-6" />
                                     </div>
@@ -341,8 +340,8 @@ export default function DigitalMenuPage() {
                                             ))}
                                         </div>
                                     ) : (
-                                        <div className="py-16 text-center space-y-2 bg-[#faf6f0] rounded-3xl border border-[#e6ccb2]/60 p-6">
-                                            <div className="w-12 h-12 rounded-2xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                                        <div className="py-16 text-center space-y-2 bg-[#FAF0E6]/50 rounded-3xl border border-[#e6ccb2]/60 p-6">
+                                            <div className="w-12 h-12 rounded-2xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/60">
                                                 <Info className="w-6 h-6" />
                                             </div>
                                             <h4 className="font-black text-sm text-[#3d2314]">Tidak Ada Data Menu</h4>
@@ -372,16 +371,16 @@ export default function DigitalMenuPage() {
                 >
                     <div
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-[#fffcf7] w-full max-w-md rounded-3xl p-5 sm:p-6 border border-[#e6ccb2] shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-150"
+                        className="bg-white w-full max-w-md rounded-3xl p-5 sm:p-6 border border-[#e6ccb2] shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-150"
                     >
                         <button
                             onClick={() => setSelectedProduct(null)}
-                            className="absolute right-4 top-4 w-8 h-8 rounded-full bg-[#f4ece1] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition cursor-pointer z-10"
+                            className="absolute right-4 top-4 w-8 h-8 rounded-full bg-[#FAF0E6] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition cursor-pointer z-10"
                         >
                             <X className="w-4 h-4" />
                         </button>
 
-                        <div className="w-full aspect-[4/3] bg-white rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center">
+                        <div className="w-full aspect-[4/3] bg-stone-50 rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center">
                             {selectedProduct.image ? (
                                 <img
                                     src={
@@ -389,7 +388,7 @@ export default function DigitalMenuPage() {
                                             ? selectedProduct.image
                                             : selectedProduct.image.startsWith('/img')
                                                 ? selectedProduct.image
-                                                : `http://127.0.0.1:8000/storage/${selectedProduct.image}`
+                                                : `${API_BASE_URL}/storage/${selectedProduct.image}`
                                     }
                                     alt={selectedProduct.name}
                                     className="w-full h-full object-cover"
@@ -405,7 +404,7 @@ export default function DigitalMenuPage() {
                                     {selectedProduct.category || 'MENU'}
                                 </span>
                                 <div className="flex items-center gap-1.5">
-                                    <span className="px-2 py-0.5 bg-[#f4ece1] text-[#8c5a3c] text-[9px] font-black uppercase rounded-md">
+                                    <span className="px-2 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9px] font-black uppercase rounded-md">
                                         {selectedProduct.purchase_option || 'In Store'}
                                     </span>
                                     {selectedProduct.location && selectedProduct.location !== 'all' && (
@@ -436,7 +435,7 @@ export default function DigitalMenuPage() {
                             <Link
                                 href="/#locations"
                                 onClick={() => setSelectedProduct(null)}
-                                className="px-4 py-2 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-full transition flex items-center gap-1.5 uppercase"
+                                className="px-4 py-2 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-full transition flex items-center gap-1.5 uppercase cursor-pointer"
                             >
                                 <MapPin className="w-3.5 h-3.5" />
                                 <span>VISIT CAFE</span>
@@ -457,7 +456,7 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
     return (
         <div
             onClick={() => onSelect(item)}
-            className="bg-[#faf6f0] rounded-3xl p-3 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-2.5 relative group hover:shadow-md hover:border-[#8c5a3c] transition duration-200 cursor-pointer"
+            className="bg-[#FAF0E6]/60 rounded-3xl p-3 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-2.5 relative group hover:shadow-md hover:border-[#8c5a3c] transition duration-200 cursor-pointer"
         >
             {/* Badges */}
             <div className="absolute top-4 left-4 flex flex-col gap-1 z-10">
@@ -482,7 +481,7 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                                 ? item.image
                                 : item.image.startsWith('/img')
                                     ? item.image
-                                    : `http://127.0.0.1:8000/storage/${item.image}`
+                                    : `${API_BASE_URL}/storage/${item.image}`
                         }
                         alt={item.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
@@ -499,7 +498,7 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                         {item.category || 'MENU'}
                     </span>
                     {item.location && item.location !== 'all' && (
-                        <span className="text-[7px] font-bold px-1.5 py-0.2 bg-[#f4ece1] text-[#8c5a3c] rounded border border-[#e6ccb2]/60 shrink-0">
+                        <span className="text-[7px] font-bold px-1.5 py-0.2 bg-white text-[#8c5a3c] rounded border border-[#e6ccb2]/60 shrink-0">
                             {item.location === 'heavenland' ? 'Heavenland' : 'P. Mutiara'}
                         </span>
                     )}
@@ -515,7 +514,7 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                 <div className="font-black text-[#3d2314] text-xs">
                     Rp {new Intl.NumberFormat('id-ID').format(item.price)}
                 </div>
-                <span className="px-2 py-0.5 bg-[#f4ece1] text-[#8c5a3c] text-[8px] font-black uppercase rounded-md">
+                <span className="px-2 py-0.5 bg-white text-[#8c5a3c] text-[8px] font-black uppercase rounded-md border border-[#e6ccb2]/50">
                     {item.purchase_option || 'In Store'}
                 </span>
             </div>

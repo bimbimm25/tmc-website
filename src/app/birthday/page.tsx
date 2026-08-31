@@ -10,6 +10,8 @@ import {
     Info, Gift
 } from 'lucide-react';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     return (
         <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -26,6 +28,20 @@ function BearFaceIcon({ className = "w-5 h-5" }: { className?: string }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15a2 2 0 100-4 2 2 0 000 4z" />
         </svg>
     );
+}
+
+function renderFormattedText(text?: string | null, fallback?: React.ReactNode) {
+    if (!text) return fallback;
+
+    const normalized = text.replace(/<br\s*\/?>/gi, '\n');
+    const lines = normalized.split('\n');
+
+    return lines.map((line, idx) => (
+        <span key={idx}>
+            {line}
+            {idx < lines.length - 1 && <br />}
+        </span>
+    ));
 }
 
 export interface BirthdayPackageItem {
@@ -93,12 +109,12 @@ export default function BirthdayPage() {
             setIsError(false);
 
             const [resBirthdays, resBanner] = await Promise.all([
-                fetch('http://127.0.0.1:8000/api/birthdays', { cache: 'no-store' }),
-                fetch('http://127.0.0.1:8000/api/banners/birthday', { cache: 'no-store' }).catch(() => null)
+                fetch(`${API_BASE_URL}/api/birthdays`, { cache: 'no-store' }),
+                fetch(`${API_BASE_URL}/api/banners/birthday`, { cache: 'no-store' }).catch(() => null)
             ]);
 
             if (!resBirthdays.ok) {
-                const resEvents = await fetch('http://127.0.0.1:8000/api/events', { cache: 'no-store' });
+                const resEvents = await fetch(`${API_BASE_URL}/api/events`, { cache: 'no-store' });
                 if (resEvents.ok) {
                     const jsonEvents = await resEvents.json();
                     const filtered = (jsonEvents.data || []).filter((item: any) =>
@@ -140,107 +156,103 @@ export default function BirthdayPage() {
             ? banner.image
             : banner.image.startsWith('/img')
                 ? banner.image
-                : `http://127.0.0.1:8000/storage/${banner.image}`)
+                : `${API_BASE_URL}/storage/${banner.image}`)
         : '/img/hero-home.png';
 
     const defaultBookingLink = "https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20tertarik%20untuk%20booking%20paket%20Birthday%20&%20Private%20Event";
 
     return (
-        <div className="bg-[#faf6f0] min-h-screen space-y-10 sm:space-y-16 pb-16">
+        <div className="min-h-screen space-y-10 sm:space-y-14 pb-16">
 
-            {/* 1. HERO BIRTHDAY SECTION */}
-            <section className="w-full relative min-h-dvh lg:h-screen lg:max-h-190 flex items-center bg-[#faf6f0] border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* ================================================= */}
+            {/* 1. HERO BANNER FULL 1 LAYAR (UKURAN PAS)          */}
+            {/* ================================================= */}
+            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src={heroImage}
+                        alt="Birthday and Private Event at To Meet Cafe"
+                        className="w-full h-full object-cover object-right lg:object-center"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                </div>
 
-                        <div className="lg:col-span-6 space-y-5 text-center lg:text-left order-2 lg:order-1">
-                            <div className="space-y-2">
-                                <span className="text-[10px] sm:text-xs font-black text-[#8c5a3c] tracking-widest uppercase block">
-                                    MAKE EVERY MOMENT SPECIAL
-                                </span>
-                                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#3d2314] tracking-tight leading-[1.1] uppercase">
-                                    Birthday &<br />
-                                    <span>Private Event</span><br />
-                                    <span className="text-[#8c5a3c] text-2xl sm:text-3xl lg:text-4xl font-extrabold normal-case tracking-normal">
-                                        at To Meet
-                                    </span>
-                                </h1>
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
+                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
+                            <span>MAKE EVERY MOMENT SPECIAL</span>
+                            <Sparkles className="w-3 h-3 text-amber-500" />
+                        </div>
+
+                        <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
+                            {renderFormattedText(
+                                banner?.title,
+                                <>
+                                    BIRTHDAY & <br />
+                                    <span>PRIVATE EVENT</span> <br />
+                                    <span className="text-[#8c5a3c]">AT TO MEET</span>
+                                </>
+                            )}
+                        </h1>
+
+                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                            {renderFormattedText(
+                                banner?.subtitle,
+                                'Rayakan hari spesial si kecil di dunia beruang yang hangat dan ceria! Kami siapkan seluruh detail dekorasi dan makanan, Anda cukup menikmati momen bahagianya.'
+                            )}
+                        </p>
+
+                        <div className="pt-1 grid grid-cols-3 gap-2 max-w-sm text-center">
+                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#e85a4f] mx-auto flex items-center justify-center">
+                                    <Heart className="w-3.5 h-3.5 fill-current" />
+                                </div>
+                                <div className="text-[9px] font-black text-[#3d2314] leading-tight">Cute Bear Theme</div>
                             </div>
 
-                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md mx-auto lg:mx-0">
-                                {banner?.subtitle || 'Rayakan hari spesial si kecil di dunia beruang yang hangat dan ceria! Kami siapkan seluruh detail dekorasi dan makanan, Anda cukup menikmati momen bahagianya.'}
-                            </p>
-
-                            <div className="grid grid-cols-3 gap-2 sm:gap-3 max-w-md mx-auto lg:mx-0 pt-1">
-                                <div className="bg-[#fffcf7] p-2.5 rounded-2xl border border-[#e6ccb2]/60 text-center space-y-1">
-                                    <div className="w-7 h-7 rounded-xl bg-[#f4ece1] text-[#e85a4f] mx-auto flex items-center justify-center">
-                                        <Heart className="w-3.5 h-3.5 fill-current" />
-                                    </div>
-                                    <div className="text-[10px] font-black text-[#3d2314]">Cute Bear Theme</div>
+                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
+                                    <Utensils className="w-3.5 h-3.5" />
                                 </div>
-                                <div className="bg-[#fffcf7] p-2.5 rounded-2xl border border-[#e6ccb2]/60 text-center space-y-1">
-                                    <div className="w-7 h-7 rounded-xl bg-[#f4ece1] text-[#8c5a3c] mx-auto flex items-center justify-center">
-                                        <Utensils className="w-3.5 h-3.5" />
-                                    </div>
-                                    <div className="text-[10px] font-black text-[#3d2314]">Yummy Food & Drinks</div>
-                                </div>
-                                <div className="bg-[#fffcf7] p-2.5 rounded-2xl border border-[#e6ccb2]/60 text-center space-y-1">
-                                    <div className="w-7 h-7 rounded-xl bg-[#f4ece1] text-amber-600 mx-auto flex items-center justify-center">
-                                        <Camera className="w-3.5 h-3.5" />
-                                    </div>
-                                    <div className="text-[10px] font-black text-[#3d2314]">Memorable Moments</div>
-                                </div>
+                                <div className="text-[9px] font-black text-[#3d2314] leading-tight">Yummy Treats</div>
                             </div>
 
-                            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
-                                <a
-                                    href={banner?.cta_link || defaultBookingLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="px-7 py-3.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
-                                >
-                                    <Phone className="w-3.5 h-3.5 fill-current" />
-                                    <span>{banner?.cta_text || 'BOOK VIA WHATSAPP'}</span>
-                                </a>
-                                <span className="text-xs font-bold text-[#8c5a3c]">Let&apos;s plan your special day!</span>
+                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-amber-600 mx-auto flex items-center justify-center">
+                                    <Camera className="w-3.5 h-3.5" />
+                                </div>
+                                <div className="text-[9px] font-black text-[#3d2314] leading-tight">Photo Spots</div>
                             </div>
                         </div>
 
-                        <div className="lg:col-span-6 order-1 lg:order-2 flex flex-col items-center lg:items-end space-y-3">
-                            <div className="relative w-full max-w-md lg:max-w-lg aspect-16/11 rounded-3xl overflow-hidden shadow-xl border-3 border-white">
-                                <img
-                                    src={heroImage}
-                                    alt="Birthday and Private Event at To Meet Cafe"
-                                    className="w-full h-full object-cover object-center"
-                                />
-                            </div>
+                        <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
+                            <a
+                                href={banner?.cta_link || defaultBookingLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                            >
+                                <Phone className="w-3.5 h-3.5 fill-current" />
+                                <span>{banner?.cta_text || 'BOOK VIA WHATSAPP'}</span>
+                            </a>
 
-                            <div className="w-full max-w-md lg:max-w-lg bg-[#fffcf7] p-3 rounded-2xl border border-[#e6ccb2]/80 shadow-sm grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[10px] font-black text-[#3d2314]">
-                                <div className="flex items-center gap-1.5 justify-center">
-                                    <Home className="w-3.5 h-3.5 text-[#8c5a3c]" />
-                                    <span>Spacious Space</span>
-                                </div>
-                                <div className="flex items-center gap-1.5 justify-center">
-                                    <Palette className="w-3.5 h-3.5 text-[#8c5a3c]" />
-                                    <span>Custom Decor</span>
-                                </div>
-                                <div className="flex items-center gap-1.5 justify-center">
-                                    <Sparkles className="w-3.5 h-3.5 text-[#8c5a3c]" />
-                                    <span>Playground</span>
-                                </div>
-                                <div className="flex items-center gap-1.5 justify-center">
-                                    <Smile className="w-3.5 h-3.5 text-[#8c5a3c]" />
-                                    <span>Friendly Staff</span>
-                                </div>
-                            </div>
+                            <a
+                                href="#packages"
+                                className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md"
+                            >
+                                <Gift className="w-3.5 h-3.5" />
+                                <span>PILIH PAKET</span>
+                            </a>
                         </div>
-
                     </div>
                 </div>
             </section>
 
-            {/* 2. OUR PACKAGES & WHAT'S INCLUDED */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* ================================================= */}
+            {/* 2. OUR PACKAGES & WHAT'S INCLUDED                 */}
+            {/* ================================================= */}
+            <section id="packages" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14">
                 <div className="space-y-6">
                     <div className="flex items-center gap-2 border-b border-[#e6ccb2]/60 pb-3">
                         <BearPawIcon className="w-4 h-4 text-[#8c5a3c]" />
@@ -253,14 +265,14 @@ export default function BirthdayPage() {
 
                         <div className="lg:col-span-8">
                             {isLoading && (
-                                <div className="py-16 text-center space-y-2 bg-[#fffcf7] rounded-3xl border border-[#e6ccb2]/60 p-6">
+                                <div className="py-16 text-center space-y-2 bg-white rounded-3xl border border-[#e6ccb2]/60 p-6">
                                     <div className="w-6 h-6 border-2 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
                                     <p className="text-xs font-bold text-[#8c5a3c]">Memuat paket birthday...</p>
                                 </div>
                             )}
 
                             {!isLoading && isError && (
-                                <div className="py-12 text-center space-y-2.5 bg-[#faf6f0] rounded-3xl border border-rose-200 p-6">
+                                <div className="py-12 text-center space-y-2.5 bg-[#FAF0E6]/50 rounded-3xl border border-rose-200 p-6">
                                     <AlertCircle className="w-6 h-6 text-rose-600 mx-auto" />
                                     <h4 className="font-black text-xs text-[#3d2314]">Gagal Memuat Paket</h4>
                                     <button
@@ -273,8 +285,8 @@ export default function BirthdayPage() {
                             )}
 
                             {!isLoading && !isError && packages.length === 0 && (
-                                <div className="py-16 text-center space-y-2 bg-[#fffcf7] rounded-3xl border border-[#e6ccb2]/60 p-6">
-                                    <Info className="w-6 h-6 text-[#8c5a3c] mx-auto" />
+                                <div className="py-16 text-center space-y-2 bg-white rounded-3xl border border-[#e6ccb2]/60 p-6">
+                                    <Info className="w-6 h-6 text-[#8c5a3c]" />
                                     <h4 className="font-black text-sm text-[#3d2314]">Belum Ada Paket Birthday</h4>
                                     <p className="text-xs text-[#6c584c]">Paket perayaan sedang disiapkan oleh tim To Meet Cafe.</p>
                                 </div>
@@ -283,26 +295,35 @@ export default function BirthdayPage() {
                             {!isLoading && !isError && packages.length > 0 && (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                                     {packages.map((pkg, idx) => {
-                                        const pkgImage = pkg.image
-                                            ? (pkg.image.startsWith('http')
-                                                ? pkg.image
-                                                : pkg.image.startsWith('/img')
-                                                    ? pkg.image
-                                                    : `http://127.0.0.1:8000/storage/${pkg.image}`)
-                                            : '/img/hero-home.png';
+                                        const hasImage = Boolean(pkg.image && pkg.image.trim() !== '');
+                                        const pkgImage = hasImage
+                                            ? (pkg.image!.startsWith('http')
+                                                ? pkg.image!
+                                                : pkg.image!.startsWith('/img')
+                                                    ? pkg.image!
+                                                    : `${API_BASE_URL}/storage/${pkg.image}`)
+                                            : null;
 
                                         return (
                                             <div
                                                 key={pkg.id}
-                                                className="bg-[#fffcf7] rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden flex flex-col justify-between hover:border-[#8c5a3c] transition duration-200"
+                                                className="bg-white rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden flex flex-col justify-between hover:border-[#8c5a3c] transition duration-200"
                                             >
                                                 <div>
-                                                    <div className="relative w-full aspect-4/3 bg-stone-100 overflow-hidden">
-                                                        <img
-                                                            src={pkgImage}
-                                                            alt={pkg.title}
-                                                            className="w-full h-full object-cover"
-                                                        />
+                                                    <div className="relative w-full aspect-4/3 bg-[#FAF0E6]/50 overflow-hidden flex items-center justify-center border-b border-[#e6ccb2]/40">
+                                                        {pkgImage ? (
+                                                            <img
+                                                                src={pkgImage}
+                                                                alt={pkg.title}
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <div className="flex flex-col items-center justify-center text-center p-4 space-y-1 text-[#a08a7b]">
+                                                                <ImageOff className="w-6 h-6 opacity-60" />
+                                                                <span className="text-[10px] font-black tracking-wider uppercase">Belum ada gambar</span>
+                                                            </div>
+                                                        )}
+
                                                         <div className="absolute top-3 left-3 bg-[#3d2314]/80 backdrop-blur-xs text-white px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider">
                                                             {idx === 0 ? 'BASIC' : idx === 1 ? 'DELUXE' : 'PREMIUM'}
                                                         </div>
@@ -348,7 +369,7 @@ export default function BirthdayPage() {
                             )}
                         </div>
 
-                        <div className="lg:col-span-4 bg-[#fffcf7] p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
+                        <div className="lg:col-span-4 bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
                             <div className="flex items-center gap-2">
                                 <BearFaceIcon className="w-5 h-5 text-[#8c5a3c]" />
                                 <h3 className="font-black text-sm text-[#3d2314] uppercase tracking-wide">
@@ -387,7 +408,7 @@ export default function BirthdayPage() {
                                 </div>
                             </div>
 
-                            <div className="p-3 bg-[#faf6f0] rounded-2xl border border-[#e6ccb2]/60 text-center">
+                            <div className="p-3 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/60 text-center">
                                 <p className="text-[11px] font-bold text-[#8c5a3c]">
                                     We can customize packages based on your personal needs!
                                 </p>
@@ -398,7 +419,9 @@ export default function BirthdayPage() {
                 </div>
             </section>
 
-            {/* 3. OUR SPACES & ADD-ON SERVICES */}
+            {/* ================================================= */}
+            {/* 3. OUR SPACES & ADD-ON SERVICES                   */}
+            {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
@@ -411,71 +434,99 @@ export default function BirthdayPage() {
                         </div>
 
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            <div className="bg-[#fffcf7] p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
+                            <div className="bg-white p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
                                 <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
-                                    <img src="/img/hero-home.png" alt="Indoor Area" className="w-full h-full object-cover" />
+                                    <img src="/img/visit-us-pm/seating-area-lt1.png" alt="Indoor Area" className="w-full h-full object-cover" />
                                 </div>
                                 <div>
-                                    <h4 className="font-black text-xs text-[#3d2314]">INDOOR AREA</h4>
-                                    <p className="text-[9.5px] text-[#6c584c] font-semibold leading-tight mt-0.5">Cozy space for dining and celebration.</p>
+                                    <h4 className="font-black text-xs text-[#3d2314]">SEATING AREA LT 1</h4>
                                 </div>
                             </div>
 
-                            <div className="bg-[#fffcf7] p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
+                            <div className="bg-white p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
                                 <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
-                                    <img src="/img/hero-home.png" alt="Playground" className="w-full h-full object-cover" />
+                                    <img src="/img/visit-us-pm/seating-area-lt2.png" alt="Playground" className="w-full h-full object-cover" />
+                                </div>
+                                <div>
+                                    <h4 className="font-black text-xs text-[#3d2314]">SEATING AREA LT 2</h4>
+                                </div>
+                            </div>
+
+                            <div className="bg-white p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
+                                <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
+                                    <img src="/img/visit-us-pm/seating-area-lt3.png" alt="Private Room" className="w-full h-full object-cover" />
+                                </div>
+                                <div>
+                                    <h4 className="font-black text-xs text-[#3d2314]">SEATING AREA LT 3</h4>
+                                </div>
+                            </div>
+
+                            <div className="bg-white p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
+                                <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
+                                    <img src="/img/visit-us-pm/playground.png" alt="Outdoor Area" className="w-full h-full object-cover" />
                                 </div>
                                 <div>
                                     <h4 className="font-black text-xs text-[#3d2314]">PLAYGROUND</h4>
-                                    <p className="text-[9.5px] text-[#6c584c] font-semibold leading-tight mt-0.5">Fun & safe playground for kids.</p>
                                 </div>
                             </div>
-
-                            <div className="bg-[#fffcf7] p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
+                            <div className="bg-white p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
                                 <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
-                                    <img src="/img/hero-home.png" alt="Private Room" className="w-full h-full object-cover" />
+                                    <img src="/img/visit-us-pm/teddy-bear.png" alt="Outdoor Area" className="w-full h-full object-cover" />
                                 </div>
                                 <div>
-                                    <h4 className="font-black text-xs text-[#3d2314]">PRIVATE ROOM (L2)</h4>
-                                    <p className="text-[9.5px] text-[#6c584c] font-semibold leading-tight mt-0.5">More private space for special moments.</p>
+                                    <h4 className="font-black text-xs text-[#3d2314]">SPOT FOTO TEDDY BEAR</h4>
                                 </div>
                             </div>
-
-                            <div className="bg-[#fffcf7] p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
+                            <div className="bg-white p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
                                 <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
-                                    <img src="/img/hero-home.png" alt="Outdoor Area" className="w-full h-full object-cover" />
+                                    <img src="/img/visit-us-pm/kolam-pancing.png" alt="Outdoor Area" className="w-full h-full object-cover" />
                                 </div>
                                 <div>
-                                    <h4 className="font-black text-xs text-[#3d2314]">OUTDOOR AREA</h4>
-                                    <p className="text-[9.5px] text-[#6c584c] font-semibold leading-tight mt-0.5">Great for casual gathering and small events.</p>
+                                    <h4 className="font-black text-xs text-[#3d2314]">KOLAM PANCING</h4>
+                                </div>
+                            </div>
+                            <div className="bg-white p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
+                                <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
+                                    <img src="/img/visit-us-pm/merchandise-corner.png" alt="Outdoor Area" className="w-full h-full object-cover" />
+                                </div>
+                                <div>
+                                    <h4 className="font-black text-xs text-[#3d2314]">MERCHANDISE CORNER</h4>
+                                </div>
+                            </div>
+                            <div className="bg-white p-2.5 rounded-2xl border border-[#e6ccb2]/70 space-y-2">
+                                <div className="w-full aspect-4/3 rounded-xl overflow-hidden bg-stone-100">
+                                    <img src="/img/visit-us-pm/boardgame.png" alt="Outdoor Area" className="w-full h-full object-cover" />
+                                </div>
+                                <div>
+                                    <h4 className="font-black text-xs text-[#3d2314]">BOARGAME</h4>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="lg:col-span-4 bg-[#fffcf7] p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
+                    <div className="lg:col-span-4 bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
                         <h3 className="font-black text-sm text-[#e85a4f] uppercase tracking-wide">
                             ADD-ON SERVICES
                         </h3>
 
                         <div className="space-y-2 text-xs text-[#5a4232] font-bold">
-                            <div className="flex items-center gap-2 p-1.5 bg-[#faf6f0] rounded-xl">
+                            <div className="flex items-center gap-2 p-1.5 bg-[#FAF0E6]/50 rounded-xl">
                                 <Palette className="w-4 h-4 text-[#8c5a3c]" />
                                 <span>Face Painting Activity</span>
                             </div>
-                            <div className="flex items-center gap-2 p-1.5 bg-[#faf6f0] rounded-xl">
+                            <div className="flex items-center gap-2 p-1.5 bg-[#FAF0E6]/50 rounded-xl">
                                 <Sparkles className="w-4 h-4 text-[#8c5a3c]" />
                                 <span>Balloon Decoration Gate</span>
                             </div>
-                            <div className="flex items-center gap-2 p-1.5 bg-[#faf6f0] rounded-xl">
+                            <div className="flex items-center gap-2 p-1.5 bg-[#FAF0E6]/50 rounded-xl">
                                 <Gift className="w-4 h-4 text-[#8c5a3c]" />
                                 <span>Custom Goodie Bags</span>
                             </div>
-                            <div className="flex items-center gap-2 p-1.5 bg-[#faf6f0] rounded-xl">
+                            <div className="flex items-center gap-2 p-1.5 bg-[#FAF0E6]/50 rounded-xl">
                                 <Camera className="w-4 h-4 text-[#8c5a3c]" />
                                 <span>Photobooth & Documentation</span>
                             </div>
-                            <div className="flex items-center gap-2 p-1.5 bg-[#faf6f0] rounded-xl">
+                            <div className="flex items-center gap-2 p-1.5 bg-[#FAF0E6]/50 rounded-xl">
                                 <Heart className="w-4 h-4 text-[#8c5a3c]" />
                                 <span>Custom Birthday Cake</span>
                             </div>
@@ -494,9 +545,11 @@ export default function BirthdayPage() {
                 </div>
             </section>
 
-            {/* 4. HOW TO BOOK */}
+            {/* ================================================= */}
+            {/* 4. HOW TO BOOK                                    */}
+            {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#fffcf7] p-5 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6">
+                <div className="bg-white p-5 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6">
                     <div className="flex items-center gap-2 border-b border-[#e6ccb2]/60 pb-3">
                         <BearPawIcon className="w-4 h-4 text-[#8c5a3c]" />
                         <h2 className="text-base sm:text-lg font-black text-[#3d2314] uppercase tracking-wide">
@@ -505,44 +558,44 @@ export default function BirthdayPage() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div className="bg-[#faf6f0] p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
                             <div className="w-8 h-8 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-xs mx-auto shadow-xs">
                                 1
                             </div>
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                            <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/50">
                                 <MessageSquare className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-xs text-[#3d2314]">Contact Us</h4>
                             <p className="text-[10px] text-[#6c584c] font-semibold">Chat with us via WhatsApp to check availability.</p>
                         </div>
 
-                        <div className="bg-[#faf6f0] p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
                             <div className="w-8 h-8 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-xs mx-auto shadow-xs">
                                 2
                             </div>
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                            <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/50">
                                 <CalendarCheck className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-xs text-[#3d2314]">Choose Date & Package</h4>
                             <p className="text-[10px] text-[#6c584c] font-semibold">Select your preferred date and birthday package.</p>
                         </div>
 
-                        <div className="bg-[#faf6f0] p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
                             <div className="w-8 h-8 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-xs mx-auto shadow-xs">
                                 3
                             </div>
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                            <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/50">
                                 <CreditCard className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-xs text-[#3d2314]">Confirm & Pay Deposit</h4>
                             <p className="text-[10px] text-[#6c584c] font-semibold">We&apos;ll confirm your booking after the deposit.</p>
                         </div>
 
-                        <div className="bg-[#faf6f0] p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
                             <div className="w-8 h-8 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-xs mx-auto shadow-xs">
                                 4
                             </div>
-                            <div className="w-8 h-8 rounded-xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                            <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/50">
                                 <BearFaceIcon className="w-4 h-4" />
                             </div>
                             <h4 className="font-black text-xs text-[#3d2314]">Enjoy Your Day!</h4>
@@ -552,7 +605,9 @@ export default function BirthdayPage() {
                 </div>
             </section>
 
-            {/* 5. BOTTOM CTA BANNER */}
+            {/* ================================================= */}
+            {/* 5. BOTTOM CTA BANNER                              */}
+            {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-[#fdf3f1] p-6 sm:p-10 rounded-3xl border border-rose-200/80 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
                     <div className="space-y-1 max-w-lg">
@@ -576,7 +631,9 @@ export default function BirthdayPage() {
                 </div>
             </section>
 
-            {/* 6. MODAL DETAIL PAKET POPUP */}
+            {/* ================================================= */}
+            {/* 6. MODAL DETAIL PAKET POPUP                       */}
+            {/* ================================================= */}
             {selectedPackage && (
                 <div
                     onClick={() => setSelectedPackage(null)}
@@ -584,32 +641,39 @@ export default function BirthdayPage() {
                 >
                     <div
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-[#fffcf7] w-full max-w-lg rounded-3xl p-6 border border-[#e6ccb2] shadow-2xl space-y-4 relative my-auto max-h-[90vh] overflow-y-auto"
+                        className="bg-white w-full max-w-lg rounded-3xl p-6 border border-[#e6ccb2] shadow-2xl space-y-4 relative my-auto max-h-[90vh] overflow-y-auto"
                     >
                         <button
                             onClick={() => setSelectedPackage(null)}
-                            className="absolute right-4 top-4 w-8 h-8 rounded-full bg-[#f4ece1] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition cursor-pointer"
+                            className="absolute right-4 top-4 w-8 h-8 rounded-full bg-[#FAF0E6] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition cursor-pointer z-10"
                         >
                             <X className="w-4 h-4" />
                         </button>
 
-                        <div className="w-full aspect-16/10 bg-stone-100 rounded-2xl overflow-hidden border border-[#e6ccb2]/60">
-                            <img
-                                src={
-                                    selectedPackage.image
-                                        ? (selectedPackage.image.startsWith('http')
+                        <div className="w-full aspect-16/10 bg-stone-50 rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center">
+                            {selectedPackage.image && selectedPackage.image.trim() !== '' ? (
+                                <img
+                                    src={
+                                        selectedPackage.image.startsWith('http')
                                             ? selectedPackage.image
-                                            : `http://127.0.0.1:8000/storage/${selectedPackage.image}`)
-                                        : '/img/hero-home.png'
-                                }
-                                alt={selectedPackage.title}
-                                className="w-full h-full object-cover"
-                            />
+                                            : selectedPackage.image.startsWith('/img')
+                                                ? selectedPackage.image
+                                                : `${API_BASE_URL}/storage/${selectedPackage.image}`
+                                    }
+                                    alt={selectedPackage.title}
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div className="flex flex-col items-center justify-center text-center p-4 space-y-1 text-[#a08a7b]">
+                                    <ImageOff className="w-8 h-8 opacity-60" />
+                                    <span className="text-xs font-black tracking-wider uppercase">Belum ada foto paket</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                                <span className="px-2.5 py-0.5 bg-[#f4ece1] text-[#8c5a3c] text-[10px] font-black uppercase rounded-md">
+                                <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] font-black uppercase rounded-md">
                                     BIRTHDAY PACKAGE
                                 </span>
                                 <span className="text-xs font-bold text-stone-500">
