@@ -102,14 +102,14 @@ export default async function Home() {
       {/* 1. HERO SECTION (DINAMIS & SUPPORTS <BR>)         */}
       {/* ================================================= */}
       <section
-        className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[800px] flex items-center bg-cover bg-center sm:bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden transition-all duration-300"
+        className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[800px] flex items-center bg-cover bg-[75%_center] sm:bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden transition-all duration-300"
         style={{ backgroundImage: `url('${heroBackgroundImage}')` }}
       >
         {/* Soft Overlay Gradien Putih Desktop */}
-        <div className="hidden lg:block absolute inset-0 bg-linear-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl" />
+        <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl" />
 
-        {/* Soft Overlay HP untuk Kontras Sempurna */}
-        <div className="block lg:hidden absolute inset-0 bg-black/25" />
+        {/* Overlay Halus untuk HP agar Beruang Tetap Terlihat Jelas & Teks Terbaca */}
+        <div className="block lg:hidden absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
@@ -399,7 +399,7 @@ export default async function Home() {
               ))
             ) : (
               <div className="col-span-full text-center py-8 text-[#6c584c] font-semibold text-xs">
-                Belum ada data menu terhubung dari Admin Panel.
+                Belum ada data menu
               </div>
             )}
           </div>
@@ -584,16 +584,24 @@ export default async function Home() {
                   </span>
                 </div>
 
-                <p className="text-xs sm:text-sm font-black text-[#3d2314] leading-snug">
-                  {activeMission?.title || 'Take a selfie at To Meet Cafe in Roblox!'}
-                </p>
+                {activeMission ? (
+                  <>
+                    <p className="text-xs sm:text-sm font-black text-[#3d2314] leading-snug">
+                      {activeMission.title}
+                    </p>
 
-                <div className="text-[11px] text-[#6c584c] font-bold pt-2 border-t border-[#e6ccb2]/40 flex items-center justify-between">
-                  <span>Reward:</span>
-                  <span className="font-black text-[#8c5a3c] bg-[#f4ece1] px-2.5 py-0.5 rounded-lg border border-[#e6ccb2]/60">
-                    {activeMission?.reward_title || 'Free EXP / Sticker'}
-                  </span>
-                </div>
+                    <div className="text-[11px] text-[#6c584c] font-bold pt-2 border-t border-[#e6ccb2]/40 flex items-center justify-between">
+                      <span>Reward:</span>
+                      <span className="font-black text-[#8c5a3c] bg-[#f4ece1] px-2.5 py-0.5 rounded-lg border border-[#e6ccb2]/60">
+                        {activeMission.reward_title}
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-xs sm:text-sm font-black text-[#6c584c] leading-snug">
+                    belum ada data misi tersedia
+                  </p>
+                )}
 
               </div>
             </div>
@@ -735,7 +743,7 @@ export default async function Home() {
                     <FaInstagram className="w-4 h-4" />
                   </a>
                   <a
-                    href="https://www.tiktok.com/@tomeet.cafe?_r=1&_t=ZS-99dEumOyfiS  "
+                    href="https://www.tiktok.com/@tomeet.cafe?_r=1&_t=ZS-99dEumOyfiS"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-9 h-9 rounded-xl bg-[#3d2314] text-white flex items-center justify-center hover:bg-[#8c5a3c] transition duration-200 shadow-2xs"
@@ -743,7 +751,7 @@ export default async function Home() {
                   >
                     <FaTiktok className="w-4 h-4" />
                   </a>
-                  <a 
+                  <a
                     href="https://youtube.com/@tomeetcafe"
                     target="_blank"
                     rel="noopener noreferrer"

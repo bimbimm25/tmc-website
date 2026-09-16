@@ -392,9 +392,9 @@ export default function MerchandisePage() {
                                     <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
                                         <AlertCircle className="w-4 h-4" />
                                     </div>
-                                    <h4 className="font-black text-xs text-[#3d2314]">Gagal Memuat Merchandise</h4>
+                                    <h4 className="font-black text-xs text-[#3d2314]">Gagal Memuat Data Merchandise</h4>
                                     <p className="text-[11px] text-[#6c584c] font-semibold max-w-xs mx-auto">
-                                        Pastikan backend Laravel sudah aktif dan berjalan.
+                                        Server Sedang Sibuk Atau Error
                                     </p>
                                     <button
                                         onClick={fetchMerchandiseData}

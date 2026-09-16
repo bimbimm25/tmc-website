@@ -122,6 +122,25 @@ export default function RobloxPage() {
         fetchRobloxData();
     }, []);
 
+    // Mengunci scroll layar background saat modal popup aktif
+    useEffect(() => {
+        if (selectedScreenshot) {
+            // Kunci di html dan body
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+
+            // Cegah event touchmove di mobile
+            const preventTouch = (e: TouchEvent) => e.preventDefault();
+            window.addEventListener('touchmove', preventTouch, { passive: false });
+
+            return () => {
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+                window.removeEventListener('touchmove', preventTouch);
+            };
+        }
+    }, [selectedScreenshot]);
+
     const groupedMissions = useMemo(() => {
         const groups: { [key: string]: RobloxBadgeItem[] } = {};
 
@@ -170,90 +189,90 @@ export default function RobloxPage() {
             {/* 1. HERO SECTION FULL 1 LAYAR                      */}
             {/* ================================================= */}
             <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
-                <div className="absolute inset-0 z-0">
-                    <img
-                        src={heroImage}
-                        alt="To Meet Roblox Game Experience"
-                        className="w-full h-full object-cover object-right lg:object-center"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
-                </div>
+    <div className="absolute inset-0 z-0">
+        <img
+            src={heroImage}
+            alt="To Meet Roblox Game Experience"
+            className="w-full h-full object-cover object-[75%_center] lg:object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+    </div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
-                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
+        <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
 
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
-                            <span>WELCOME TO ROBLOX WORLD</span>
-                            <Sparkles className="w-3 h-3 text-amber-500" />
-                        </div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
+                <span>WELCOME TO ROBLOX WORLD</span>
+                <Sparkles className="w-3 h-3 text-amber-500" />
+            </div>
 
-                        <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
-                            {renderFormattedText(
-                                banner?.title,
-                                <>
-                                    TO MEET <br />
-                                    <span className="text-[#8c5a3c]">UNIVERSE</span>
-                                </>
-                            )}
-                        </h1>
+            <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
+                {renderFormattedText(
+                    banner?.title,
+                    <>
+                        TO MEET <br />
+                        <span className="text-[#8c5a3c]">UNIVERSE</span>
+                    </>
+                )}
+            </h1>
 
-                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
-                            {renderFormattedText(
-                                banner?.subtitle,
-                                'Selesaikan misi karier dan tantangan Obby di game Roblox, raih badge penanda prestasi, dan tunjukkan ke kasir untuk mendapatkan reward gratis di To Meet Cafe!'
-                            )}
-                        </p>
+            <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                {renderFormattedText(
+                    banner?.subtitle,
+                    'Selesaikan misi karier dan tantangan Obby di game Roblox, raih badge penanda prestasi, dan tunjukkan ke kasir untuk mendapatkan reward gratis di To Meet Cafe!'
+                )}
+            </p>
 
-                        <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
-                            <a
-                                href={playLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer"
-                            >
-                                <Gamepad2 className="w-3.5 h-3.5" />
-                                <span>{banner?.cta_text || 'PLAY ON ROBLOX'}</span>
-                                <ExternalLink className="w-3 h-3" />
-                            </a>
+            <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
+                <a
+                    href={playLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer"
+                >
+                    <Gamepad2 className="w-3.5 h-3.5" />
+                    <span>{banner?.cta_text || 'PLAY ON ROBLOX'}</span>
+                    <ExternalLink className="w-3 h-3" />
+                </a>
 
-                            <a
-                                href="#trailer-section"
-                                className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center justify-center gap-1.5 shadow-md cursor-pointer uppercase tracking-wider"
-                            >
-                                <Play className="w-3.5 h-3.5 fill-current text-[#e85a4f]" />
-                                <span>WATCH TRAILER</span>
-                            </a>
-                        </div>
+                <a
+                    href="#trailer-section"
+                    className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center justify-center gap-1.5 shadow-md cursor-pointer uppercase tracking-wider"
+                >
+                    <Play className="w-3.5 h-3.5 fill-current text-[#e85a4f]" />
+                    <span>WATCH TRAILER</span>
+                </a>
+            </div>
 
-                        <div className="pt-1 grid grid-cols-3 gap-2 max-w-sm text-center">
-                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-amber-500 flex items-center justify-center mx-auto">
-                                    <Sparkles className="w-3.5 h-3.5" />
-                                </div>
-                                <div className="text-[10px] font-black text-[#3d2314] leading-tight">18.5K</div>
-                                <div className="text-[8px] text-[#6c584c] font-bold uppercase">Visits</div>
-                            </div>
-
-                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-emerald-600 flex items-center justify-center mx-auto">
-                                    <ThumbsUp className="w-3.5 h-3.5" />
-                                </div>
-                                <div className="text-[10px] font-black text-[#3d2314] leading-tight">96%</div>
-                                <div className="text-[8px] text-[#6c584c] font-bold uppercase">Likes</div>
-                            </div>
-
-                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center mx-auto">
-                                    <Users className="w-3.5 h-3.5" />
-                                </div>
-                                <div className="text-[10px] font-black text-[#3d2314] leading-tight">3.2K</div>
-                                <div className="text-[8px] text-[#6c584c] font-bold uppercase">Players</div>
-                            </div>
-                        </div>
-
+            <div className="pt-1 grid grid-cols-3 gap-2 max-w-sm text-center">
+                <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                    <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-amber-500 flex items-center justify-center mx-auto">
+                        <Sparkles className="w-3.5 h-3.5" />
                     </div>
+                    <div className="text-[10px] font-black text-[#3d2314] leading-tight">18.5K</div>
+                    <div className="text-[8px] text-[#6c584c] font-bold uppercase">Visits</div>
                 </div>
-            </section>
+
+                <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                    <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-emerald-600 flex items-center justify-center mx-auto">
+                        <ThumbsUp className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="text-[10px] font-black text-[#3d2314] leading-tight">96%</div>
+                    <div className="text-[8px] text-[#6c584c] font-bold uppercase">Likes</div>
+                </div>
+
+                <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                    <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center mx-auto">
+                        <Users className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="text-[10px] font-black text-[#3d2314] leading-tight">3.2K</div>
+                    <div className="text-[8px] text-[#6c584c] font-bold uppercase">Players</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
             {/* ================================================= */}
             {/* 2. TRAILER GAMEPLAY & THEATER SHOWCASE            */}
@@ -554,7 +573,9 @@ export default function RobloxPage() {
             {selectedScreenshot && (
                 <div
                     onClick={() => setSelectedScreenshot(null)}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4"
+                    onWheel={(e) => e.stopPropagation()}
+                    onTouchMove={(e) => e.stopPropagation()}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 overscroll-contain"
                 >
                     <div
                         onClick={(e) => e.stopPropagation()}
@@ -564,13 +585,13 @@ export default function RobloxPage() {
                             onClick={() => setSelectedScreenshot(null)}
                             className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center z-10 hover:bg-black transition cursor-pointer"
                         >
-                            <X className="w-4    h-4" />
+                            <X className="w-4 h-4" />
                         </button>
                         <div className="w-full aspect-[16/10] bg-stone-900 flex items-center justify-center">
                             <img
                                 src={selectedScreenshot}
                                 alt="Map Preview"
-                                className="w-full h-full object-contain"
+                                className="w-full h-full object-contain select-none"
                             />
                         </div>
                     </div>

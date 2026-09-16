@@ -86,68 +86,68 @@ export default async function AboutPage() {
             {/* 1. HERO SECTION (PAS & PROPORSIONAL)              */}
             {/* ================================================= */}
             <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
-                {/* Background Image Full Cover */}
-                <div className="absolute inset-0 z-0">
-                    <img
-                        src={heroImageSrc}
-                        alt="To Meet Cafe Atmosphere"
-                        className="w-full h-full object-cover object-right lg:object-center"
-                    />
-                    {/* Gradient Overlay Putih Sebelah Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
-                </div>
+    {/* Background Image Full Cover */}
+    <div className="absolute inset-0 z-0">
+        <img
+            src={heroImageSrc}
+            alt="To Meet Cafe Atmosphere"
+            className="w-full h-full object-cover object-[75%_center] lg:object-center"
+        />
+        {/* Gradient Overlay: Desktop dari kiri, Mobile lembut dari kiri/bawah agar teks kontras dan beruang tetap terlihat */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+    </div>
 
-                {/* Konten Text Hero */}
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
-                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+    {/* Konten Text Hero */}
+    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
+        <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
 
-                        {/* Pill Badge */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#e85a4f] text-[9.5px] font-black border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
-                            <span>ABOUT TO MEET</span>
-                            <BearPawIcon className="w-3 h-3" />
-                        </div>
+            {/* Pill Badge */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#e85a4f] text-[9.5px] font-black border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
+                <span>ABOUT TO MEET</span>
+                <BearPawIcon className="w-3 h-3" />
+            </div>
 
-                        {/* Title dengan Ukuran Proporsional */}
-                        <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15]">
-                            {renderFormattedText(
-                                aboutBanner?.title,
-                                <>
-                                    MORE THAN A CAFE, <br />
-                                    IT&apos;S A HAPPY PLACE TO MEET <br />
-                                    <span className="text-[#8c5a3c]">& CREATE MEMORIES.</span>
-                                </>
-                            )}
-                        </h1>
+            {/* Title dengan Ukuran Proporsional */}
+            <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15]">
+                {renderFormattedText(
+                    aboutBanner?.title,
+                    <>
+                        MORE THAN A CAFE, <br />
+                        IT&apos;S A HAPPY PLACE TO MEET <br />
+                        <span className="text-[#8c5a3c]">& CREATE MEMORIES.</span>
+                    </>
+                )}
+            </h1>
 
-                        {/* Subtitle */}
-                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
-                            {renderFormattedText(
-                                aboutBanner?.subtitle,
-                                'To Meet is a cozy bear-themed cafe & playground created for everyone to enjoy sweet treats, good times, and heartwarming moments together.'
-                            )}
-                        </p>
+            {/* Subtitle */}
+            <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                {renderFormattedText(
+                    aboutBanner?.subtitle,
+                    'To Meet is a cozy bear-themed cafe & playground created for everyone to enjoy sweet treats, good times, and heartwarming moments together.'
+                )}
+            </p>
 
-                        {/* Tombol Aksi */}
-                        <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
-                            <a
-                                href="#story"
-                                className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black rounded-full text-[11px] transition duration-200 shadow-md shadow-rose-500/20 inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
-                            >
-                                <span>{aboutBanner?.cta_text || 'OUR STORY'}</span>
-                                <BearPawIcon className="w-3.5 h-3.5" />
-                            </a>
+            {/* Tombol Aksi */}
+            <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
+                <a
+                    href="#story"
+                    className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black rounded-full text-[11px] transition duration-200 shadow-md shadow-rose-500/20 inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                >
+                    <span>{aboutBanner?.cta_text || 'OUR STORY'}</span>
+                    <BearPawIcon className="w-3.5 h-3.5" />
+                </a>
 
-                            <Link
-                                href="/#locations"
-                                className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md"
-                            >
-                                <MapPin className="w-3.5 h-3.5" />
-                                <span>VISIT OUR CAFES</span>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                <Link
+                    href="/#locations"
+                    className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md"
+                >
+                    <MapPin className="w-3.5 h-3.5" />
+                    <span>VISIT OUR CAFES</span>
+                </Link>
+            </div>
+        </div>
+    </div>
+</section>
 
             {/* ================================================= */}
             {/* 2. OUR STORY SECTION                              */}

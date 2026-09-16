@@ -638,7 +638,7 @@ export default function FAQPage() {
                             </div>
 
                             <a
-                                href="https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20ingin%20bertanya%20seputar%20cafe"
+                                href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20ingin%20bertanya%20seputar%20cafe"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-full py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-xs rounded-2xl shadow-md transition flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer"
@@ -783,7 +783,7 @@ export default function FAQPage() {
                     </div>
 
                     <a
-                        href="https://wa.me/628123456789"
+                        href="https://wa.me/6282141609328"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="px-6 py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-xs rounded-full shadow-md transition inline-flex items-center gap-2 uppercase tracking-wider shrink-0 cursor-pointer"

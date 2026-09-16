@@ -175,43 +175,43 @@ export default function DigitalMenuPage() {
             {/* 1. HERO SECTION (DINAMIS DARI DASHBOARD BANNER)   */}
             {/* ================================================= */}
             <section
-                className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[750px] flex items-center bg-cover bg-center sm:bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden transition-all duration-300"
-                style={{ backgroundImage: `url('${heroBackgroundImage}')` }}
-            >
-                {/* Soft Overlay Gradien Putih Desktop */}
-                <div className="hidden lg:block absolute inset-0 bg-linear-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl" />
+    className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[750px] flex items-center bg-cover bg-[75%_center] sm:bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden transition-all duration-300"
+    style={{ backgroundImage: `url('${heroBackgroundImage}')` }}
+>
+    {/* Soft Overlay Gradien Putih Desktop */}
+    <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl" />
 
-                {/* Soft Overlay HP untuk Kontras Sempurna */}
-                <div className="block lg:hidden absolute inset-0 bg-black/25" />
+    {/* Soft Overlay HP untuk Kontras Sempurna */}
+    <div className="block lg:hidden absolute inset-0 bg-black/25" />
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
-                    <div className="w-full max-w-lg lg:w-1/2 bg-white/95 sm:bg-white/90 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-3xl border border-[#e6ccb2]/80 lg:border-none shadow-xl lg:shadow-none space-y-2.5 sm:space-y-3.5 text-center sm:text-left mx-auto sm:mx-0">
-                        <div className="inline-flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-[#8c5a3c] tracking-widest uppercase">
-                            <Link href="/" className="hover:underline">HOME</Link>
-                            <ChevronRight className="w-3 h-3 text-[#8c5a3c]" />
-                            <span className="text-[#3d2314] font-black">DIGITAL MENU</span>
-                        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
+        <div className="w-full max-w-lg lg:w-1/2 bg-white/95 sm:bg-white/90 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-3xl border border-[#e6ccb2]/80 lg:border-none shadow-xl lg:shadow-none space-y-2.5 sm:space-y-3.5 text-center sm:text-left mx-auto sm:mx-0">
+            <div className="inline-flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-[#8c5a3c] tracking-widest uppercase">
+                <Link href="/" className="hover:underline">HOME</Link>
+                <ChevronRight className="w-3 h-3 text-[#8c5a3c]" />
+                <span className="text-[#3d2314] font-black">DIGITAL MENU</span>
+            </div>
 
-                        <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#3d2314] tracking-tight leading-tight">
-                            {menuBanner?.title || 'Our Digital Menu'}
-                        </h1>
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#3d2314] tracking-tight leading-tight">
+                {menuBanner?.title || 'Our Digital Menu'}
+            </h1>
 
-                        <p className="text-[11px] sm:text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md mx-auto sm:mx-0">
-                            {menuBanner?.subtitle || 'Explore our wide variety of bear-themed sweet treats, delicious meals, and refreshing drinks crafted with love for you and your family!'}
-                        </p>
+            <p className="text-[11px] sm:text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md mx-auto sm:mx-0">
+                {menuBanner?.subtitle || 'Explore our wide variety of bear-themed sweet treats, delicious meals, and refreshing drinks crafted with love for you and your family!'}
+            </p>
 
-                        <div className="pt-2 flex items-center justify-center sm:justify-start">
-                            <a
-                                href="#menu-content"
-                                className="px-6 py-2.5 sm:py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-black text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
-                            >
-                                <span>{menuBanner?.cta_text || 'EXPLORE MENU'}</span>
-                                <BearPawIcon className="w-3.5 h-3.5" />
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <div className="pt-2 flex items-center justify-center sm:justify-start">
+                <a
+                    href="#menu-content"
+                    className="px-6 py-2.5 sm:py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-black text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
+                >
+                    <span>{menuBanner?.cta_text || 'EXPLORE MENU'}</span>
+                    <BearPawIcon className="w-3.5 h-3.5" />
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
             {/* ================================================= */}
             {/* 2. MAIN CONTENT AREA & LOCATION FILTER            */}

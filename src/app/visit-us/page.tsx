@@ -243,7 +243,7 @@ export default function VisitUsPage() {
                             </button>
 
                             <a
-                                href="https://maps.google.com/?q=Heavenland+Park+Sidoarjo"
+                                href="https://maps.app.goo.gl/cXiqpFXWuzAhN2Xf9"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-full py-1 bg-transparent hover:bg-[#FAF0E6] text-[#8c5a3c] font-black text-[10px] rounded-lg transition flex items-center justify-center gap-1 uppercase tracking-wider cursor-pointer"
@@ -322,7 +322,7 @@ export default function VisitUsPage() {
                             </Link>
 
                             <a
-                                href="https://maps.google.com/?q=Pondok+Mutiara+Sidoarjo"
+                                href="https://maps.app.goo.gl/MjD4qiDafbCExye76"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-full py-1 bg-transparent hover:bg-[#FAF0E6] text-[#8c5a3c] font-black text-[10px] rounded-lg transition flex items-center justify-center gap-1 uppercase tracking-wider cursor-pointer"

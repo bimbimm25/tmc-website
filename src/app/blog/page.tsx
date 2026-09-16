@@ -505,7 +505,7 @@ export default function BlogPage() {
                     </div>
 
                     <a
-                        href="https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20punya%20ide%20cerita/kolaborasi%20untuk%20blog"
+                        href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20punya%20ide%20cerita/kolaborasi%20untuk%20blog"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="px-6 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-full shadow-md shadow-[#8c5a3c]/15 transition inline-flex items-center gap-1.5 uppercase tracking-wider shrink-0 cursor-pointer"

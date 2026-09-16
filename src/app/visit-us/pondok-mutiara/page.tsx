@@ -170,9 +170,9 @@ export default function PondokMutiaraPage() {
                     <img
                         src={heroImage}
                         alt="To Meet Cafe Pondok Mutiara"
-                        className="w-full h-full object-cover object-right lg:object-center"
+                        className="w-full h-full object-cover object-[60%_center] lg:object-center"
                     />
-                    <div className="absolute inset-0 bg-linear-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
                 </div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">

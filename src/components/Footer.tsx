@@ -31,7 +31,7 @@ export default function Footer() {
                         {/* Social Media Links */}
                         <div className="flex items-center gap-2.5 pt-1">
                             <a
-                                href="https://instagram.com/@tomeetcafe"
+                                href="https://www.instagram.com/tomeet.cafe?stkn=NnBva3lubWk5OHFk"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Instagram"
@@ -40,7 +40,7 @@ export default function Footer() {
                                 <FaInstagram className="w-4 h-4" />
                             </a>
                             <a
-                                href="https://tiktok.com/@tomeetcafe"
+                                href="https://www.tiktok.com/@tomeet.cafe?_r=1&_t=ZS-99dEumOyfiS"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="TikTok"
@@ -145,8 +145,8 @@ export default function Footer() {
                 </div>
 
                 {/* Copyright & Scroll Top */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-[#8c5a3c]/80 pt-4">
-                    <p className="text-center sm:text-left text-[11px] pl-10 sm:pl-12">
+                <div className="flex w-full flex-col items-center justify-center gap-4 pt-4 text-center text-xs font-bold text-[#8c5a3c]/80 sm:flex-row sm:justify-between sm:text-left">
+                    <p className="w-full text-center text-[11px] sm:w-auto sm:text-left">
                         © {new Date().getFullYear()} TO MEET CAFE. All Rights Reserved.
                     </p>
                     <a
