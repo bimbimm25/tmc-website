@@ -102,6 +102,38 @@ export default function EventPage() {
     const [isError, setIsError] = useState<boolean>(false);
     const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
 
+    // Penguncian Scroll Halaman ketika Modal Pop-up Aktif
+    useEffect(() => {
+        if (!selectedEvent) return;
+
+        const originalHtmlOverflow = document.documentElement.style.overflow;
+        const originalBodyOverflow = document.body.style.overflow;
+
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+
+        const preventScroll = (e: TouchEvent | WheelEvent) => {
+            const target = e.target as HTMLElement;
+            const modalContent = document.getElementById('event-modal-card');
+
+            if (modalContent && modalContent.contains(target)) {
+                return;
+            }
+
+            e.preventDefault();
+        };
+
+        window.addEventListener('wheel', preventScroll, { passive: false });
+        window.addEventListener('touchmove', preventScroll, { passive: false });
+
+        return () => {
+            document.documentElement.style.overflow = originalHtmlOverflow;
+            document.body.style.overflow = originalBodyOverflow;
+            window.removeEventListener('wheel', preventScroll);
+            window.removeEventListener('touchmove', preventScroll);
+        };
+    }, [selectedEvent]);
+
     async function fetchEventPageData() {
         try {
             setIsLoading(true);
@@ -170,6 +202,10 @@ export default function EventPage() {
                 ? eventBanner.image
                 : `${API_BASE_URL}/storage/${eventBanner.image}`)
         : '/img/hero-home.png';
+
+    const handleCloseModal = () => {
+        setSelectedEvent(null);
+    };
 
     return (
         <div className="min-h-screen pb-12 space-y-8 sm:space-y-10">
@@ -421,15 +457,18 @@ export default function EventPage() {
             {/* ================================================= */}
             {selectedEvent && (
                 <div
-                    onClick={() => setSelectedEvent(null)}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 overflow-y-auto"
+                    onClick={handleCloseModal}
+                    className="fixed inset-0 z-[99999] w-screen h-[100dvh] flex items-center justify-center bg-black/65 backdrop-blur-md p-4 overscroll-contain overflow-y-auto"
+                    onWheel={(e) => e.stopPropagation()}
+                    onTouchMove={(e) => e.stopPropagation()}
                 >
                     <div
+                        id="event-modal-card"
                         onClick={(e) => e.stopPropagation()}
                         className="bg-white w-full max-w-lg rounded-3xl p-5 sm:p-6 border border-[#e6ccb2] shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-150 my-auto max-h-[90vh] overflow-y-auto"
                     >
                         <button
-                            onClick={() => setSelectedEvent(null)}
+                            onClick={handleCloseModal}
                             className="absolute right-4 top-4 w-8 h-8 rounded-full bg-[#FAF0E6] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition cursor-pointer z-10"
                         >
                             <X className="w-4 h-4" />
@@ -488,7 +527,7 @@ export default function EventPage() {
                                 href={`https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20booking%20kegiatan%20${encodeURIComponent(selectedEvent.title)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-5 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-full transition flex items-center gap-1.5 uppercase shadow-xs"
+                                className="px-5 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-full transition flex items-center gap-1.5 uppercase shadow-xs cursor-pointer"
                             >
                                 <Phone className="w-3.5 h-3.5 fill-current" />
                                 <span>BOOK VIA WA</span>
@@ -502,7 +541,7 @@ export default function EventPage() {
             {/* 4. EASY BOOKING STEPS                             */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#ffffff] p-4 sm:p-6 lg:p-7 rounded-3xl border border-rose-100/80 shadow-2xs grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+                <div className="bg-white p-4 sm:p-6 lg:p-7 rounded-3xl border border-rose-100/80 shadow-2xs grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
                     <div className="lg:col-span-4 space-y-2 text-center lg:text-left">
                         <div className="text-[9px] font-black text-[#8c5a3c] tracking-widest uppercase">
                             EASY BOOKING
@@ -521,7 +560,7 @@ export default function EventPage() {
                                 className="px-5 py-2 bg-[#3d2314] hover:bg-[#201007] text-white font-black text-[11px] rounded-full shadow-xs transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
                             >
                                 <span>BOOK VIA WHATSAPP</span>
-                                <Phone className="w-3 h-3 fill-current" />
+                                <Phone className="w-3.5 h-3.5 fill-current" />
                             </a>
                         </div>
                     </div>

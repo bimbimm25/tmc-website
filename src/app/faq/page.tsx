@@ -6,7 +6,7 @@ import {
     Search, ChevronDown, ChevronUp, MessageCircle,
     Coffee, Utensils, Calendar, Sparkles, Building2,
     ShoppingBag, MapPin, Clock, ArrowRight, HelpCircle,
-    Mail, X
+    Mail, X, Phone
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
@@ -56,122 +56,305 @@ const FAQ_DATA: FAQItem[] = [
     {
         id: 'gen-1',
         category: 'general',
-        question: 'Apa itu To Meet Cafe & Playground?',
-        answer: 'To Meet Cafe adalah cafe dan playground ramah keluarga bertema beruang lucu di mana Anda dapat menikmati hidangan lezat, aktivitas seru anak-anak, dan menciptakan kenangan manis bersama orang tersayang.'
+        question: 'Store cabang Pondok Mutiara buka jam berapa Kak?',
+        answer: 'Untuk cabang Pondok Mutiara buka jam 12.00 – 22.00 WIB (Last order pukul 21.00 WIB) ya Kak.'
     },
     {
         id: 'gen-2',
         category: 'general',
-        question: 'Di mana saja lokasi cabang To Meet Cafe?',
-        answer: 'Saat ini kami memiliki 2 cabang di Sidoarjo: 1) Heavenland Park (Outdoor Playground & Kolam Pancing Beruang) di Jl. Raya Pralajur, dan 2) Pondok Mutiara (Indoor Cozy Space & Ruang Privat) di Jl. Pondok Mutiara No. 1.'
+        question: 'Store Pondok Mutiara tutup jam berapa Kak?',
+        answer: 'Kami tutup di jam 22.00 WIB (Last order pukul 21.00 WIB) ya Kak.'
     },
     {
         id: 'gen-3',
         category: 'general',
-        question: 'Kapan jam operasional buka cafe?',
-        answer: 'Cabang Heavenland Park: Senin–Jumat pukul 10.00–22.00 WIB, Sabtu–Minggu & Libur Nasional pukul 09.00–22.00 WIB. Cabang Pondok Mutiara: Buka setiap hari pukul 10.00–22.00 WIB. Pesanan terakhir (last order) pukul 21.30 WIB.'
+        question: 'Cabang Heavenland tutup di jam berapa Kak?',
+        answer: 'Untuk cabang Heavenland buka di jam 12.00 – 19.00 WIB (Last order 18.30 WIB) ya Kak. Namun saat ini kami tutup sementara karena sedang renovasi.'
     },
     {
         id: 'gen-4',
         category: 'general',
-        question: 'Apakah harus melakukan reservasi sebelum datang?',
-        answer: 'Pengunjung langsung (walk-in) selalu disambut dengan hangat! Namun, untuk kunjungan di akhir pekan, rombongan lebih dari 8 orang, atau acara ulang tahun, kami sangat menyarankan untuk reservasi terlebih dahulu via WhatsApp.'
+        question: 'Kak, yang di Pondok Mutiara hari Senin juga tutup kah?',
+        answer: 'Setiap hari Senin kami tutup ya Kak, buka kembali hari Selasa besok ya.'
     },
     {
         id: 'gen-5',
         category: 'general',
-        question: 'Apakah To Meet Cafe cocok untuk anak-anak dan balita?',
-        answer: 'Sangat cocok! Cafe kami dirancang khusus ramah keluarga dengan playground bertingkat 3 yang aman, kolam pancing beruang interaktif, baby high chair, area balita, serta paket menu khusus anak.'
+        question: 'Apakah waktu makan dibatasi 2 jam ya Kak?',
+        answer: 'Jika kondisi cafe sedang ramai dan ada antrean, maka berlaku batas maksimal dine-in 2 jam ya Kak. Namun jika sedang tidak ada antrean, aman Kak bisa bersantai lebih lama.'
     },
     {
         id: 'gen-6',
         category: 'general',
-        question: 'Apa saja tata tertib yang berlaku di dalam cafe?',
-        answer: 'Demi kenyamanan bersama, pengunjung wajib memakai kaos kaki saat berada di area playground, menjaga kebersihan, mendampingi anak-anak saat bermain, serta merokok hanya di area smoking outdoor yang disediakan.'
-    },
-
-    // Menu & Pemesanan
-    {
-        id: 'menu-1',
-        category: 'menu',
-        question: 'Apakah semua makanan dan minuman di sini Halal?',
-        answer: 'Ya! Semua bahan baku makanan dan minuman yang kami sajikan 100% Halal, tanpa mengandung babi, tanpa minyak babi (no pork no lard), dan tanpa alkohol.'
+        question: 'Untuk pemesanan GoFood aktif jam berapa Kak?',
+        answer: 'Untuk GoFood akan aktif mulai pukul 12.30 WIB ya Kak.'
     },
     {
-        id: 'menu-2',
-        category: 'menu',
-        question: 'Apa saja menu andalan (signature) di To Meet Cafe?',
-        answer: 'Menu favorit andalan kami antara lain Bear Signature Milk Tea, Teddy Croffle dengan Gelato lembut, Creamy Truffle Pasta, dan Paket Bento Karakter Beruang untuk anak-anak.'
+        id: 'gen-7',
+        category: 'general',
+        question: 'To Meet ada di ShopeeFood, GrabFood, atau GoFood Kak?',
+        answer: 'Kakak bisa cek GoFood kami ya Kak. Untuk saat ini kami belum tersedia di ShopeeFood maupun GrabFood.'
     },
     {
-        id: 'menu-3',
-        category: 'menu',
-        question: 'Metode pembayaran apa saja yang diterima?',
-        answer: 'Kami menerima pembayaran Tunai (Cash), QRIS (BCA, Mandiri, GoPay, OVO, ShopeePay, Dana), Kartu Debit, dan Kartu Kredit tanpa biaya tambahan.'
+        id: 'gen-8',
+        category: 'general',
+        question: 'Kalau badut maskot hari apa saja Kak kelilingnya?',
+        answer: 'Hari Selasa – Jumat, dan jika weekend jamnya random Kak. Untuk jadwal waktu badut berkeliling juga bersifat random ya Kak.'
+    },
+    {
+        id: 'gen-9',
+        category: 'general',
+        question: 'Pembayarannya bisa cash atau harus cashless Kak?',
+        answer: 'Sistem pembayaran kami cashless ya Kak. Kami menerima QRIS, Kartu Debit, dan Kartu Kredit.'
+    },
+    {
+        id: 'gen-10',
+        category: 'general',
+        question: 'Min, untuk penggunaan kartu kredit BCA apakah ada minimum transaksinya?',
+        answer: 'Untuk penggunaan kartu kredit, bisa menggunakan kartu berlogo Visa, Mastercard, atau JCB dengan minimal pembelian Rp 150.000 ya Kak.'
+    },
+    {
+        id: 'gen-11',
+        category: 'general',
+        question: 'Apakah harga menu sudah termasuk pajak?',
+        answer: 'Harga makanan dan minuman belum termasuk pajak ya Kak.'
+    },
+    {
+        id: 'gen-12',
+        category: 'general',
+        question: 'Untuk masuk ke playground minimal ordernya berapa Kak?',
+        answer: 'Untuk bermain ke playground kami ada promo minimal order Kak, bisa langsung cek Instagram resmi kami untuk info promo terbarunya ya.'
+    },
+    {
+        id: 'gen-13',
+        category: 'general',
+        question: 'Ada syarat dan ketentuan (S&K) untuk bermain di playground kah?',
+        answer: 'Ada minimal order untuk bisa bermain di playground Kak. Kemudian batas maksimal tinggi badan anak adalah 125 cm, untuk anak di bawah usia 3 tahun wajib didampingi orang tua, serta seluruh pengunjung area playground wajib memakai kaos kaki.'
+    },
+    {
+        id: 'gen-14',
+        category: 'general',
+        question: 'Kak, apakah di To Meet Cafe menjual kaos kaki untuk playground?',
+        answer: 'Jual ya Kak, tersedia di kasir dengan harga Rp 5.000.'
+    },
+    {
+        id: 'gen-15',
+        category: 'general',
+        question: 'Jika pesan paket surprise, apakah sudah bisa masuk ke playground?',
+        answer: 'Bisa Kak jika ingin masuk playground untuk 1 anak, tergantung dengan promo playground yang berlaku di periode tersebut ya.'
     },
 
     // Reservasi
     {
         id: 'res-1',
         category: 'reservation',
-        question: 'Bagaimana cara memesan tempat atau ruang privat?',
-        answer: 'Anda dapat memesan tempat dengan mudah melalui tombol "Chat WhatsApp" di website ini atau menghubungi admin kami dengan mencantumkan tanggal, jam, jumlah tamu, dan cabang yang dipilih.'
+        question: 'Kalau ke sana perlu reservasi dulu atau bisa langsung datang Kak?',
+        answer: 'Bisa langsung datang ya Kak! Kalau langsung datang tidak ada minimum order, namun untuk reservasi ada ketentuan minimal ordernya.'
     },
     {
         id: 'res-2',
         category: 'reservation',
-        question: 'Apakah ada batas minimum pemesanan (minimum spend)?',
-        answer: 'Untuk area makan reguler tidak ada minimum spend. Sedangkan untuk penyewaan Ruang Privat VIP di Lantai 2, paket minimum spend mulai dari Rp 500.000 untuk durasi 2,5 jam.'
+        question: 'Kak, mau pesan/reservasi meja untuk hari ini apakah bisa?',
+        answer: 'Untuk reservasi meja kami bantu minimal H-1 ya Kak.'
+    },
+    {
+        id: 'res-3',
+        category: 'reservation',
+        question: 'Kalau reservasi apakah ada batasan jamnya?',
+        answer: 'Baik reservasi maupun langsung datang tetap ada batas waktu makan yaitu maksimal 2 jam ya Kak. Namun jika sedang tidak ada waiting list atau antrean, customer bisa duduk lebih lama.'
+    },
+    {
+        id: 'res-4',
+        category: 'reservation',
+        question: 'Kak, bisa reservasi untuk merayakan ulang tahun tidak ya?',
+        answer: 'Bisa banget Kak! Untuk informasi paket dan reservasi perayaan ulang tahun selengkapnya bisa langsung hubungi admin via WhatsApp kami ya.'
+    },
+    {
+        id: 'res-5',
+        category: 'reservation',
+        question: 'Kak kalau mau ke To Meet apakah ada minimal payment/order per orang?',
+        answer: 'Minimal pembelian hanya berlaku untuk yang reservasi meja saja ya Kak. Jika langsung datang (walk-in) tidak ada minimal pembelian.'
+    },
+    {
+        id: 'res-6',
+        category: 'reservation',
+        question: 'Kalau dine-in langsung tanpa reservasi apakah ada minimal pembelian?',
+        answer: 'Jika tidak reservasi (langsung datang), maka tidak ada minimal pembelian ya Kak.'
+    },
+    {
+        id: 'res-7',
+        category: 'reservation',
+        question: 'Jadi harus minimal order sebanyak 320K/meja ya Kak? Kalau di bawah 320K tidak boleh?',
+        answer: 'Iya Kak, khusus untuk reservasi ketentuan minimum purchase-nya adalah Rp 320.000 per table (dengan kapasitas 4 pax/table).'
+    },
+    {
+        id: 'res-8',
+        category: 'reservation',
+        question: 'Kalau mau reservasi bisa hubungi ke nomor mana ya Kak?',
+        answer: 'Bisa langsung menghubungi nomor WhatsApp resmi kami di +62 821-4160-9328 ya Kak.'
+    },
+    {
+        id: 'res-9',
+        category: 'reservation',
+        question: 'Kalau mau pesan menu yang ada tulisan HBD, apakah harus reservasi dulu?',
+        answer: 'Bisa langsung pesan di tempat ya Kak, nanti tinggal beli lilin di kasir kami dan sudah free request tulisan ucapan.'
     },
 
     // Event & Ulang Tahun
     {
         id: 'event-1',
         category: 'event',
-        question: 'Bisakah mengadakan pesta ulang tahun atau gathering di sini?',
-        answer: 'Tentu saja! Kami menyediakan paket lengkap pesta ulang tahun anak, bridal shower, field trip sekolah, maupun gathering kantor lengkap dengan dekorasi tematik, pemandu acara (MC), dan hidangan prasmanan.'
+        question: 'Apa ada birthday treats di To Meet Cafe?',
+        answer: 'Kami ada paket surprise birthday Kak atau birthday menu yang bisa dicek langsung di halaman menu digital kami.'
     },
     {
         id: 'event-2',
         category: 'event',
-        question: 'Berapa hari sebelumnya kami harus memesan paket acara?',
-        answer: 'Kami menyarankan untuk melakukan pemesanan dan konfirmasi paket acara minimal 1–2 minggu sebelumnya agar jadwal dan persiapan dekorasi dapat disiapkan maksimal.'
+        question: 'Di sini apakah bisa menunya diberi tulisan HBD di piring?',
+        answer: 'Bisa banget Kak! Tinggal melakukan pembelian lilin di kasir kami, nanti otomatis dapat free request tulisan HBD di piring.'
+    },
+    {
+        id: 'event-3',
+        category: 'event',
+        question: 'Request tulisan HBD apakah bisa langsung dipesan di tempat?',
+        answer: 'Bisa langsung dipesan di tempat saat datang ya Kak.'
+    },
+    {
+        id: 'event-4',
+        category: 'event',
+        question: 'Apakah boleh membawa kue ulang tahun (birthday cake) sendiri?',
+        answer: 'Bisa Kak, namun tidak boleh dimakan di dalam cafe ya. Hanya diperbolehkan untuk foto-foto atau tiup lilin saja.'
+    },
+    {
+        id: 'event-5',
+        category: 'event',
+        question: 'Paket surprise birthday apakah bisa dipesan langsung atau perlu reservasi dulu?',
+        answer: 'Bisa langsung dipesan di cafe saat berkunjung ya Kak.'
+    },
+    {
+        id: 'event-6',
+        category: 'event',
+        question: 'Paket surprise ini apakah minimal pembelian 150K saja?',
+        answer: 'Betul Kak, harga paket surprise adalah 150K dan dapat dipesan dengan minimal pembelian menu lain sebesar 150K, sehingga total minimal transaksinya menjadi 300K ya Kak.'
+    },
+    {
+        id: 'event-7',
+        category: 'event',
+        question: 'Apakah ada paket birthday untuk kapasitas 50 orang?',
+        answer: 'Ada Kak! Kami menyediakan paket birthday untuk private event dengan harga mulai dari Rp 3.500.000. Rinciannya bisa dicek langsung di halaman Birthday kami ya.'
+    },
+    {
+        id: 'event-8',
+        category: 'event',
+        question: 'Untuk paket surprise birthday, apakah kuenya bisa pilih atau hanya karakter beruang saja?',
+        answer: 'Untuk paket surprise birthday sudah termasuk free mousse cake beruang + lilin ya Kak. Jika menginginkan jenis cake lainnya, kami juga menyediakan pilihan menu birthday cake tersendiri (di luar paket surprise).'
+    },
+    {
+        id: 'event-9',
+        category: 'event',
+        question: 'Kalau pesan paket birthday, apakah mejanya bisa dihias / didekorasi?',
+        answer: 'Bisa menambahkan Add-On dekorasi meja ya Kak. Untuk info detail dan pemesanannya bisa langsung menghubungi WhatsApp admin kami.'
     },
 
     // Fasilitas
     {
         id: 'fac-1',
         category: 'facilities',
-        question: 'Fasilitas apa saja yang tersedia untuk pengunjung?',
-        answer: 'Fasilitas kami meliputi Free Wi-Fi berkecepatan tinggi, Ruangan Full AC yang sejuk, Musholla bersih dan nyaman, Toilet keluarga yang higienis, Kursi makan bayi (High Chair), dan beragam Spot Foto Instagramable.'
+        question: 'Hi Kak, kalau dine-in ada fasilitas Wi-Fi tidak ya?',
+        answer: 'Ada Kak! Untuk password Wi-Fi-nya nanti bisa langsung ditanyakan ke kasir atau waiters kami ya.'
     },
     {
         id: 'fac-2',
         category: 'facilities',
-        question: 'Apakah wajib memakai kaos kaki di area playground?',
-        answer: 'Ya, demi menjaga kebersihan dan keselamatan anak-anak, seluruh pengunjung yang memasuki area playground wajib mengenakan kaos kaki. Kaos kaki juga tersedia untuk dibeli di kasir jika Anda lupa membawanya.'
+        question: 'Cabang mana saja yang ada area playground-nya Kak?',
+        answer: 'Kedua cabang kami ada playground-nya ya Kak. Namun jika Kakak menginginkan area playground yang lebih luas, bisa langsung berkunjung ke cabang Pondok Mutiara.'
+    },
+    {
+        id: 'fac-3',
+        category: 'facilities',
+        question: 'Di cabang Pondok Mutiara apakah tersedia musholla?',
+        answer: 'Untuk musholla di cabang Pondok Mutiara saat ini belum tersedia ya Kak.'
+    },
+    {
+        id: 'fac-4',
+        category: 'facilities',
+        question: 'Apakah ada fasilitas lift di cafe Kak?',
+        answer: 'Mohon maaf kami belum menyediakan fasilitas lift ya Kak.'
+    },
+    {
+        id: 'fac-5',
+        category: 'facilities',
+        question: 'Di To Meet cabang Pondok Mutiara ada berapa lantai Kak? Apakah ada lift-nya?',
+        answer: 'Ada 3 lantai Kak, dan untuk akses antar lantainya menggunakan tangga ya.'
+    },
+    {
+        id: 'fac-6',
+        category: 'facilities',
+        question: 'Apakah sudah tersedia ruang laktasi atau tempat mengganti pampers ya Kak?',
+        answer: 'Untuk ruangan khusus menyusui/laktasi saat ini masih belum tersedia Kak. Namun pada toilet umum kami di lantai 2 dan 3, bagian wastafelnya memiliki area meja yang cukup luas dan bisa digunakan untuk mengganti pampers si kecil.'
     },
 
     // Merchandise
     {
         id: 'merch-1',
         category: 'merchandise',
-        question: 'Di mana saya bisa membeli merchandise resmi To Meet?',
-        answer: 'Boneka beruang resmi, gantungan kunci, tote bag kanvas, tumbler, dan aksesoris eksklusif dapat dibeli langsung di kasir outlet cafe maupun melalui katalog online di website ini.'
+        question: 'Untuk fishing / kolam pancing lokasinya di mana tuh Kak?',
+        answer: 'Lokasinya ada di cabang Pondok Mutiara ya Kak.'
+    },
+    {
+        id: 'merch-2',
+        category: 'merchandise',
+        question: 'Untuk area fishing gratis atau bayar Kak?',
+        answer: 'Bayar ya Kak, biayanya cukup Rp 10.000 saja.'
+    },
+    {
+        id: 'merch-3',
+        category: 'merchandise',
+        question: 'Kak mau tanya, di sana ada jual squishy tidak ya?',
+        answer: 'Ada ya Kak, harga mulai dari Rp 20.000 Kak.'
+    },
+    {
+        id: 'merch-4',
+        category: 'merchandise',
+        question: 'Apakah merchandise bisa dipesan secara online?',
+        answer: 'Untuk saat ini merchandise kami hanya available untuk dibeli langsung di toko offline To Meet Cafe Pondok Mutiara ya Kak.'
     },
 
     // Lokasi & Parkir
     {
         id: 'loc-1',
         category: 'location',
-        question: 'Apakah tersedia tempat parkir yang aman dan luas?',
-        answer: 'Kedua cabang kami memiliki area parkir mobil dan motor yang sangat luas, tertata rapi, dan dilengkapi pengawasan keamanan 24 jam. Parkir gratis bagi pengunjung cafe.'
-    }
+        question: 'To Meet lokasinya ada di mana tuh Kak?',
+        answer: 'Lokasi kami ada di Sidoarjo ya Kak.'
+    },
+    {
+        id: 'loc-2',
+        category: 'location',
+        question: 'Ini cabang Jakarta ada tidak ya Kak?',
+        answer: 'Mohon maaf Kak, seluruh cabang kami saat ini berlokasi di Sidoarjo ya Kak.'
+    },
+    {
+        id: 'loc-3',
+        category: 'location',
+        question: 'Apa bedanya cabang Heavenland dan Pondok Mutiara Kak?',
+        answer: 'Untuk cabang Heavenland hanya menyediakan menu minuman dan dessert, sedangkan di cabang Pondok Mutiara menunya jauh lebih lengkap karena tersedia aneka makanan berat (heavy meals) ya Kak.'
+    },
+    {
+        id: 'loc-4',
+        category: 'location',
+        question: 'Yang cabang Heavenland ada di daerah Candi itu kan Kak?',
+        answer: 'Betul Kak, lokasinya ada di daerah Candi ya. Namun untuk saat ini cabang Heavenland masih tutup sementara karena sedang renovasi.'
+    },
+    {
+        id: 'loc-5',
+        category: 'location',
+        question: 'Yang cabang Pondok Mutiara itu yang dekat Lippo Mall ya Kak?',
+        answer: 'Betul Kak, lokasinya berada di dekat Lippo Mall Sidoarjo.'
+    },
 ];
 
 const CATEGORIES = [
     { id: 'general', name: 'UMUM', desc: 'Info umum tentang To Meet Cafe', icon: Coffee },
-    { id: 'menu', name: 'MENU & PESANAN', desc: 'Menu, pemesanan & pembayaran', icon: Utensils },
     { id: 'reservation', name: 'RESERVASI', desc: 'Reservasi meja & booking tempat', icon: Calendar },
     { id: 'event', name: 'EVENT & ULANG TAHUN', desc: 'Paket ulang tahun & acara privat', icon: Sparkles },
     { id: 'facilities', name: 'FASILITAS', desc: 'Fasilitas lengkap di cafe', icon: Building2 },
@@ -297,7 +480,7 @@ export default function FAQPage() {
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white p-3 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-x-auto scrollbar-none">
-                    <div className="flex items-center gap-2 min-w-max lg:min-w-0 lg:grid lg:grid-cols-7">
+                    <div className="flex items-center gap-2 min-w-max lg:min-w-0 lg:grid lg:grid-cols-6">
                         {CATEGORIES.map((cat) => {
                             const IconComponent = cat.icon;
                             const isActive = selectedCategory === cat.id && searchQuery.trim() === '';
@@ -308,20 +491,20 @@ export default function FAQPage() {
                                         setSelectedCategory(cat.id);
                                         setSearchQuery('');
                                     }}
-                                    className={`p-3 rounded-2xl transition flex flex-col items-center text-center space-y-1 cursor-pointer w-36 lg:w-full ${isActive
+                                    className={`p-2.5 rounded-2xl transition flex flex-col items-center text-center space-y-1 cursor-pointer w-[7.2rem] sm:w-[7.5rem] lg:w-full ${isActive
                                         ? 'bg-[#FAF0E6] border border-[#e6ccb2] shadow-2xs'
                                         : 'hover:bg-[#FAF0E6]/50 border border-transparent'
                                         }`}
                                 >
-                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isActive ? 'bg-[#8c5a3c] text-white shadow-xs' : 'bg-[#FAF0E6] text-[#8c5a3c]'
+                                    <div className={`w-7 h-7 rounded-xl flex items-center justify-center ${isActive ? 'bg-[#8c5a3c] text-white shadow-xs' : 'bg-[#FAF0E6] text-[#8c5a3c]'
                                         }`}>
-                                        <IconComponent className="w-4 h-4" />
+                                        <IconComponent className="w-3.5 h-3.5" />
                                     </div>
-                                    <div className={`text-[11px] font-black tracking-wider uppercase leading-tight ${isActive ? 'text-[#8c5a3c]' : 'text-[#3d2314]'
+                                    <div className={`text-[10px] font-black tracking-wider uppercase leading-tight ${isActive ? 'text-[#8c5a3c]' : 'text-[#3d2314]'
                                         }`}>
                                         {cat.name}
                                     </div>
-                                    <div className="text-[9.5px] text-[#6c584c] font-semibold line-clamp-1">
+                                    <div className="text-[8.5px] text-[#6c584c] font-semibold line-clamp-1">
                                         {cat.desc}
                                     </div>
                                 </button>
@@ -535,17 +718,17 @@ export default function FAQPage() {
 
                                 {/* Cabang 1: Heavenland Park */}
                                 <div className="bg-[#FAF0E6]/50 p-3 rounded-2xl border border-[#e6ccb2]/60 space-y-1.5">
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex items-center justify-between gap-2">
                                         <span className="text-[10px] font-black text-[#e85a4f] uppercase tracking-wider">
                                             HEAVENLAND PARK
                                         </span>
-                                        <span className="text-[9px] font-black text-rose-600 bg-rose-50 border border-rose-200/80 px-1.5 py-0.5 rounded">
-                                            Senin Libur
+                                        <span className="text-[10px] font-black uppercase tracking-wide text-red-700 bg-red-100 border border-red-300 px-2 py-1 rounded-full shadow-sm">
+                                            Sedang Direnovasi
                                         </span>
                                     </div>
                                     <div className="flex items-center justify-between text-[#3d2314]">
-                                        <span className="text-[#6c584c] font-semibold">Selasa – Minggu</span>
-                                        <span className="font-black text-xs">12.00 – 19.00 WIB</span>
+                                        <span className="text-[#6c584c] font-semibold">Saat ini belum buka</span>
+                                        <span className="font-black text-xs">Pantau info terbaru</span>
                                     </div>
                                 </div>
 
@@ -605,7 +788,7 @@ export default function FAQPage() {
                         rel="noopener noreferrer"
                         className="px-6 py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-xs rounded-full shadow-md transition inline-flex items-center gap-2 uppercase tracking-wider shrink-0 cursor-pointer"
                     >
-                        <Mail className="w-3.5 h-3.5" />
+                        <MessageCircle className="w-3.5 h-3.5" />
                         <span>HUBUNGI KAMI</span>
                     </a>
                 </div>

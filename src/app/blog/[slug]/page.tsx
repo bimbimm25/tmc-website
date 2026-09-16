@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, useRef, use } from 'react';
 import Link from 'next/link';
 import {
-    Clock, ArrowLeft, Eye, Share2, Sparkles, ChevronRight,
-    BookOpen, AlertCircle
+    Clock, ArrowLeft, Eye, ChevronRight,
+    AlertCircle, ImageOff
 } from 'lucide-react';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 export interface SinglePost {
     id: number;
@@ -31,11 +33,18 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
 
-    async function fetchPostDetail() {
+    // KUNCI UTAMA: Ref ini mencegah pemanggilan ganda oleh React StrictMode di Localhost
+    const hasFetchedRef = useRef(false);
+
+    async function fetchPostDetail(slug: string) {
         try {
             setIsLoading(true);
             setIsError(false);
-            const res = await fetch(`http://127.0.0.1:8000/api/blog/${resolvedParams.slug}`, { cache: 'no-store' });
+
+            const res = await fetch(`${API_BASE_URL}/api/blog/${slug}`, { 
+                cache: 'no-store' 
+            });
+            
             if (!res.ok) throw new Error('Artikel tidak ditemukan');
 
             const json = await res.json();
@@ -51,7 +60,11 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
     }
 
     useEffect(() => {
-        fetchPostDetail();
+        // Jika sudah pernah fetch untuk slug ini dalam siklus render saat ini, abaikan panggilan ke-2
+        if (hasFetchedRef.current) return;
+        hasFetchedRef.current = true;
+
+        fetchPostDetail(resolvedParams.slug);
     }, [resolvedParams.slug]);
 
     const formatDate = (dateStr: string) => {
@@ -64,14 +77,14 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
     };
 
     const getImageUrl = (img?: string | null) => {
-        if (!img) return '/img/hero-home.png';
+        if (!img || img.trim() === '') return null;
         if (img.startsWith('http') || img.startsWith('/img')) return img;
-        return `http://127.0.0.1:8000/storage/${img}`;
+        return `${API_BASE_URL}/storage/${img}`;
     };
 
     if (isLoading) {
         return (
-            <div className="bg-[#faf6f0] min-h-screen flex items-center justify-center pt-20">
+            <div className="min-h-screen flex items-center justify-center pt-20">
                 <div className="text-center space-y-2">
                     <div className="w-8 h-8 border-3 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
                     <p className="text-xs font-bold text-[#8c5a3c]">Memuat isi artikel...</p>
@@ -82,8 +95,8 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
 
     if (isError || !post) {
         return (
-            <div className="bg-[#faf6f0] min-h-screen flex items-center justify-center pt-20 px-4">
-                <div className="bg-[#fffcf7] p-8 rounded-3xl border border-[#e6ccb2] text-center max-w-md space-y-4 shadow-sm">
+            <div className="min-h-screen flex items-center justify-center pt-20 px-4">
+                <div className="bg-white p-8 rounded-3xl border border-[#e6ccb2] text-center max-w-md space-y-4 shadow-sm">
                     <AlertCircle className="w-8 h-8 text-rose-500 mx-auto" />
                     <h2 className="text-lg font-black text-[#3d2314]">Artikel Tidak Ditemukan</h2>
                     <p className="text-xs text-[#6c584c]">Mungkin artikel ini telah dipindahkan atau dinonaktifkan.</p>
@@ -98,8 +111,10 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
         );
     }
 
+    const coverImageUrl = getImageUrl(post.image);
+
     return (
-        <div className="bg-[#faf6f0] min-h-screen pt-24 sm:pt-28 pb-16">
+        <div className="min-h-screen pt-24 sm:pt-28 pb-16">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
                 {/* Breadcrumbs */}
@@ -114,7 +129,7 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
 
                 {/* Post Header */}
                 <div className="space-y-3">
-                    <span className="px-3 py-1 bg-[#f4ece1] text-[#8c5a3c] text-[10px] font-black uppercase rounded-lg">
+                    <span className="px-3 py-1 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] font-black uppercase rounded-lg">
                         {post.category?.name || 'Cerita Cafe'}
                     </span>
 
@@ -134,17 +149,31 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
                     </div>
                 </div>
 
-                {/* Cover Image */}
-                <div className="w-full aspect-16/10 rounded-3xl overflow-hidden border-2 border-white shadow-md bg-stone-100">
-                    <img
-                        src={getImageUrl(post.image)}
-                        alt={post.title}
-                        className="w-full h-full object-cover"
-                    />
+                {/* Cover Image Container */}
+                <div className="w-full aspect-16/10 rounded-3xl overflow-hidden border-2 border-white shadow-md bg-[#FAF0E6]/50 flex items-center justify-center">
+                    {coverImageUrl ? (
+                        <img
+                            src={coverImageUrl}
+                            alt={post.title}
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <div className="flex flex-col items-center justify-center text-center p-8 space-y-2 text-[#a08a7b]">
+                            <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center border border-[#e6ccb2]/60 shadow-2xs">
+                                <ImageOff className="w-7 h-7 text-[#8c5a3c] opacity-60" />
+                            </div>
+                            <span className="text-xs font-black uppercase tracking-wider text-[#3d2314]">
+                                Gambar Belum Tersedia
+                            </span>
+                            <p className="text-[11px] font-semibold text-[#6c584c]">
+                                Artikel ini tidak memiliki foto sampul
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Post Content */}
-                <div className="bg-[#fffcf7] p-6 sm:p-10 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4 text-xs sm:text-sm text-[#3d2314] leading-relaxed font-sans whitespace-pre-line">
+                <div className="bg-white p-6 sm:p-10 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4 text-xs sm:text-sm text-[#3d2314] leading-relaxed font-sans whitespace-pre-line">
                     {post.content}
                 </div>
 
@@ -156,24 +185,38 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
                         </h3>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            {related.map((rel) => (
-                                <Link
-                                    key={rel.id}
-                                    href={`/blog/${rel.slug}`}
-                                    className="bg-[#fffcf7] p-3 rounded-2xl border border-[#e6ccb2]/70 space-y-2 block hover:border-[#8c5a3c] transition shadow-2xs"
-                                >
-                                    <div className="w-full aspect-16/10 rounded-xl overflow-hidden bg-stone-100">
-                                        <img
-                                            src={getImageUrl(rel.image)}
-                                            alt={rel.title}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                    <h4 className="font-black text-xs text-[#3d2314] line-clamp-2 leading-snug">
-                                        {rel.title}
-                                    </h4>
-                                </Link>
-                            ))}
+                            {related.map((rel) => {
+                                const relImgUrl = getImageUrl(rel.image);
+
+                                return (
+                                    <Link
+                                        key={rel.id}
+                                        href={`/blog/${rel.slug}`}
+                                        prefetch={false}
+                                        className="bg-white p-3 rounded-2xl border border-[#e6ccb2]/70 space-y-2 block hover:border-[#8c5a3c] transition shadow-2xs group"
+                                    >
+                                        <div className="w-full aspect-16/10 rounded-xl overflow-hidden bg-[#FAF0E6]/50 flex items-center justify-center border border-[#e6ccb2]/40">
+                                            {relImgUrl ? (
+                                                <img
+                                                    src={relImgUrl}
+                                                    alt={rel.title}
+                                                    className="w-full h-full object-cover group-hover:scale-103 transition duration-300"
+                                                />
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center text-center p-3 space-y-1 text-[#a08a7b]">
+                                                    <ImageOff className="w-5 h-5 opacity-60" />
+                                                    <span className="text-[9px] font-black uppercase tracking-wider">
+                                                        Tidak ada gambar
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <h4 className="font-black text-xs text-[#3d2314] line-clamp-2 leading-snug group-hover:text-[#8c5a3c] transition">
+                                            {rel.title}
+                                        </h4>
+                                    </Link>
+                                );
+                            })}
                         </div>
                     </div>
                 )}

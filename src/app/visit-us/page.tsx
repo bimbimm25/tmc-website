@@ -186,21 +186,32 @@ export default function VisitUsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 items-stretch">
 
                     {/* CABANG 1: HEAVENLAND PARK */}
-                    <div className="bg-white rounded-3xl border border-[#e6ccb2]/80 shadow-2xs p-3.5 sm:p-4 flex flex-col justify-between hover:border-[#8c5a3c] transition duration-200">
+                    <div className="bg-white rounded-3xl border border-[#e6ccb2]/80 shadow-2xs p-3.5 sm:p-4 flex flex-col justify-between hover:border-[#8c5a3c] transition duration-200 opacity-95">
                         <div className="space-y-3">
                             {/* Frame Gambar Proporsional */}
                             <div className="relative w-full h-48 sm:h-56 lg:h-[270px] bg-stone-100 rounded-2xl overflow-hidden border border-[#e6ccb2]/60 shadow-2xs">
                                 <img
                                     src="/img/visit-us-hlp/banner-hlp.png"
                                     alt="To Meet Cafe Heavenland Park"
-                                    className="w-full h-full object-cover object-center"
+                                    className="w-full h-full object-cover object-[center_35%] grayscale-[0.2] brightness-[0.8]"
                                 />
+                                <div className="absolute inset-0 bg-[#3d2314]/30" />
                                 <div className="absolute top-2.5 left-2.5 bg-[#e85a4f] text-white px-2.5 py-0.5 rounded-full text-[9px] font-black tracking-wider uppercase shadow-xs">
                                     CABANG 1
                                 </div>
+                                <div className="absolute inset-0 flex items-center justify-center px-4">
+                                    <div className="rounded-2xl border border-white/60 bg-[#3d2314]/60 px-3 py-2 text-center shadow-lg backdrop-blur-[1px]">
+                                        <p className="text-[10px] font-black uppercase tracking-[0.24em] text-[#f7dfc6]">
+                                            Sedang Renovasi
+                                        </p>
+                                        <p className="mt-1 text-xs sm:text-sm font-black uppercase tracking-wide text-white">
+                                            CABANG INI SEDANG DI RENOVASI
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className="px-1 space-y-1 text-center">
+                            <div className="px-1 space-y-2 text-center">
                                 <h3 className="text-base sm:text-lg font-black text-[#3d2314] uppercase tracking-wide leading-tight">
                                     HEAVENLAND PARK
                                 </h3>
@@ -209,44 +220,27 @@ export default function VisitUsPage() {
                                     DESSERT • MINI PLAYGROUND
                                 </p>
 
-                                <div className="grid grid-cols-4 gap-1.5 pt-1 text-center">
-                                    <div className="bg-[#FAF0E6]/50 p-1.5 rounded-xl border border-[#e6ccb2]/60 space-y-0.5">
-                                        <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
-                                            <BearFaceIcon className="w-3 h-3" />
-                                        </div>
-                                        <div className="text-[8.5px] font-black text-[#3d2314] leading-tight truncate">Dessert</div>
-                                    </div>
-                                    <div className="bg-[#FAF0E6]/50 p-1.5 rounded-xl border border-[#e6ccb2]/60 space-y-0.5">
-                                        <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
-                                            <Home className="w-3 h-3" />
-                                        </div>
-                                        <div className="text-[8.5px] font-black text-[#3d2314] leading-tight truncate">Indoor Area</div>
-                                    </div>
-                                    <div className="bg-[#FAF0E6]/50 p-1.5 rounded-xl border border-[#e6ccb2]/60 space-y-0.5">
-                                        <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
-                                            <Coffee className="w-3.5 h-3.5" />
-                                        </div>
-                                        <div className="text-[8.5px] font-black text-[#3d2314] leading-tight truncate">Self Service</div>
-                                    </div>
-                                    <div className="bg-[#FAF0E6]/50 p-1.5 rounded-xl border border-[#e6ccb2]/60 space-y-0.5">
-                                        <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
-                                            <Sparkles className="w-3 h-3" />
-                                        </div>
-                                        <div className="text-[8.5px] font-black text-[#3d2314] leading-tight truncate">Mini Playground</div>
-                                    </div>
+                                <div className="rounded-2xl border border-[#f0d9bf] bg-[#FAF0E6]/70 px-3 py-2 text-center">
+                                    <p className="text-[10px] font-black uppercase tracking-wider text-[#8c5a3c]">
+                                        INFORMASI KUNJUNGAN
+                                    </p>
+                                    <p className="mt-1 text-[10px] text-[#6c584c] font-semibold leading-relaxed">
+                                        Silakan cek cabang lain atau tunggu update resmi dari To Meet Cafe untuk pembukaan kembali.
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="pt-3 space-y-1">
-                            <Link
-                                href="/visit-us/heavenland-park"
-                                className="w-full py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-xl transition flex items-center justify-center gap-1.5 uppercase tracking-wider shadow-xs cursor-pointer"
+                            <button
+                                type="button"
+                                disabled
+                                className="w-full py-2.5 bg-[#c7b8a7] text-white font-black text-[11px] rounded-xl transition flex items-center justify-center gap-1.5 uppercase tracking-wider shadow-xs cursor-not-allowed"
                             >
                                 <MapPin className="w-3.5 h-3.5" />
                                 <span>VISIT HEAVENLAND PARK</span>
                                 <ArrowRight className="w-3 h-3" />
-                            </Link>
+                            </button>
 
                             <a
                                 href="https://maps.google.com/?q=Heavenland+Park+Sidoarjo"
@@ -269,7 +263,7 @@ export default function VisitUsPage() {
                                 <img
                                     src="/img/visit-us-pm/banner-pm.png"
                                     alt="To Meet Cafe Pondok Mutiara"
-                                    className="w-full h-full object-cover object-center"
+                                    className="w-full h-full object-cover object-bottom"
                                 />
                                 <div className="absolute top-2.5 left-2.5 bg-[#8c5a3c] text-white px-2.5 py-0.5 rounded-full text-[9px] font-black tracking-wider uppercase shadow-xs">
                                     CABANG 2

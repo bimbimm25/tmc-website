@@ -199,7 +199,7 @@ export default async function Home() {
 
           {/* 1. Visit Cafe */}
           <a
-            href="#locations"
+            href="/visit-us"
             className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
           >
             <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
@@ -620,7 +620,7 @@ export default async function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch">
 
             {/* 1. Outlet Heavenland Park */}
-            <div className="bg-white p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-5">
+            <div className="bg-[#f8f1ea] p-5 sm:p-6 rounded-[2rem] border border-[#d8b598]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-5 opacity-90">
               <div className="grid grid-cols-12 gap-3.5 items-center">
 
                 {/* Teks Kiri */}
@@ -634,36 +634,36 @@ export default async function Home() {
                   </p>
                   <div className="pt-1">
                     <span className="text-[10px] text-[#8c5a3c] font-black uppercase tracking-wider block">
-                      Open Daily
+                      Renovasi
                     </span>
                     <span className="text-xs text-[#3d2314] font-black">
-                      10.00 – 22.00 WIB
+                      Cabang sedang di renovasi
                     </span>
                   </div>
                 </div>
 
                 {/* Foto Kanan */}
-                <div className="col-span-5 aspect-square bg-[#f4ece1] rounded-2xl overflow-hidden border border-[#e6ccb2]/60 shadow-2xs">
+                <div className="col-span-5 aspect-square bg-[#f4ece1] rounded-2xl overflow-hidden border border-[#e6ccb2]/60 shadow-2xs relative">
                   <img
                     src="/img/tmc-heaveland-park.png"
                     alt="To Meet Cafe Heavenland Park"
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-cover object-center grayscale-[0.3] opacity-80"
                   />
+                  <div className="absolute inset-0 bg-[#f4ece1]/30" />
                 </div>
 
               </div>
 
               {/* Tombol Direction */}
               <div>
-                <a
-                  href="https://maps.google.com/?q=Heavenland+Park+Sidoarjo"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-32 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-xs rounded-full text-center transition tracking-wider flex items-center justify-center gap-1.5 uppercase shadow-xs cursor-pointer"
+                <button
+                  type="button"
+                  className="w-40 py-2.5 bg-[#c7b0a0] text-white font-black text-[10px] rounded-full text-center transition tracking-wider flex items-center justify-center gap-1.5 uppercase shadow-xs cursor-not-allowed opacity-90"
+                  disabled
                 >
-                  <span>DIRECTION</span>
+                  <span>Sedang Renovasi</span>
                   <MapPin className="w-3.5 h-3.5" />
-                </a>
+                </button>
               </div>
             </div>
 
@@ -704,7 +704,7 @@ export default async function Home() {
               {/* Tombol Direction */}
               <div>
                 <a
-                  href="https://maps.google.com/?q=Pondok+Mutiara+Sidoarjo"
+                  href="https://maps.app.goo.gl/8mZuEJCFvSwbcALe7"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-32 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-xs rounded-full text-center transition tracking-wider flex items-center justify-center gap-1.5 uppercase shadow-xs cursor-pointer"
@@ -726,7 +726,7 @@ export default async function Home() {
                 </div>
                 <div className="flex items-center gap-2 pt-0.5">
                   <a
-                    href="https://instagram.com"
+                    href="https://www.instagram.com/tomeet.cafe?stkn=NnBva3lubWk5OHFk"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-9 h-9 rounded-xl bg-[#3d2314] text-white flex items-center justify-center hover:bg-[#8c5a3c] transition duration-200 shadow-2xs"
@@ -735,7 +735,7 @@ export default async function Home() {
                     <FaInstagram className="w-4 h-4" />
                   </a>
                   <a
-                    href="https://tiktok.com"
+                    href="https://www.tiktok.com/@tomeet.cafe?_r=1&_t=ZS-99dEumOyfiS  "
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-9 h-9 rounded-xl bg-[#3d2314] text-white flex items-center justify-center hover:bg-[#8c5a3c] transition duration-200 shadow-2xs"
@@ -763,7 +763,7 @@ export default async function Home() {
                 </div>
                 <div>
                   <a
-                    href="https://wa.me/628123456789"
+                    href="https://wa.me/6282141609328"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full sm:w-auto px-6 py-3 bg-[#5cb85c] hover:bg-[#4cae4c] active:bg-[#449d44] text-white font-black text-xs rounded-full text-center transition flex items-center justify-center gap-2 tracking-wider uppercase shadow-xs cursor-pointer"

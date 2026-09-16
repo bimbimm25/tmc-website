@@ -156,7 +156,7 @@ export default function PondokMutiaraPage() {
                 : `${API_BASE_URL}/storage/${banner.image}`)
         : '/img/hero-home.png';
 
-    const googleMapsUrl = "https://maps.google.com/?q=Pondok+Mutiara+Sidoarjo";
+    const googleMapsUrl = "https://maps.app.goo.gl/zWp8wcEhyK4VpczDA";
     const reservationWaUrl = "https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20ingin%20reservasi%20meja%20di%20Cabang%20Pondok%20Mutiara";
 
     return (
@@ -172,7 +172,7 @@ export default function PondokMutiaraPage() {
                         alt="To Meet Cafe Pondok Mutiara"
                         className="w-full h-full object-cover object-right lg:object-center"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                    <div className="absolute inset-0 bg-linear-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
                 </div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
@@ -284,7 +284,7 @@ export default function PondokMutiaraPage() {
                             <div className="w-full h-56 sm:h-64 rounded-2xl overflow-hidden border border-[#e6ccb2]/70 shadow-2xs bg-stone-100">
                                 <iframe
                                     title="Peta Lokasi Pondok Mutiara"
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.467414002626!2d112.7093222!3d-7.4467873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7e6b72a39a7b9%3A0x7d8e20f269a87d0!2sPondok%20Mutiara!5e0!3m2!1sid!2sid!4v1715000000000!5m2!1sid!2sid"
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3255.5875573291796!2d112.69738207400381!3d-7.4478727925632375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7e12007cd81af%3A0xf50bdf96d6e1a0a9!2sTo%20Meet%20Cafe%20-%20Pondok%20Mutiara!5e1!3m2!1sid!2sid!4v1789358859258!5m2!1sid!2sid"
                                     width="100%"
                                     height="100%"
                                     style={{ border: 0 }}
@@ -373,15 +373,12 @@ export default function PondokMutiaraPage() {
                                 </div>
                                 <div className="space-y-1.5 text-xs text-[#5a4232] font-semibold leading-relaxed">
                                     <p>
-                                        Tersedia deretan parkir mobil & motor yang sangat luas di area pelataran ruko.
-                                    </p>
-                                    <p className="text-[11px] text-[#6c584c]">
-                                        Dikelola dengan sistem retribusi parkir resmi kawasan ruko.
+                                        Tersedia area parkir disekitar ruko untuk mobil dan motor
                                     </p>
                                 </div>
                             </div>
                             <div className="py-2 px-3 bg-amber-50 rounded-xl border border-amber-200/80 text-[10.5px] text-amber-800 font-bold text-center shadow-2xs">
-                                Parkir Kawasan Berbayar
+                                Parkir Berbayar
                             </div>
                         </div>
 
@@ -412,7 +409,7 @@ export default function PondokMutiaraPage() {
                                 </div>
                                 <h4 className="font-black text-xs text-[#3d2314] uppercase">Tersedia Makanan Berat</h4>
                                 <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed">
-                                    Menyajikan aneka menu nasi, pasta, steak, burger, makanan berat keluarga, dan kids meal set lengkap.
+                                    Menyajikan aneka menu makanan berat keluarga, dan kids meal set lengkap.
                                 </p>
                             </div>
                             <Link href="/menu" className="text-[9.5px] font-bold text-[#8c5a3c] hover:underline pt-1 border-t border-[#e6ccb2]/40 inline-flex items-center gap-1">
@@ -556,8 +553,8 @@ export default function PondokMutiaraPage() {
                             key={idx}
                             onClick={() => setCurrentPageIndex(idx)}
                             className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${currentPageIndex === idx
-                                    ? 'w-6 bg-[#8c5a3c]'
-                                    : 'w-2 bg-[#e6ccb2] hover:bg-[#8c5a3c]/60'
+                                ? 'w-6 bg-[#8c5a3c]'
+                                : 'w-2 bg-[#e6ccb2] hover:bg-[#8c5a3c]/60'
                                 }`}
                             aria-label={`Go to slide ${idx + 1}`}
                         />
@@ -647,7 +644,8 @@ export default function PondokMutiaraPage() {
                                 <span>Penyajian & Pesanan</span>
                             </div>
                             <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed">
-                                Waktu penyajian makanan estimasi <span className="font-bold text-[#3d2314]">40 menit</span>. Pemesanan dilakukan mandiri via scan Barcode Meja.
+                                Waktu penyajian makanan maksimal <span className="font-bold text-[#3d2314]">40 menit</span>. saat kondisi sedang ramai.
+                                Pemesanan dilakukan secara mandiri dengan scan barcode di meja.
                             </p>
                         </div>
 
@@ -694,20 +692,20 @@ export default function PondokMutiaraPage() {
                         <div className="bg-[#FAF0E6]/50 p-3.5 rounded-2xl border border-[#e6ccb2]/60 space-y-1">
                             <div className="flex items-center gap-2 text-xs font-black text-[#3d2314]">
                                 <Sparkles className="w-4 h-4 text-amber-600" />
-                                <span>Free Playground Promo</span>
+                                <span>Playground Access</span>
                             </div>
                             <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed">
-                                Akses bermain gratis di playground berlaku sesuai ketentuan minimum pembelian promo periode berjalan.
+                                Akses bermain di playground tersedia dengan memenuhi minimum pembelian sesuai promo yang berlaku.
                             </p>
                         </div>
 
                         <div className="bg-[#FAF0E6]/50 p-3.5 rounded-2xl border border-[#e6ccb2]/60 space-y-1">
                             <div className="flex items-center gap-2 text-xs font-black text-[#3d2314]">
                                 <AlertTriangle className="w-4 h-4 text-amber-600" />
-                                <span>Batas Tinggi 125cm</span>
+                                <span>Ketentuan Tinggi Badan & Usia Anak</span>
                             </div>
                             <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed">
-                                Batas maksimal tinggi badan anak di playground adalah <span className="font-bold text-[#3d2314]">125 cm</span> demi keamanan bersama.
+                                Batas maksimal tinggi badan anak di playground adalah <span className="font-bold text-[#3d2314]">125 cm</span> demi menjaga keamanan bersama. Anak di bawah 3 tahun wajib didampingi orang tua.
                             </p>
                         </div>
 

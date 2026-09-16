@@ -58,31 +58,31 @@ export interface BannerItem {
 const MAP_SCREENSHOTS = [
     {
         id: 1,
-        title: 'To Meet Cafe Main Lobby',
-        tag: 'Social & Dining Area',
-        image: '/img/',
-        desc: 'Area cafe utama tempat berkumpul, memesan makanan virtual, dan santai bareng teman.'
+        title: 'Bear Park Area',
+        tag: 'Main Map',
+        image: '/img/roblox/bear-park-roblox.png',
+        desc: 'Area utama To Meet Cafe dengan suasana bear park yang estetik dan siap untuk dijelajahi.'
     },
     {
         id: 2,
-        title: 'Teddy Bear Parkour Obby',
-        tag: 'Obby Challenge',
-        image: '/img/',
-        desc: 'Tantangan rintangan melompat seru dengan checkpoint awan bertema permen manis.'
+        title: 'Indoor Cafe',
+        tag: 'Indoor Cafe',
+        image: '/img/roblox/indoor-cafe-roblox.png',
+        desc: 'Jelajahi bagian dalam cafe sambil menyelesaikan misi dan menikmati detail dunia game.'
     },
     {
         id: 3,
-        title: 'Chef Kitchen & Bakery Hub',
-        tag: 'Career Quest',
-        image: '/img/',
-        desc: 'Dapur interaktif tempat menyelesaikan misi membuat dessert spesial To Meet.'
+        title: 'Obby Area',
+        tag: 'Obby Challenge',
+        image: '/img/roblox/obby-roblox.png',
+        desc: 'Selesaikan misi karier, kumpulkan badge, dan buka reward eksklusif di To Meet Cafe.'
     },
     {
         id: 4,
-        title: 'Secret Selfie Spot & Rooftop',
-        tag: 'Photo Zone',
-        image: '/img/',
-        desc: 'Spot foto estetik dengan view seluruh kota To Meet Universe untuk klaim badge.'
+        title: 'Outdoor Cafe',
+        tag: 'Outdoor Cafe',
+        image: '/img/roblox/outdoor-cafe-roblox.png',
+        desc: 'Area outdoor yang cocok untuk selfie, eksplorasi visual, dan menikmati suasana cafe santai.'
     }
 ];
 
@@ -161,7 +161,7 @@ export default function RobloxPage() {
                 : `${API_BASE_URL}/storage/${banner.image}`)
         : '/img/hero-home.png';
 
-    const playLink = banner?.cta_link || 'https://www.roblox.com';
+    const playLink = banner?.cta_link || 'https://www.roblox.com/share?code=47170fa9c8a5b649b293166187e470c0&type=ExperienceDetails&stamp=1785743470866';
 
     return (
         <div className="min-h-screen space-y-10 sm:space-y-14 pb-16">
@@ -266,7 +266,7 @@ export default function RobloxPage() {
                         <div className="lg:col-span-7">
                             <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-xl border-2 border-[#e6ccb2]/80 bg-black group">
                                 <iframe
-                                    src="https://www.youtube.com"
+                                    src="https://www.youtube.com/embed/eZsAmpeJYPM?si=_y6r7OPCty9zuWj-"
                                     title="To Meet Roblox Gameplay Trailer"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
@@ -528,7 +528,7 @@ export default function RobloxPage() {
                             <div>
                                 <h4 className="font-black text-xs text-[#3d2314]">Tunjukkan Profil ke Kasir</h4>
                                 <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
-                                    Kunjungi outlet To Meet Cafe dan perlihatkan badge Roblox yang sudah berhasil didapatkan kepada staff kasir.
+                                    Kunjungi outlet To Meet Cafe dan perlihatkan badge Roblox yang sudah berhasil didapatkan kepada staff kasir dan bawa id Roblox mu.
                                 </p>
                             </div>
                         </div>
@@ -540,7 +540,7 @@ export default function RobloxPage() {
                             <div>
                                 <h4 className="font-black text-xs text-[#3d2314]">Nikmati Hadiah Gratis</h4>
                                 <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
-                                    Staff kami akan memverifikasi dan langsung menyerahkan reward fisik/makanan sesuai tingkatan badge.
+                                    Staff kami akan memverifikasi dan langsung menyerahkan reward sesuai misi
                                 </p>
                             </div>
                         </div>

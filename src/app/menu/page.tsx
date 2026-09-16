@@ -53,6 +53,41 @@ export default function DigitalMenuPage() {
     const [isError, setIsError] = useState<boolean>(false);
     const [selectedProduct, setSelectedProduct] = useState<MenuItem | null>(null);
 
+    // Kunci Scroll Halaman ketika Modal Pop-up Aktif (Mendukung Virtual/SmoothScroll & Mobile Touch)
+    useEffect(() => {
+        if (!selectedProduct) return;
+
+        // Kunci overflow di html dan body
+        const originalHtmlOverflow = document.documentElement.style.overflow;
+        const originalBodyOverflow = document.body.style.overflow;
+
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+
+        // Cegah gesture touch dan wheel scrolling tembus ke background halaman
+        const preventScroll = (e: TouchEvent | WheelEvent) => {
+            const target = e.target as HTMLElement;
+            const modalContent = document.getElementById('menu-modal-card');
+
+            // Izinkan scroll hanya jika terjadi di dalam modal card itu sendiri
+            if (modalContent && modalContent.contains(target)) {
+                return;
+            }
+
+            e.preventDefault();
+        };
+
+        window.addEventListener('wheel', preventScroll, { passive: false });
+        window.addEventListener('touchmove', preventScroll, { passive: false });
+
+        return () => {
+            document.documentElement.style.overflow = originalHtmlOverflow;
+            document.body.style.overflow = originalBodyOverflow;
+            window.removeEventListener('wheel', preventScroll);
+            window.removeEventListener('touchmove', preventScroll);
+        };
+    }, [selectedProduct]);
+
     async function fetchMenuPageData() {
         try {
             setIsLoading(true);
@@ -128,6 +163,10 @@ export default function DigitalMenuPage() {
                 ? menuBanner.image
                 : `${API_BASE_URL}/storage/${menuBanner.image}`)
         : '/img/hero-home.png';
+
+    const handleCloseModal = () => {
+        setSelectedProduct(null);
+    };
 
     return (
         <div className="min-h-screen pb-16 space-y-8">
@@ -205,7 +244,7 @@ export default function DigitalMenuPage() {
                             >
                                 Pondok Mutiara
                             </button>
-                            <button
+                            {/*<button
                                 onClick={() => setSelectedLocation('heavenland')}
                                 className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'heavenland'
                                     ? 'bg-[#8c5a3c] text-white shadow-xs'
@@ -213,7 +252,7 @@ export default function DigitalMenuPage() {
                                     }`}
                             >
                                 Heavenland Park
-                            </button>
+                            </button> */}
                         </div>
                     </div>
 
@@ -299,7 +338,7 @@ export default function DigitalMenuPage() {
                                     <div className="space-y-1">
                                         <h4 className="font-black text-sm text-[#3d2314]">Gagal Memuat Data Menu</h4>
                                         <p className="text-xs text-[#6c584c] font-semibold max-w-sm mx-auto">
-                                            Layanan menu sedang tidak dapat dihubungi. Pastikan server backend sudah aktif.
+                                            Server Sedang Sibuk atau Anda Sedang Offline. Silakan coba lagi nanti.
                                         </p>
                                     </div>
                                     <button
@@ -366,15 +405,18 @@ export default function DigitalMenuPage() {
             {/* ================================================= */}
             {selectedProduct && (
                 <div
-                    onClick={() => setSelectedProduct(null)}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 overflow-y-auto"
+                    onClick={handleCloseModal}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 overscroll-contain overflow-hidden"
+                    onWheel={(e) => e.stopPropagation()}
+                    onTouchMove={(e) => e.stopPropagation()}
                 >
                     <div
+                        id="menu-modal-card"
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white w-full max-w-md rounded-3xl p-5 sm:p-6 border border-[#e6ccb2] shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-150"
+                        className="bg-white w-full max-w-md rounded-3xl p-5 sm:p-6 border border-[#e6ccb2] shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto"
                     >
                         <button
-                            onClick={() => setSelectedProduct(null)}
+                            onClick={handleCloseModal}
                             className="absolute right-4 top-4 w-8 h-8 rounded-full bg-[#FAF0E6] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition cursor-pointer z-10"
                         >
                             <X className="w-4 h-4" />
@@ -433,8 +475,8 @@ export default function DigitalMenuPage() {
                             </div>
 
                             <Link
-                                href="/#locations"
-                                onClick={() => setSelectedProduct(null)}
+                                href="/visit-us"
+                                onClick={handleCloseModal}
                                 className="px-4 py-2 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-full transition flex items-center gap-1.5 uppercase cursor-pointer"
                             >
                                 <MapPin className="w-3.5 h-3.5" />

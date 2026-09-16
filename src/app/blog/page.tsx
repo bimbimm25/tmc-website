@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
     Search, Clock, ArrowRight, Sparkles,
-    Mail, Send, TrendingUp, BookOpen, AlertCircle, RefreshCw,
-    ImageOff
+    TrendingUp, BookOpen, AlertCircle, ImageOff
 } from 'lucide-react';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     return (
@@ -71,6 +72,7 @@ export interface BannerItem {
 }
 
 export default function BlogPage() {
+    const router = useRouter();
     const [posts, setPosts] = useState<PostItem[]>([]);
     const [categories, setCategories] = useState<CategoryItem[]>([]);
     const [featured, setFeatured] = useState<PostItem | null>(null);
@@ -88,7 +90,7 @@ export default function BlogPage() {
             setIsLoading(true);
             setIsError(false);
 
-            const res = await fetch('http://127.0.0.1:8000/api/blog-data', { cache: 'no-store' });
+            const res = await fetch(`${API_BASE_URL}/api/blog-data`, { cache: 'no-store' });
             if (!res.ok) throw new Error('Gagal mengambil data blog');
 
             const json = await res.json();
@@ -127,13 +129,13 @@ export default function BlogPage() {
             ? banner.image
             : banner.image.startsWith('/img')
                 ? banner.image
-                : `http://127.0.0.1:8000/storage/${banner.image}`)
+                : `${API_BASE_URL}/storage/${banner.image}`)
         : '/img/hero-home.png';
 
     const getImageUrl = (img?: string | null) => {
         if (!img || img.trim() === '') return null;
         if (img.startsWith('http') || img.startsWith('/img')) return img;
-        return `http://127.0.0.1:8000/storage/${img}`;
+        return `${API_BASE_URL}/storage/${img}`;
     };
 
     const formatDate = (dateStr: string) => {
@@ -145,35 +147,34 @@ export default function BlogPage() {
         }
     };
 
+    const handleNavigateToArticle = (slug: string) => {
+        router.push(`/blog/${slug}`);
+    };
+
     return (
-        <div className="bg-[#faf6f0] min-h-screen space-y-10 sm:space-y-14 pb-16">
+        <div className="min-h-screen space-y-10 sm:space-y-14 pb-16">
 
             {/* ================================================= */}
             {/* 1. HERO SECTION FULL 1 LAYAR (BLOG BANNER)        */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center bg-[#faf6f0] overflow-hidden">
-                {/* Background Image Full Cover */}
+            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img
                         src={heroImage}
                         alt="To Meet Blog Showcase"
                         className="w-full h-full object-cover object-right lg:object-center"
                     />
-                    {/* Gradient Overlay Sebelah Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#faf6f0] via-[#faf6f0]/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
                 </div>
 
-                {/* Konten Text Hero */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
                     <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
 
-                        {/* Pill Badge */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f4ece1]/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
                             <span>TO MEET STORIES & TIPS</span>
                             <Sparkles className="w-3 h-3 text-amber-500" />
                         </div>
 
-                        {/* Title Proporsional */}
                         <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
                             {renderFormattedText(
                                 banner?.title,
@@ -184,7 +185,6 @@ export default function BlogPage() {
                             )}
                         </h1>
 
-                        {/* Subtitle */}
                         <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                             {renderFormattedText(
                                 banner?.subtitle,
@@ -192,23 +192,17 @@ export default function BlogPage() {
                             )}
                         </p>
 
-                        {/* Feature Badges Mini */}
                         <div className="pt-1 grid grid-cols-3 gap-2 max-w-sm text-center">
-                            <div className="bg-[#fffcf7]/90 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
                                 <div className="text-[9.5px] font-black text-[#8c5a3c] uppercase">Cerita Cafe</div>
                                 <div className="text-[8px] text-[#6c584c] font-semibold">Behind the scenes</div>
                             </div>
-                            <div className="bg-[#fffcf7]/90 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                                <div className="text-[9.5px] font-black text-[#8c5a3c] uppercase">Menu & Resep</div>
-                                <div className="text-[8px] text-[#6c584c] font-semibold">Inspirasi kuliner</div>
-                            </div>
-                            <div className="bg-[#fffcf7]/90 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
                                 <div className="text-[9.5px] font-black text-[#8c5a3c] uppercase">Aktivitas & Tips</div>
                                 <div className="text-[8px] text-[#6c584c] font-semibold">Tips seru si kecil</div>
                             </div>
                         </div>
 
-                        {/* Tombol Aksi */}
                         <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
                             <a
                                 href="#articles"
@@ -241,9 +235,12 @@ export default function BlogPage() {
                                     </h2>
                                 </div>
 
-                                <div className="bg-[#fffcf7] rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden hover:border-[#8c5a3c] transition duration-200">
+                                <div 
+                                    onClick={() => handleNavigateToArticle(featured.slug)}
+                                    className="bg-white rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden hover:border-[#8c5a3c] transition duration-200 cursor-pointer"
+                                >
                                     <div className="grid grid-cols-1 sm:grid-cols-12 gap-0 items-center">
-                                        <div className="sm:col-span-6 aspect-16/10 sm:aspect-auto sm:h-full bg-[#fcf7f0] overflow-hidden flex items-center justify-center">
+                                        <div className="sm:col-span-6 aspect-16/10 sm:aspect-auto sm:h-full bg-[#FAF0E6]/50 overflow-hidden flex items-center justify-center">
                                             {getImageUrl(featured.image) ? (
                                                 <img
                                                     src={getImageUrl(featured.image)!}
@@ -259,14 +256,12 @@ export default function BlogPage() {
                                         </div>
 
                                         <div className="sm:col-span-6 p-5 sm:p-6 space-y-3">
-                                            <span className="px-2.5 py-0.5 bg-[#f4ece1] text-[#8c5a3c] text-[9.5px] font-black uppercase rounded-md">
+                                            <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9.5px] font-black uppercase rounded-md">
                                                 {featured.category?.name || 'Cerita Cafe'}
                                             </span>
 
-                                            <h3 className="text-base sm:text-lg font-black text-[#3d2314] leading-snug">
-                                                <Link href={`/blog/${featured.slug}`} className="hover:text-[#8c5a3c] transition">
-                                                    {featured.title}
-                                                </Link>
+                                            <h3 className="text-base sm:text-lg font-black text-[#3d2314] leading-snug hover:text-[#8c5a3c] transition">
+                                                {featured.title}
                                             </h3>
 
                                             <p className="text-xs text-[#5a4232] font-semibold leading-relaxed line-clamp-2">
@@ -279,13 +274,10 @@ export default function BlogPage() {
                                                     <span>{formatDate(featured.created_at)}</span>
                                                 </div>
 
-                                                <Link
-                                                    href={`/blog/${featured.slug}`}
-                                                    className="px-4 py-1.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[10.5px] rounded-full shadow-2xs transition inline-flex items-center gap-1 uppercase tracking-wider"
-                                                >
+                                                <span className="px-4 py-1.5 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-black text-[10.5px] rounded-full shadow-2xs transition inline-flex items-center gap-1 uppercase tracking-wider">
                                                     <span>READ MORE</span>
-                                                    <ArrowRight className="w-3 h-3" />
-                                                </Link>
+                                                    <ArrowRight className="w-3.5 h-3.5" />
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -308,14 +300,14 @@ export default function BlogPage() {
                             </div>
 
                             {isLoading && (
-                                <div className="py-16 text-center space-y-2 bg-[#fffcf7] rounded-3xl border border-[#e6ccb2]/60 p-6">
+                                <div className="py-16 text-center space-y-2 bg-white rounded-3xl border border-[#e6ccb2]/60 p-6">
                                     <div className="w-6 h-6 border-2 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
                                     <p className="text-xs font-bold text-[#8c5a3c]">Memuat artikel...</p>
                                 </div>
                             )}
 
                             {!isLoading && isError && (
-                                <div className="py-12 text-center space-y-2.5 bg-[#faf6f0] rounded-3xl border border-rose-200 p-6">
+                                <div className="py-12 text-center space-y-2.5 bg-[#FAF0E6]/50 rounded-3xl border border-rose-200 p-6">
                                     <AlertCircle className="w-6 h-6 text-rose-600 mx-auto" />
                                     <h4 className="font-black text-xs text-[#3d2314]">Gagal Memuat Artikel</h4>
                                     <button
@@ -328,7 +320,7 @@ export default function BlogPage() {
                             )}
 
                             {!isLoading && !isError && filteredPosts.length === 0 && (
-                                <div className="py-16 text-center space-y-2 bg-[#fffcf7] rounded-3xl border border-[#e6ccb2]/60 p-6">
+                                <div className="py-16 text-center space-y-2 bg-white rounded-3xl border border-[#e6ccb2]/60 p-6">
                                     <BookOpen className="w-6 h-6 text-[#8c5a3c] mx-auto" />
                                     <h4 className="font-black text-sm text-[#3d2314]">Artikel Tidak Ditemukan</h4>
                                     <p className="text-xs text-[#6c584c]">Coba ubah kata kunci pencarian atau kategori filter.</p>
@@ -343,10 +335,11 @@ export default function BlogPage() {
                                         return (
                                             <div
                                                 key={post.id}
-                                                className="bg-[#fffcf7] rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden flex flex-col justify-between hover:border-[#8c5a3c] transition duration-200 group"
+                                                onClick={() => handleNavigateToArticle(post.slug)}
+                                                className="bg-white rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden flex flex-col justify-between hover:border-[#8c5a3c] transition duration-200 group cursor-pointer"
                                             >
                                                 <div>
-                                                    <div className="relative w-full aspect-16/10 bg-[#fcf7f0] overflow-hidden flex items-center justify-center border-b border-[#e6ccb2]/40">
+                                                    <div className="relative w-full aspect-16/10 bg-[#FAF0E6]/50 overflow-hidden flex items-center justify-center border-b border-[#e6ccb2]/40">
                                                         {postImg ? (
                                                             <img
                                                                 src={postImg}
@@ -366,10 +359,8 @@ export default function BlogPage() {
                                                     </div>
 
                                                     <div className="p-4 space-y-1.5">
-                                                        <h3 className="font-black text-xs sm:text-[13px] text-[#3d2314] leading-snug line-clamp-2">
-                                                            <Link href={`/blog/${post.slug}`} className="hover:text-[#8c5a3c] transition">
-                                                                {post.title}
-                                                            </Link>
+                                                        <h3 className="font-black text-xs sm:text-[13px] text-[#3d2314] leading-snug line-clamp-2 group-hover:text-[#8c5a3c] transition">
+                                                            {post.title}
                                                         </h3>
 
                                                         <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed line-clamp-2">
@@ -380,12 +371,9 @@ export default function BlogPage() {
 
                                                 <div className="p-4 pt-0 flex items-center justify-between border-t border-[#e6ccb2]/40 text-[10px] font-bold text-[#6c584c]">
                                                     <span>{formatDate(post.created_at)}</span>
-                                                    <Link
-                                                        href={`/blog/${post.slug}`}
-                                                        className="w-6 h-6 rounded-full bg-[#f4ece1] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition"
-                                                    >
+                                                    <span className="w-6 h-6 rounded-full bg-[#FAF0E6] group-hover:bg-[#8c5a3c] text-[#8c5a3c] group-hover:text-white flex items-center justify-center transition">
                                                         <ArrowRight className="w-3 h-3" />
-                                                    </Link>
+                                                    </span>
                                                 </div>
                                             </div>
                                         );
@@ -397,7 +385,7 @@ export default function BlogPage() {
                                 <div className="text-center pt-2">
                                     <button
                                         onClick={() => setVisibleCount((prev) => prev + 6)}
-                                        className="px-6 py-2.5 bg-white hover:bg-[#faf6f0] border border-[#e6ccb2] text-[#3d2314] font-black text-xs rounded-full shadow-2xs transition cursor-pointer uppercase tracking-wider"
+                                        className="px-6 py-2.5 bg-white hover:bg-[#FAF0E6] border border-[#e6ccb2] text-[#3d2314] font-black text-xs rounded-full shadow-2xs transition cursor-pointer uppercase tracking-wider"
                                     >
                                         LOAD MORE ARTICLES
                                     </button>
@@ -406,25 +394,25 @@ export default function BlogPage() {
                         </div>
                     </div>
 
-                    {/* KOLOM KANAN (SIDEBAR: SEARCH, CATEGORIES, NEWSLETTER, POPULAR) */}
+                    {/* KOLOM KANAN (SIDEBAR: SEARCH, CATEGORIES, POPULAR) */}
                     <div className="lg:col-span-4 space-y-6">
 
                         {/* Search Input Box */}
-                        <div className="bg-[#fffcf7] p-3 rounded-2xl border border-[#e6ccb2]/80 shadow-2xs">
+                        <div className="bg-white p-3 rounded-2xl border border-[#e6ccb2]/80 shadow-2xs">
                             <div className="relative">
                                 <input
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Search articles..."
-                                    className="w-full bg-[#faf6f0] border border-[#e6ccb2]/60 rounded-xl pl-9 pr-3 py-2 text-xs text-[#3d2314] font-semibold focus:outline-none focus:border-[#8c5a3c]"
+                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/60 rounded-xl pl-9 pr-3 py-2 text-xs text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c]"
                                 />
                                 <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
                             </div>
                         </div>
 
                         {/* Categories Box */}
-                        <div className="bg-[#fffcf7] p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
+                        <div className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
                             <div className="flex items-center justify-between border-b border-[#e6ccb2]/50 pb-2.5">
                                 <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wider">
                                     CATEGORIES
@@ -437,7 +425,7 @@ export default function BlogPage() {
                                     onClick={() => setSelectedCategory('all')}
                                     className={`w-full p-2 rounded-xl flex items-center justify-between transition cursor-pointer ${selectedCategory === 'all'
                                             ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                            : 'text-[#5a4232] hover:bg-[#faf6f0]'
+                                            : 'text-[#5a4232] hover:bg-[#FAF0E6]'
                                         }`}
                                 >
                                     <span>All Articles</span>
@@ -450,7 +438,7 @@ export default function BlogPage() {
                                         onClick={() => setSelectedCategory(cat.slug)}
                                         className={`w-full p-2 rounded-xl flex items-center justify-between transition cursor-pointer ${selectedCategory === cat.slug
                                                 ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                                : 'text-[#5a4232] hover:bg-[#faf6f0]'
+                                                : 'text-[#5a4232] hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         <span>{cat.name}</span>
@@ -459,8 +447,9 @@ export default function BlogPage() {
                                 ))}
                             </div>
                         </div>
+
                         {/* Popular Articles Box */}
-                        <div className="bg-[#fffcf7] p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
+                        <div className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
                             <div className="flex items-center gap-1.5 border-b border-[#e6ccb2]/50 pb-2.5">
                                 <TrendingUp className="w-4 h-4 text-[#8c5a3c]" />
                                 <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wider">
@@ -470,15 +459,17 @@ export default function BlogPage() {
 
                             <div className="space-y-3">
                                 {popular.map((pop, idx) => (
-                                    <div key={pop.id} className="flex items-start gap-3 group">
-                                        <div className="w-6 h-6 rounded-full bg-[#f4ece1] text-[#8c5a3c] font-black text-xs flex items-center justify-center shrink-0">
+                                    <div 
+                                        key={pop.id} 
+                                        onClick={() => handleNavigateToArticle(pop.slug)}
+                                        className="flex items-start gap-3 group cursor-pointer"
+                                    >
+                                        <div className="w-6 h-6 rounded-full bg-[#FAF0E6] text-[#8c5a3c] font-black text-xs flex items-center justify-center shrink-0">
                                             {idx + 1}
                                         </div>
                                         <div className="space-y-0.5 min-w-0">
                                             <h4 className="font-bold text-xs text-[#3d2314] leading-snug group-hover:text-[#8c5a3c] transition truncate">
-                                                <Link href={`/blog/${pop.slug}`}>
-                                                    {pop.title}
-                                                </Link>
+                                                {pop.title}
                                             </h4>
                                             <div className="text-[9.5px] text-stone-400 font-semibold">
                                                 {formatDate(pop.created_at)} • {pop.views || 0} views
@@ -498,9 +489,9 @@ export default function BlogPage() {
             {/* 3. BOTTOM CTA: GOT A SWEET STORY IDEA?            */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#fffcf7] p-5 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                <div className="bg-white p-5 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
                     <div className="flex items-center gap-3.5">
-                        <div className="w-11 h-11 rounded-2xl bg-[#f4ece1] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
+                        <div className="w-11 h-11 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
                             <BearFaceIcon className="w-6 h-6" />
                         </div>
                         <div>

@@ -12,7 +12,7 @@ const jakartaSans = Plus_Jakarta_Sans({
   display: 'swap',
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tomeetcafe.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tomeetcafe.id';
 
 export const viewport: Viewport = {
   themeColor: '#E4CFB8',
@@ -25,21 +25,35 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'To Meet Cafe & Playground Sidoarjo | Cafe Ramah Anak & Keluarga',
+    default: 'To Meet Cafe & Playground | Cafe Ramah Anak di Sidoarjo',
     template: '%s | To Meet Cafe',
   },
   description:
-    'To Meet Cafe & Playground adalah kafe ramah keluarga bertema beruang di Sidoarjo. Nikmati menu lezat, indoor playground, paket ulang tahun, event workshop seru, dan integrasi game Roblox.',
+    'To Meet Cafe & Playground adalah cafe ramah anak dan keluarga di Sidoarjo dengan konsep beruang yang unik. Nikmati menu lucu, playground, birthday package, workshop, merchandise, dan pengalaman seru di To Meet.',
   keywords: [
     'To Meet Cafe',
     'To Meet Cafe Sidoarjo',
+    'To Meet Cafe & Playground',
+    'Cafe Sidoarjo',
     'Cafe Ramah Anak Sidoarjo',
-    'Kids Playground Cafe Sidoarjo',
+    'Cafe kids friendly Sidoarjo',
+    'Cafe Anak Sidoarjo',
+    'Cafe Keluarga Sidoarjo',
+    'Family Cafe Sidoarjo',
+    'Cafe dengan Playground Sidoarjo',
+    'Kids Cafe Sidoarjo',
+    'Playground Cafe Sidoarjo',
+    'Indoor Playground Sidoarjo',
+    'Tempat Makan Ramah Anak Sidoarjo',
+    'Tempat Makan Keluarga Sidoarjo',
+    'Tempat Main Anak Sidoarjo',
     'Tempat Ulang Tahun Anak Sidoarjo',
-    'Cafe Heavenland Park Sidoarjo',
+    'Birthday Cafe Sidoarjo',
     'To Meet Pondok Mutiara',
-    'Cafe Keluarga Jawa Timur',
-    'To Meet Roblox Cafe',
+    'Cafe Pondok Mutiara Sidoarjo',
+    'Workshop Anak Sidoarjo',
+    'Aktivitas Anak Sidoarjo',
+    'To Meet Roblox',
   ],
   authors: [{ name: 'To Meet Cafe Team' }],
   creator: 'To Meet Cafe',
@@ -57,24 +71,24 @@ export const metadata: Metadata = {
     locale: 'id_ID',
     url: SITE_URL,
     siteName: 'To Meet Cafe',
-    title: 'To Meet Cafe & Playground Sidoarjo | Sweet Stories & Family Fun',
+    title: 'To Meet Cafe & Playground | Cafe Ramah Anak di Sidoarjo',
     description:
-      'Kafe keluarga ramah anak dengan playground tematik, menu lezat, area privat event, dan petualangan seru di Sidoarjo.',
+      'To Meet Cafe & Playground adalah cafe ramah anak dan keluarga di Sidoarjo dengan konsep beruang yang unik. Nikmati menu lucu, playground, birthday package, workshop, merchandise, dan pengalaman seru di To Meet.',
     images: [
       {
-        url: '/img/logo-tomeet.png',
+        url: '/logo-tomeet.svg',
         width: 800,
         height: 800,
-        alt: 'To Meet Cafe Official Logo',
+        alt: 'To Meet Cafe Logo',
       },
     ],
   },
   twitter: {
     card: 'summary',
-    title: 'To Meet Cafe & Playground Sidoarjo',
+    title: 'To Meet Cafe & Playground | Cafe Ramah Anak di Sidoarjo',
     description:
       'Kafe keluarga ramah anak dengan playground tematik dan menu lezat di Sidoarjo.',
-    images: ['/img/logo-tomeet.png'],
+    images: ['/logo-tomeet.svg'],
   },
   robots: {
     index: true,
@@ -88,9 +102,11 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/img/logo-tomeet.png',
-    shortcut: '/img/logo-tomeet.png',
-    apple: '/img/logo-tomeet.png',
+    icon: [
+      { url: '/logo-tomeet.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/logo-tomeet.svg',
+    apple: '/logo-tomeet.svg',
   },
 };
 
@@ -101,49 +117,70 @@ export default function RootLayout({
 }) {
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Restaurant',
-    name: 'To Meet Cafe & Playground',
-    image: `${SITE_URL}/img/logo-tomeet.png`,
-    logo: `${SITE_URL}/img/logo-tomeet.png`,
-    '@id': SITE_URL,
-    url: SITE_URL,
-    telephone: '+628123456789',
-    priceRange: '$$',
-    servesCuisine: ['Indonesian', 'Western', 'Dessert', 'Coffee', 'Kids Meal'],
-    address: [
+    '@graph': [
       {
-        '@type': 'PostalAddress',
-        streetAddress: 'Heavenland Park, Jl. Raya Pralajur',
-        addressLocality: 'Sidoarjo',
-        addressRegion: 'Jawa Timur',
-        addressCountry: 'ID',
-      },
-      {
-        '@type': 'PostalAddress',
-        streetAddress: 'Jl. Pondok Mutiara No. 1',
-        addressLocality: 'Sidoarjo',
-        addressRegion: 'Jawa Timur',
-        addressCountry: 'ID',
-      },
-    ],
-    openingHoursSpecification: [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
+        '@type': 'Restaurant',
+        '@id': `${SITE_URL}/visit-us/pondok-mutiara`,
+        name: 'To Meet Cafe & Playground - Pondok Mutiara',
+        image: `${SITE_URL}/logo-tomeet.svg`,
+        url: SITE_URL,
+        telephone: '+62 821-4160-9328',
+        priceRange: '$$',
+        servesCuisine: ['Indonesian', 'Western', 'Dessert', 'Coffee', 'Kids Meal'],
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'harum, Ruko, Jl. Pd. Mutiara No.1A blok B, Jati, Kec. Sidoarjo, Kabupaten Sidoarjo, Jawa Timur 61226',
+          addressLocality: 'Sidoarjo',
+          addressRegion: 'Jawa Timur',
+          addressCountry: 'ID',
+        },
+        openingHoursSpecification: [
+          {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: [
+              'Tuesday',
+              'Wednesday',
+              'Thursday',
+              'Friday',
+              'Saturday',
+              'Sunday',
+            ],
+            opens: '12:00',
+            closes: '22:00',
+          },
         ],
-        opens: '10:00',
-        closes: '22:00',
       },
       {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Saturday', 'Sunday'],
-        opens: '09:00',
-        closes: '22:00',
+        '@type': 'Restaurant',
+        '@id': `${SITE_URL}/visit-us/heavenland-park`,
+        name: 'To Meet Cafe - Heavenland Park',
+        image: `${SITE_URL}/logo-tomeet.svg`,
+        url: SITE_URL,
+        telephone: '+62 821-4160-9328',
+        priceRange: '$$',
+        servesCuisine: ['Indonesian', 'Western', 'Dessert', 'Coffee', 'Kids Meal'],
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Ruko Heavenland Park, BB-26, Ngemplak, Klurak, Kec. Candi, Kabupaten Sidoarjo, Jawa Timur 61217',
+          addressLocality: 'Sidoarjo',
+          addressRegion: 'Jawa Timur',
+          addressCountry: 'ID',
+        },
+        openingHoursSpecification: [
+          {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: [
+              'Tuesday',
+              'Wednesday',
+              'Thursday',
+              'Friday',
+              'Saturday',
+              'Sunday',
+            ],
+            opens: '12:00',
+            closes: '21:00',
+          },
+        ],
       },
     ],
   };
@@ -155,6 +192,7 @@ export default function RootLayout({
       style={{ colorScheme: 'light' }}
     >
       <head>
+        <link rel="icon" href="/logo-tomeet.svg" type="image/svg+xml" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
