@@ -496,7 +496,7 @@ export default async function Home() {
                 </Link>
 
                 <a
-                  href="https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20tanya%20info%20event%20dan%20workshop"
+                  href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20tanya%20info%20event%20dan%20workshop"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/90 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[#3d2314] shadow-2xs transition hover:bg-[#faf6f0]"

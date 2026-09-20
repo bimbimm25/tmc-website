@@ -182,9 +182,9 @@ export default function RobloxPage() {
         <div className="min-h-screen space-y-8 sm:space-y-12 pb-16">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION (RAPI, SEJAJAR & SUBJUDUL JELAS) */}
+            {/* 1. HERO SECTION (RESPONSIF: MOBILE vs DESKTOP)    */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/60 pt-16 pb-4 lg:py-0">
+            <section className="relative w-full min-h-dvh lg:h-screen flex items-center overflow-hidden border-b border-[#e6ccb2]/60 pt-16 pb-4 lg:py-0">
                 {/* 1. Background Image Cover */}
                 <div className="absolute inset-0 z-0">
                     <img
@@ -193,18 +193,18 @@ export default function RobloxPage() {
                         className="w-full h-full object-cover object-[75%_center] lg:object-right xl:object-center"
                     />
 
-                    {/* Gradien Putih Sisi Kiri: Bikin Subjudul 100% Terbaca Jelas & Gambar Kanan Tetap Terbuka */}
+                    {/* Gradien Putih Sisi Kiri */}
                     <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 sm:via-white/80 to-transparent w-full sm:w-4/5 lg:w-3/5 xl:w-1/2" />
 
                     {/* Soft Vignette Bawah di HP */}
                     <div className="block lg:hidden absolute inset-0 bg-gradient-to-t from-white/40 via-transparent to-transparent pointer-events-none" />
                 </div>
 
-                {/* 2. Konten Hero (Rapi 1 Kolom Sejajar di HP, 2 Kolom di Desktop) */}
+                {/* 2. Konten Hero */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto flex flex-col justify-center">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-5 lg:gap-8 items-center">
 
-                        {/* Kolom Teks: Seluruh Elemen di dalam Card Ber-Border Rapi */}
+                        {/* Kolom Teks: Dibungkus Card Ber-Border Rapi di HP */}
                         <div className="lg:col-span-6 text-left">
                             <div className="bg-white/85 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-4 sm:p-5 lg:p-0 rounded-3xl lg:rounded-none border border-white/80 lg:border-none shadow-md lg:shadow-none space-y-2.5 sm:space-y-3 max-w-md">
 
@@ -260,8 +260,8 @@ export default function RobloxPage() {
                             </div>
                         </div>
 
-                        {/* Video YouTube: Presisi Sejajar Lebar Penuh dengan Teks di Atasnya */}
-                        <div className="lg:col-span-6 w-full max-w-md lg:max-w-none">
+                        {/* Video YouTube Khusus Tampilan HP (Langsung Muncul Bersama Hero) */}
+                        <div className="block lg:hidden lg:col-span-6 w-full max-w-md">
                             <div className="bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl sm:rounded-3xl border border-[#e6ccb2]/90 shadow-md space-y-1.5">
                                 <div className="flex items-center justify-between px-1">
                                     <span className="inline-flex items-center gap-1.5 text-[9.5px] font-black uppercase text-[#8c5a3c]">
@@ -288,7 +288,7 @@ export default function RobloxPage() {
                     </div>
 
                     {/* 3 Mini Highlight Stats: Presisi Sejajar di Bawah */}
-                    <div className="grid grid-cols-3 gap-2 max-w-md text-center pt-2.5">
+                    <div className="grid grid-cols-3 gap-2 max-w-md text-center pt-3">
                         <div className="bg-white/95 backdrop-blur-xs py-1.5 px-2 rounded-xl border border-[#e6ccb2]/70 shadow-2xs">
                             <div className="text-[11px] font-black text-[#3d2314] leading-none">18.5K</div>
                             <div className="text-[7.5px] text-[#6c584c] font-bold uppercase mt-0.5">Visits</div>
@@ -308,7 +308,66 @@ export default function RobloxPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 2. IN-GAME MAP SCREENSHOTS GALLERY                */}
+            {/* 2. TRAILER GAMEPLAY & THEATER SHOWCASE (DESKTOP)  */}
+            {/* ================================================= */}
+            <section id="trailer-section" className="hidden lg:block max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14">
+                <div className="bg-white p-5 sm:p-8 lg:p-10 rounded-[2.5rem] border border-[#e6ccb2]/80 shadow-2xs">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+
+                        {/* Video Player */}
+                        <div className="lg:col-span-7">
+                            <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-xl border-2 border-[#e6ccb2]/80 bg-black group">
+                                <iframe
+                                    src="https://www.youtube.com/embed/eZsAmpeJYPM?si=_y6r7OPCty9zuWj-"
+                                    title="To Meet Roblox Gameplay Trailer"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Video Content Overview */}
+                        <div className="lg:col-span-5 space-y-3.5 text-center lg:text-left">
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#FAF0E6] rounded-full text-[10px] sm:text-xs font-black text-[#8c5a3c] tracking-widest uppercase border border-[#e6ccb2]/80">
+                                <Play className="w-3 h-3 fill-current text-[#e85a4f]" />
+                                <span>OFFICIAL GAME TRAILER</span>
+                            </div>
+
+                            <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
+                                Jelajahi Dunia Virtual <br /> To Meet Cafe!
+                            </h2>
+
+                            <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
+                                Tonton cuplikan keseruan game resmi kami di Roblox! Jelajahi bangunan cafe 3D yang autentik, selesaikan rintangan Obby bersama teman, dan kumpulkan badge eksklusif.
+                            </p>
+
+                            <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                                <a
+                                    href={playLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-6 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
+                                >
+                                    <Gamepad2 className="w-4 h-4" />
+                                    <span>GABUNG SEKARANG</span>
+                                </a>
+                                <a
+                                    href="#map-gallery"
+                                    className="px-5 py-2.5 bg-[#FAF0E6] hover:bg-[#8c5a3c] hover:text-white text-[#8c5a3c] font-black text-xs rounded-full transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer border border-[#e6ccb2]/60"
+                                >
+                                    <ImageIcon className="w-3.5 h-3.5" />
+                                    <span>LIHAT MAP PREVIEW</span>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            {/* ================================================= */}
+            {/* 3. IN-GAME MAP SCREENSHOTS GALLERY                */}
             {/* ================================================= */}
             <section id="map-gallery" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14 space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-[#e6ccb2]/60 pb-3">
@@ -361,7 +420,7 @@ export default function RobloxPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 3. DAFTAR MISI PER SECTION                        */}
+            {/* 4. DAFTAR MISI PER SECTION                        */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
@@ -486,7 +545,7 @@ export default function RobloxPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 4. ATURAN & CARA KLAIM REWARD OFFLINE DI CAFE     */}
+            {/* 5. ATURAN & CARA KLAIM REWARD OFFLINE DI CAFE     */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white p-5 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
@@ -522,7 +581,7 @@ export default function RobloxPage() {
                             </div>
                         </div>
 
-                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-1.5 flex items-start gap-3">
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/50 space-y-1.5 flex items-start gap-3">
                             <div className="w-7 h-7 rounded-xl bg-[#8c5a3c] text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
                                 3
                             </div>
@@ -538,7 +597,7 @@ export default function RobloxPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 5. MODAL PREVIEW SCREENSHOT IMAGE                 */}
+            {/* 6. MODAL PREVIEW SCREENSHOT IMAGE                 */}
             {/* ================================================= */}
             {selectedScreenshot && (
                 <div

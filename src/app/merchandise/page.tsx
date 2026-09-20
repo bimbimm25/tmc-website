@@ -171,7 +171,7 @@ export default function MerchandisePage() {
             {/* ================================================= */}
             {/* 1. HERO BANNER (HANYA DITAMPILKAN DI DESKTOP)     */}
             {/* ================================================= */}
-            <section className="hidden lg:flex relative w-full h-screen max-h-[820px] items-center overflow-hidden border-b border-[#e6ccb2]/60">
+            <section className="hidden lg:flex relative w-full h-screen max-h-[720px] items-center overflow-hidden border-b border-[#e6ccb2]/60">
                 {/* Background Image Full Cover */}
                 <div className="absolute inset-0 z-0">
                     <img
@@ -180,13 +180,13 @@ export default function MerchandisePage() {
                         className="w-full h-full object-cover object-right xl:object-center"
                     />
                     {/* Gradien Putih Halus Sisi Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full lg:w-3/5 xl:w-1/2" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent w-full lg:w-3/5 xl:w-1/2" />
                 </div>
 
                 {/* Konten Hero */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-16 sm:pt-20">
-                    <div className="max-w-md lg:max-w-xl">
-                        <div className="space-y-3.5 sm:space-y-4">
+                    <div className="max-w-md lg:max-w-lg">
+                        <div className="space-y-3 sm:space-y-3.5">
 
                             {/* Pill Badge */}
                             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 text-[#8c5a3c] text-xs font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs">
@@ -194,9 +194,9 @@ export default function MerchandisePage() {
                                 <Sparkles className="w-3 h-3 text-amber-500" />
                             </div>
 
-                            {/* Title */}
+                            {/* Title (Dikecilkan ukurannya agar pas di area gradien putih dan tidak menabrak gambar) */}
                             <div className="space-y-1">
-                                <h1 className="text-4xl xl:text-5xl font-black text-[#3d2314] tracking-tight leading-[1.18] uppercase">
+                                <h1 className="text-3xl lg:text-[2.4rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
                                     {renderFormattedText(
                                         merchBanner?.title,
                                         <>
@@ -208,7 +208,7 @@ export default function MerchandisePage() {
                             </div>
 
                             {/* Subtitle */}
-                            <p className="text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                            <p className="text-xs lg:text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md">
                                 {renderFormattedText(
                                     merchBanner?.subtitle,
                                     'Bawa pulang koleksi boneka dan suvenir lucu khas To Meet Cafe untuk teman atau koleksi pribadimu.'
@@ -216,43 +216,43 @@ export default function MerchandisePage() {
                             </p>
 
                             {/* 3 Values Mini Cards */}
-                            <div className="grid grid-cols-3 gap-2 pt-1 max-w-md">
-                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2.5 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1 shadow-2xs">
-                                    <div className="w-7 h-7 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs">
-                                        <BearFaceIcon className="w-3.5 h-3.5" />
+                            <div className="grid grid-cols-3 gap-2 pt-0.5 max-w-md">
+                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-0.5 shadow-2xs">
+                                    <div className="w-6 h-6 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs">
+                                        <BearFaceIcon className="w-3 h-3" />
                                     </div>
                                     <div className="leading-none">
-                                        <span className="text-[9.5px] font-black text-[#3d2314] block tracking-tight">100% Original</span>
-                                        <span className="text-[7.5px] text-[#6c584c] font-bold block mt-0.5">Official Item</span>
+                                        <span className="text-[9px] font-black text-[#3d2314] block tracking-tight">100% Original</span>
+                                        <span className="text-[7px] text-[#6c584c] font-bold block mt-0.5">Official Item</span>
                                     </div>
                                 </div>
 
-                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2.5 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1 shadow-2xs">
-                                    <div className="w-7 h-7 rounded-xl bg-white text-amber-500 flex items-center justify-center shadow-2xs">
-                                        <Sparkles className="w-3.5 h-3.5" />
+                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-0.5 shadow-2xs">
+                                    <div className="w-6 h-6 rounded-xl bg-white text-amber-500 flex items-center justify-center shadow-2xs">
+                                        <Sparkles className="w-3 h-3" />
                                     </div>
                                     <div className="leading-none">
-                                        <span className="text-[9.5px] font-black text-[#3d2314] block tracking-tight">Cute Design</span>
-                                        <span className="text-[7.5px] text-[#6c584c] font-bold block mt-0.5">Aesthetic</span>
+                                        <span className="text-[9px] font-black text-[#3d2314] block tracking-tight">Cute Design</span>
+                                        <span className="text-[7px] text-[#6c584c] font-bold block mt-0.5">Aesthetic</span>
                                     </div>
                                 </div>
 
-                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2.5 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1 shadow-2xs">
-                                    <div className="w-7 h-7 rounded-xl bg-white text-[#e85a4f] flex items-center justify-center shadow-2xs">
-                                        <Gift className="w-3.5 h-3.5" />
+                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-0.5 shadow-2xs">
+                                    <div className="w-6 h-6 rounded-xl bg-white text-[#e85a4f] flex items-center justify-center shadow-2xs">
+                                        <Gift className="w-3 h-3" />
                                     </div>
                                     <div className="leading-none">
-                                        <span className="text-[9.5px] font-black text-[#3d2314] block tracking-tight">Great Gift</span>
-                                        <span className="text-[7.5px] text-[#6c584c] font-bold block mt-0.5">For Loved Ones</span>
+                                        <span className="text-[9px] font-black text-[#3d2314] block tracking-tight">Great Gift</span>
+                                        <span className="text-[7px] text-[#6c584c] font-bold block mt-0.5">For Loved Ones</span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Call To Action Buttons */}
-                            <div className="pt-2 flex flex-row items-center gap-2.5">
+                            <div className="pt-1.5 flex flex-row items-center gap-2.5">
                                 <a
                                     href="#catalog"
-                                    className="px-6 py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-xs rounded-full shadow-md shadow-rose-500/25 transition-all duration-200 flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer whitespace-nowrap"
+                                    className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-xs rounded-full shadow-md shadow-rose-500/25 transition-all duration-200 flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer whitespace-nowrap"
                                 >
                                     <span>{merchBanner?.cta_text || 'LIHAT KATALOG'}</span>
                                     <ShoppingBag className="w-3.5 h-3.5 shrink-0" />
@@ -262,7 +262,7 @@ export default function MerchandisePage() {
                                     href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20tanya%20stok%20merchandise"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="px-6 py-3 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-xs rounded-full shadow-md transition-all duration-200 flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer whitespace-nowrap"
+                                    className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-xs rounded-full shadow-md transition-all duration-200 flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer whitespace-nowrap"
                                 >
                                     <Phone className="w-3.5 h-3.5 fill-current shrink-0" />
                                     <span>TANYA ADMIN</span>
