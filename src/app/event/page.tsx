@@ -352,7 +352,7 @@ export default function EventPage() {
                             </div>
                             <h4 className="font-black text-xs text-[#3d2314]">Belum Ada Kegiatan</h4>
                             <p className="text-[10px] text-[#6c584c] font-semibold max-w-xs mx-auto">
-                                Belum ada aktivitas yang ditambahkan pada kategori ini.
+                                Tunggu Kegiatan Selanjutnya di To Meet
                             </p>
                         </div>
                     )}

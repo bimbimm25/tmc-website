@@ -4,7 +4,8 @@ import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
     Search, Star, Utensils, CupSoda, Cake,
-    Info, ChevronRight, Coffee, X, MapPin, AlertCircle, RefreshCw
+    Info, ChevronRight, Coffee, X, MapPin, AlertCircle, RefreshCw,
+    SlidersHorizontal
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
@@ -53,7 +54,7 @@ export default function DigitalMenuPage() {
     const [isError, setIsError] = useState<boolean>(false);
     const [selectedProduct, setSelectedProduct] = useState<MenuItem | null>(null);
 
-    // Kunci Scroll Halaman ketika Modal Pop-up Aktif (Mendukung Virtual/SmoothScroll & Mobile Touch)
+    // Kunci Scroll Halaman ketika Modal Pop-up Aktif
     useEffect(() => {
         if (!selectedProduct) return;
 
@@ -175,7 +176,6 @@ export default function DigitalMenuPage() {
                 className="hidden lg:flex w-full relative h-screen max-h-[750px] items-center bg-cover bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-20 pb-6 overflow-hidden transition-all duration-300"
                 style={{ backgroundImage: `url('${heroBackgroundImage}')` }}
             >
-                {/* Soft Overlay Gradien Putih Desktop */}
                 <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl" />
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
@@ -208,65 +208,96 @@ export default function DigitalMenuPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 2. MAIN CONTENT AREA & LOCATION FILTER            */}
+            {/* 2. MAIN CONTENT AREA & UX KATEGORI MOBILE         */}
             {/* ================================================= */}
             <section id="menu-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-4">
                 <div className="bg-white p-4 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6">
 
-                    {/* Filter Tab Lokasi Outlet */}
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 sm:p-4 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/70">
-                        <div className="flex items-center gap-2 text-xs font-black text-[#3d2314] uppercase tracking-wide">
-                            <MapPin className="w-4 h-4 text-[#8c5a3c]" />
-                            <span>PILIH OUTLET:</span>
+                    {/* Filter Tab Lokasi Outlet & Search Bar (Di atas untuk Mobile) */}
+                    <div className="space-y-3">
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 sm:p-4 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/70">
+                            <div className="flex items-center gap-2 text-xs font-black text-[#3d2314] uppercase tracking-wide">
+                                <MapPin className="w-4 h-4 text-[#8c5a3c]" />
+                                <span>PILIH OUTLET:</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 max-w-full">
+                                <button
+                                    onClick={() => setSelectedLocation('all')}
+                                    className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'all'
+                                        ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                        : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                        }`}
+                                >
+                                    Semua Outlet
+                                </button>
+                                <button
+                                    onClick={() => setSelectedLocation('pondok_mutiara')}
+                                    className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'pondok_mutiara'
+                                        ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                        : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                        }`}
+                                >
+                                    Pondok Mutiara
+                                </button>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 max-w-full">
-                            <button
-                                onClick={() => setSelectedLocation('all')}
-                                className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'all'
-                                    ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                    : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
-                                    }`}
-                            >
-                                Semua Outlet
-                            </button>
-                            <button
-                                onClick={() => setSelectedLocation('pondok_mutiara')}
-                                className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'pondok_mutiara'
-                                    ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                    : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
-                                    }`}
-                            >
-                                Pondok Mutiara
-                            </button>
+
+                        {/* Search Bar untuk Mobile & Desktop */}
+                        <div className="relative">
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="Cari makanan / minuman lezat..."
+                                className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-2xl pl-10 pr-9 py-2.5 text-xs text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
+                            />
+                            <Search className="w-4 h-4 text-[#8c5a3c] absolute left-3.5 top-3" />
+                            {searchQuery && (
+                                <button
+                                    onClick={() => setSearchQuery('')}
+                                    className="absolute right-3 top-3 text-[#8c5a3c] hover:text-[#3d2314] cursor-pointer"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* UX KATEGORI MENU KHUSUS MOBILE: Horizontal Pill Chips yang Sangat Rapi & Mudah Dipahami */}
+                    <div className="block lg:hidden">
+                        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none">
+                            {availableCategories.map((cat) => {
+                                const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
+                                let label = cat.toUpperCase();
+                                if (cat === 'all') label = 'SEMUA MENU';
+                                if (cat === 'bestseller') label = 'BEST SELLER';
+
+                                return (
+                                    <button
+                                        key={cat}
+                                        onClick={() => setSelectedCategory(cat)}
+                                        className={`px-3.5 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition shrink-0 cursor-pointer flex items-center gap-1.5 ${isSelected
+                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                            : 'bg-[#FAF0E6]/70 text-[#3d2314] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
+                                            }`}
+                                    >
+                                        {cat === 'bestseller' && <Star className="w-3 h-3 fill-amber-400 text-amber-400" />}
+                                        <span>{label}</span>
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
-                        {/* SIDEBAR FILTER (KIRI) */}
-                        <aside className="lg:col-span-3 lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:flex lg:flex-col gap-3">
-
-                            {/* 1. Search Bar */}
-                            <div className="relative shrink-0">
-                                <input
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Cari makanan / minuman..."
-                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-2xl pl-10 pr-9 py-2.5 text-xs text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
-                                />
-                                <Search className="w-4 h-4 text-[#8c5a3c] absolute left-3.5 top-3" />
-                                {searchQuery && (
-                                    <button
-                                        onClick={() => setSearchQuery('')}
-                                        className="absolute right-3 top-3 text-[#8c5a3c] hover:text-[#3d2314] cursor-pointer"
-                                    >
-                                        <X className="w-4 h-4" />
-                                    </button>
-                                )}
+                        {/* SIDEBAR FILTER (KIRI - HANYA DESKTOP) */}
+                        <aside className="hidden lg:block lg:col-span-3 lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:flex lg:flex-col gap-3">
+                            <div className="text-xs font-black text-[#3d2314] uppercase tracking-wider px-1 flex items-center gap-1.5">
+                                <SlidersHorizontal className="w-3.5 h-3.5 text-[#8c5a3c]" />
+                                <span>Kategori Menu</span>
                             </div>
 
-                            {/* 2. Nav Kategori: Scroll Mandiri */}
                             <nav
                                 onWheel={(e) => e.stopPropagation()}
                                 className="flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto lg:flex-1 lg:min-h-0 overscroll-contain pr-1.5 pb-3 scrollbar-thin scrollbar-thumb-[#8c5a3c]/30 scrollbar-track-transparent"
