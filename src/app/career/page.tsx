@@ -320,24 +320,33 @@ export default function CareerPage() {
         <div className="min-h-screen space-y-10 sm:space-y-14 pb-14">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION FULL 1 LAYAR                      */}
+            {/* 1. HERO SECTION (GRADIEN ASLI SMOOTH + TEKS PAS)  */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50">
+                {/* 1. Background Cover & Gradasi Putih Asli (Smooth) */}
                 <div className="absolute inset-0 z-0">
                     <img
                         src={heroImage}
                         alt="To Meet Cafe Career"
-                        className="w-full h-full object-cover object-right lg:object-center"
+                        className="w-full h-full object-cover object-[75%_center] lg:object-center"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent sm:w-3/4 lg:w-3/5" />
+                    {/* Gradasi asli yang smooth dari sisi kiri */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
                 </div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div className="max-w-xl space-y-4">
-                        <span className="text-xs sm:text-sm font-black text-[#8c5a3c] tracking-[0.2em] uppercase">
-                            CAREER OPPORTUNITIES
-                        </span>
+                {/* 2. Konten Hero */}
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
+                    <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg space-y-3 sm:space-y-4 text-left">
 
+                        {/* Pill Badge */}
+                        <div>
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 text-[#8c5a3c] text-[9.5px] sm:text-[10px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs">
+                                <span>CAREER OPPORTUNITIES</span>
+                                <Sparkles className="w-2.5 h-2.5 text-amber-500" />
+                            </span>
+                        </div>
+
+                        {/* Judul Utama */}
                         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#3d2314] tracking-tight leading-[1.08] uppercase">
                             {renderFormattedText(
                                 banner?.title,
@@ -349,30 +358,33 @@ export default function CareerPage() {
                             )}
                         </h1>
 
-                        <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed">
+                        {/* Subjudul: Dibatasi max-w-[260px] di mobile agar pas di dalam area putih halus */}
+                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-[260px] sm:max-w-md">
                             {renderFormattedText(
                                 banner?.subtitle,
                                 'Mari bertumbuh dan menciptakan momen kebahagiaan manis bersama To Meet Cafe & Playground.'
                             )}
                         </p>
 
-                        <div className="pt-2 flex flex-wrap items-center gap-3">
+                        {/* Tombol Aksi Sejajar */}
+                        <div className="pt-1 flex flex-row items-center gap-2 sm:gap-3">
                             <button
                                 onClick={scrollToPositions}
-                                className="px-6 py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-xs rounded-full shadow-md transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
+                                className="px-4 sm:px-6 py-2.5 sm:py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center justify-center gap-1.5 sm:gap-2 uppercase tracking-wider cursor-pointer whitespace-nowrap"
                             >
-                                <Briefcase className="w-4 h-4" />
+                                <Briefcase className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                 <span>LIHAT LOWONGAN</span>
                             </button>
 
                             <a
                                 href="#our-values"
-                                className="px-6 py-3 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-xs rounded-full transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer shadow-md"
+                                className="px-4 sm:px-6 py-2.5 sm:py-3 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full transition inline-flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md whitespace-nowrap"
                             >
                                 <span>OUR VALUES</span>
                                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                             </a>
                         </div>
+
                     </div>
                 </div>
             </section>
@@ -532,8 +544,8 @@ export default function CareerPage() {
                                 <button
                                     onClick={() => setSelectedLocationFilter('all')}
                                     className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'all'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                        ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                        : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
                                         }`}
                                 >
                                     Semua Lokasi
@@ -550,8 +562,8 @@ export default function CareerPage() {
                                 <button
                                     onClick={() => setSelectedLocationFilter('mutiara')}
                                     className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'mutiara'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                        ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                        : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
                                         }`}
                                 >
                                     Pondok Mutiara
@@ -649,7 +661,7 @@ export default function CareerPage() {
                 </div>
             </section>
 
-            
+
 
             {/* ================================================= */}
             {/* 5. OUR CULTURE IN ACTION  
@@ -700,7 +712,7 @@ export default function CareerPage() {
                 </div>
             </section>                         */}
             {/* ================================================= */}
-            
+
 
             {/* ================================================= */}
             {/* 6. WHAT OUR TEAM SAYS                             */}

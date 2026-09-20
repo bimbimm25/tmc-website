@@ -166,98 +166,109 @@ export default function MerchandisePage() {
         : '/img/hero-home.png';
 
     return (
-        <div className="min-h-screen pb-16 space-y-8 sm:space-y-10">
+        <div className="min-h-screen pb-16 space-y-6 sm:space-y-10">
 
             {/* ================================================= */}
-            {/* 1. HERO BANNER FULL 1 LAYAR (UKURAN PROPORSIONAL) */}
+            {/* 1. HERO BANNER (HANYA DITAMPILKAN DI DESKTOP)     */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+            <section className="hidden lg:flex relative w-full h-screen max-h-[820px] items-center overflow-hidden border-b border-[#e6ccb2]/60">
                 {/* Background Image Full Cover */}
                 <div className="absolute inset-0 z-0">
                     <img
                         src={heroImageSrc}
                         alt="To Meet Official Merchandise"
-                        className="w-full h-full object-cover object-right lg:object-center"
+                        className="w-full h-full object-cover object-right xl:object-center"
                     />
-                    {/* Gradient Overlay Putih Sebelah Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                    {/* Gradien Putih Halus Sisi Kiri */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full lg:w-3/5 xl:w-1/2" />
                 </div>
 
-                {/* Konten Text Hero */}
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
-                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+                {/* Konten Hero */}
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-16 sm:pt-20">
+                    <div className="max-w-md lg:max-w-xl">
+                        <div className="space-y-3.5 sm:space-y-4">
 
-                        {/* Pill Badge */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
-                            <span>OFFICIAL MERCHANDISE</span>
-                            <Sparkles className="w-3 h-3 text-amber-500" />
-                        </div>
-
-                        {/* Title Proporsional */}
-                        <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
-                            {renderFormattedText(
-                                merchBanner?.title,
-                                <>
-                                    TO MEET <br />
-                                    <span className="text-[#8c5a3c]">MERCHANDISE</span>
-                                </>
-                            )}
-                        </h1>
-
-                        {/* Subtitle */}
-                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
-                            {renderFormattedText(
-                                merchBanner?.subtitle,
-                                'Bawa pulang koleksi boneka dan suvenir lucu khas To Meet Cafe untuk teman atau koleksi pribadimu.'
-                            )}
-                        </p>
-
-                        {/* 3 Values Mini */}
-                        <div className="pt-1 grid grid-cols-3 gap-2 max-w-sm text-center">
-                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center mx-auto">
-                                    <BearFaceIcon className="w-3.5 h-3.5" />
-                                </div>
-                                <div className="text-[9px] font-black text-[#3d2314] uppercase leading-tight">100% Original</div>
-                                <div className="text-[7.5px] text-[#6c584c] font-semibold">Official Product</div>
+                            {/* Pill Badge */}
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 text-[#8c5a3c] text-xs font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs">
+                                <span>OFFICIAL MERCHANDISE</span>
+                                <Sparkles className="w-3 h-3 text-amber-500" />
                             </div>
 
-                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center mx-auto">
-                                    <Sparkles className="w-3.5 h-3.5" />
-                                </div>
-                                <div className="text-[9px] font-black text-[#3d2314] uppercase leading-tight">Cute Design</div>
-                                <div className="text-[7.5px] text-[#6c584c] font-semibold">Aesthetic & Cozy</div>
+                            {/* Title */}
+                            <div className="space-y-1">
+                                <h1 className="text-4xl xl:text-5xl font-black text-[#3d2314] tracking-tight leading-[1.18] uppercase">
+                                    {renderFormattedText(
+                                        merchBanner?.title,
+                                        <>
+                                            TO MEET <br />
+                                            <span className="text-[#8c5a3c]">MERCHANDISE</span>
+                                        </>
+                                    )}
+                                </h1>
                             </div>
 
-                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                                <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center mx-auto">
-                                    <Gift className="w-3.5 h-3.5" />
+                            {/* Subtitle */}
+                            <p className="text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                                {renderFormattedText(
+                                    merchBanner?.subtitle,
+                                    'Bawa pulang koleksi boneka dan suvenir lucu khas To Meet Cafe untuk teman atau koleksi pribadimu.'
+                                )}
+                            </p>
+
+                            {/* 3 Values Mini Cards */}
+                            <div className="grid grid-cols-3 gap-2 pt-1 max-w-md">
+                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2.5 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1 shadow-2xs">
+                                    <div className="w-7 h-7 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs">
+                                        <BearFaceIcon className="w-3.5 h-3.5" />
+                                    </div>
+                                    <div className="leading-none">
+                                        <span className="text-[9.5px] font-black text-[#3d2314] block tracking-tight">100% Original</span>
+                                        <span className="text-[7.5px] text-[#6c584c] font-bold block mt-0.5">Official Item</span>
+                                    </div>
                                 </div>
-                                <div className="text-[9px] font-black text-[#3d2314] uppercase leading-tight">Great Gift</div>
-                                <div className="text-[7.5px] text-[#6c584c] font-semibold">For Loved Ones</div>
+
+                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2.5 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1 shadow-2xs">
+                                    <div className="w-7 h-7 rounded-xl bg-white text-amber-500 flex items-center justify-center shadow-2xs">
+                                        <Sparkles className="w-3.5 h-3.5" />
+                                    </div>
+                                    <div className="leading-none">
+                                        <span className="text-[9.5px] font-black text-[#3d2314] block tracking-tight">Cute Design</span>
+                                        <span className="text-[7.5px] text-[#6c584c] font-bold block mt-0.5">Aesthetic</span>
+                                    </div>
+                                </div>
+
+                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2.5 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1 shadow-2xs">
+                                    <div className="w-7 h-7 rounded-xl bg-white text-[#e85a4f] flex items-center justify-center shadow-2xs">
+                                        <Gift className="w-3.5 h-3.5" />
+                                    </div>
+                                    <div className="leading-none">
+                                        <span className="text-[9.5px] font-black text-[#3d2314] block tracking-tight">Great Gift</span>
+                                        <span className="text-[7.5px] text-[#6c584c] font-bold block mt-0.5">For Loved Ones</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Tombol Aksi */}
-                        <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
-                            <a
-                                href="#catalog"
-                                className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
-                            >
-                                <span>{merchBanner?.cta_text || 'LIHAT KATALOG'}</span>
-                                <ShoppingBag className="w-3.5 h-3.5" />
-                            </a>
+                            {/* Call To Action Buttons */}
+                            <div className="pt-2 flex flex-row items-center gap-2.5">
+                                <a
+                                    href="#catalog"
+                                    className="px-6 py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-xs rounded-full shadow-md shadow-rose-500/25 transition-all duration-200 flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer whitespace-nowrap"
+                                >
+                                    <span>{merchBanner?.cta_text || 'LIHAT KATALOG'}</span>
+                                    <ShoppingBag className="w-3.5 h-3.5 shrink-0" />
+                                </a>
 
-                            <a
-                                href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20tanya%20stok%20merchandise"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md"
-                            >
-                                <Phone className="w-3.5 h-3.5 fill-current" />
-                                <span>TANYA ADMIN</span>
-                            </a>
+                                <a
+                                    href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20tanya%20stok%20merchandise"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-6 py-3 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-xs rounded-full shadow-md transition-all duration-200 flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer whitespace-nowrap"
+                                >
+                                    <Phone className="w-3.5 h-3.5 fill-current shrink-0" />
+                                    <span>TANYA ADMIN</span>
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -266,7 +277,7 @@ export default function MerchandisePage() {
             {/* ================================================= */}
             {/* 2. MAIN MERCHANDISE SECTION                       */}
             {/* ================================================= */}
-            <section id="catalog" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14">
+            <section id="catalog" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14 pt-20 sm:pt-24 lg:pt-0">
                 <div className="bg-white p-4 sm:p-6 lg:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
@@ -450,7 +461,7 @@ export default function MerchandisePage() {
             </section>
 
             {/* ================================================= */}
-            {/* 3. BENEFITS / FEATURES SECTION                   */}
+            {/* 3. BENEFITS / FEATURES SECTION                    */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
@@ -496,7 +507,7 @@ export default function MerchandisePage() {
             {/* 4. ORDER / WHATSAPP CTA SECTION                   */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="    bg-[#ffffff] p-5 sm:p-7 rounded-3xl border border-rose-100/80 shadow-2xs grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+                <div className="bg-[#ffffff] p-5 sm:p-7 rounded-3xl border border-rose-100/80 shadow-2xs grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
 
                     <div className="lg:col-span-7 space-y-2 text-center lg:text-left">
                         <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">

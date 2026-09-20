@@ -248,7 +248,7 @@ export default function Navbar() {
                                                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                                             </div>
                                             <div>
-                                                <div className="font-black text-[11px] leading-tight">BIRTHDAY & PRIVATE</div>
+                                                <div className="font-black text-[11px] leading-tight">BIRTHDAY & PRIVATE EVENT</div>
                                                 <div className="text-[9px] text-[#6c584c] lowercase font-semibold">sewa tempat & ultah</div>
                                             </div>
                                         </Link>
@@ -256,7 +256,7 @@ export default function Navbar() {
                                 )}
                             </div>
 
-                            {/* Visit Us */}
+                            {/* Visit Us Desktop */}
                             <Link
                                 href="/visit-us"
                                 className={`transition-colors duration-200 relative py-1 ${isActive('/visit-us')
@@ -490,14 +490,15 @@ export default function Navbar() {
                                                 : 'text-[#5a4232] hover:text-[#e85a4f]'
                                             }`}
                                     >
-                                        • BIRTHDAY & PRIVATE
+                                        • BIRTHDAY & PRIVATE EVENT
                                     </Link>
                                 </div>
                             )}
                         </div>
 
+                        {/* Visit Us Mobile (Langsung ke cabang Pondok Mutiara) */}
                         <Link
-                            href="/visit-us"
+                            href="/visit-us/pondok-mutiara"
                             onClick={() => setIsMobileMenuOpen(false)}
                             className={`p-2.5 rounded-xl transition flex items-center gap-2.5 ${isActive('/visit-us')
                                     ? 'bg-[#fdf3f1] text-[#e85a4f]'

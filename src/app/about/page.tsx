@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import {
     Heart, Users, Sparkles, Award, MapPin,
-    Smile, Utensils, Star, ExternalLink
+    Smile, Utensils, Star, ExternalLink, ShieldCheck,
+    CheckCircle2, Clock, Calendar, Flag
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
@@ -68,6 +69,34 @@ function renderFormattedText(text?: string | null, fallback?: React.ReactNode) {
     ));
 }
 
+// Data Milestone Perjalanan To Meet Cafe
+const MILESTONES = [
+    {
+        year: '2023',
+        title: 'The First Spark: Heavenland Park',
+        desc: 'To Meet Cafe pertama kali hadir di Heavenland Park, Sidoarjo. Membawa konsep dessert manis dan ramah keluarga bertema beruang.',
+        tag: 'Birth of To Meet'
+    },
+    {
+        year: '2024',
+        title: 'Signature Bear Menu & Playground',
+        desc: 'Meluncurkan menu ikonik Onigiri Teddy dan minuman beruang, serta memperluas area playground indoor yang aman untuk anak.',
+        tag: 'Menu Innovation'
+    },
+    {
+        year: '2025',
+        title: 'Ekspansi Cabang Pondok Mutiara',
+        desc: 'Membuka outlet kedua di Pondok Mutiara dengan kapasitas lebih luas untuk private birthday party, workshop, dan merchandise corner.',
+        tag: 'Second Outlet'
+    },
+    {
+        year: '2026',
+        title: 'Roblox World & Digital Ecosystem',
+        desc: 'Menghubungkan cafe fisik dengan dunia virtual interaktif To Meet di Roblox dan penyempurnaan sistem pemesanan digital menu.',
+        tag: 'Digital Universe'
+    }
+];
+
 export default async function AboutPage() {
     const aboutBanner = await getAboutBanner();
 
@@ -85,69 +114,78 @@ export default async function AboutPage() {
             {/* ================================================= */}
             {/* 1. HERO SECTION (PAS & PROPORSIONAL)              */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
-    {/* Background Image Full Cover */}
-    <div className="absolute inset-0 z-0">
-        <img
-            src={heroImageSrc}
-            alt="To Meet Cafe Atmosphere"
-            className="w-full h-full object-cover object-[75%_center] lg:object-center"
-        />
-        {/* Gradient Overlay: Desktop dari kiri, Mobile lembut dari kiri/bawah agar teks kontras dan beruang tetap terlihat */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent w-full sm:w-2/3 lg:w-1/2" />
-    </div>
+            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50">
+                {/* 1. Background Image & Decorative Layer */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src={heroImageSrc}
+                        alt="To Meet Cafe Atmosphere"
+                        className="w-full h-full object-cover object-[75%_center] lg:object-right xl:object-center"
+                    />
 
-    {/* Konten Text Hero */}
-    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
-        <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+                    {/* Gradien Putih Halus Sisi Kiri (Desktop) */}
+                    <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full lg:w-3/5 xl:w-1/2" />
 
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#e85a4f] text-[9.5px] font-black border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
-                <span>ABOUT TO MEET</span>
-                <BearPawIcon className="w-3 h-3" />
-            </div>
+                    {/* Soft Vignette Khusus Mobile agar Karakter Beruang Stand Out */}
+                    <div className="block lg:hidden absolute inset-0 bg-gradient-to-t from-white/90 via-white/30 to-transparent" />
 
-            {/* Title dengan Ukuran Proporsional */}
-            <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15]">
-                {renderFormattedText(
-                    aboutBanner?.title,
-                    <>
-                        MORE THAN A CAFE, <br />
-                        IT&apos;S A HAPPY PLACE TO MEET <br />
-                        <span className="text-[#8c5a3c]">& CREATE MEMORIES.</span>
-                    </>
-                )}
-            </h1>
+                    {/* Watermark Paw prints samar di latar belakang */}
+                    <BearPawIcon className="absolute top-20 right-6 w-16 h-16 text-white/30 rotate-12 pointer-events-none" />
+                    <BearPawIcon className="absolute top-44 right-24 w-8 h-8 text-white/20 -rotate-15 pointer-events-none" />
+                </div>
 
-            {/* Subtitle */}
-            <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
-                {renderFormattedText(
-                    aboutBanner?.subtitle,
-                    'To Meet is a cozy bear-themed cafe & playground created for everyone to enjoy sweet treats, good times, and heartwarming moments together.'
-                )}
-            </p>
+                {/* 2. Konten Text Hero */}
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-14 sm:pt-16">
+                    <div className="max-w-md lg:max-w-xl space-y-2.5 sm:space-y-3 bg-white/85 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-4 sm:p-5 lg:p-0 rounded-2xl lg:rounded-none border border-white/80 lg:border-none shadow-md lg:shadow-none">
 
-            {/* Tombol Aksi */}
-            <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
-                <a
-                    href="#story"
-                    className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black rounded-full text-[11px] transition duration-200 shadow-md shadow-rose-500/20 inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
-                >
-                    <span>{aboutBanner?.cta_text || 'OUR STORY'}</span>
-                    <BearPawIcon className="w-3.5 h-3.5" />
-                </a>
+                        {/* Pill Badge */}
+                        <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white text-[#e85a4f] text-[9px] font-black border border-[#e6ccb2]/80 shadow-2xs">
+                            <span>ABOUT TO MEET</span>
+                            <BearPawIcon className="w-2.5 h-2.5" />
+                        </div>
 
-                <Link
-                    href="/#locations"
-                    className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md"
-                >
-                    <MapPin className="w-3.5 h-3.5" />
-                    <span>VISIT OUR CAFES</span>
-                </Link>
-            </div>
-        </div>
-    </div>
-</section>
+                        {/* Title Proporsional */}
+                        <h1 className="text-xl sm:text-2xl lg:text-[2.2rem] font-black text-[#2e170c] tracking-tight leading-[1.2]">
+                            {renderFormattedText(
+                                aboutBanner?.title,
+                                <>
+                                    MORE THAN A CAFE, <br />
+                                    IT&apos;S A HAPPY PLACE TO MEET <br />
+                                    <span className="text-[#8c5a3c]">& CREATE MEMORIES.</span>
+                                </>
+                            )}
+                        </h1>
+
+                        {/* Subtitle Ringkas */}
+                        <p className="text-[11px] sm:text-xs lg:text-[13px] text-[#4a3427] font-semibold leading-relaxed max-w-md">
+                            {renderFormattedText(
+                                aboutBanner?.subtitle,
+                                'To Meet is a cozy bear-themed cafe & playground created for everyone to enjoy sweet treats, good times, and heartwarming moments together.'
+                            )}
+                        </p>
+
+                        {/* Tombol Aksi */}
+                        <div className="pt-1 grid grid-cols-2 sm:flex sm:flex-row items-center gap-2 max-w-sm sm:max-w-none">
+                            <a
+                                href="#story"
+                                className="w-full sm:w-auto px-4 sm:px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black rounded-full text-[10.5px] sm:text-xs transition duration-200 shadow-md shadow-rose-500/20 flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap"
+                            >
+                                <span>{aboutBanner?.cta_text || 'OUR STORY'}</span>
+                                <BearPawIcon className="w-3 h-3 shrink-0" />
+                            </a>
+
+                            <Link
+                                href="/#locations"
+                                className="w-full sm:w-auto px-4 sm:px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full transition flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md whitespace-nowrap"
+                            >
+                                <MapPin className="w-3 h-3 shrink-0" />
+                                <span>VISIT OUR CAFES</span>
+                            </Link>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
 
             {/* ================================================= */}
             {/* 2. OUR STORY SECTION                              */}
@@ -216,7 +254,7 @@ export default async function AboutPage() {
                                         To Meet lahir pada tahun 2023 dari sebuah café kecil di Heavenland Park, Sidoarjo dengan satu tujuan sederhana: menghadirkan dessert yang lucu, suasana yang hangat, dan momen yang menyenangkan untuk dinikmati bersama.
                                     </p>
                                     <p>
-                                        Seiring waktu, To Meet tumbuh menjadi lebih dari sekadar café. Kami ingin menciptakan tempat di mana keluarga, teman, dan anak-anak bisa berkumpul, bermain, berbagi cerita, dan membawa pulang kenangan manis di setiap kunjungan.
+                                        Seiring waktu, To Meet tumbuh menjadi lebih dari sekedar café. Kami ingin menciptakan tempat di mana keluarga, teman, dan anak-anak bisa berkumpul, bermain, berbagi cerita, dan membawa pulang kenangan manis di setiap kunjungan.
                                     </p>
                                 </div>
                             </div>
@@ -227,9 +265,146 @@ export default async function AboutPage() {
             </section>
 
             {/* ================================================= */}
+            {/* NEW 1: HALAL CERTIFIED & QUALITY COMMITMENT       */}
+            {/* <section className="w-full py-6 sm:py-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="bg-[#FAF0E6]/70 rounded-[2.5rem] border border-[#e6ccb2] p-6 sm:p-10 lg:p-12 shadow-2xs relative overflow-hidden">
+                            
+                        <BearPawIcon className="absolute -right-8 -bottom-8 w-44 h-44 text-[#e6ccb2]/40 -rotate-12 pointer-events-none" />
+
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                            
+                            <div className="lg:col-span-4 flex flex-col items-center justify-center text-center p-6 sm:p-8 bg-white rounded-3xl border border-[#e6ccb2]/80 shadow-sm">
+                                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 shadow-inner border border-emerald-100">
+                                    <ShieldCheck className="w-9 h-9 sm:w-11 sm:h-11" />
+                                </div>
+                                <span className="inline-block px-3 py-1 bg-emerald-100/70 text-emerald-800 text-[10px] font-black uppercase rounded-full tracking-wider mb-2">
+                                    100% Halal Ingredients
+                                </span>
+                                <h3 className="text-lg sm:text-xl font-black text-[#3d2314] uppercase tracking-tight">
+                                    HALAL & HYGIENIC
+                                </h3>
+                                <p className="text-xs text-[#6c584c] font-semibold mt-1">
+                                    Disiapkan dengan penuh rasa aman untuk seluruh keluarga dan si kecil.
+                                </p>
+                            </div>
+
+                            <div className="lg:col-span-8 space-y-4 text-center lg:text-left">
+                                <div className="space-y-1.5">
+                                    <div className="inline-flex items-center gap-1.5 text-[9.5px] font-black text-emerald-700 tracking-widest uppercase">
+                                        <Award className="w-3.5 h-3.5 text-emerald-600" />
+                                        <span>QUALITY & TRUST COMMITMENT</span>
+                                    </div>
+                                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
+                                        Makan Nyaman, Hati Tenang di To Meet
+                                    </h2>
+                                    <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed">
+                                        Kami memahami pentingnya kehalalan dan kebersihan makanan bagi keluarga Anda. Setiap menu To Meet Cafe diolah menggunakan bahan-bahan bersertifikasi halal, tanpa alkohol, dan tanpa bahan non-halal lainnya dengan standar sanitasi dapur yang ketat.
+                                    </p>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                                    <div className="bg-white/80 backdrop-blur-xs p-3.5 rounded-2xl border border-[#e6ccb2]/60 space-y-1">
+                                        <div className="flex items-center gap-2 text-emerald-700">
+                                            <CheckCircle2 className="w-4 h-4 shrink-0" />
+                                            <h4 className="font-black text-xs text-[#3d2314] uppercase">No Pork, No Lard</h4>
+                                        </div>
+                                        <p className="text-[10px] text-[#6c584c] font-semibold leading-tight">
+                                            100% bebas dari bahan hewani non-halal dan turunannya.
+                                        </p>
+                                    </div>
+
+                                    <div className="bg-white/80 backdrop-blur-xs p-3.5 rounded-2xl border border-[#e6ccb2]/60 space-y-1">
+                                        <div className="flex items-center gap-2 text-emerald-700">
+                                            <CheckCircle2 className="w-4 h-4 shrink-0" />
+                                            <h4 className="font-black text-xs text-[#3d2314] uppercase">Alcohol-Free</h4>
+                                        </div>
+                                        <p className="text-[10px] text-[#6c584c] font-semibold leading-tight">
+                                            Semua saus, bumbu, sirup, dan dessert murni tanpa campuran alkohol.
+                                        </p>
+                                    </div>
+
+                                    <div className="bg-white/80 backdrop-blur-xs p-3.5 rounded-2xl border border-[#e6ccb2]/60 space-y-1">
+                                        <div className="flex items-center gap-2 text-emerald-700">
+                                            <CheckCircle2 className="w-4 h-4 shrink-0" />
+                                            <h4 className="font-black text-xs text-[#3d2314] uppercase">Kid-Friendly Food</h4>
+                                        </div>
+                                        <p className="text-[10px] text-[#6c584c] font-semibold leading-tight">
+                                            Rasa seimbang, ramah anak, serta kaya nutrisi baik.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>       */}
+            {/* ================================================= */}
+            
+
+            {/* ================================================= */}
+            {/* NEW 2: MILESTONES (OUR JOURNEY)                   */}
+            {/* <section className="w-full py-14 lg:py-16">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                    
+                    
+                    <div className="text-center max-w-2xl mx-auto space-y-2">
+                        <div className="inline-flex items-center gap-1.5 text-[10px] font-black text-[#e85a4f] tracking-widest uppercase">
+                            <Clock className="w-3.5 h-3.5" />
+                            <span>OUR MILESTONES</span>
+                        </div>
+                        <h2 className="text-2xl sm:text-3xl font-black text-[#3d2314] tracking-tight uppercase">
+                            Perjalanan Kami Dari Waktu ke Waktu
+                        </h2>
+                        <p className="text-xs sm:text-sm text-[#6c584c] font-semibold">
+                            Setiap langkah kecil yang kami lalui bersama Anda untuk menciptakan ruang bahagia yang selalu dirindukan.
+                        </p>
+                    </div>
+
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 relative">
+                        {MILESTONES.map((item, idx) => (
+                            <div
+                                key={idx}
+                                className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs hover:shadow-md hover:border-[#8c5a3c] transition duration-300 flex flex-col justify-between space-y-4 group relative"
+                            >
+                                <div className="space-y-2.5">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-2xl sm:text-3xl font-black text-[#8c5a3c] tracking-tight group-hover:text-[#e85a4f] transition duration-200">
+                                            {item.year}
+                                        </span>
+                                        <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9px] font-black uppercase rounded-full border border-[#e6ccb2]/60">
+                                            {item.tag}
+                                        </span>
+                                    </div>
+
+                                    <h3 className="font-black text-sm text-[#3d2314] leading-snug">
+                                        {item.title}
+                                    </h3>
+
+                                    <p className="text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                        {item.desc}
+                                    </p>
+                                </div>
+
+                                <div className="pt-2 border-t border-[#e6ccb2]/40 flex items-center gap-1.5 text-[#8c5a3c] text-[10px] font-bold">
+                                    <BearPawIcon className="w-3 h-3 text-[#e85a4f]" />
+                                    <span>To Meet Chapter</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                </div>
+            </section>*/}
+            {/* ================================================= */}
+            
+
+            {/* ================================================= */}
             {/* 3. OUR MISSION & VALUES                           */}
             {/* ================================================= */}
-            <section className="w-full py-14 lg:py-16">
+            <section className="w-full py-14 lg:py-16 bg-white/40 border-y border-[#e6ccb2]/40">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 

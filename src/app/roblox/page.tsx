@@ -54,7 +54,6 @@ export interface BannerItem {
     cta_link?: string | null;
 }
 
-// Data Map Preview Screenshots
 const MAP_SCREENSHOTS = [
     {
         id: 1,
@@ -122,14 +121,11 @@ export default function RobloxPage() {
         fetchRobloxData();
     }, []);
 
-    // Mengunci scroll layar background saat modal popup aktif
     useEffect(() => {
         if (selectedScreenshot) {
-            // Kunci di html dan body
             document.documentElement.style.overflow = 'hidden';
             document.body.style.overflow = 'hidden';
 
-            // Cegah event touchmove di mobile
             const preventTouch = (e: TouchEvent) => e.preventDefault();
             window.addEventListener('touchmove', preventTouch, { passive: false });
 
@@ -183,158 +179,136 @@ export default function RobloxPage() {
     const playLink = banner?.cta_link || 'https://www.roblox.com/share?code=47170fa9c8a5b649b293166187e470c0&type=ExperienceDetails&stamp=1785743470866';
 
     return (
-        <div className="min-h-screen space-y-10 sm:space-y-14 pb-16">
+        <div className="min-h-screen space-y-8 sm:space-y-12 pb-16">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION FULL 1 LAYAR                      */}
+            {/* 1. HERO SECTION (RAPI, SEJAJAR & SUBJUDUL JELAS) */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
-    <div className="absolute inset-0 z-0">
-        <img
-            src={heroImage}
-            alt="To Meet Roblox Game Experience"
-            className="w-full h-full object-cover object-[75%_center] lg:object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
-    </div>
+            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/60 pt-16 pb-4 lg:py-0">
+                {/* 1. Background Image Cover */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src={heroImage}
+                        alt="To Meet Roblox Game Experience"
+                        className="w-full h-full object-cover object-[75%_center] lg:object-right xl:object-center"
+                    />
 
-    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
-        <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+                    {/* Gradien Putih Sisi Kiri: Bikin Subjudul 100% Terbaca Jelas & Gambar Kanan Tetap Terbuka */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 sm:via-white/80 to-transparent w-full sm:w-4/5 lg:w-3/5 xl:w-1/2" />
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
-                <span>WELCOME TO ROBLOX WORLD</span>
-                <Sparkles className="w-3 h-3 text-amber-500" />
-            </div>
-
-            <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
-                {renderFormattedText(
-                    banner?.title,
-                    <>
-                        TO MEET <br />
-                        <span className="text-[#8c5a3c]">UNIVERSE</span>
-                    </>
-                )}
-            </h1>
-
-            <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
-                {renderFormattedText(
-                    banner?.subtitle,
-                    'Selesaikan misi karier dan tantangan Obby di game Roblox, raih badge penanda prestasi, dan tunjukkan ke kasir untuk mendapatkan reward gratis di To Meet Cafe!'
-                )}
-            </p>
-
-            <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
-                <a
-                    href={playLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer"
-                >
-                    <Gamepad2 className="w-3.5 h-3.5" />
-                    <span>{banner?.cta_text || 'PLAY ON ROBLOX'}</span>
-                    <ExternalLink className="w-3 h-3" />
-                </a>
-
-                <a
-                    href="#trailer-section"
-                    className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center justify-center gap-1.5 shadow-md cursor-pointer uppercase tracking-wider"
-                >
-                    <Play className="w-3.5 h-3.5 fill-current text-[#e85a4f]" />
-                    <span>WATCH TRAILER</span>
-                </a>
-            </div>
-
-            <div className="pt-1 grid grid-cols-3 gap-2 max-w-sm text-center">
-                <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                    <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-amber-500 flex items-center justify-center mx-auto">
-                        <Sparkles className="w-3.5 h-3.5" />
-                    </div>
-                    <div className="text-[10px] font-black text-[#3d2314] leading-tight">18.5K</div>
-                    <div className="text-[8px] text-[#6c584c] font-bold uppercase">Visits</div>
+                    {/* Soft Vignette Bawah di HP */}
+                    <div className="block lg:hidden absolute inset-0 bg-gradient-to-t from-white/40 via-transparent to-transparent pointer-events-none" />
                 </div>
 
-                <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                    <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-emerald-600 flex items-center justify-center mx-auto">
-                        <ThumbsUp className="w-3.5 h-3.5" />
-                    </div>
-                    <div className="text-[10px] font-black text-[#3d2314] leading-tight">96%</div>
-                    <div className="text-[8px] text-[#6c584c] font-bold uppercase">Likes</div>
-                </div>
+                {/* 2. Konten Hero (Rapi 1 Kolom Sejajar di HP, 2 Kolom di Desktop) */}
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto flex flex-col justify-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-5 lg:gap-8 items-center">
 
-                <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                    <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center mx-auto">
-                        <Users className="w-3.5 h-3.5" />
-                    </div>
-                    <div className="text-[10px] font-black text-[#3d2314] leading-tight">3.2K</div>
-                    <div className="text-[8px] text-[#6c584c] font-bold uppercase">Players</div>
-                </div>
-            </div>
+                        {/* Kolom Teks: Seluruh Elemen di dalam Card Ber-Border Rapi */}
+                        <div className="lg:col-span-6 text-left">
+                            <div className="bg-white/85 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-4 sm:p-5 lg:p-0 rounded-3xl lg:rounded-none border border-white/80 lg:border-none shadow-md lg:shadow-none space-y-2.5 sm:space-y-3 max-w-md">
 
-        </div>
-    </div>
-</section>
+                                {/* Pill Badge */}
+                                <div>
+                                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-[#8c5a3c] text-[9.5px] sm:text-[10px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs">
+                                        <span>ROBLOX UNIVERSE</span>
+                                        <Sparkles className="w-3 h-3 text-amber-500" />
+                                    </div>
+                                </div>
 
-            {/* ================================================= */}
-            {/* 2. TRAILER GAMEPLAY & THEATER SHOWCASE            */}
-            {/* ================================================= */}
-            <section id="trailer-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14">
-                <div className="bg-white p-5 sm:p-8 lg:p-10 rounded-[2.5rem] border border-[#e6ccb2]/80 shadow-2xs">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+                                {/* Title */}
+                                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2e170c] tracking-tight leading-[1.15] uppercase">
+                                    {renderFormattedText(
+                                        banner?.title,
+                                        <>
+                                            TO MEET <br className="hidden sm:block" />
+                                            <span className="text-[#8c5a3c]">IN ROBLOX</span>
+                                        </>
+                                    )}
+                                </h1>
 
-                        {/* Video Player */}
-                        <div className="lg:col-span-7">
-                            <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-xl border-2 border-[#e6ccb2]/80 bg-black group">
-                                <iframe
-                                    src="https://www.youtube.com/embed/eZsAmpeJYPM?si=_y6r7OPCty9zuWj-"
-                                    title="To Meet Roblox Gameplay Trailer"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                    className="w-full h-full object-cover"
-                                />
+                                {/* Subjudul Rapi dengan Warna Teks Asli */}
+                                <p className="text-xs sm:text-[13px] text-[#4a3427] font-semibold leading-relaxed">
+                                    {renderFormattedText(
+                                        banner?.subtitle,
+                                        'Selesaikan misi karier dan tantangan Obby di game Roblox, raih badge penanda prestasi, dan tukarkan reward gratis di To Meet Cafe!'
+                                    )}
+                                </p>
+
+                                {/* Tombol Aksi Sejajar */}
+                                <div className="pt-1 flex flex-row items-center gap-2 sm:gap-2.5">
+                                    <a
+                                        href={playLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="px-4 sm:px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap"
+                                    >
+                                        <Gamepad2 className="w-3.5 h-3.5" />
+                                        <span>{banner?.cta_text || 'PLAY ON ROBLOX'}</span>
+                                        <ExternalLink className="w-3 h-3" />
+                                    </a>
+
+                                    <a
+                                        href="#map-gallery"
+                                        className="px-4 sm:px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full transition inline-flex items-center gap-1.5 shadow-md cursor-pointer uppercase tracking-wider whitespace-nowrap"
+                                    >
+                                        <Compass className="w-3.5 h-3.5" />
+                                        <span>MAP PREVIEW</span>
+                                    </a>
+                                </div>
+
                             </div>
                         </div>
 
-                        {/* Video Content Overview */}
-                        <div className="lg:col-span-5 space-y-3.5 text-center lg:text-left">
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#FAF0E6] rounded-full text-[10px] sm:text-xs font-black text-[#8c5a3c] tracking-widest uppercase border border-[#e6ccb2]/80">
-                                <Play className="w-3 h-3 fill-current text-[#e85a4f]" />
-                                <span>OFFICIAL GAME TRAILER</span>
-                            </div>
+                        {/* Video YouTube: Presisi Sejajar Lebar Penuh dengan Teks di Atasnya */}
+                        <div className="lg:col-span-6 w-full max-w-md lg:max-w-none">
+                            <div className="bg-white/95 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl sm:rounded-3xl border border-[#e6ccb2]/90 shadow-md space-y-1.5">
+                                <div className="flex items-center justify-between px-1">
+                                    <span className="inline-flex items-center gap-1.5 text-[9.5px] font-black uppercase text-[#8c5a3c]">
+                                        <Play className="w-2.5 h-2.5 text-[#e85a4f] fill-current" />
+                                        Official Trailer
+                                    </span>
+                                    <span className="text-[8px] font-bold px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md border border-emerald-200">
+                                        Roblox Gameplay
+                                    </span>
+                                </div>
 
-                            <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
-                                Jelajahi Dunia Virtual <br /> To Meet Cafe!
-                            </h2>
-
-                            <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                                Tonton cuplikan keseruan game resmi kami di Roblox! Jelajahi bangunan cafe 3D yang autentik, selesaikan rintangan Obby bersama teman, dan kumpulkan badge eksklusif.
-                            </p>
-
-                            <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                                <a
-                                    href={playLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="px-6 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
-                                >
-                                    <Gamepad2 className="w-4 h-4" />
-                                    <span>GABUNG SEKARANG</span>
-                                </a>
-                                <a
-                                    href="#map-gallery"
-                                    className="px-5 py-2.5 bg-[#FAF0E6] hover:bg-[#8c5a3c] hover:text-white text-[#8c5a3c] font-black text-xs rounded-full transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer border border-[#e6ccb2]/60"
-                                >
-                                    <ImageIcon className="w-3.5 h-3.5" />
-                                    <span>LIHAT MAP PREVIEW</span>
-                                </a>
+                                <div className="relative w-full aspect-video rounded-xl sm:rounded-2xl overflow-hidden shadow-xs border border-[#e6ccb2]/60 bg-black">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/eZsAmpeJYPM?si=_y6r7OPCty9zuWj-"
+                                        title="To Meet Roblox Gameplay Trailer"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
                             </div>
                         </div>
 
+                    </div>
+
+                    {/* 3 Mini Highlight Stats: Presisi Sejajar di Bawah */}
+                    <div className="grid grid-cols-3 gap-2 max-w-md text-center pt-2.5">
+                        <div className="bg-white/95 backdrop-blur-xs py-1.5 px-2 rounded-xl border border-[#e6ccb2]/70 shadow-2xs">
+                            <div className="text-[11px] font-black text-[#3d2314] leading-none">18.5K</div>
+                            <div className="text-[7.5px] text-[#6c584c] font-bold uppercase mt-0.5">Visits</div>
+                        </div>
+
+                        <div className="bg-white/95 backdrop-blur-xs py-1.5 px-2 rounded-xl border border-[#e6ccb2]/70 shadow-2xs">
+                            <div className="text-[11px] font-black text-emerald-700 leading-none">96%</div>
+                            <div className="text-[7.5px] text-[#6c584c] font-bold uppercase mt-0.5">Likes</div>
+                        </div>
+
+                        <div className="bg-white/95 backdrop-blur-xs py-1.5 px-2 rounded-xl border border-[#e6ccb2]/70 shadow-2xs">
+                            <div className="text-[11px] font-black text-[#8c5a3c] leading-none">3.2K</div>
+                            <div className="text-[7.5px] text-[#6c584c] font-bold uppercase mt-0.5">Players</div>
+                        </div>
                     </div>
                 </div>
             </section>
 
             {/* ================================================= */}
-            {/* 3. IN-GAME MAP SCREENSHOTS GALLERY                */}
+            {/* 2. IN-GAME MAP SCREENSHOTS GALLERY                */}
             {/* ================================================= */}
             <section id="map-gallery" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14 space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-[#e6ccb2]/60 pb-3">
@@ -352,7 +326,6 @@ export default function RobloxPage() {
                     </span>
                 </div>
 
-                {/* Grid Galeri Screenshot */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {MAP_SCREENSHOTS.map((spot) => (
                         <div
@@ -388,7 +361,7 @@ export default function RobloxPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 4. DAFTAR MISI PER SECTION                        */}
+            {/* 3. DAFTAR MISI PER SECTION                        */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
@@ -422,7 +395,6 @@ export default function RobloxPage() {
                             key={categoryKey}
                             className="bg-white p-5 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4"
                         >
-                            {/* Header Section Per Kategori */}
                             <div className="flex items-center justify-between border-b border-[#e6ccb2]/60 pb-3">
                                 <div className="flex items-center gap-2.5">
                                     <div className="w-7 h-7 rounded-xl bg-[#FAF0E6] flex items-center justify-center shrink-0">
@@ -443,14 +415,12 @@ export default function RobloxPage() {
                                 </span>
                             </div>
 
-                            {/* Header Tabel (Desktop) */}
                             <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-2 bg-[#FAF0E6]/50 rounded-xl text-[10px] font-black text-stone-500 uppercase tracking-wider">
                                 <div className="col-span-4">Badge</div>
                                 <div className="col-span-5">Mission</div>
                                 <div className="col-span-3 text-right">Reward</div>
                             </div>
 
-                            {/* Baris-Baris Misi */}
                             <div className="space-y-2.5">
                                 {missionList.map((item) => {
                                     const badgeImg = item.image
@@ -516,7 +486,7 @@ export default function RobloxPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 5. ATURAN & CARA KLAIM REWARD OFFLINE DI CAFE     */}
+            {/* 4. ATURAN & CARA KLAIM REWARD OFFLINE DI CAFE     */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white p-5 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
@@ -559,7 +529,7 @@ export default function RobloxPage() {
                             <div>
                                 <h4 className="font-black text-xs text-[#3d2314]">Nikmati Hadiah Gratis</h4>
                                 <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
-                                    Staff kami akan memverifikasi dan langsung menyerahkan reward sesuai misi
+                                    Staff kami akan memverifikasi dan langsung menyerahkan reward sesuai misi.
                                 </p>
                             </div>
                         </div>
@@ -568,7 +538,7 @@ export default function RobloxPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 6. MODAL PREVIEW SCREENSHOT IMAGE                 */}
+            {/* 5. MODAL PREVIEW SCREENSHOT IMAGE                 */}
             {/* ================================================= */}
             {selectedScreenshot && (
                 <div

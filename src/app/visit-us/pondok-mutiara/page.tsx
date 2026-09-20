@@ -769,7 +769,7 @@ export default function PondokMutiaraPage() {
                                 <span>Batas Booking H-1</span>
                             </div>
                             <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
-                                Reservasi wajib dilakukan maksimal H-1 dengan sistem *close bill* di awal saat konfirmasi.
+                                Reservasi wajib dilakukan maksimal H-1 dengan sistem <strong>close bill</strong> di awal saat konfirmasi.
                             </p>
                         </div>
 
@@ -779,7 +779,7 @@ export default function PondokMutiaraPage() {
                                 <span>Durasi Dine-In 2 Jam</span>
                             </div>
                             <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
-                                Waktu dine-in maksimal 2 jam. Apabila tidak ada antrean waiting list, tamu diperbolehkan duduk lebih lama.
+                                Waktu dine-in maksimal 2 jam. Apabila tidak ada antrean / waiting list, tamu diperbolehkan duduk lebih lama.
                             </p>
                         </div>
 

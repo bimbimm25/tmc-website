@@ -208,12 +208,12 @@ export default function EventPage() {
     };
 
     return (
-        <div className="min-h-screen pb-12 space-y-8 sm:space-y-10">
+        <div className="min-h-screen pb-12 space-y-6 sm:space-y-10">
 
             {/* ================================================= */}
-            {/* 1. HERO BANNER FULL 1 LAYAR (UKURAN PAS)          */}
+            {/* 1. HERO BANNER (HANYA DITAMPILKAN DI DESKTOP)     */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+            <section className="hidden lg:flex relative w-full h-screen min-h-dvh items-center overflow-hidden">
                 {/* Background Image Full Cover */}
                 <div className="absolute inset-0 z-0">
                     <img
@@ -283,7 +283,7 @@ export default function EventPage() {
             {/* ================================================= */}
             {/* 2. DAFTAR EVENT & WORKSHOP                        */}
             {/* ================================================= */}
-            <section id="activities" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14">
+            <section id="activities" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14 pt-20 sm:pt-24 lg:pt-0">
                 <div className="bg-white p-4 sm:p-6 lg:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-5">
 
                     {/* Header & Filter Tabs Dinamis */}

@@ -57,19 +57,16 @@ export default function DigitalMenuPage() {
     useEffect(() => {
         if (!selectedProduct) return;
 
-        // Kunci overflow di html dan body
         const originalHtmlOverflow = document.documentElement.style.overflow;
         const originalBodyOverflow = document.body.style.overflow;
 
         document.documentElement.style.overflow = 'hidden';
         document.body.style.overflow = 'hidden';
 
-        // Cegah gesture touch dan wheel scrolling tembus ke background halaman
         const preventScroll = (e: TouchEvent | WheelEvent) => {
             const target = e.target as HTMLElement;
             const modalContent = document.getElementById('menu-modal-card');
 
-            // Izinkan scroll hanya jika terjadi di dalam modal card itu sendiri
             if (modalContent && modalContent.contains(target)) {
                 return;
             }
@@ -169,54 +166,51 @@ export default function DigitalMenuPage() {
     };
 
     return (
-        <div className="min-h-screen pb-16 space-y-8">
+        <div className="min-h-screen pb-16 space-y-4 lg:space-y-8">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION (DINAMIS DARI DASHBOARD BANNER)   */}
+            {/* 1. HERO SECTION (HANYA DITAMPILKAN DI DESKTOP)    */}
             {/* ================================================= */}
             <section
-    className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[750px] flex items-center bg-cover bg-[75%_center] sm:bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden transition-all duration-300"
-    style={{ backgroundImage: `url('${heroBackgroundImage}')` }}
->
-    {/* Soft Overlay Gradien Putih Desktop */}
-    <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl" />
+                className="hidden lg:flex w-full relative h-screen max-h-[750px] items-center bg-cover bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-20 pb-6 overflow-hidden transition-all duration-300"
+                style={{ backgroundImage: `url('${heroBackgroundImage}')` }}
+            >
+                {/* Soft Overlay Gradien Putih Desktop */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl" />
 
-    {/* Soft Overlay HP untuk Kontras Sempurna */}
-    <div className="block lg:hidden absolute inset-0 bg-black/25" />
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
+                    <div className="w-full max-w-lg lg:w-1/2 p-0 space-y-3.5 text-left">
+                        <div className="inline-flex items-center justify-start gap-2 text-xs font-bold text-[#8c5a3c] tracking-widest uppercase">
+                            <Link href="/" className="hover:underline">HOME</Link>
+                            <ChevronRight className="w-3 h-3 text-[#8c5a3c]" />
+                            <span className="text-[#3d2314] font-black">DIGITAL MENU</span>
+                        </div>
 
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
-        <div className="w-full max-w-lg lg:w-1/2 bg-white/95 sm:bg-white/90 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-3xl border border-[#e6ccb2]/80 lg:border-none shadow-xl lg:shadow-none space-y-2.5 sm:space-y-3.5 text-center sm:text-left mx-auto sm:mx-0">
-            <div className="inline-flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-bold text-[#8c5a3c] tracking-widest uppercase">
-                <Link href="/" className="hover:underline">HOME</Link>
-                <ChevronRight className="w-3 h-3 text-[#8c5a3c]" />
-                <span className="text-[#3d2314] font-black">DIGITAL MENU</span>
-            </div>
+                        <h1 className="text-4xl lg:text-5xl font-black text-[#3d2314] tracking-tight leading-tight">
+                            {menuBanner?.title || 'Our Digital Menu'}
+                        </h1>
 
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#3d2314] tracking-tight leading-tight">
-                {menuBanner?.title || 'Our Digital Menu'}
-            </h1>
+                        <p className="text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                            {menuBanner?.subtitle || 'Explore our wide variety of bear-themed sweet treats, delicious meals, and refreshing drinks crafted with love for you and your family!'}
+                        </p>
 
-            <p className="text-[11px] sm:text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md mx-auto sm:mx-0">
-                {menuBanner?.subtitle || 'Explore our wide variety of bear-themed sweet treats, delicious meals, and refreshing drinks crafted with love for you and your family!'}
-            </p>
-
-            <div className="pt-2 flex items-center justify-center sm:justify-start">
-                <a
-                    href="#menu-content"
-                    className="px-6 py-2.5 sm:py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-black text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
-                >
-                    <span>{menuBanner?.cta_text || 'EXPLORE MENU'}</span>
-                    <BearPawIcon className="w-3.5 h-3.5" />
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
+                        <div className="pt-2 flex items-center justify-start">
+                            <a
+                                href="#menu-content"
+                                className="px-6 py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-black text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
+                            >
+                                <span>{menuBanner?.cta_text || 'EXPLORE MENU'}</span>
+                                <BearPawIcon className="w-3.5 h-3.5" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* ================================================= */}
             {/* 2. MAIN CONTENT AREA & LOCATION FILTER            */}
             {/* ================================================= */}
-            <section id="menu-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+            <section id="menu-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-4">
                 <div className="bg-white p-4 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6">
 
                     {/* Filter Tab Lokasi Outlet */}
@@ -244,24 +238,16 @@ export default function DigitalMenuPage() {
                             >
                                 Pondok Mutiara
                             </button>
-                            {/*<button
-                                onClick={() => setSelectedLocation('heavenland')}
-                                className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'heavenland'
-                                    ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                    : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
-                                    }`}
-                            >
-                                Heavenland Park
-                            </button> */}
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
                         {/* SIDEBAR FILTER (KIRI) */}
-                        <aside className="lg:col-span-3 space-y-4 lg:sticky lg:top-24">
-                            {/* Search Bar */}
-                            <div className="relative">
+                        <aside className="lg:col-span-3 lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:flex lg:flex-col gap-3">
+
+                            {/* 1. Search Bar */}
+                            <div className="relative shrink-0">
                                 <input
                                     type="text"
                                     value={searchQuery}
@@ -280,8 +266,11 @@ export default function DigitalMenuPage() {
                                 )}
                             </div>
 
-                            {/* Daftar Kategori */}
-                            <nav className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-none text-xs font-black uppercase tracking-wide">
+                            {/* 2. Nav Kategori: Scroll Mandiri */}
+                            <nav
+                                onWheel={(e) => e.stopPropagation()}
+                                className="flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto lg:flex-1 lg:min-h-0 overscroll-contain pr-1.5 pb-3 scrollbar-thin scrollbar-thumb-[#8c5a3c]/30 scrollbar-track-transparent"
+                            >
                                 {availableCategories.map((cat) => {
                                     const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
                                     let label = cat.toUpperCase();
@@ -292,23 +281,26 @@ export default function DigitalMenuPage() {
                                         <button
                                             key={cat}
                                             onClick={() => setSelectedCategory(cat)}
-                                            className={`flex items-center justify-between px-4 py-3 rounded-2xl transition shrink-0 cursor-pointer ${isSelected
+                                            className={`flex items-center justify-between px-3.5 py-2.5 rounded-2xl transition shrink-0 cursor-pointer text-left w-full ${isSelected
                                                 ? 'bg-[#8c5a3c] text-white shadow-xs'
                                                 : 'bg-[#FAF0E6]/50 text-[#3d2314] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
                                                 }`}
                                         >
-                                            <span className="flex items-center gap-2.5">
+                                            <span className="flex items-center gap-2 min-w-0 pr-1">
                                                 {cat === 'bestseller' ? (
-                                                    <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                                                    <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 shrink-0" />
                                                 ) : (
-                                                    <Coffee className="w-4 h-4" />
+                                                    <Coffee className="w-3.5 h-3.5 shrink-0 text-current" />
                                                 )}
-                                                <span>{label}</span>
+                                                <span className="text-[10.5px] font-black uppercase tracking-tight leading-none truncate whitespace-nowrap">
+                                                    {label}
+                                                </span>
                                             </span>
+
                                             {isSelected ? (
-                                                <X className="w-3.5 h-3.5 hidden lg:block" />
+                                                <X className="w-3.5 h-3.5 shrink-0 hidden lg:block" />
                                             ) : (
-                                                <ChevronRight className="w-3.5 h-3.5 hidden lg:block opacity-60" />
+                                                <ChevronRight className="w-3.5 h-3.5 shrink-0 hidden lg:block opacity-60" />
                                             )}
                                         </button>
                                     );

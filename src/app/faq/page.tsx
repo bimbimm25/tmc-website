@@ -29,7 +29,6 @@ function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     );
 }
 
-// Helper function untuk parsing tag <br> dan enter (\n)
 function renderFormattedText(text?: string | null, fallback?: React.ReactNode) {
     if (!text) return fallback;
 
@@ -411,12 +410,12 @@ export default function FAQPage() {
     const activeCategoryInfo = CATEGORIES.find((c) => c.id === selectedCategory) || CATEGORIES[0];
 
     return (
-        <div className="min-h-screen space-y-10 sm:space-y-14 pb-14">
+        <div className="min-h-screen space-y-6 sm:space-y-10 pb-14">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION FULL 1 LAYAR (FAQ BANNER)         */}
+            {/* 1. HERO SECTION (HANYA DITAMPILKAN DI DESKTOP)    */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+            <section className="hidden lg:flex relative w-full h-screen min-h-dvh items-center overflow-hidden">
                 {/* Background Image Full Cover */}
                 <div className="absolute inset-0 z-0">
                     <img
@@ -478,7 +477,7 @@ export default function FAQPage() {
             {/* ================================================= */}
             {/* 2. CATEGORY NAVIGATION HORIZONTAL TABS            */}
             {/* ================================================= */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-0">
                 <div className="bg-white p-3 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-x-auto scrollbar-none">
                     <div className="flex items-center gap-2 min-w-max lg:min-w-0 lg:grid lg:grid-cols-6">
                         {CATEGORIES.map((cat) => {
@@ -705,7 +704,6 @@ export default function FAQPage() {
 
                         {/* CARD 3: JAM BUKA CAFE */}
                         <div className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3.5">
-                            {/* Header Card */}
                             <div className="flex items-center gap-2 border-b border-[#e6ccb2]/50 pb-2.5">
                                 <Clock className="w-4 h-4 text-[#8c5a3c]" />
                                 <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wider">
@@ -713,9 +711,7 @@ export default function FAQPage() {
                                 </h3>
                             </div>
 
-                            {/* Daftar Jam Operasional Per Cabang */}
                             <div className="space-y-3 text-xs">
-
                                 {/* Cabang 1: Heavenland Park */}
                                 <div className="bg-[#FAF0E6]/50 p-3 rounded-2xl border border-[#e6ccb2]/60 space-y-1.5">
                                     <div className="flex items-center justify-between gap-2">
@@ -747,10 +743,8 @@ export default function FAQPage() {
                                         <span className="font-black text-xs">12.00 – 21.00 WIB</span>
                                     </div>
                                 </div>
-
                             </div>
 
-                            {/* Footer Note */}
                             <div className="pt-2 border-t border-[#e6ccb2]/40 text-center">
                                 <span className="text-[10px] font-black text-[#8c5a3c] uppercase">
                                     Sampai jumpa di To Meet Cafe!

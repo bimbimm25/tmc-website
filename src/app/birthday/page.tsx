@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
     Phone, Users, Clock, Sparkles, Heart, Utensils,
     Camera, ImageOff, CalendarCheck, MessageSquare, CreditCard,
-    Info, Gift, Layers, ArrowRight, X, AlertCircle, PartyPopper
+    Info, Gift, Layers, ArrowRight, X, AlertCircle, PartyPopper,
+    ChevronLeft, ChevronRight, ZoomIn
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
@@ -40,14 +41,31 @@ const OFFICIAL_ADDONS = [
 
 // Foto-Foto Galeri Murni Tanpa Tulisan
 const GALLERY_PHOTOS = [
-    { id: 1, image: '/img/gallery/gallery-1.png', alt: 'To Meet Cafe Gallery 1' },
-    { id: 2, image: '/img/gallery/gallery-2.png', alt: 'To Meet Cafe Gallery 2' },
-    { id: 3, image: '/img/gallery/gallery-3.png', alt: 'To Meet Cafe Gallery 3' },
-    { id: 4, image: '/img/gallery/gallery-4.png', alt: 'To Meet Cafe Gallery 4' },
-    { id: 5, image: '/img/gallery/gallery-5.png', alt: 'To Meet Cafe Gallery 5' },
-    { id: 6, image: '/img/gallery/gallery-6.png', alt: 'To Meet Cafe Gallery 6' },
-    { id: 7, image: '/img/gallery/gallery-7.png', alt: 'To Meet Cafe Gallery 7' },
-    { id: 8, image: '/img/gallery/gallery-8.png', alt: 'To Meet Cafe Gallery 8' },
+    { id: 1, image: '/img/gallery-birthday/Galery.jpg', alt: 'To Meet Cafe Gallery 1' },
+    { id: 2, image: '/img/gallery-birthday/Galery.png', alt: 'To Meet Cafe Gallery 2' },
+    { id: 3, image: '/img/gallery-birthday/Galery(1).jpg', alt: 'To Meet Cafe Gallery 3' },
+    { id: 4, image: '/img/gallery-birthday/Galery(2).jpg', alt: 'To Meet Cafe Gallery 4' },
+    { id: 5, image: '/img/gallery-birthday/Galery(3).jpg', alt: 'To Meet Cafe Gallery 5' },
+    { id: 6, image: '/img/gallery-birthday/Galery(4).jpg', alt: 'To Meet Cafe Gallery 6' },
+    { id: 7, image: '/img/gallery-birthday/Galery(5).jpg', alt: 'To Meet Cafe Gallery 7' },
+    { id: 8, image: '/img/gallery-birthday/Galery(6).jpg', alt: 'To Meet Cafe Gallery 8' },
+    { id: 9, image: '/img/gallery-birthday/Galery(7).jpg', alt: 'To Meet Cafe Gallery 9' },
+    { id: 10, image: '/img/gallery-birthday/Galery(8).jpg', alt: 'To Meet Cafe Gallery 10' },
+    { id: 11, image: '/img/gallery-birthday/Galery(9).jpg', alt: 'To Meet Cafe Gallery 11' },
+    { id: 12, image: '/img/gallery-birthday/Galery(10).jpg', alt: 'To Meet Cafe Gallery 12' },
+    { id: 13, image: '/img/gallery-birthday/Galery(11).jpg', alt: 'To Meet Cafe Gallery 13' },
+    { id: 14, image: '/img/gallery-birthday/Galery(12).jpg', alt: 'To Meet Cafe Gallery 14' },
+    { id: 15, image: '/img/gallery-birthday/Galery(13).jpg', alt: 'To Meet Cafe Gallery 15' },
+    { id: 16, image: '/img/gallery-birthday/Galery(14).jpg', alt: 'To Meet Cafe Gallery 16' },
+    { id: 17, image: '/img/gallery-birthday/Galery(15).jpg', alt: 'To Meet Cafe Gallery 17' },
+    { id: 18, image: '/img/gallery-birthday/Galery(16).jpg', alt: 'To Meet Cafe Gallery 18' },
+    { id: 19, image: '/img/gallery-birthday/Galery(17).jpg', alt: 'To Meet Cafe Gallery 19' },
+    { id: 20, image: '/img/gallery-birthday/Galery(18).jpg', alt: 'To Meet Cafe Gallery 20' },
+    { id: 21, image: '/img/gallery-birthday/Galery(19).jpg', alt: 'To Meet Cafe Gallery 21' },
+    { id: 22, image: '/img/gallery-birthday/Galery(20).jpg', alt: 'To Meet Cafe Gallery 22' },
+    { id: 23, image: '/img/gallery-birthday/Galery(21).jpg', alt: 'To Meet Cafe Gallery 23' },
+    { id: 24, image: '/img/gallery-birthday/Galery(22).jpg', alt: 'To Meet Cafe Gallery 24' },
+    { id: 25, image: '/img/gallery-birthday/Galery(23).jpg', alt: 'To Meet Cafe Gallery 25' },
 ];
 
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
@@ -102,7 +120,6 @@ export interface BannerItem {
     cta_link?: string | null;
 }
 
-// Helper Ekstraksi Baris Fasilitas
 function parseDescriptionLines(text?: string | null): string[] {
     if (!text) return [];
     return text
@@ -113,7 +130,6 @@ function parseDescriptionLines(text?: string | null): string[] {
         .map(l => l.replace(/^[-*•]\s*/, ''));
 }
 
-// Helper: Cek Free MC & Fun Games khusus Teddy Bliss Bday & Golden Bear Party
 function checkHasFreeMcGames(title?: string | null): boolean {
     if (!title) return false;
     const lower = title.toLowerCase();
@@ -125,12 +141,22 @@ function checkHasFreeMcGames(title?: string | null): boolean {
     );
 }
 
-// Helper: Keterangan Pajak berdasarkan harga paket
 function getTaxNotice(price: number): { text: string; isIncluded: boolean } {
     if (price >= 3500000) {
         return { text: '*sudah termasuk pajak', isIncluded: true };
     }
     return { text: '*belum termasuk pajak', isIncluded: false };
+}
+
+function shouldHideAddons(title?: string | null): boolean {
+    if (!title) return false;
+    const lower = title.toLowerCase();
+    return (
+        lower.includes('surprise bday') ||
+        lower.includes('tiny party') ||
+        lower.includes('happy party') ||
+        lower.includes('teddy party')
+    );
 }
 
 export default function BirthdayPage() {
@@ -140,9 +166,35 @@ export default function BirthdayPage() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
 
-    // Kunci scroll body saat modal aktif
+    // State Slider Gallery (4 per slide)
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const ITEMS_PER_SLIDE = 4;
+    const totalSlides = Math.ceil(GALLERY_PHOTOS.length / ITEMS_PER_SLIDE);
+
+    // State Zoom Foto Lightbox
+    const [zoomedPhotoIndex, setZoomedPhotoIndex] = useState<number | null>(null);
+
+    const handlePrevSlide = () => {
+        setCurrentSlide((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
+    };
+
+    const handleNextSlide = () => {
+        setCurrentSlide((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
+    };
+
+    // Navigasi Foto Saat Mode Zoom Aktif
+    const handlePrevZoomPhoto = useCallback(() => {
+        setZoomedPhotoIndex((prev) => (prev === null || prev === 0 ? GALLERY_PHOTOS.length - 1 : prev - 1));
+    }, []);
+
+    const handleNextZoomPhoto = useCallback(() => {
+        setZoomedPhotoIndex((prev) => (prev === null || prev === GALLERY_PHOTOS.length - 1 ? 0 : prev + 1));
+    }, []);
+
+    // Kunci scroll body saat modal paket atau zoom gambar aktif
     useEffect(() => {
-        if (!selectedPackage) return;
+        const isLocked = Boolean(selectedPackage || zoomedPhotoIndex !== null);
+        if (!isLocked) return;
 
         const origHtml = document.documentElement.style.overflow;
         const origBody = document.body.style.overflow;
@@ -157,16 +209,29 @@ export default function BirthdayPage() {
             e.preventDefault();
         };
 
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setSelectedPackage(null);
+                setZoomedPhotoIndex(null);
+            }
+            if (zoomedPhotoIndex !== null) {
+                if (e.key === 'ArrowLeft') handlePrevZoomPhoto();
+                if (e.key === 'ArrowRight') handleNextZoomPhoto();
+            }
+        };
+
         window.addEventListener('wheel', preventScroll, { passive: false });
         window.addEventListener('touchmove', preventScroll, { passive: false });
+        window.addEventListener('keydown', handleKeyDown);
 
         return () => {
             document.documentElement.style.overflow = origHtml;
             document.body.style.overflow = origBody;
             window.removeEventListener('wheel', preventScroll);
             window.removeEventListener('touchmove', preventScroll);
+            window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [selectedPackage]);
+    }, [selectedPackage, zoomedPhotoIndex, handlePrevZoomPhoto, handleNextZoomPhoto]);
 
     async function fetchBirthdayData() {
         try {
@@ -233,26 +298,33 @@ export default function BirthdayPage() {
         <div className="min-h-screen space-y-10 sm:space-y-14 pb-16">
 
             {/* ================================================= */}
-            {/* 1. HERO BANNER FULL 1 LAYAR                       */}
+            {/* 1. HERO BANNER FULL 1 LAYAR (CLEAN & SUBJUDUL PAS) */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50">
+                {/* 1. Background Cover Layer & Gradien Asli */}
                 <div className="absolute inset-0 z-0">
                     <img
                         src={heroImage}
                         alt="Birthday and Private Event at To Meet Cafe"
-                        className="w-full h-full object-cover object-right lg:object-center"
+                        className="w-full h-full object-cover object-[75%_center] lg:object-center"
                     />
+                    {/* Lapisan gradien putih halus sisi kiri */}
                     <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
                 </div>
 
+                {/* 2. Konten Hero Text & Buttons */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
-                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+                    <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5 text-left">
 
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
-                            <span>MAKE EVERY MOMENT SPECIAL</span>
-                            <Sparkles className="w-3 h-3 text-amber-500" />
+                        {/* Pill Badge */}
+                        <div className="flex">
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs">
+                                <span>MAKE EVERY MOMENT SPECIAL</span>
+                                <Sparkles className="w-3 h-3 text-amber-500" />
+                            </div>
                         </div>
 
+                        {/* Judul Utama */}
                         <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
                             {renderFormattedText(
                                 banner?.title,
@@ -264,29 +336,31 @@ export default function BirthdayPage() {
                             )}
                         </h1>
 
-                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                        {/* Subjudul: Bersih tanpa box, dibatasi max-w-[260px] di mobile agar pas di area putih */}
+                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-[260px] sm:max-w-md">
                             {renderFormattedText(
                                 banner?.subtitle,
                                 'Rayakan hari spesial si kecil di dunia beruang yang hangat dan ceria! Kami siapkan seluruh detail dekorasi dan makanan, Anda cukup menikmati momen bahagianya.'
                             )}
                         </p>
 
-                        <div className="pt-1 grid grid-cols-3 gap-2 max-w-sm text-center">
-                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                        {/* 3 Mini Feature Cards: Sejajar Rapi */}
+                        <div className="w-full grid grid-cols-3 gap-2 text-center pt-0.5">
+                            <div className="bg-white/95 backdrop-blur-xs py-2 px-1 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
                                 <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#e85a4f] mx-auto flex items-center justify-center">
                                     <Heart className="w-3.5 h-3.5 fill-current" />
                                 </div>
                                 <div className="text-[9px] font-black text-[#3d2314] leading-tight">Cute Bear Theme</div>
                             </div>
 
-                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                            <div className="bg-white/95 backdrop-blur-xs py-2 px-1 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
                                 <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
                                     <Utensils className="w-3.5 h-3.5" />
                                 </div>
                                 <div className="text-[9px] font-black text-[#3d2314] leading-tight">Yummy Treats</div>
                             </div>
 
-                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
+                            <div className="bg-white/95 backdrop-blur-xs py-2 px-1 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
                                 <div className="w-6 h-6 rounded-xl bg-[#FAF0E6] text-amber-600 mx-auto flex items-center justify-center">
                                     <Camera className="w-3.5 h-3.5" />
                                 </div>
@@ -294,12 +368,13 @@ export default function BirthdayPage() {
                             </div>
                         </div>
 
-                        <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
+                        {/* Tombol Aksi Sejajar Rata Kiri */}
+                        <div className="w-full pt-1 flex flex-row items-center gap-2 sm:gap-2.5">
                             <a
                                 href={banner?.cta_link || defaultBookingLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                                className="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap"
                             >
                                 <Phone className="w-3.5 h-3.5 fill-current" />
                                 <span>{banner?.cta_text || 'BOOK VIA WHATSAPP'}</span>
@@ -307,19 +382,18 @@ export default function BirthdayPage() {
 
                             <a
                                 href="#packages"
-                                className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md"
+                                className="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full transition inline-flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md whitespace-nowrap"
                             >
                                 <Gift className="w-3.5 h-3.5" />
                                 <span>PILIH PAKET</span>
                             </a>
                         </div>
+
                     </div>
                 </div>
             </section>
 
-            {/* ================================================= */}
-            {/* 2. OUR PACKAGES                                   */}
-            {/* ================================================= */}
+            {/* 2. OUR PACKAGES */}
             <section id="packages" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14 space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#e6ccb2]/60 pb-3">
                     <div className="flex items-center gap-2">
@@ -385,7 +459,6 @@ export default function BirthdayPage() {
                                     className="bg-white rounded-xl border border-[#e6ccb2]/80 shadow-sm overflow-hidden flex flex-col justify-between hover:border-[#8c5a3c] hover:shadow-md transition duration-200"
                                 >
                                     <div>
-                                        {/* Foto Cover */}
                                         <div className="relative w-full aspect-video bg-[#FAF0E6]/50 overflow-hidden flex items-center justify-center border-b border-[#e6ccb2]/40">
                                             {pkgImage ? (
                                                 <img
@@ -404,7 +477,6 @@ export default function BirthdayPage() {
                                                 {idx === 0 ? 'BASIC' : idx === 1 ? 'DELUXE' : 'PREMIUM'}
                                             </div>
 
-                                            {/* Badge Khusus Free MC & Fun Games pada Foto */}
                                             {hasFreeMcGames && (
                                                 <div className="absolute top-2 right-2 bg-gradient-to-r from-amber-500 to-[#e85a4f] text-white px-2 py-0.5 rounded-full text-[7.5px] font-black uppercase tracking-wider shadow-xs flex items-center gap-1">
                                                     <PartyPopper className="w-2.5 h-2.5" />
@@ -413,7 +485,6 @@ export default function BirthdayPage() {
                                             )}
                                         </div>
 
-                                        {/* Info & Ringkasan Fasilitas */}
                                         <div className="p-3.5 space-y-2">
                                             <div>
                                                 <h3 className="font-black text-xs sm:text-sm text-[#3d2314] leading-tight">
@@ -425,7 +496,6 @@ export default function BirthdayPage() {
                                                     </span>
                                                 )}
 
-                                                {/* Label Free MC & Fun Games pada body */}
                                                 {hasFreeMcGames && (
                                                     <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200/80 rounded-md text-[8.5px] font-black uppercase tracking-wider">
                                                         <Sparkles className="w-2.5 h-2.5 text-amber-600" />
@@ -434,7 +504,6 @@ export default function BirthdayPage() {
                                                 )}
                                             </div>
 
-                                            {/* Preview 3 Fasilitas Teratas */}
                                             <div className="space-y-1 border-t border-[#e6ccb2]/50 pt-2">
                                                 <span className="text-[8px] font-black text-[#8c5a3c] uppercase tracking-wider block">
                                                     Highlight Fasilitas:
@@ -460,7 +529,6 @@ export default function BirthdayPage() {
                                         </div>
                                     </div>
 
-                                    {/* Footer Kartu & Tombol Detail */}
                                     <div className="p-3.5 pt-0 border-t border-[#e6ccb2]/40 space-y-2 mt-0.5">
                                         <div className="flex items-baseline justify-between pt-1.5">
                                             <div>
@@ -469,7 +537,6 @@ export default function BirthdayPage() {
                                                     Rp {new Intl.NumberFormat('id-ID').format(pkg.price)}
                                                 </span>
                                             </div>
-                                            {/* Keterangan Pajak Otomatis */}
                                             <span className={`text-[8.5px] font-bold italic ${taxNotice.isIncluded ? 'text-emerald-700' : 'text-[#8c5a3c]'}`}>
                                                 {taxNotice.text}
                                             </span>
@@ -490,9 +557,7 @@ export default function BirthdayPage() {
                 )}
             </section>
 
-            {/* ================================================= */}
-            {/* 3. OFFICIAL ADD-ONS                               */}
-            {/* ================================================= */}
+            {/* 3. OFFICIAL ADD-ONS */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white p-5 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-5">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#e6ccb2]/60 pb-3">
@@ -537,36 +602,106 @@ export default function BirthdayPage() {
                 </div>
             </section>
 
-            {/* ================================================= */}
-            {/* 4. GALLERY                                        */}
-            {/* ================================================= */}
+            {/* 4. GALLERY (SLIDER 4 PER HALAMAN + ZOOM MODAL) */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-                <div className="flex items-center gap-2 border-b border-[#e6ccb2]/60 pb-3">
-                    <Camera className="w-4 h-4 text-[#8c5a3c]" />
-                    <h2 className="text-base sm:text-lg font-black text-[#3d2314] uppercase tracking-wide">
-                        GALLERY
-                    </h2>
+                <div className="flex items-center justify-between border-b border-[#e6ccb2]/60 pb-3">
+                    <div className="flex items-center gap-2">
+                        <Camera className="w-4 h-4 text-[#8c5a3c]" />
+                        <h2 className="text-base sm:text-lg font-black text-[#3d2314] uppercase tracking-wide">
+                            GALLERY
+                        </h2>
+                        <span className="hidden sm:inline-block px-2 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] font-bold rounded-full border border-[#e6ccb2]/60">
+                            {GALLERY_PHOTOS.length} Foto
+                        </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-black text-[#8c5a3c] mr-1">
+                            {currentSlide + 1} <span className="text-[#a08a7b] font-semibold">/ {totalSlides}</span>
+                        </span>
+
+                        <button
+                            onClick={handlePrevSlide}
+                            aria-label="Foto Sebelumnya"
+                            className="w-8 h-8 rounded-full bg-white border border-[#e6ccb2]/80 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white shadow-2xs flex items-center justify-center transition active:scale-95 cursor-pointer"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+
+                        <button
+                            onClick={handleNextSlide}
+                            aria-label="Foto Berikutnya"
+                            className="w-8 h-8 rounded-full bg-white border border-[#e6ccb2]/80 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white shadow-2xs flex items-center justify-center transition active:scale-95 cursor-pointer"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-                    {GALLERY_PHOTOS.map((photo) => (
-                        <div 
-                            key={photo.id}
-                            className="w-full aspect-16/10 rounded-2xl overflow-hidden border border-[#e6ccb2]/70 shadow-2xs bg-stone-100 group"
-                        >
-                            <img 
-                                src={photo.image} 
-                                alt={photo.alt} 
-                                className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                            />
-                        </div>
+                <div className="overflow-hidden rounded-3xl">
+                    <div
+                        className="flex transition-transform duration-500 ease-out"
+                        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                    >
+                        {Array.from({ length: totalSlides }).map((_, slideIdx) => {
+                            const startIdx = slideIdx * ITEMS_PER_SLIDE;
+                            const currentBatch = GALLERY_PHOTOS.slice(startIdx, startIdx + ITEMS_PER_SLIDE);
+
+                            return (
+                                <div key={slideIdx} className="w-full shrink-0">
+                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                                        {currentBatch.map((photo, pSubIdx) => {
+                                            const globalIndex = startIdx + pSubIdx;
+                                            return (
+                                                <div
+                                                    key={photo.id}
+                                                    onClick={() => setZoomedPhotoIndex(globalIndex)}
+                                                    className="group relative w-full aspect-16/10 rounded-2xl overflow-hidden border border-[#e6ccb2]/70 bg-stone-100 shadow-2xs hover:shadow-md transition-all duration-300 cursor-pointer"
+                                                >
+                                                    <img
+                                                        src={photo.image}
+                                                        alt={photo.alt}
+                                                        loading="lazy"
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                    />
+
+                                                    {/* Hover Overlay Icon Zoom */}
+                                                    <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-1.5 text-white">
+                                                        <div className="p-2 rounded-full bg-white/20 backdrop-blur-xs border border-white/40 shadow-xs">
+                                                            <ZoomIn className="w-4 h-4" />
+                                                        </div>
+                                                        <span className="text-[10px] font-black uppercase tracking-wider hidden sm:inline-block">Zoom</span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-center gap-1.5 pt-1">
+                    {Array.from({ length: totalSlides }).map((_, dotIdx) => (
+                        <button
+                            key={dotIdx}
+                            onClick={() => setCurrentSlide(dotIdx)}
+                            aria-label={`Pindah ke slide ${dotIdx + 1}`}
+                            className={`transition-all duration-300 rounded-full cursor-pointer ${currentSlide === dotIdx
+                                ? 'w-6 h-2 bg-[#8c5a3c]'
+                                : 'w-2 h-2 bg-[#e6ccb2]/70 hover:bg-[#8c5a3c]/60'
+                                }`}
+                        />
                     ))}
                 </div>
             </section>
 
-            {/* ================================================= */}
-            {/* 5. HOW TO BOOK                                    */}
-            {/* ================================================= */}
+            {/* 5. HOW TO BOOK */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white p-5 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6">
                     <div className="flex items-center gap-2 border-b border-[#e6ccb2]/60 pb-3">
@@ -624,9 +759,7 @@ export default function BirthdayPage() {
                 </div>
             </section>
 
-            {/* ================================================= */}
-            {/* 6. BOTTOM CTA BANNER                              */}
-            {/* ================================================= */}
+            {/* 6. BOTTOM CTA BANNER */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-[#fdf3f1] p-6 sm:p-10 rounded-3xl border border-rose-200/80 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
                     <div className="space-y-1 max-w-lg">
@@ -650,9 +783,7 @@ export default function BirthdayPage() {
                 </div>
             </section>
 
-            {/* ================================================= */}
-            {/* 7. MODAL DETAIL                                   */}
-            {/* ================================================= */}
+            {/* 7. MODAL DETAIL PAKET */}
             {selectedPackage && (
                 <div
                     onClick={() => setSelectedPackage(null)}
@@ -665,7 +796,6 @@ export default function BirthdayPage() {
                         onClick={(e) => e.stopPropagation()}
                         className="relative w-full max-w-lg bg-white rounded-3xl border border-[#e6ccb2] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
                     >
-                        {/* Tombol X Mengunci di Sudut Kanan Atas Kartu */}
                         <button
                             onClick={() => setSelectedPackage(null)}
                             aria-label="Tutup Detail"
@@ -674,9 +804,7 @@ export default function BirthdayPage() {
                             <X className="w-4 h-4" />
                         </button>
 
-                        {/* Kontainer Isi Scroll */}
                         <div className="overflow-y-auto p-6 space-y-5">
-                            {/* Cover Image */}
                             <div className="relative w-full aspect-16/10 bg-stone-50 rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center">
                                 {selectedPackage.image && selectedPackage.image.trim() !== '' ? (
                                     <img
@@ -705,7 +833,6 @@ export default function BirthdayPage() {
                                 )}
                             </div>
 
-                            {/* Detail Paket */}
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
                                     <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] font-black uppercase rounded-md">
@@ -735,7 +862,6 @@ export default function BirthdayPage() {
                                     )}
                                 </div>
 
-                                {/* Daftar Semua Fasilitas Lengkap */}
                                 <div className="py-2.5 border-y border-[#e6ccb2]/50 space-y-2">
                                     <span className="text-[10px] font-black text-[#3d2314] uppercase block">
                                         Semua Fasilitas Yang Didapatkan:
@@ -758,25 +884,26 @@ export default function BirthdayPage() {
                                 </div>
                             </div>
 
-                            {/* Rincian Pilihan Add-Ons Resmi */}
-                            <div className="space-y-2">
-                                <span className="text-[10px] font-black text-[#8c5a3c] uppercase block">
-                                    Tersedia Pilihan Add-Ons:
-                                </span>
-                                <div className="space-y-1.5">
-                                    {OFFICIAL_ADDONS.map((addon) => (
-                                        <div key={addon.id} className="flex items-center justify-between p-2.5 bg-[#FAF0E6]/50 rounded-xl border border-[#e6ccb2]/50 text-xs">
-                                            <div>
-                                                <span className="font-black text-[#3d2314] block">{addon.name}</span>
-                                                <span className="text-[10px] text-[#6c584c] font-medium">{addon.desc}</span>
+                            {/* Rincian Pilihan Add-Ons Resmi (Disembunyikan untuk Surprise Bday, Tiny Party, Happy Party, Teddy Party) */}
+                            {!shouldHideAddons(selectedPackage.title) && (
+                                <div className="space-y-2">
+                                    <span className="text-[10px] font-black text-[#8c5a3c] uppercase block">
+                                        Tersedia Pilihan Add-Ons:
+                                    </span>
+                                    <div className="space-y-1.5">
+                                        {OFFICIAL_ADDONS.map((addon) => (
+                                            <div key={addon.id} className="flex items-center justify-between p-2.5 bg-[#FAF0E6]/50 rounded-xl border border-[#e6ccb2]/50 text-xs">
+                                                <div>
+                                                    <span className="font-black text-[#3d2314] block">{addon.name}</span>
+                                                    <span className="text-[10px] text-[#6c584c] font-medium">{addon.desc}</span>
+                                                </div>
+                                                <span className="font-black text-[#e85a4f] text-[11px] shrink-0 ml-2">{addon.price}</span>
                                             </div>
-                                            <span className="font-black text-[#e85a4f] text-[11px] shrink-0 ml-2">{addon.price}</span>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
-                            {/* Footer & CTA WA */}
                             <div className="pt-2 border-t border-[#e6ccb2]/50 flex items-center justify-between">
                                 <div>
                                     <span className="text-[10px] font-bold text-[#8c5a3c] block uppercase">Harga Paket</span>
@@ -798,6 +925,69 @@ export default function BirthdayPage() {
                                     <span>BOOK VIA WA</span>
                                 </a>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ================================================= */}
+            {/* 8. MODAL ZOOM FOTO GALERI (LIGHTBOX RESPONSIVE)   */}
+            {/* ================================================= */}
+            {zoomedPhotoIndex !== null && GALLERY_PHOTOS[zoomedPhotoIndex] && (
+                <div
+                    onClick={() => setZoomedPhotoIndex(null)}
+                    className="fixed inset-0 z-[999999] w-screen h-[100dvh] flex items-center justify-center bg-black/90 backdrop-blur-md p-3 sm:p-6"
+                    onWheel={(e) => e.stopPropagation()}
+                    onTouchMove={(e) => e.stopPropagation()}
+                >
+                    {/* Tombol Tutup X di Pojok Kanan Atas */}
+                    <button
+                        onClick={() => setZoomedPhotoIndex(null)}
+                        aria-label="Tutup Zoom"
+                        className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center transition backdrop-blur-md border border-white/30 cursor-pointer shadow-lg active:scale-95"
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
+
+                    {/* Tombol Panah Kiri (Foto Sebelumnya) */}
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handlePrevZoomPhoto();
+                        }}
+                        aria-label="Foto Sebelumnya"
+                        className="absolute left-3 sm:left-6 z-50 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center transition backdrop-blur-md border border-white/30 cursor-pointer shadow-lg active:scale-95"
+                    >
+                        <ChevronLeft className="w-6 h-6" />
+                    </button>
+
+                    {/* Tombol Panah Kanan (Foto Berikutnya) */}
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleNextZoomPhoto();
+                        }}
+                        aria-label="Foto Berikutnya"
+                        className="absolute right-3 sm:right-6 z-50 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center transition backdrop-blur-md border border-white/30 cursor-pointer shadow-lg active:scale-95"
+                    >
+                        <ChevronRight className="w-6 h-6" />
+                    </button>
+
+                    {/* Gambar Zoom dengan Ukuran Maksimal & Proporsional */}
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="relative max-w-5xl max-h-[85vh] w-full flex flex-col items-center justify-center animate-in fade-in zoom-in-95 duration-200 select-none"
+                    >
+                        <img
+                            src={GALLERY_PHOTOS[zoomedPhotoIndex].image}
+                            alt={GALLERY_PHOTOS[zoomedPhotoIndex].alt}
+                            className="max-w-full max-h-[80vh] w-auto h-auto object-contain rounded-2xl shadow-2xl border border-white/20"
+                        />
+
+                        {/* Keterangan & Nomor Urut Foto di Bawah */}
+                        <div className="mt-3 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs font-bold flex items-center gap-2">
+                            <span>{GALLERY_PHOTOS[zoomedPhotoIndex].alt}</span>
+                            <span className="text-[#d4a373]">({zoomedPhotoIndex + 1} / {GALLERY_PHOTOS.length})</span>
                         </div>
                     </div>
                 </div>

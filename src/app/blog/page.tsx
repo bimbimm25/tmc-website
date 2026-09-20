@@ -152,12 +152,12 @@ export default function BlogPage() {
     };
 
     return (
-        <div className="min-h-screen space-y-10 sm:space-y-14 pb-16">
+        <div className="min-h-screen space-y-6 sm:space-y-10 pb-16">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION FULL 1 LAYAR (BLOG BANNER)        */}
+            {/* 1. HERO SECTION (HANYA DITAMPILKAN DI DESKTOP)    */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+            <section className="hidden lg:flex relative w-full h-screen min-h-dvh items-center overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img
                         src={heroImage}
@@ -192,7 +192,7 @@ export default function BlogPage() {
                             )}
                         </p>
 
-                        <div className="pt-1 grid grid-cols-3 gap-2 max-w-sm text-center">
+                        <div className="pt-1 grid grid-cols-2 gap-2 max-w-sm text-center">
                             <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
                                 <div className="text-[9.5px] font-black text-[#8c5a3c] uppercase">Cerita Cafe</div>
                                 <div className="text-[8px] text-[#6c584c] font-semibold">Behind the scenes</div>
@@ -219,7 +219,7 @@ export default function BlogPage() {
             {/* ================================================= */}
             {/* 2. MAIN BLOG CONTENT                              */}
             {/* ================================================= */}
-            <section id="articles" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14">
+            <section id="articles" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14 pt-20 sm:pt-24 lg:pt-0">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
                     {/* KOLOM KIRI (FEATURED ARTICLE & LATEST POSTS) */}

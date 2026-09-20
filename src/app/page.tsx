@@ -101,79 +101,72 @@ export default async function Home() {
       {/* ================================================= */}
       {/* 1. HERO SECTION (DINAMIS & SUPPORTS <BR>)         */}
       {/* ================================================= */}
-      <section
-        className="w-full relative h-[100dvh] lg:h-screen lg:max-h-[800px] flex items-center bg-cover bg-[75%_center] sm:bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-16 sm:pt-20 pb-6 overflow-hidden transition-all duration-300"
-        style={{ backgroundImage: `url('${heroBackgroundImage}')` }}
-      >
-        {/* Soft Overlay Gradien Putih Desktop */}
-        <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl" />
+      {/* ================================================= */}
+      {/* 1. HERO SECTION (PERSIS SESUAI REFERENSI MOBILE)  */}
+      {/* ================================================= */}
+      <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50">
+        {/* 1. Background Cover Layer */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={heroBackgroundImage}
+            alt="To Meet Cafe Atmosphere"
+            className="w-full h-full object-cover object-[75%_center] lg:object-right xl:object-center"
+          />
 
-        {/* Overlay Halus untuk HP agar Beruang Tetap Terlihat Jelas & Teks Terbaca */}
-        <div className="block lg:hidden absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+          {/* Gradient Overlay: Lembut di mobile dan solid di desktop agar teks kontras & beruang tetap terlihat utuh */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent w-full sm:w-3/4 lg:w-3/5 xl:w-1/2" />
+          <div className="block lg:hidden absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent" />
+        </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
+        {/* 2. Konten Hero Text & Action */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-14 sm:pt-16">
+          <div className="max-w-md lg:max-w-xl space-y-2.5 sm:space-y-3.5 text-left">
 
-            {/* Card Kontainer Teks */}
-            <div className="lg:col-span-7 bg-white/95 sm:bg-white/90 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-5 sm:p-8 lg:p-0 rounded-3xl border border-[#e6ccb2]/80 lg:border-none shadow-xl lg:shadow-none space-y-3 sm:space-y-4 text-center sm:text-left">
-
-              <div className="space-y-1 max-w-lg lg:max-w-xl mx-auto sm:mx-0">
-                <span className="text-xs sm:text-base lg:text-xl font-extrabold text-[#8c5a3c] tracking-wide block uppercase">
-                  Welcome to
-                </span>
-                <h1 className="text-2xl sm:text-3xl lg:text-5xl font-black text-[#3d2314] tracking-tight leading-[1.15]">
-                  {homeBanner?.title ? (
-                    <FormatTextWithBreak text={homeBanner.title} />
-                  ) : (
-                    <>
-                      TO MEET<br />
-                      <span className="text-[#8c5a3c] lg:text-[#3d2314]">Universe</span>
-                    </>
-                  )}
-                  <Sparkles className="inline-block w-5 h-5 sm:w-7 sm:h-7 ml-1.5 text-[#e85a4f]" />
-                </h1>
-              </div>
-
-              <p className="text-[11px] sm:text-sm lg:text-base text-[#5a4232] font-extrabold sm:font-bold leading-relaxed max-w-xs sm:max-w-lg mx-auto sm:mx-0">
-                {homeBanner?.subtitle ? (
-                  <FormatTextWithBreak text={homeBanner.subtitle} />
-                ) : (
-                  'A cozy cafe, a world of friends, and endless sweet adventures await you!'
-                )}
-                <Heart className="inline-block w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 text-[#e85a4f] fill-current" />
-              </p>
-
-              {/* Tombol CTA */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center sm:justify-start gap-2 sm:gap-3 pt-1 sm:pt-2">
-                <a
-                  href="#locations"
-                  className="px-5 py-2.5 sm:py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-extrabold rounded-full text-xs sm:text-sm transition duration-200 shadow-md shadow-rose-500/20 flex items-center justify-center gap-2 tracking-wider uppercase cursor-pointer"
-                >
-                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  <span>VISIT OUR CAFE</span>
-                </a>
-                <a
-                  href="#adventure"
-                  className="px-5 py-2.5 sm:py-3 bg-[#3d2314] hover:bg-[#281208] text-white font-extrabold rounded-full text-xs sm:text-sm transition duration-200 shadow-md flex items-center justify-center gap-2 tracking-wider uppercase cursor-pointer"
-                >
-                  <span>EXPLORE TO MEET</span>
-                  <Sparkles className="w-3.5 h-3.5" />
-                </a>
-              </div>
-
+            {/* Pill Badge Mungil */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-xs text-[#e85a4f] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs">
+              <span>WELCOME TO MEET</span>
+              <Sparkles className="w-3 h-3 text-amber-500" />
             </div>
 
-            {/* Balon Percakapan Statis Beruang (Desktop Only) */}
-            <div className="lg:col-span-5 hidden lg:flex justify-end relative h-full">
-              <div className="absolute right-8 xl:right-12 -top-12 z-20">
-                <div className="bg-white/95 backdrop-blur-md px-4 py-2 rounded-2xl shadow-md border border-[#e6ccb2] text-center text-[#3d2314] font-black text-xs inline-flex items-center gap-1.5 relative">
-                  <span>Hi, I&apos;m To Meet Bear!</span>
-                  <Heart className="w-3.5 h-3.5 text-[#e85a4f] fill-current" />
+            {/* Title Proporsional & Rapi */}
+            <h1 className="text-2xl sm:text-3xl lg:text-[2.6rem] font-black text-[#2e170c] tracking-tight leading-[1.18]">
+              {homeBanner?.title ? (
+                <FormatTextWithBreak text={homeBanner.title} />
+              ) : (
+                <>
+                  More than a cafe, <br />
+                  It&apos;s a happy place to meet <br />
+                  <span className="text-[#8c5a3c]">& create memories.</span>
+                </>
+              )}
+            </h1>
 
-                  {/* Ekor Balon */}
-                  <div className="absolute -bottom-1.5 right-8 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-white" />
-                </div>
-              </div>
+            {/* Subtitle */}
+            <p className="text-xs sm:text-[13px] text-[#4a3427] font-semibold leading-relaxed max-w-md">
+              {homeBanner?.subtitle ? (
+                <FormatTextWithBreak text={homeBanner.subtitle} />
+              ) : (
+                'To Meet is a cozy bear-themed cafe & playground created for everyone to enjoy sweet treats, good times, and heartwarming moments together.'
+              )}
+            </p>
+
+            {/* Tombol Aksi Kapsul Berdampingan Seperti Referensi */}
+            <div className="pt-2 flex flex-row items-center gap-2 sm:gap-3">
+              <a
+                href="#locations"
+                className="px-4 sm:px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black rounded-full text-[10.5px] sm:text-xs transition duration-200 shadow-md shadow-rose-500/20 inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap"
+              >
+                <span>VISIT OUR CAFES</span>
+                <MapPin className="w-3.5 h-3.5 shrink-0" />
+              </a>
+
+              <a
+                href="#adventure"
+                className="px-4 sm:px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md whitespace-nowrap"
+              >
+                <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                <span>EXPLORE TO MEET</span>
+              </a>
             </div>
 
           </div>
@@ -470,60 +463,66 @@ export default async function Home() {
       {/* 5. UPCOMING EVENT SECTION (CLEAN SINGLE CARD)     */}
       {/* ================================================= */}
       <section id="event" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white border border-[#e6ccb2]/80 rounded-[2.5rem] p-5 sm:p-7 lg:p-8 shadow-2xs">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+        <div className="relative isolate overflow-hidden rounded-[2.5rem] border border-[#e6ccb2]/60 shadow-md">
+          <img
+            src="/img/HEADER-CLAY-ART.png"
+            alt="To Meet Cafe Events & Workshops"
+            className="absolute inset-0 h-full w-full scale-[1.08] object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1b110d]/90 via-[#1b110d]/70 to-[#1b110d]/35 lg:to-[#1b110d]/20" />
 
-            {/* Sisi Kiri: Frame Gambar Banner Utuh */}
-            <div className="lg:col-span-6 flex justify-center">
-              <Link
-                href="/event"
-                className="group relative w-full aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/10] rounded-2xl overflow-hidden bg-white border border-[#e6ccb2]/60 shadow-xs flex items-center justify-center p-3 transition duration-300 hover:border-[#8c5a3c] hover:shadow-md"
-              >
-                <img
-                  src="/img/HEADER-CLAY-ART.png"
-                  alt="To Meet Cafe Events & Workshops"
-                  className="w-full h-full object-contain object-center group-hover:scale-[1.02] transition-transform duration-300"
-                />
-              </Link>
-            </div>
-
-            {/* Sisi Kanan: Konten Informasi & Tombol Aksi */}
-            <div className="lg:col-span-6 space-y-4 text-center lg:text-left">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#f4ece1] rounded-full text-[10px] sm:text-xs font-black text-[#8c5a3c] tracking-widest uppercase border border-[#e6ccb2]/80">
-                <Calendar className="w-3.5 h-3.5 text-[#8c5a3c]" />
+          <div className="relative z-10 grid grid-cols-1 gap-8 px-5 py-6 sm:px-8 sm:py-8 lg:grid-cols-12 lg:items-center lg:px-12 lg:py-12">
+            <div className="lg:col-span-7 space-y-4 text-center lg:text-left">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-[#f9d8ac] backdrop-blur-sm">
+                <Calendar className="h-3.5 w-3.5" />
                 <span>EVENTS & WORKSHOPS</span>
               </div>
 
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
+              <h2 className="text-2xl font-black uppercase tracking-tight text-white sm:text-3xl lg:text-4xl">
                 Temukan Keseruan Event & Workshop Menarik
               </h2>
 
-              <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
+              <p className="mx-auto max-w-xl text-xs font-semibold leading-relaxed text-stone-100 sm:text-sm lg:mx-0">
                 Mulai dari kelas kreasi seni edukatif hingga perayaan ulang tahun spesial keluarga. Cek jadwal kegiatan seru terbaru dan reservasi tempatmu sekarang!
               </p>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-1 justify-center lg:justify-start">
+              <div className="flex flex-wrap items-center justify-center gap-3 pt-1 lg:justify-start">
                 <Link
                   href="/event"
-                  className="px-6 py-2.5 sm:py-3 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-xs rounded-full shadow-md shadow-[#8c5a3c]/15 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#8c5a3c] px-6 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md shadow-[#8c5a3c]/20 transition hover:bg-[#73482f] active:bg-[#5c3a25]"
                 >
                   <span>LIHAT SEMUA EVENT</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
 
                 <a
                   href="https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20tanya%20info%20event%20dan%20workshop"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-5 py-2.5 sm:py-3 bg-white hover:bg-[#faf6f0] text-[#3d2314] font-black text-xs rounded-full border border-[#e6ccb2] transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/90 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[#3d2314] shadow-2xs transition hover:bg-[#faf6f0]"
                 >
-                  <Phone className="w-3.5 h-3.5 text-[#8c5a3c] fill-current" />
+                  <Phone className="h-3.5 w-3.5 fill-current text-[#8c5a3c]" />
                   <span>BOOK VIA WA</span>
                 </a>
               </div>
             </div>
 
+            <div className="lg:col-span-5 lg:justify-self-end">
+              <div className="mx-auto w-full max-w-sm rounded-[1.75rem] border border-white/20 bg-white/10 p-4 text-left text-white shadow-xl backdrop-blur-md sm:p-5">
+                <div className="border-b border-white/20 pb-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#f9d8ac]">
+                  <span className="flex items-center gap-1.5">
+                    <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    <span>COMING SOON</span>
+                  </span>
+                </div>
+
+                <div className="space-y-3 pt-3">
+                  <p className="text-xs font-black uppercase leading-snug text-white sm:text-sm">
+                    Belum ada event tersedia. Tunggu kegiatan selanjutnya di To Meet.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
