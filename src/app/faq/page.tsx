@@ -55,300 +55,300 @@ const FAQ_DATA: FAQItem[] = [
     {
         id: 'gen-1',
         category: 'general',
-        question: 'Store cabang Pondok Mutiara buka jam berapa Kak?',
-        answer: 'Untuk cabang Pondok Mutiara buka jam 12.00 – 22.00 WIB (Last order pukul 21.00 WIB) ya Kak.'
+        question: 'Cafe cabang Pondok Mutiara buka pukul berapa?',
+        answer: 'To Meet Cafe cabang Pondok Mutiara beroperasi Selasa–Minggu pukul 12.00–22.00 WIB. Pemesanan terakhir pukul 21.00 WIB.'
     },
     {
         id: 'gen-2',
         category: 'general',
-        question: 'Store Pondok Mutiara tutup jam berapa Kak?',
-        answer: 'Kami tutup di jam 22.00 WIB (Last order pukul 21.00 WIB) ya Kak.'
+        question: 'Cabang Heavenland tutup pukul berapa?',
+        answer: 'Cabang Heavenland sedang tutup sementara untuk renovasi. Saat beroperasi, cabang ini buka pukul 12.00–19.00 WIB, dengan pemesanan terakhir pukul 18.30 WIB.'
     },
     {
         id: 'gen-3',
         category: 'general',
-        question: 'Cabang Heavenland tutup di jam berapa Kak?',
-        answer: 'Untuk cabang Heavenland buka di jam 12.00 – 19.00 WIB (Last order 18.30 WIB) ya Kak. Namun saat ini kami tutup sementara karena sedang renovasi.'
+        question: 'Apakah cabang Pondok Mutiara tutup setiap hari Senin?',
+        answer: 'Cabang Pondok Mutiara tutup setiap hari Senin dan kembali buka pada hari Selasa.'
     },
     {
         id: 'gen-4',
         category: 'general',
-        question: 'Kak, yang di Pondok Mutiara hari Senin juga tutup kah?',
-        answer: 'Setiap hari Senin kami tutup ya Kak, buka kembali hari Selasa besok ya.'
+        question: 'Apakah durasi kunjungan dibatasi maksimal 2 jam?',
+        answer: 'Saat kafe ramai dan terdapat antrean, waktu makan di tempat dibatasi maksimal 2 jam. Jika tidak ada antrean, Anda dapat bersantai lebih lama.'
     },
     {
         id: 'gen-5',
         category: 'general',
-        question: 'Apakah waktu makan dibatasi 2 jam ya Kak?',
-        answer: 'Jika kondisi cafe sedang ramai dan ada antrean, maka berlaku batas maksimal dine-in 2 jam ya Kak. Namun jika sedang tidak ada antrean, aman Kak bisa bersantai lebih lama.'
+        question: 'Pemesanan melalui GoFood dapat dilakukan mulai pukul berapa?',
+        answer: 'Pemesanan melalui GoFood tersedia mulai pukul 12.30 WIB.'
     },
     {
         id: 'gen-6',
         category: 'general',
-        question: 'Untuk pemesanan GoFood aktif jam berapa Kak?',
-        answer: 'Untuk GoFood akan aktif mulai pukul 12.30 WIB ya Kak.'
+        question: 'Apakah To Meet Cafe tersedia di ShopeeFood, GrabFood, dan GoFood?',
+        answer: 'Anda dapat memesan menu To Meet Cafe melalui GoFood. Saat ini, layanan pesan antar kami belum tersedia di ShopeeFood maupun GrabFood.'
     },
     {
         id: 'gen-7',
         category: 'general',
-        question: 'To Meet ada di ShopeeFood, GrabFood, atau GoFood Kak?',
-        answer: 'Kakak bisa cek GoFood kami ya Kak. Untuk saat ini kami belum tersedia di ShopeeFood maupun GrabFood.'
+        question: 'Kapan saja badut maskot berkeliling di area kafe?',
+        answer: 'Badut maskot hadir hari Selasa–Minggu dengan waktu berkeliling yang tidak tetap.'
     },
     {
         id: 'gen-8',
         category: 'general',
-        question: 'Kalau badut maskot hari apa saja Kak kelilingnya?',
-        answer: 'Hari Selasa – Jumat, dan jika weekend jamnya random Kak. Untuk jadwal waktu badut berkeliling juga bersifat random ya Kak.'
+        question: 'Apakah To Meet Cafe menerima pembayaran tunai dan nontunai?',
+        answer: 'Pembayaran di To Meet Cafe dilakukan secara nontunai. Kami menerima QRIS, kartu debit, dan kartu kredit.'
     },
     {
         id: 'gen-9',
         category: 'general',
-        question: 'Pembayarannya bisa cash atau harus cashless Kak?',
-        answer: 'Sistem pembayaran kami cashless ya Kak. Kami menerima QRIS, Kartu Debit, dan Kartu Kredit.'
+        question: 'Berapa minimum transaksi untuk pembayaran dengan kartu kredit?',
+        answer: 'Pembayaran dengan kartu kredit berlogo Visa, Mastercard, atau JCB dapat dilakukan dengan minimum transaksi Rp150.000.'
     },
     {
         id: 'gen-10',
         category: 'general',
-        question: 'Min, untuk penggunaan kartu kredit BCA apakah ada minimum transaksinya?',
-        answer: 'Untuk penggunaan kartu kredit, bisa menggunakan kartu berlogo Visa, Mastercard, atau JCB dengan minimal pembelian Rp 150.000 ya Kak.'
+        question: 'Apakah harga yang tertera pada menu sudah termasuk pajak?',
+        answer: 'Harga makanan dan minuman yang tertera pada menu belum termasuk pajak.'
     },
     {
         id: 'gen-11',
         category: 'general',
-        question: 'Apakah harga menu sudah termasuk pajak?',
-        answer: 'Harga makanan dan minuman belum termasuk pajak ya Kak.'
+        question: 'Berapa minimum pemesanan untuk bermain di playground?',
+        answer: 'Ketentuan minimum pemesanan untuk bermain di playground mengikuti promo yang berlaku. Informasi promo terbaru dapat dilihat di Instagram resmi To Meet Cafe.'
     },
     {
         id: 'gen-12',
         category: 'general',
-        question: 'Untuk masuk ke playground minimal ordernya berapa Kak?',
-        answer: 'Untuk bermain ke playground kami ada promo minimal order Kak, bisa langsung cek Instagram resmi kami untuk info promo terbarunya ya.'
+        question: 'Apa saja syarat dan ketentuan untuk bermain di playground?',
+        answer: 'Untuk bermain di playground, berlaku ketentuan minimum pemesanan. Playground dapat digunakan oleh anak dengan tinggi badan maksimal 125 cm. Anak di bawah usia 3 tahun wajib didampingi orang tua, dan setiap pengunjung area playground wajib memakai kaos kaki.'
     },
     {
         id: 'gen-13',
         category: 'general',
-        question: 'Ada syarat dan ketentuan (S&K) untuk bermain di playground kah?',
-        answer: 'Ada minimal order untuk bisa bermain di playground Kak. Kemudian batas maksimal tinggi badan anak adalah 125 cm, untuk anak di bawah usia 3 tahun wajib didampingi orang tua, serta seluruh pengunjung area playground wajib memakai kaos kaki.'
+        question: 'Apakah To Meet Cafe menjual kaos kaki untuk digunakan di playground?',
+        answer: 'Kami menyediakan kaos kaki untuk playground di kasir dengan harga Rp5.000.'
     },
     {
         id: 'gen-14',
         category: 'general',
-        question: 'Kak, apakah di To Meet Cafe menjual kaos kaki untuk playground?',
-        answer: 'Jual ya Kak, tersedia di kasir dengan harga Rp 5.000.'
-    },
+        question: 'Apakah pembelian Paket Surprise sudah mencakup akses ke playground?',
+        answer: 'Akses playground untuk satu anak melalui Paket Surprise mengikuti ketentuan promo yang berlaku saat pemesanan.'
+    }, 
     {
         id: 'gen-15',
         category: 'general',
-        question: 'Jika pesan paket surprise, apakah sudah bisa masuk ke playground?',
-        answer: 'Bisa Kak jika ingin masuk playground untuk 1 anak, tergantung dengan promo playground yang berlaku di periode tersebut ya.'
-    },
+        question: 'Cabang To Meet Cafe mana yang memiliki kolam pancing?',
+        answer: 'Kolam pancing tersedia di To Meet Cafe cabang Pondok Mutiara.'
+    }, 
+    {
+        id: 'gen-16',
+        category: 'general',
+        question: 'Apakah penggunaan area kolam pancing (fishing) dikenakan biaya',
+        answer: 'Penggunaan area kolam pancing dikenakan biaya Rp10.000'
+    }, 
+    {
+        id: 'gen-17',
+        category: 'general',
+        question: 'Apakah To Meet Cafe  membuka peluang kemitraan atau franchise?',
+        answer: 'Saat ini, To Meet Cafe belum membuka peluang kemitraan atau franchise. Semoga program kemitraan dapat segera tersedia dalam waktu dekat.'
+    }, 
 
     // Reservasi
     {
         id: 'res-1',
         category: 'reservation',
-        question: 'Kalau ke sana perlu reservasi dulu atau bisa langsung datang Kak?',
-        answer: 'Bisa langsung datang ya Kak! Kalau langsung datang tidak ada minimum order, namun untuk reservasi ada ketentuan minimal ordernya.'
+        question: 'Apakah perlu reservasi sebelum datang ke To Meet Cafe?',
+        answer: 'Anda bisa langsung datang tanpa reservasi dan tanpa minimum pemesanan. Jika ingin melakukan reservasi, berlaku ketentuan minimum pemesanan'
     },
     {
         id: 'res-2',
         category: 'reservation',
-        question: 'Kak, mau pesan/reservasi meja untuk hari ini apakah bisa?',
-        answer: 'Untuk reservasi meja kami bantu minimal H-1 ya Kak.'
+        question: 'Apakah saya bisa melakukan reservasi meja untuk hari ini? ',
+        answer: 'Reservasi dapat dilakukan paling lambat satu hari sebelum kedatangan (H-1). Jika ingin datang hari ini, Anda bisa langsung berkunjung tanpa reservasi'
     },
     {
         id: 'res-3',
         category: 'reservation',
-        question: 'Kalau reservasi apakah ada batasan jamnya?',
-        answer: 'Baik reservasi maupun langsung datang tetap ada batas waktu makan yaitu maksimal 2 jam ya Kak. Namun jika sedang tidak ada waiting list atau antrean, customer bisa duduk lebih lama.'
+        question: 'Apakah reservasi meja memiliki batas waktu penggunaan?',
+        answer: 'Baik dengan reservasi maupun datang langsung, waktu makan dibatasi maksimal 2 jam. Jika tidak ada antrean, Anda dapat duduk lebih lama'
     },
     {
         id: 'res-4',
         category: 'reservation',
-        question: 'Kak, bisa reservasi untuk merayakan ulang tahun tidak ya?',
-        answer: 'Bisa banget Kak! Untuk informasi paket dan reservasi perayaan ulang tahun selengkapnya bisa langsung hubungi admin via WhatsApp kami ya.'
+        question: 'Apakah To Meet Cafe menerima reservasi untuk perayaan ulang tahun?',
+        answer: 'Tentu bisa! To Meet Cafe menerima reservasi untuk perayaan ulang tahun. Silakan hubungi admin kami melalui WhatsApp untuk mengetahui paket yang tersedia dan melakukan reservasi.'
     },
     {
         id: 'res-5',
         category: 'reservation',
-        question: 'Kak kalau mau ke To Meet apakah ada minimal payment/order per orang?',
-        answer: 'Minimal pembelian hanya berlaku untuk yang reservasi meja saja ya Kak. Jika langsung datang (walk-in) tidak ada minimal pembelian.'
+        question: 'Apakah ada minimum pemesanan per orang untuk berkunjung ke To Meet Cafe?',
+        answer: 'Jika datang langsung, tidak ada minimum pembelian per orang. Untuk reservasi, berlaku minimum pemesanan Rp320.000 per meja.'
     },
     {
         id: 'res-6',
         category: 'reservation',
-        question: 'Kalau dine-in langsung tanpa reservasi apakah ada minimal pembelian?',
-        answer: 'Jika tidak reservasi (langsung datang), maka tidak ada minimal pembelian ya Kak.'
+        question: 'Apakah ada minimum pembelian bagi pengunjung yang datang langsung (dine-in)',
+        answer: 'Tidak ada minimum pembelian untuk pengunjung yang datang langsung (tanpa reservasi)'
     },
     {
         id: 'res-7',
         category: 'reservation',
-        question: 'Jadi harus minimal order sebanyak 320K/meja ya Kak? Kalau di bawah 320K tidak boleh?',
-        answer: 'Iya Kak, khusus untuk reservasi ketentuan minimum purchase-nya adalah Rp 320.000 per table (dengan kapasitas 4 pax/table).'
+        question: 'Jika total pesanan kurang dari Rp320.000, apakah tetap bisa reservasi?',
+        answer: 'Minimum pemesanan untuk reservasi adalah Rp320.000 per meja dengan kapasitas maksimal 4 orang. Pesanan di bawah Rp320.000 belum memenuhi ketentuan reservasi.'
     },
     {
         id: 'res-8',
         category: 'reservation',
-        question: 'Kalau mau reservasi bisa hubungi ke nomor mana ya Kak?',
-        answer: 'Bisa langsung menghubungi nomor WhatsApp resmi kami di +62 821-4160-9328 ya Kak.'
+        question: 'Bagaimana cara menghubungi To Meet Cafe untuk reservasi?',
+        answer: 'Untuk reservasi, silakan hubungi WhatsApp resmi To Meet Cafe di +62 821-4160-9328'
     },
     {
         id: 'res-9',
         category: 'reservation',
-        question: 'Kalau mau pesan menu yang ada tulisan HBD, apakah harus reservasi dulu?',
-        answer: 'Bisa langsung pesan di tempat ya Kak, nanti tinggal beli lilin di kasir kami dan sudah free request tulisan ucapan.'
+        question: 'Apakah perlu reservasi untuk memesan menu dengan tulisan HBD?',
+        answer: 'Tidak perlu reservasi. Anda dapat memesannya langsung saat berkunjung. Kami menyediakan tulisan ucapan tanpa biaya tambahan, dan lilin dapat dibeli di kasir'
     },
 
     // Event & Ulang Tahun
     {
         id: 'event-1',
         category: 'event',
-        question: 'Apa ada birthday treats di To Meet Cafe?',
-        answer: 'Kami ada paket surprise birthday Kak atau birthday menu yang bisa dicek langsung di halaman menu digital kami.'
+        question: 'Apakah To Meet Cafe menyediakan birthday treats?',
+        answer: 'Kami menyediakan paket surprise birthday atau birthday menu, yang detailnya dapat dilihat di menu digital kami'
     },
     {
         id: 'event-2',
         category: 'event',
-        question: 'Di sini apakah bisa menunya diberi tulisan HBD di piring?',
-        answer: 'Bisa banget Kak! Tinggal melakukan pembelian lilin di kasir kami, nanti otomatis dapat free request tulisan HBD di piring.'
+        question: 'Apakah saya bisa meminta tulisan “HBD" di piring?',
+        answer: 'Dengan melakukan pembelian lilin, Anda dapat meminta tulisan “HBD” di piring tanpa biaya tambahan.'
     },
     {
         id: 'event-3',
         category: 'event',
-        question: 'Request tulisan HBD apakah bisa langsung dipesan di tempat?',
-        answer: 'Bisa langsung dipesan di tempat saat datang ya Kak.'
+        question: 'Apakah permintaan tulisan “HBD” bisa dilakukan langsung di cafe?',
+        answer: 'Anda dapat menyampaikannya saat memesan langsung di cafe.'
     },
     {
         id: 'event-4',
         category: 'event',
         question: 'Apakah boleh membawa kue ulang tahun (birthday cake) sendiri?',
-        answer: 'Bisa Kak, namun tidak boleh dimakan di dalam cafe ya. Hanya diperbolehkan untuk foto-foto atau tiup lilin saja.'
+        answer: 'Anda boleh membawa kue ulang tahun dari luar untuk keperluan foto. Namun, kue tersebut tidak dapat dikonsumsi di dalam cafe'
     },
     {
         id: 'event-5',
         category: 'event',
-        question: 'Paket surprise birthday apakah bisa dipesan langsung atau perlu reservasi dulu?',
-        answer: 'Bisa langsung dipesan di cafe saat berkunjung ya Kak.'
+        question: 'Apakah Paket Surprise Birthday bisa dipesan langsung di cafe tanpa reservasi ?',
+        answer: 'Tidak perlu reservasi. Paket Surprise Birthday bisa dipesan langsung saat Anda berkunjung ke cafe.'
     },
     {
         id: 'event-6',
         category: 'event',
-        question: 'Paket surprise ini apakah minimal pembelian 150K saja?',
-        answer: 'Betul Kak, harga paket surprise adalah 150K dan dapat dipesan dengan minimal pembelian menu lain sebesar 150K, sehingga total minimal transaksinya menjadi 300K ya Kak.'
+        question: 'Apakah total minimum pembelian untuk Paket Surprise Birthday hanya Rp150.000?',
+        answer: 'Harga Paket Surprise Birthday adalah Rp150.000. Paket ini dapat dipesan dengan tambahan pembelian menu minimal Rp150.000, sehingga total minimum transaksi menjadi Rp300.000.'
     },
     {
         id: 'event-7',
         category: 'event',
-        question: 'Apakah ada paket birthday untuk kapasitas 50 orang?',
-        answer: 'Ada Kak! Kami menyediakan paket birthday untuk private event dengan harga mulai dari Rp 3.500.000. Rinciannya bisa dicek langsung di halaman Birthday kami ya.'
+        question: 'Apakah tersedia paket ulang tahun untuk 50 orang?',
+        answer: 'Kami menyediakan paket ulang tahun untuk acara privat, dengan harga mulai dari Rp3.500.000. Informasi pilihan paket dapat dilihat di halaman Birthday kami'
     },
     {
         id: 'event-8',
         category: 'event',
-        question: 'Untuk paket surprise birthday, apakah kuenya bisa pilih atau hanya karakter beruang saja?',
-        answer: 'Untuk paket surprise birthday sudah termasuk free mousse cake beruang + lilin ya Kak. Jika menginginkan jenis cake lainnya, kami juga menyediakan pilihan menu birthday cake tersendiri (di luar paket surprise).'
+        question: 'Apakah kue dalam Paket Surprise Birthday bisa dipilih?',
+        answer: 'Paket Surprise Birthday sudah termasuk mousse cake berbentuk beruang dan lilin. Jika menginginkan kue lain, Anda dapat memilih dari menu birthday cake dengan biaya tambahan'
     },
     {
         id: 'event-9',
         category: 'event',
-        question: 'Kalau pesan paket birthday, apakah mejanya bisa dihias / didekorasi?',
-        answer: 'Bisa menambahkan Add-On dekorasi meja ya Kak. Untuk info detail dan pemesanannya bisa langsung menghubungi WhatsApp admin kami.'
+        question: 'Apakah meja untuk Paket Birthday bisa ditambahkan dekorasi',
+        answer: 'Tentu bisa. Anda dapat menambahkan dekorasi meja pada Paket Birthday. Untuk detail pilihan dan pemesanan, silahkan hubungi admin kami melalui WhatsApp'
     },
 
     // Fasilitas
     {
         id: 'fac-1',
         category: 'facilities',
-        question: 'Hi Kak, kalau dine-in ada fasilitas Wi-Fi tidak ya?',
-        answer: 'Ada Kak! Untuk password Wi-Fi-nya nanti bisa langsung ditanyakan ke kasir atau waiters kami ya.'
+        question: 'Apakah To Meet Cafe menyediakan Wi-Fi untuk pengunjung?',
+        answer: 'Ya, To Meet Cafe menyediakan Wi-Fi untuk pengunjung. Untuk mendapatkan kata sandinya, silakan menghubungi kasir atau staf kami'
     },
     {
         id: 'fac-2',
         category: 'facilities',
-        question: 'Cabang mana saja yang ada area playground-nya Kak?',
-        answer: 'Kedua cabang kami ada playground-nya ya Kak. Namun jika Kakak menginginkan area playground yang lebih luas, bisa langsung berkunjung ke cabang Pondok Mutiara.'
+        question: 'Cabang To Meet Cafe mana saja yang memiliki playground?',
+        answer: 'Playground tersedia di cabang Pondok Mutiara dan Heavenland. Jika Anda mencari area bermain yang lebih luas, kami menyarankan cabang Pondok Mutiara. Saat ini, cabang Heavenland masih tutup sementara untuk renovasi.'
     },
     {
         id: 'fac-3',
         category: 'facilities',
-        question: 'Di cabang Pondok Mutiara apakah tersedia musholla?',
-        answer: 'Untuk musholla di cabang Pondok Mutiara saat ini belum tersedia ya Kak.'
+        question: 'Apakah To Meet Cafe memiliki lift?',
+        answer: 'Mohon maaf,  Saat ini To Meet Cafe belum dilengkapi fasilitas lift.'
     },
     {
         id: 'fac-4',
         category: 'facilities',
-        question: 'Apakah ada fasilitas lift di cafe Kak?',
-        answer: 'Mohon maaf kami belum menyediakan fasilitas lift ya Kak.'
+        question: 'Ada berapa lantai di To Meet Cafe cabang Pondok Mutiara? Apakah tersedia lift?',
+        answer: 'To Meet Cafe cabang Pondok Mutiara memiliki tiga lantai. Saat ini akses antar lantai melalui tangga, karena fasilitas lift belum tersedia'
     },
     {
         id: 'fac-5',
         category: 'facilities',
-        question: 'Di To Meet cabang Pondok Mutiara ada berapa lantai Kak? Apakah ada lift-nya?',
-        answer: 'Ada 3 lantai Kak, dan untuk akses antar lantainya menggunakan tangga ya.'
+        question: 'Apakah tersedia ruang laktasi atau tempat untuk mengganti popok/pampers bayi?',
+        answer: 'Mohon maaf, saat ini kami belum menyediakan ruang khusus untuk laktasi. Jika perlu mengganti popok si kecil, tersedia area meja yang cukup luas di dekat wastafel toilet umum lantai 2 dan 3.'
     },
     {
         id: 'fac-6',
         category: 'facilities',
-        question: 'Apakah sudah tersedia ruang laktasi atau tempat mengganti pampers ya Kak?',
-        answer: 'Untuk ruangan khusus menyusui/laktasi saat ini masih belum tersedia Kak. Namun pada toilet umum kami di lantai 2 dan 3, bagian wastafelnya memiliki area meja yang cukup luas dan bisa digunakan untuk mengganti pampers si kecil.'
+        question: 'Apakah tersedia musholla di To Meet Cafe cabang Pondok Mutiara?',
+        answer: 'Mohon maaf, saat ini fasilitas musholla belum tersedia di To Meet Cafe cabang Pondok Mutiara'
     },
 
     // Merchandise
     {
         id: 'merch-1',
         category: 'merchandise',
-        question: 'Untuk fishing / kolam pancing lokasinya di mana tuh Kak?',
-        answer: 'Lokasinya ada di cabang Pondok Mutiara ya Kak.'
+        question: 'Apakah To Meet Cafe menjual squishy?',
+        answer: 'Squishy tersedia di To Meet Cafe. Harganya mulai dari Rp20.000.'
     },
     {
         id: 'merch-2',
         category: 'merchandise',
-        question: 'Untuk area fishing gratis atau bayar Kak?',
-        answer: 'Bayar ya Kak, biayanya cukup Rp 10.000 saja.'
-    },
-    {
-        id: 'merch-3',
-        category: 'merchandise',
-        question: 'Kak mau tanya, di sana ada jual squishy tidak ya?',
-        answer: 'Ada ya Kak, harga mulai dari Rp 20.000 Kak.'
-    },
-    {
-        id: 'merch-4',
-        category: 'merchandise',
-        question: 'Apakah merchandise bisa dipesan secara online?',
-        answer: 'Untuk saat ini merchandise kami hanya available untuk dibeli langsung di toko offline To Meet Cafe Pondok Mutiara ya Kak.'
+        question: 'Apakah merchandise To Meet Cafe bisa dipesan secara online?',
+        answer: 'Saat ini, merchandise hanya dapat dibeli langsung di To Meet Cafe cabang Pondok Mutiara.'
     },
 
     // Lokasi & Parkir
     {
         id: 'loc-1',
         category: 'location',
-        question: 'To Meet lokasinya ada di mana tuh Kak?',
-        answer: 'Lokasi kami ada di Sidoarjo ya Kak.'
+        question: 'To Meet Cafe berlokasi di mana?',
+        answer: 'To Meet Cafe berlokasi di Sidoarjo, Jawa Timur'
     },
     {
         id: 'loc-2',
         category: 'location',
-        question: 'Ini cabang Jakarta ada tidak ya Kak?',
-        answer: 'Mohon maaf Kak, seluruh cabang kami saat ini berlokasi di Sidoarjo ya Kak.'
+        question: 'Apakah To Meet Cafe memiliki cabang di Jakarta?',
+        answer: 'Saat ini, To Meet Cafe belum memiliki cabang di Jakarta. Seluruh cabang kami berlokasi di Sidoarjo, Jawa Timur'
     },
     {
         id: 'loc-3',
         category: 'location',
-        question: 'Apa bedanya cabang Heavenland dan Pondok Mutiara Kak?',
-        answer: 'Untuk cabang Heavenland hanya menyediakan menu minuman dan dessert, sedangkan di cabang Pondok Mutiara menunya jauh lebih lengkap karena tersedia aneka makanan berat (heavy meals) ya Kak.'
+        question: 'Apa perbedaan menu di cabang Heavenland dan Pondok Mutiara?',
+        answer: 'Cabang Heavenland menyediakan minuman dan dessert. Di cabang Pondok Mutiara, pilihan menunya lebih lengkap dan tersedia berbagai makanan berat.'
     },
     {
         id: 'loc-4',
         category: 'location',
-        question: 'Yang cabang Heavenland ada di daerah Candi itu kan Kak?',
-        answer: 'Betul Kak, lokasinya ada di daerah Candi ya. Namun untuk saat ini cabang Heavenland masih tutup sementara karena sedang renovasi.'
+        question: 'Apakah cabang Heavenland berada di daerah Candi?',
+        answer: 'Betul cabang Heavenland berada di daerah Candi. Namun saat ini, cabang tersebut masih tutup sementara karena renovasi.'
     },
     {
         id: 'loc-5',
         category: 'location',
-        question: 'Yang cabang Pondok Mutiara itu yang dekat Lippo Mall ya Kak?',
-        answer: 'Betul Kak, lokasinya berada di dekat Lippo Mall Sidoarjo.'
+        question: 'Apakah cabang Pondok Mutiara berada di dekat Lippo Mall?',
+        answer: 'Betul, cabang Pondok Mutiara berada di dekat Lippo Mall. '
     },
 ];
 
