@@ -74,7 +74,7 @@ const FAQ_DATA: FAQItem[] = [
         id: 'gen-4',
         category: 'general',
         question: 'Apakah durasi kunjungan dibatasi maksimal 2 jam?',
-        answer: 'Saat kafe ramai dan terdapat antrean, waktu makan di tempat dibatasi maksimal 2 jam. Jika tidak ada antrean, Anda dapat bersantai lebih lama.'
+        answer: 'Saat cafe ramai dan terdapat antrean, waktu makan di tempat dibatasi maksimal 2 jam. Jika tidak ada antrean, Anda dapat bersantai lebih lama.'
     },
     {
         id: 'gen-5',
@@ -91,7 +91,7 @@ const FAQ_DATA: FAQItem[] = [
     {
         id: 'gen-7',
         category: 'general',
-        question: 'Kapan saja badut maskot berkeliling di area kafe?',
+        question: 'Kapan saja badut maskot berkeliling di area cafe?',
         answer: 'Badut maskot hadir hari Selasa–Minggu dengan waktu berkeliling yang tidak tetap.'
     },
     {
@@ -263,7 +263,7 @@ const FAQ_DATA: FAQItem[] = [
     {
         id: 'event-9',
         category: 'event',
-        question: 'Apakah meja untuk Paket Birthday bisa ditambahkan dekorasi',
+        question: 'Apakah meja untuk Paket Birthday bisa ditambahkan dekorasi?',
         answer: 'Tentu bisa. Anda dapat menambahkan dekorasi meja pada Paket Birthday. Untuk detail pilihan dan pemesanan, silahkan hubungi admin kami melalui WhatsApp'
     },
 
