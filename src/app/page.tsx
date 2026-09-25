@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {
   Coffee, MapPin, Utensils, Calendar,
   ShoppingBag, Gamepad2, PartyPopper, Sparkles,
-  Heart, Star, Compass, Phone, MessageCircle, Clock, Play, ArrowRight
+  Heart, Star, Compass, Phone, MessageCircle, Clock, Play, ArrowRight, Share2
 } from 'lucide-react';
 
 import { FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
@@ -142,7 +142,7 @@ export default async function Home() {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xs sm:text-[13px] text-[#4a3427] font-semibold leading-relaxed max-w-md">
+            <p className="text-sm sm:text-[14px] text-[#4a3427] font-semibold leading-relaxed max-w-md">
               {homeBanner?.subtitle ? (
                 <FormatTextWithBreak text={homeBanner.subtitle} />
               ) : (
@@ -188,137 +188,169 @@ export default async function Home() {
         </div>
 
         {/* Adventure Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-5 items-stretch">
 
           {/* 1. Visit Cafe */}
           <a
             href="/visit-us"
-            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
               <img
                 src="/img/icon-visit-cafe.png"
                 alt="Visit Cafe"
                 className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
               />
             </div>
-            <div className="space-y-1 w-full">
-              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
-                VISIT CAFE
-              </h3>
-              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
-                Cek lokasi buat makan yang enak, main, dan seru-seruan bareng keluarga.
-              </p>
+
+            <div className="w-full flex flex-col justify-end flex-1">
+              {/* Slot Judul Terkunci Tinggi (Konsisten 1 atau 2 baris) */}
+              <div className="h-8 sm:h-9 flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+                  VISIT CAFE
+                </h3>
+              </div>
+              {/* Slot Deskripsi Terkunci Tinggi */}
+              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
+                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+                  Cek lokasi makan enak, playground, dan santai bareng keluarga.
+                </p>
+              </div>
             </div>
           </a>
 
           {/* 2. Menu */}
           <Link
             href="/menu"
-            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
               <img
                 src="/img/icon-menu.png"
                 alt="Menu"
                 className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
               />
             </div>
-            <div className="space-y-1 w-full">
-              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
-                MENU
-              </h3>
-              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
-                Makanan dan minuman yang enak dan dibuat dengan cinta
-              </p>
+
+            <div className="w-full flex flex-col justify-end flex-1">
+              <div className="h-8 sm:h-9 flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+                  MENU
+                </h3>
+              </div>
+              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
+                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+                  Makanan dan minuman lezat yang dibuat penuh cinta.
+                </p>
+              </div>
             </div>
           </Link>
 
           {/* 3. Event & Workshop */}
           <Link
             href="/event"
-            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
               <img
                 src="/img/icon-event.png"
                 alt="Event & Workshop"
                 className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
               />
             </div>
-            <div className="space-y-1 w-full">
-              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
-                EVENT & WORKSHOP
-              </h3>
-              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
-                Bikin, belajar, dan seru-seruan bareng lewat aktivitas seru di To Meet.
-              </p>
+
+            <div className="w-full flex flex-col justify-end flex-1">
+              <div className="h-8 sm:h-9 flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+                  EVENT & WORKSHOP
+                </h3>
+              </div>
+              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
+                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+                  Aktivitas seru, kreasi manis, dan workshop interaktif.
+                </p>
+              </div>
             </div>
           </Link>
 
           {/* 4. Merchandise */}
           <Link
             href="/merchandise"
-            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
               <img
                 src="/img/icon-merchandise.png"
                 alt="Merchandise"
                 className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
               />
             </div>
-            <div className="space-y-1 w-full">
-              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
-                MERCHANDISE
-              </h3>
-              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
-                Bawa pulang koleksi favoritmu dari To Meet.
-              </p>
+
+            <div className="w-full flex flex-col justify-end flex-1">
+              <div className="h-8 sm:h-9 flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+                  MERCHANDISE
+                </h3>
+              </div>
+              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
+                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+                  Bawa pulang suvenir dan boneka beruang lucu To Meet.
+                </p>
+              </div>
             </div>
           </Link>
 
           {/* 5. Roblox */}
           <Link
             href="/roblox"
-            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
               <img
                 src="/img/icon-roblox.png"
                 alt="Roblox"
                 className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
               />
             </div>
-            <div className="space-y-1 w-full">
-              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
-                ROBLOX
-              </h3>
-              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
-                Yuk, masuk ke dunia To Meet di Roblox dan jelajahi map-nya!
-              </p>
+
+            <div className="w-full flex flex-col justify-end flex-1">
+              <div className="h-8 sm:h-9 flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+                  ROBLOX
+                </h3>
+              </div>
+              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
+                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+                  Jelajahi dunia cafe virtual 3D dan selesaikan misinya!
+                </p>
+              </div>
             </div>
           </Link>
 
           {/* 6. Birthday / Private Event */}
           <Link
             href="/birthday"
-            className="bg-white p-4 sm:p-5 md:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between space-y-3 group cursor-pointer"
+            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center shrink-0">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
               <img
                 src="/img/icon-birthday.png"
                 alt="Birthday / Private Event"
                 className="w-full h-full object-contain group-hover:scale-105 transition duration-200"
               />
             </div>
-            <div className="space-y-1 w-full">
-              <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
-                BIRTHDAY / PRIVATE EVENT
-              </h3>
-              <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-tight max-w-[130px] mx-auto">
-                Ulang tahun jadi makin seru kalau dirayain bareng To Meet!
-              </p>
+
+            <div className="w-full flex flex-col justify-end flex-1">
+              <div className="h-8 sm:h-9 flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+                  BIRTHDAY & EVENT
+                </h3>
+              </div>
+              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
+                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+                  Rayakan momen spesial penuh kebahagiaan di To Meet!
+                </p>
+              </div>
             </div>
           </Link>
 
@@ -331,30 +363,34 @@ export default async function Home() {
       <section id="highlights" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white p-5 sm:p-8 rounded-3xl border border-[#e6ccb2]/70 shadow-2xs space-y-5">
 
+          {/* Header Section */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#e6ccb2]/50 pb-3 gap-2">
             <div className="space-y-0.5">
-              <h2 className="text-lg sm:text-2xl font-black text-[#3d2314] flex items-center gap-1.5">
+              <h2 className="text-lg sm:text-2xl font-black text-[#3d2314] flex items-center gap-1.5 uppercase tracking-wide">
                 <span>TODAY&apos;S HIGHLIGHTS</span>
-                <Heart className="w-4 h-4 text-[#e85a4f]" />
+                <Heart className="w-4 h-4 text-[#e85a4f] fill-current" />
               </h2>
             </div>
 
             <Link
               href="/menu"
-              className="px-3.5 py-1.5 bg-[#f4ece1] hover:bg-[#8c5a3c] hover:text-white text-[#8c5a3c] font-bold rounded-full text-xs transition duration-200 flex items-center gap-1.5 self-start sm:self-auto"
+              className="px-3.5 py-1.5 bg-[#f4ece1] hover:bg-[#8c5a3c] hover:text-white text-[#8c5a3c] font-black rounded-full text-xs transition duration-200 flex items-center gap-1.5 self-start sm:self-auto uppercase tracking-wider"
             >
               <span>SEE FULL MENU</span>
               <Sparkles className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Product Cards Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 items-stretch">
             {highlightMenus.length > 0 ? (
               highlightMenus.map((menu: Menu) => (
-                <div key={menu.id} className="bg-[#FAF0E6]/60 rounded-2xl p-3.5 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-3 relative group hover:shadow-md transition duration-200">
-
+                <div
+                  key={menu.id}
+                  className="bg-[#FAF0E6]/60 rounded-3xl p-3 sm:p-3.5 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-2.5 relative group hover:shadow-md hover:border-[#8c5a3c] transition duration-200 cursor-pointer"
+                >
                   {/* Badges */}
-                  <div className="absolute top-5 left-5 flex flex-col gap-1 z-10">
+                  <div className="absolute top-4 left-4 flex flex-col gap-1 z-10 pointer-events-none">
                     {menu.is_bestseller && (
                       <span className="px-2.5 py-0.5 bg-[#d4a373] text-white text-[8px] font-black uppercase rounded-full shadow-2xs tracking-wider">
                         BEST SELLER
@@ -367,8 +403,8 @@ export default async function Home() {
                     )}
                   </div>
 
-                  {/* Gambar Produk */}
-                  <div className="w-full h-40 bg-white rounded-xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center relative">
+                  {/* Gambar Produk: Persegi Rasio 1:1 */}
+                  <div className="w-full aspect-square bg-white rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center relative">
                     {menu.image ? (
                       <img
                         src={`${API_BASE_URL}/storage/${menu.image}`}
@@ -381,9 +417,11 @@ export default async function Home() {
                   </div>
 
                   {/* Detail Info */}
-                  <div className="space-y-0.5">
-                    <h3 className="font-black text-[#3d2314] text-xs sm:text-sm truncate">{menu.name}</h3>
-                    <div className="font-black text-[#8c5a3c] text-xs pt-0.5">
+                  <div className="space-y-0.5 pt-0.5">
+                    <h3 className="font-black text-[#3d2314] text-xs sm:text-sm truncate">
+                      {menu.name}
+                    </h3>
+                    <div className="font-black text-[#8c5a3c] text-xs sm:text-[13px]">
                       Rp {new Intl.NumberFormat('id-ID').format(menu.price)}
                     </div>
                   </div>
@@ -391,8 +429,8 @@ export default async function Home() {
                 </div>
               ))
             ) : (
-              <div className="col-span-full text-center py-8 text-[#6c584c] font-semibold text-xs">
-                Belum ada data menu
+              <div className="col-span-full text-center py-10 text-[#6c584c] font-semibold text-xs bg-[#FAF0E6]/40 rounded-2xl border border-[#e6ccb2]/50">
+                Belum ada menu sorotan yang aktif
               </div>
             )}
           </div>
@@ -726,38 +764,63 @@ export default async function Home() {
             <div className="bg-white p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs flex flex-col justify-between space-y-4 relative overflow-hidden">
 
               {/* Follow Us */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#e85a4f]" />
-                  <span className="text-xs font-black text-[#3d2314]">Follow us!</span>
+              <div className="space-y-3">
+                {/* Header Title */}
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-md bg-[#FAF0E6] flex items-center justify-center text-[#e85a4f]">
+                    <Share2 className="w-3 h-3" />
+                  </div>
+                  <span className="text-xs font-black text-[#3d2314] uppercase tracking-wider">
+                    Follow Our Journey!
+                  </span>
                 </div>
-                <div className="flex items-center gap-2 pt-0.5">
+
+                <p className="text-[11px] text-[#6c584c] font-medium leading-relaxed whitespace-nowrap">
+                  Ikuti update menu baru, keseruan workshop, dan promo spesial kami
+                </p>
+
+                {/* Social Media Links (Pill / Capsule Style) */}
+                <div className="flex flex-wrap gap-2 pt-0.5">
+                  {/* Instagram */}
                   <a
                     href="https://www.instagram.com/tomeet.cafe?stkn=NnBva3lubWk5OHFk"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-xl bg-[#3d2314] text-white flex items-center justify-center hover:bg-[#8c5a3c] transition duration-200 shadow-2xs"
-                    title="Instagram"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#8c5a3c] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95"
+                    title="Instagram @tomeet.cafe"
                   >
-                    <FaInstagram className="w-4 h-4" />
+                    <div className="w-5 h-5 rounded-full bg-white text-[#e85a4f] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition">
+                      <FaInstagram className="w-3 h-3" />
+                    </div>
+                    <span className="text-[11px] font-black tracking-tight">Instagram</span>
                   </a>
+
+                  {/* TikTok */}
                   <a
                     href="https://www.tiktok.com/@tomeet.cafe?_r=1&_t=ZS-99dEumOyfiS"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-xl bg-[#3d2314] text-white flex items-center justify-center hover:bg-[#8c5a3c] transition duration-200 shadow-2xs"
-                    title="TikTok"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#3d2314] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95"
+                    title="TikTok @tomeet.cafe"
                   >
-                    <FaTiktok className="w-4 h-4" />
+                    <div className="w-5 h-5 rounded-full bg-white text-[#3d2314] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition">
+                      <FaTiktok className="w-2.5 h-2.5" />
+                    </div>
+                    <span className="text-[11px] font-black tracking-tight">TikTok</span>
                   </a>
+
+                  {/* YouTube */}
                   <a
                     href="https://youtube.com/@tomeetcafe"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-xl bg-[#3d2314] text-white flex items-center justify-center hover:bg-[#8c5a3c] transition duration-200 shadow-2xs"
-                    title="YouTube"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#e85a4f] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95"
+                    title="YouTube @tomeetcafe"
                   >
-                    <FaYoutube className="w-4 h-4" />
+                    <div className="w-5 h-5 rounded-full bg-white text-[#e85a4f] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition">
+                      <FaYoutube className="w-3 h-3" />
+                    </div>
+                    <span className="text-[11px] font-black tracking-tight">YouTube</span>
                   </a>
                 </div>
               </div>
