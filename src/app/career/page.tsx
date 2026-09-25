@@ -376,7 +376,7 @@ export default function CareerPage() {
                             )}
                         </h1>
 
-                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-[260px] sm:max-w-md">
+                        <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-[260px] sm:max-w-md">
                             {renderFormattedText(
                                 banner?.subtitle,
                                 'Mari bertumbuh dan menciptakan momen kebahagiaan manis bersama di To Meet Cafe.'

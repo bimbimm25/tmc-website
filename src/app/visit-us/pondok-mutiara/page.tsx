@@ -193,7 +193,7 @@ export default function PondokMutiaraPage() {
                             )}
                         </h1>
 
-                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                        <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                             {renderFormattedText(
                                 banner?.subtitle,
                                 'Suasana indoor yang luas, sejuk, dan nyaman dengan playground bertingkat, menu makanan berat lezat, serta ruang privat untuk keluarga Anda.'

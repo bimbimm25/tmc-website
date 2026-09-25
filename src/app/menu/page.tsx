@@ -190,7 +190,7 @@ export default function DigitalMenuPage() {
                             {menuBanner?.title || 'Our Digital Menu'}
                         </h1>
 
-                        <p className="text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                        <p className="text-sm sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                             {menuBanner?.subtitle || 'Explore our wide variety of bear-themed sweet treats, delicious meals, and refreshing drinks crafted with love for you and your family!'}
                         </p>
 

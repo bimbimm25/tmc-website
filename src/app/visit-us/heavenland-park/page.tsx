@@ -112,7 +112,7 @@ export default function HeavenlandParkPage() {
                         </div>
 
                         {/* Title Proporsional */}
-                        <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
+                        <h1 className="text-2xl sm:text-[15px] lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
                             {renderFormattedText(
                                 banner?.title,
                                 <>

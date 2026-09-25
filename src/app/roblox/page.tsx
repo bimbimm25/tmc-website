@@ -228,7 +228,7 @@ export default function RobloxPage() {
                                 </h1>
 
                                 {/* Subjudul Rapi dengan Warna Teks Asli */}
-                                <p className="text-xs sm:text-[13px] text-[#4a3427] font-semibold leading-relaxed">
+                                <p className="text-xs sm:text-[15px] text-[#4a3427] font-semibold leading-relaxed">
                                     {renderFormattedText(
                                         banner?.subtitle,
                                         'Selesaikan misi karier dan tantangan Obby di game Roblox, raih badge penanda prestasi, dan tukarkan reward gratis di To Meet Cafe!'

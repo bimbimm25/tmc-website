@@ -248,7 +248,7 @@ export default function EventPage() {
                         </h1>
 
                         {/* Subtitle */}
-                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                        <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                             {eventBanner?.subtitle ? (
                                 <FormatTextWithBreak text={eventBanner.subtitle} />
                             ) : (

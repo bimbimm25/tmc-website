@@ -123,7 +123,7 @@ export default function VisitUsPage() {
                             <p className="font-bold text-[#3d2314]">
                                 Dua tempat nyaman, satu pengalaman manis penuh kehangatan.
                             </p>
-                            <p className="text-[11px] sm:text-xs text-[#6c584c]">
+                            <p className="text-[15px] sm:text-xs text-[#6c584c]">
                                 {renderFormattedText(
                                     banner?.subtitle,
                                     'Datang untuk menikmati hidangan lezat, tinggal untuk mengabadikan momen berharga bersama keluarga.'

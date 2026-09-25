@@ -449,7 +449,7 @@ export default function FAQPage() {
                         </h1>
 
                         {/* Subtitle */}
-                        <div className="space-y-1 text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                        <div className="space-y-1 text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                             <p className="font-bold text-[#3d2314]">
                                 Kami siap membantu Anda!
                             </p>

@@ -157,7 +157,7 @@ export default async function AboutPage() {
                         </h1>
 
                         {/* Subtitle Ringkas */}
-                        <p className="text-[11px] sm:text-xs lg:text-[13px] text-[#4a3427] font-semibold leading-relaxed max-w-md">
+                        <p className="text-[11px] sm:text-xs lg:text-[15px] text-[#4a3427] font-semibold leading-relaxed max-w-md">
                             {renderFormattedText(
                                 aboutBanner?.subtitle,
                                 'To Meet is a cozy bear-themed cafe & playground created for everyone to enjoy sweet treats, good times, and heartwarming moments together.'

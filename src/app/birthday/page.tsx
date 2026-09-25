@@ -337,7 +337,7 @@ export default function BirthdayPage() {
                         </h1>
 
                         {/* Subjudul: Bersih tanpa box, dibatasi max-w-[260px] di mobile agar pas di area putih */}
-                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-[260px] sm:max-w-md">
+                        <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-[260px] sm:max-w-md">
                             {renderFormattedText(
                                 banner?.subtitle,
                                 'Rayakan hari spesial si kecil di dunia beruang yang hangat dan ceria! Kami siapkan seluruh detail dekorasi dan makanan, Anda cukup menikmati momen bahagianya.'

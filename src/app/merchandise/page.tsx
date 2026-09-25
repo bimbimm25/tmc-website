@@ -208,7 +208,7 @@ export default function MerchandisePage() {
                             </div>
 
                             {/* Subtitle */}
-                            <p className="text-xs lg:text-sm text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                            <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                                 {renderFormattedText(
                                     merchBanner?.subtitle,
                                     'Bawa pulang koleksi boneka dan suvenir lucu khas To Meet Cafe untuk teman atau koleksi pribadimu.'
@@ -216,34 +216,34 @@ export default function MerchandisePage() {
                             </p>
 
                             {/* 3 Values Mini Cards */}
-                            <div className="grid grid-cols-3 gap-2 pt-0.5 max-w-md">
-                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-0.5 shadow-2xs">
-                                    <div className="w-6 h-6 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs">
-                                        <BearFaceIcon className="w-3 h-3" />
+                            <div className="grid grid-cols-3 gap-3 pt-1 max-w-md">
+                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-3 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1.5 shadow-2xs">
+                                    <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs">
+                                        <BearFaceIcon className="w-4 h-4" />
                                     </div>
                                     <div className="leading-none">
-                                        <span className="text-[9px] font-black text-[#3d2314] block tracking-tight">100% Original</span>
-                                        <span className="text-[7px] text-[#6c584c] font-bold block mt-0.5">Official Item</span>
+                                        <span className="text-[11px] font-black text-[#3d2314] block tracking-tight">100% Original</span>
+                                        <span className="text-[9px] text-[#6c584c] font-bold block mt-0.5">Official Item</span>
                                     </div>
                                 </div>
 
-                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-0.5 shadow-2xs">
-                                    <div className="w-6 h-6 rounded-xl bg-white text-amber-500 flex items-center justify-center shadow-2xs">
-                                        <Sparkles className="w-3 h-3" />
+                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-3 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1.5 shadow-2xs">
+                                    <div className="w-8 h-8 rounded-xl bg-white text-amber-500 flex items-center justify-center shadow-2xs">
+                                        <Sparkles className="w-4 h-4" />
                                     </div>
                                     <div className="leading-none">
-                                        <span className="text-[9px] font-black text-[#3d2314] block tracking-tight">Cute Design</span>
-                                        <span className="text-[7px] text-[#6c584c] font-bold block mt-0.5">Aesthetic</span>
+                                        <span className="text-[11px] font-black text-[#3d2314] block tracking-tight">Cute Design</span>
+                                        <span className="text-[9px] text-[#6c584c] font-bold block mt-0.5">Aesthetic</span>
                                     </div>
                                 </div>
 
-                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-0.5 shadow-2xs">
-                                    <div className="w-6 h-6 rounded-xl bg-white text-[#e85a4f] flex items-center justify-center shadow-2xs">
-                                        <Gift className="w-3 h-3" />
+                                <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-3 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1.5 shadow-2xs">
+                                    <div className="w-8 h-8 rounded-xl bg-white text-[#e85a4f] flex items-center justify-center shadow-2xs">
+                                        <Gift className="w-4 h-4" />
                                     </div>
                                     <div className="leading-none">
-                                        <span className="text-[9px] font-black text-[#3d2314] block tracking-tight">Great Gift</span>
-                                        <span className="text-[7px] text-[#6c584c] font-bold block mt-0.5">For Loved Ones</span>
+                                        <span className="text-[11px] font-black text-[#3d2314] block tracking-tight">Great Gift</span>
+                                        <span className="text-[9px] text-[#6c584c] font-bold block mt-0.5">For Loved Ones</span>
                                     </div>
                                 </div>
                             </div>

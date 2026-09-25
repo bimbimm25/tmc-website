@@ -87,7 +87,7 @@ export default function Navbar() {
                                     className="w-full h-full object-contain"
                                 />
                             </div>
-                            <span className={`font-black text-xs sm:text-[13px] tracking-[0.2em] uppercase transition-colors duration-200 ${isScrolled
+                            <span className={`font-black text-xs sm:text-[13.5px] tracking-[0.18em] uppercase transition-colors duration-200 ${isScrolled
                                     ? 'text-[#3d2314] group-hover:text-[#e85a4f]'
                                     : 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] group-hover:text-[#e85a4f]'
                                 }`}>
@@ -95,8 +95,8 @@ export default function Navbar() {
                             </span>
                         </Link>
 
-                        {/* Desktop Navigation Links */}
-                        <nav ref={dropdownRef} className="hidden xl:flex items-center gap-5 lg:gap-6 text-[10.5px] font-black tracking-wider uppercase">
+                        {/* Desktop Navigation Links (Ukuran pas: 13px - 14px) */}
+                        <nav ref={dropdownRef} className="hidden xl:flex items-center gap-4.5 xl:gap-5 text-[13px] xl:text-[14px] font-black tracking-wider uppercase">
 
                             {/* Home */}
                             <Link
@@ -149,7 +149,7 @@ export default function Navbar() {
                                     <div className="absolute top-full left-0 w-52 bg-[#fffcf7] border border-[#e6ccb2] rounded-2xl shadow-xl p-2 space-y-1 animate-in fade-in slide-in-from-top-2 duration-150">
                                         <Link
                                             href="/menu"
-                                            className={`flex items-center gap-2.5 p-2.5 rounded-xl transition ${isActive('/menu')
+                                            className={`flex items-center gap-2.5 p-2 rounded-xl transition ${isActive('/menu')
                                                     ? 'bg-[#fdf3f1] text-[#e85a4f]'
                                                     : 'text-[#3d2314] hover:bg-[#fdf3f1] hover:text-[#e85a4f]'
                                                 }`}
@@ -158,14 +158,14 @@ export default function Navbar() {
                                                 <Utensils className="w-3.5 h-3.5" />
                                             </div>
                                             <div>
-                                                <div className="font-black text-[11px] leading-tight">CAFE MENU</div>
-                                                <div className="text-[9px] text-[#6c584c] lowercase font-semibold">makanan & minuman</div>
+                                                <div className="font-black text-xs leading-tight">CAFE MENU</div>
+                                                <div className="text-[10px] text-[#6c584c] lowercase font-semibold">makanan & minuman</div>
                                             </div>
                                         </Link>
 
                                         <Link
                                             href="/merchandise"
-                                            className={`flex items-center gap-2.5 p-2.5 rounded-xl transition ${isActive('/merchandise')
+                                            className={`flex items-center gap-2.5 p-2 rounded-xl transition ${isActive('/merchandise')
                                                     ? 'bg-[#fdf3f1] text-[#e85a4f]'
                                                     : 'text-[#3d2314] hover:bg-[#fdf3f1] hover:text-[#e85a4f]'
                                                 }`}
@@ -174,8 +174,8 @@ export default function Navbar() {
                                                 <ShoppingBag className="w-3.5 h-3.5" />
                                             </div>
                                             <div>
-                                                <div className="font-black text-[11px] leading-tight">MERCHANDISE</div>
-                                                <div className="text-[9px] text-[#6c584c] lowercase font-semibold">boneka, topi & aksesoris</div>
+                                                <div className="font-black text-xs leading-tight">MERCHANDISE</div>
+                                                <div className="text-[10px] text-[#6c584c] lowercase font-semibold">boneka, topi & aksesoris</div>
                                             </div>
                                         </Link>
                                     </div>
@@ -207,7 +207,7 @@ export default function Navbar() {
                                     <div className="absolute top-full left-0 w-60 bg-[#fffcf7] border border-[#e6ccb2] rounded-2xl shadow-xl p-2 space-y-1 animate-in fade-in slide-in-from-top-2 duration-150">
                                         <Link
                                             href="/event"
-                                            className={`flex items-center gap-2.5 p-2.5 rounded-xl transition ${isActive('/event')
+                                            className={`flex items-center gap-2.5 p-2 rounded-xl transition ${isActive('/event')
                                                     ? 'bg-[#fdf3f1] text-[#e85a4f]'
                                                     : 'text-[#3d2314] hover:bg-[#fdf3f1] hover:text-[#e85a4f]'
                                                 }`}
@@ -216,14 +216,14 @@ export default function Navbar() {
                                                 <Calendar className="w-3.5 h-3.5" />
                                             </div>
                                             <div>
-                                                <div className="font-black text-[11px] leading-tight">EVENT & WORKSHOP</div>
-                                                <div className="text-[9px] text-[#6c584c] lowercase font-semibold">kegiatan seru cafe</div>
+                                                <div className="font-black text-xs leading-tight">EVENT & WORKSHOP</div>
+                                                <div className="text-[10px] text-[#6c584c] lowercase font-semibold">kegiatan seru cafe</div>
                                             </div>
                                         </Link>
 
                                         <Link
                                             href="/roblox"
-                                            className={`flex items-center gap-2.5 p-2.5 rounded-xl transition ${isActive('/roblox')
+                                            className={`flex items-center gap-2.5 p-2 rounded-xl transition ${isActive('/roblox')
                                                     ? 'bg-[#fdf3f1] text-[#e85a4f]'
                                                     : 'text-[#3d2314] hover:bg-[#fdf3f1] hover:text-[#e85a4f]'
                                                 }`}
@@ -232,14 +232,14 @@ export default function Navbar() {
                                                 <Gamepad2 className="w-3.5 h-3.5" />
                                             </div>
                                             <div>
-                                                <div className="font-black text-[11px] leading-tight">ROBLOX WORLD</div>
-                                                <div className="text-[9px] text-[#6c584c] lowercase font-semibold">game & badge rewards</div>
+                                                <div className="font-black text-xs leading-tight">ROBLOX WORLD</div>
+                                                <div className="text-[10px] text-[#6c584c] lowercase font-semibold">game & badge rewards</div>
                                             </div>
                                         </Link>
 
                                         <Link
                                             href="/birthday"
-                                            className={`flex items-center gap-2.5 p-2.5 rounded-xl transition ${isActive('/birthday')
+                                            className={`flex items-center gap-2.5 p-2 rounded-xl transition ${isActive('/birthday')
                                                     ? 'bg-[#fdf3f1] text-[#e85a4f]'
                                                     : 'text-[#3d2314] hover:bg-[#fdf3f1] hover:text-[#e85a4f]'
                                                 }`}
@@ -248,8 +248,8 @@ export default function Navbar() {
                                                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                                             </div>
                                             <div>
-                                                <div className="font-black text-[11px] leading-tight">BIRTHDAY & PRIVATE EVENT</div>
-                                                <div className="text-[9px] text-[#6c584c] lowercase font-semibold">sewa tempat & ultah</div>
+                                                <div className="font-black text-xs leading-tight">BIRTHDAY & PRIVATE EVENT</div>
+                                                <div className="text-[10px] text-[#6c584c] lowercase font-semibold">sewa tempat & ultah</div>
                                             </div>
                                         </Link>
                                     </div>
@@ -316,7 +316,7 @@ export default function Navbar() {
                                 href="https://wa.me/6282141609328"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hidden sm:inline-flex px-5 py-2 text-[11px] font-black tracking-wider uppercase rounded-full shadow-md bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white transition-all duration-300 items-center gap-2 shrink-0 cursor-pointer shadow-rose-500/20"
+                                className="hidden sm:inline-flex px-4.5 py-2 text-xs font-black tracking-wider uppercase rounded-full shadow-md bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white transition-all duration-300 items-center gap-2 shrink-0 cursor-pointer shadow-rose-500/20"
                             >
                                 <Phone className="w-3.5 h-3.5 fill-current" />
                                 <span>WHATSAPP</span>
@@ -496,7 +496,7 @@ export default function Navbar() {
                             )}
                         </div>
 
-                        {/* Visit Us Mobile (Langsung ke cabang Pondok Mutiara) */}
+                        {/* Visit Us Mobile */}
                         <Link
                             href="/visit-us/pondok-mutiara"
                             onClick={() => setIsMobileMenuOpen(false)}

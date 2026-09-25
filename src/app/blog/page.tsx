@@ -185,7 +185,7 @@ export default function BlogPage() {
                             )}
                         </h1>
 
-                        <p className="text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                        <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                             {renderFormattedText(
                                 banner?.subtitle,
                                 'Cerita seru, resep lezat, info acara, dan update terbaru seputar dunia To Meet Cafe.'
