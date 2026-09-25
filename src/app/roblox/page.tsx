@@ -276,6 +276,7 @@ export default function RobloxPage() {
                                 <div className="relative w-full aspect-video rounded-xl sm:rounded-2xl overflow-hidden shadow-xs border border-[#e6ccb2]/60 bg-black">
                                     <iframe
                                         src="https://www.youtube.com/embed/eZsAmpeJYPM?si=_y6r7OPCty9zuWj-"
+                                        loading="lazy"
                                         title="To Meet Roblox Gameplay Trailer"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowFullScreen

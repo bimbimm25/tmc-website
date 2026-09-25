@@ -450,6 +450,7 @@ export default async function Home() {
               <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-lg border-2 border-[#e6ccb2]/70 bg-black">
                 <iframe
                   src="https://www.youtube.com/embed/EpK4HAGh1zc"
+                  loading="lazy"
                   title="Cafe dengan playground anak ter estetik di sidoarjo"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
