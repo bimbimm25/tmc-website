@@ -7,7 +7,7 @@ import {
     Sparkles, Heart, Smile, Users, Award, ShieldCheck,
     Coffee, GraduationCap, PartyPopper, CheckCircle2,
     Send, X, Quote, ChevronRight, AlertCircle, Compass,
-    FileText, Gift, Check, Building
+    FileText, Gift, Check, Building, Mail
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
@@ -30,7 +30,6 @@ function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     );
 }
 
-// Helper: Memformat Label Lokasi Outlet Sesuai Nilai Backend
 function formatLocationName(loc?: any): { label: string; badgeColor: string } {
     if (!loc) {
         return {
@@ -89,37 +88,36 @@ function formatLocationName(loc?: any): { label: string; badgeColor: string } {
     };
 }
 
-// Helper: Parser Markdown & Baris Teks
-function FormatRichContent({ text }: { text?: string | null }) {
+function FormatRichContent({ text, maxItems }: { text?: string | null; maxItems?: number }) {
     if (!text || text.trim() === '') {
         return <p className="text-xs text-[#6c584c] italic">Informasi belum ditambahkan.</p>;
     }
 
     const cleanText = text.replace(/<br\s*\/?>/gi, '\n');
-    const lines = cleanText.split('\n');
+    const allLines = cleanText.split('\n').filter(line => line.trim() !== '');
+
+    const lines = maxItems ? allLines.slice(0, maxItems) : allLines;
+    const hasMore = maxItems ? allLines.length > maxItems : false;
 
     return (
         <div className="space-y-1.5 text-left">
             {lines.map((line, idx) => {
                 const trimmed = line.trim();
-                if (!trimmed) return <div key={idx} className="h-1" />;
-
-                if (trimmed.startsWith('-') || trimmed.startsWith('*') || trimmed.startsWith('•')) {
-                    const content = trimmed.replace(/^[-*•]\s*/, '');
-                    return (
-                        <div key={idx} className="flex items-start gap-2 text-xs leading-relaxed text-[#5a4232]">
-                            <span className="text-[#8c5a3c] font-black leading-none mt-1 shrink-0">•</span>
-                            <span className="font-semibold">{content}</span>
-                        </div>
-                    );
-                }
+                const content = trimmed.replace(/^[-*•\d+.]\s*/, '');
 
                 return (
-                    <p key={idx} className="text-xs leading-relaxed text-[#5a4232] font-semibold">
-                        {trimmed}
-                    </p>
+                    <div key={idx} className="flex items-start gap-2 text-xs leading-relaxed text-[#5a4232]">
+                        <span className="text-[#8c5a3c] font-black leading-none mt-1 shrink-0">•</span>
+                        <span className="font-semibold">{content}</span>
+                    </div>
                 );
             })}
+
+            {hasMore && (
+                <p className="text-[10px] font-bold text-[#8c5a3c] italic pt-0.5">
+                    + dan lainnya (lihat detail)
+                </p>
+            )}
         </div>
     );
 }
@@ -181,7 +179,6 @@ export default function CareerPage() {
 
     const openPositionsRef = useRef<HTMLDivElement>(null);
 
-    // Kunci scroll body dan html ketika modal pop-up aktif
     useEffect(() => {
         const isModalActive = Boolean(isApplyModalOpen || detailJob);
 
@@ -244,7 +241,6 @@ export default function CareerPage() {
         fetchCareerData();
     }, []);
 
-    // Filter Pekerjaan Berdasarkan Tab Lokasi Outlet
     const filteredCareers = useMemo(() => {
         return careers.filter((job) => {
             if (!job.is_active) return false;
@@ -464,12 +460,12 @@ export default function CareerPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 3. WHY JOIN US & OPEN POSITIONS (GRID 2-2)        */}
+            {/* 3. WHY JOIN US & OPEN POSITIONS (GRID 2-2 GABUNG) */}
             {/* ================================================= */}
             <section ref={openPositionsRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-                    {/* Kiri: Alasan Bergabung (Sticky Sidebar) */}
+                    {/* Kiri: Alasan Bergabung (Sticky Sidebar Ringkas) */}
                     <div className="lg:col-span-4 bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4 lg:sticky lg:top-24">
                         <div className="space-y-1">
                             <div className="inline-flex items-center gap-1.5 text-[10px] font-black text-[#8c5a3c] uppercase">
@@ -614,9 +610,9 @@ export default function CareerPage() {
                             </div>
                         )}
 
-                        {/* DAFTAR PEKERJAAN: GRID 2-2 KE BAWAH */}
+                        {/* DAFTAR PEKERJAAN: GRID 2-2 KE BAWAH DENGAN LIST BULLETS */}
                         {!isLoading && filteredCareers.length > 0 && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {filteredCareers.map((job) => {
                                     const rawLocation = (job as any).location_name || (job as any).location || (job as any).branch;
                                     const locInfo = formatLocationName(rawLocation);
@@ -624,9 +620,9 @@ export default function CareerPage() {
                                     return (
                                         <div
                                             key={job.id}
-                                            className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs hover:border-[#8c5a3c] hover:shadow-md transition duration-200 flex flex-col justify-between h-full space-y-4 group"
+                                            className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs hover:border-[#8c5a3c] hover:shadow-md transition duration-200 flex flex-col justify-between h-full space-y-3.5 group"
                                         >
-                                            {/* Bagian Atas: Badge Departemen, Tipe, Judul & Metadata */}
+                                            {/* Bagian Atas: Badge, Judul, Metadata, & Tanggung Jawab (Bullet List) */}
                                             <div className="space-y-2.5">
                                                 {/* Header Badges */}
                                                 <div className="flex items-center justify-between gap-2">
@@ -649,7 +645,7 @@ export default function CareerPage() {
                                                 <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                                                     <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-lg border text-[9.5px] font-black uppercase tracking-wide ${locInfo.badgeColor}`}>
                                                         <MapPin className="w-3 h-3 shrink-0" />
-                                                        <span className="truncate max-w-[140px]">{locInfo.label}</span>
+                                                        <span className="truncate max-w-[130px]">{locInfo.label}</span>
                                                     </div>
 
                                                     {job.salary_range && (
@@ -660,11 +656,16 @@ export default function CareerPage() {
                                                     )}
                                                 </div>
 
-                                                {/* Preview Deskripsi Singkat (Max 3 Baris) */}
+                                                {/* Preview Deskripsi dalam Bentuk List Bullet Points (Maksimal 3 Butir) */}
                                                 {job.description && (
-                                                    <p className="text-[11px] text-[#6c584c] font-medium leading-relaxed line-clamp-3 pt-1 border-t border-[#e6ccb2]/40">
-                                                        {job.description.replace(/<br\s*\/?>/gi, ' ').replace(/[-*•]/g, '').trim()}
-                                                    </p>
+                                                    <div className="pt-2 border-t border-[#e6ccb2]/40">
+                                                        <span className="block text-[9.5px] font-black text-[#8c5a3c] uppercase tracking-wider mb-1.5">
+                                                            Tanggung Jawab Utama:
+                                                        </span>
+                                                        <div className="bg-[#FAF0E6]/30 p-2.5 rounded-2xl border border-[#e6ccb2]/40">
+                                                            <FormatRichContent text={job.description} maxItems={3} />
+                                                        </div>
+                                                    </div>
                                                 )}
                                             </div>
 
@@ -816,7 +817,6 @@ export default function CareerPage() {
                             <X className="w-4 h-4" />
                         </button>
 
-                        {/* Header Modal */}
                         <div className="space-y-2 border-b border-[#e6ccb2]/60 pb-4">
                             <div className="flex items-center gap-2">
                                 <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] font-black uppercase rounded-md">
@@ -852,7 +852,6 @@ export default function CareerPage() {
                             </div>
                         </div>
 
-                        {/* Deskripsi Pekerjaan */}
                         {detailJob.description && detailJob.description.trim() !== '' && (
                             <div className="space-y-2">
                                 <h3 className="text-xs font-black text-[#3d2314] uppercase tracking-wider flex items-center gap-1.5">
@@ -865,7 +864,6 @@ export default function CareerPage() {
                             </div>
                         )}
 
-                        {/* Persyaratan (Requirements) */}
                         {detailJob.requirements && detailJob.requirements.trim() !== '' && (
                             <div className="space-y-2">
                                 <h3 className="text-xs font-black text-[#3d2314] uppercase tracking-wider flex items-center gap-1.5">
@@ -878,7 +876,6 @@ export default function CareerPage() {
                             </div>
                         )}
 
-                        {/* Benefit Pekerjaan */}
                         {detailJob.benefits && detailJob.benefits.trim() !== '' && (
                             <div className="space-y-2">
                                 <h3 className="text-xs font-black text-[#3d2314] uppercase tracking-wider flex items-center gap-1.5">
@@ -891,7 +888,6 @@ export default function CareerPage() {
                             </div>
                         )}
 
-                        {/* Footer Modal */}
                         <div className="pt-3 border-t border-[#e6ccb2]/50 flex items-center justify-end gap-2.5">
                             <button
                                 onClick={() => setDetailJob(null)}
@@ -971,7 +967,7 @@ export default function CareerPage() {
                                         required
                                         value={fullName}
                                         onChange={(e) => setFullName(e.target.value)}
-                                        placeholder="Masukkan Nama Lengkap Anda"
+                                        placeholder="Contoh: Bima Ardiansyah"
                                         className="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
                                     />
                                 </div>
@@ -986,7 +982,7 @@ export default function CareerPage() {
                                             required
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="Masukkan Email Aktif Anda"
+                                            placeholder="nama@email.com"
                                             className="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
                                         />
                                     </div>
@@ -1000,7 +996,7 @@ export default function CareerPage() {
                                             required
                                             value={phone}
                                             onChange={(e) => setPhone(e.target.value)}
-                                            placeholder="Masukkan No. HP Anda"
+                                            placeholder="08123456789"
                                             className="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
                                         />
                                     </div>
