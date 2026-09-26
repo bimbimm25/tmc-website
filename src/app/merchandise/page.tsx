@@ -6,7 +6,7 @@ import {
     Sparkles, Gift, Coffee, Boxes,
     ShoppingBag, ShieldCheck, Heart,
     ChevronDown, Phone, MessageCircle, X, Store,
-    Search, AlertCircle, RefreshCw, Info, ImageOff
+    Search, AlertCircle, RefreshCw, Info, ImageOff, Flame
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
@@ -29,7 +29,6 @@ function BearFaceIcon({ className = "w-5 h-5" }: { className?: string }) {
     );
 }
 
-// Helper function parsing tag <br> dan enter (\n)
 function renderFormattedText(text?: string | null, fallback?: React.ReactNode) {
     if (!text) return fallback;
 
@@ -53,8 +52,11 @@ export interface MerchandiseItem {
     price: number;
     image?: string | null;
     is_new?: boolean | number;
+    is_best_seller?: boolean | number;
     is_bestseller?: boolean | number;
+    is_featured?: boolean | number;
     is_active?: boolean | number;
+    purchase_type?: string;
     purchase_option?: string;
 }
 
@@ -117,23 +119,38 @@ export default function MerchandisePage() {
         fetchMerchandiseData();
     }, []);
 
-    // Ekstrak list kategori unik secara dinamis dari produk admin
+    // Kategori dinamis dari database, dengan tambahan 'all' dan 'best_seller'
     const availableCategories = useMemo(() => {
-        if (merchItems.length === 0) return ['all'];
         const unique = Array.from(new Set(
             merchItems.map(m => m.category || m.category_slug).filter(Boolean)
         )) as string[];
-        return ['all', ...unique];
+        return ['all', 'best_seller', ...unique];
     }, [merchItems]);
 
-    // Filter Kategori, Pencarian, & Sorting
+    // Hitung jumlah item best seller untuk badge counter
+    const bestSellerCount = useMemo(() => {
+        return merchItems.filter(item =>
+            item.is_active !== false && Boolean(item.is_best_seller ?? item.is_bestseller)
+        ).length;
+    }, [merchItems]);
+
+    // Filter Kategori (termasuk filter khusus Best Seller), Pencarian, & Sorting
     const filteredAndSortedItems = useMemo(() => {
         let result = merchItems.filter(item => {
             if (item.is_active === false) return false;
 
-            const categoryName = (item.category || item.category_slug || '').toLowerCase();
-            const matchesCategory = selectedCategory === 'all' || categoryName === selectedCategory.toLowerCase();
+            // Logika filter kategori
+            let matchesCategory = false;
+            if (selectedCategory === 'all') {
+                matchesCategory = true;
+            } else if (selectedCategory === 'best_seller') {
+                matchesCategory = Boolean(item.is_best_seller ?? item.is_bestseller);
+            } else {
+                const categoryName = (item.category || item.category_slug || '').toLowerCase();
+                matchesCategory = categoryName === selectedCategory.toLowerCase();
+            }
 
+            // Logika pencarian
             const matchesSearch =
                 item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 (item.description && item.description.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -141,7 +158,9 @@ export default function MerchandisePage() {
             return matchesCategory && matchesSearch;
         });
 
-        if (sortBy === 'price-low') {
+        if (sortBy === 'featured') {
+            result = [...result].sort((a, b) => (Boolean(b.is_featured) ? 1 : 0) - (Boolean(a.is_featured) ? 1 : 0));
+        } else if (sortBy === 'price-low') {
             result = [...result].sort((a, b) => a.price - b.price);
         } else if (sortBy === 'price-high') {
             result = [...result].sort((a, b) => b.price - a.price);
@@ -165,6 +184,13 @@ export default function MerchandisePage() {
                 : `${API_BASE_URL}/storage/${merchBanner.image}`)
         : '/img/hero-home.png';
 
+    // Label Header Dinamis
+    const categoryTitle = useMemo(() => {
+        if (selectedCategory === 'all') return 'ALL PRODUCTS';
+        if (selectedCategory === 'best_seller') return 'BEST SELLER PRODUCTS';
+        return selectedCategory.toUpperCase();
+    }, [selectedCategory]);
+
     return (
         <div className="min-h-screen pb-16 space-y-6 sm:space-y-10">
 
@@ -172,29 +198,23 @@ export default function MerchandisePage() {
             {/* 1. HERO BANNER (HANYA DITAMPILKAN DI DESKTOP)     */}
             {/* ================================================= */}
             <section className="hidden lg:flex relative w-full h-screen max-h-[720px] items-center overflow-hidden border-b border-[#e6ccb2]/60">
-                {/* Background Image Full Cover */}
                 <div className="absolute inset-0 z-0">
                     <img
                         src={heroImageSrc}
                         alt="To Meet Official Merchandise"
                         className="w-full h-full object-cover object-right xl:object-center"
                     />
-                    {/* Gradien Putih Halus Sisi Kiri */}
                     <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent w-full lg:w-3/5 xl:w-1/2" />
                 </div>
 
-                {/* Konten Hero */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-16 sm:pt-20">
                     <div className="max-w-md lg:max-w-lg">
                         <div className="space-y-3 sm:space-y-3.5">
-
-                            {/* Pill Badge */}
                             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 text-[#8c5a3c] text-xs font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs">
                                 <span>OFFICIAL MERCHANDISE</span>
                                 <Sparkles className="w-3 h-3 text-amber-500" />
                             </div>
 
-                            {/* Title (Dikecilkan ukurannya agar pas di area gradien putih dan tidak menabrak gambar) */}
                             <div className="space-y-1">
                                 <h1 className="text-3xl lg:text-[2.4rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
                                     {renderFormattedText(
@@ -207,7 +227,6 @@ export default function MerchandisePage() {
                                 </h1>
                             </div>
 
-                            {/* Subtitle */}
                             <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                                 {renderFormattedText(
                                     merchBanner?.subtitle,
@@ -268,7 +287,6 @@ export default function MerchandisePage() {
                                     <span>TANYA ADMIN</span>
                                 </a>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -310,11 +328,14 @@ export default function MerchandisePage() {
                                 </h3>
                             </div>
 
-                            {/* Daftar Kategori Dinamis */}
+                            {/* Navigasi Kategori (Termasuk Best Seller) */}
+                            {/* Navigasi Kategori (Termasuk Best Seller - Tanpa Keterangan Angka) */}
                             <div className="bg-[#FAF0E6]/40 p-2 rounded-2xl border border-[#e6ccb2]/40">
-                                <nav className="flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-y-auto lg:max-h-[320px] pr-1 scrollbar-thin text-xs font-black uppercase tracking-wide">
+                                <nav className="flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-y-auto lg:max-h-[340px] pr-1 scrollbar-thin text-xs font-black uppercase tracking-wide">
                                     {availableCategories.map((cat) => {
                                         const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
+                                        const isBestSellerOption = cat === 'best_seller';
+
                                         return (
                                             <button
                                                 key={cat}
@@ -323,15 +344,32 @@ export default function MerchandisePage() {
                                                     setDisplayCount(8);
                                                 }}
                                                 className={`flex items-center justify-between px-3.5 py-2 rounded-xl transition shrink-0 cursor-pointer text-left ${isSelected
-                                                    ? 'bg-[#8c5a3c] text-white shadow-2xs font-extrabold'
-                                                    : 'bg-white/80 text-[#3d2314] hover:bg-[#FAF0E6] hover:text-[#8c5a3c]'
+                                                    ? isBestSellerOption
+                                                        ? 'bg-[#e85a4f] text-white shadow-2xs font-extrabold'
+                                                        : 'bg-[#8c5a3c] text-white shadow-2xs font-extrabold'
+                                                    : isBestSellerOption
+                                                        ? 'bg-rose-50/80 text-rose-700 hover:bg-[#e85a4f] hover:text-white border border-rose-200/60'
+                                                        : 'bg-white/80 text-[#3d2314] hover:bg-[#FAF0E6] hover:text-[#8c5a3c]'
                                                     }`}
                                             >
                                                 <span className="flex items-center gap-2">
-                                                    <BearPawIcon className={`w-3 h-3 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`} />
-                                                    <span>{cat === 'all' ? 'All Products' : cat}</span>
+                                                    {isBestSellerOption ? (
+                                                        <Flame className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-rose-600'}`} />
+                                                    ) : (
+                                                        <BearPawIcon className={`w-3 h-3 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`} />
+                                                    )}
+                                                    <span>
+                                                        {cat === 'all'
+                                                            ? 'All Products'
+                                                            : isBestSellerOption
+                                                                ? 'Best Seller'
+                                                                : cat}
+                                                    </span>
                                                 </span>
-                                                {isSelected && <X className="w-3 h-3 hidden lg:block opacity-80" />}
+
+                                                {isSelected && !isBestSellerOption && (
+                                                    <X className="w-3 h-3 hidden lg:block opacity-80" />
+                                                )}
                                             </button>
                                         );
                                     })}
@@ -360,7 +398,7 @@ export default function MerchandisePage() {
                             {/* Header Sort & Counter */}
                             <div className="flex items-center justify-between border-b border-[#e6ccb2]/60 pb-3">
                                 <div className="flex items-center gap-2 text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide">
-                                    <h2>{selectedCategory === 'all' ? 'ALL PRODUCTS' : selectedCategory.toUpperCase()}</h2>
+                                    <h2>{categoryTitle}</h2>
                                     <span className="text-xs font-semibold text-[#6c584c] lowercase">
                                         ({filteredAndSortedItems.length} item)
                                     </span>
@@ -377,7 +415,7 @@ export default function MerchandisePage() {
                                             onChange={(e) => setSortBy(e.target.value)}
                                             className="bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-xl px-3 py-1.5 text-xs text-[#3d2314] font-black focus:outline-none appearance-none pr-8 cursor-pointer"
                                         >
-                                            <option value="featured">Paling Populer</option>
+                                            <option value="featured">Paling Populer (Featured)</option>
                                             <option value="newest">Produk Terbaru</option>
                                             <option value="price-low">Harga: Termurah</option>
                                             <option value="price-high">Harga: Tertinggi</option>
@@ -425,9 +463,11 @@ export default function MerchandisePage() {
                                     </div>
                                     <h4 className="font-black text-xs text-[#3d2314]">Belum Ada Produk</h4>
                                     <p className="text-[10px] text-[#6c584c] font-semibold max-w-xs mx-auto">
-                                        {searchQuery
-                                            ? 'Produk dengan kata kunci tersebut tidak ditemukan.'
-                                            : 'Belum ada produk merchandise yang ditambahkan pada kategori ini.'}
+                                        {selectedCategory === 'best_seller'
+                                            ? 'Belum ada produk yang ditandai sebagai Best Seller.'
+                                            : searchQuery
+                                                ? 'Produk dengan kata kunci tersebut tidak ditemukan.'
+                                                : 'Belum ada produk merchandise yang ditambahkan pada kategori ini.'}
                                     </p>
                                 </div>
                             )}
@@ -466,7 +506,6 @@ export default function MerchandisePage() {
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-
                         <div className="flex flex-col items-center space-y-1">
                             <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <BearFaceIcon className="w-4 h-4" />
@@ -498,7 +537,6 @@ export default function MerchandisePage() {
                             <h4 className="font-black text-xs text-[#3d2314] uppercase">Support To Meet</h4>
                             <p className="text-[10px] text-[#6c584c] font-semibold">Community</p>
                         </div>
-
                     </div>
                 </div>
             </section>
@@ -508,7 +546,6 @@ export default function MerchandisePage() {
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-[#ffffff] p-5 sm:p-7 rounded-3xl border border-rose-100/80 shadow-2xs grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
-
                     <div className="lg:col-span-7 space-y-2 text-center lg:text-left">
                         <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
                             Want to order or ask more?
@@ -516,7 +553,6 @@ export default function MerchandisePage() {
                         <p className="text-xs sm:text-sm text-[#6c584c] font-semibold max-w-md mx-auto lg:mx-0">
                             Chat with us on WhatsApp to check stock and place your order!
                         </p>
-
                         <div className="pt-1">
                             <a
                                 href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20order%20merchandise"
@@ -535,13 +571,11 @@ export default function MerchandisePage() {
                             <img src="/img/mc-1.png" alt="Merchandise 1" className="w-full h-24 object-cover rounded-xl" />
                             <span className="text-[8px] font-black uppercase tracking-wide">For You</span>
                         </div>
-
                         <div className="w-28 h-36 bg-white p-2 rounded-2xl shadow-xs transform rotate-3 hover:rotate-0 transition duration-200 text-[#3d2314] text-center flex flex-col justify-between border border-[#e6ccb2]">
                             <img src="/img/mc-2.png" alt="Merchandise 2" className="w-full h-24 object-cover rounded-xl" />
                             <span className="text-[8px] font-black uppercase tracking-wide">For Your Friend</span>
                         </div>
                     </div>
-
                 </div>
             </section>
 
@@ -551,7 +585,8 @@ export default function MerchandisePage() {
 
 function MerchandiseProductCard({ item }: { item: MerchandiseItem }) {
     const isNew = Boolean(item.is_new);
-    const isBestseller = Boolean(item.is_bestseller);
+    const isBestseller = Boolean(item.is_best_seller ?? item.is_bestseller);
+    const isFeatured = Boolean(item.is_featured);
     const hasImage = Boolean(item.image && item.image.trim() !== '');
 
     const imageSrc = hasImage
@@ -562,19 +597,34 @@ function MerchandiseProductCard({ item }: { item: MerchandiseItem }) {
                 : `${API_BASE_URL}/storage/${item.image}`)
         : null;
 
+    const purchaseLabel = useMemo(() => {
+        const raw = item.purchase_type || item.purchase_option || 'in_store';
+        if (raw === 'in_store' || raw === 'In Store') return 'In Store';
+        if (raw === 'whatsapp' || raw === 'WhatsApp Order') return 'WhatsApp Order';
+        if (raw === 'online' || raw === 'Online / Delivery') return 'Online Delivery';
+        return raw;
+    }, [item.purchase_type, item.purchase_option]);
+
     return (
         <div className="bg-[#FAF0E6]/60 rounded-3xl p-3 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-2.5 relative group hover:shadow-md hover:border-[#8c5a3c] transition duration-200">
 
             {/* Badges Status */}
-            <div className="absolute top-4 left-4 flex flex-col gap-1 z-10">
-                {isNew && (
-                    <span className="px-2.5 py-0.5 bg-[#e85a4f] text-white text-[8px] font-black uppercase rounded-full shadow-2xs tracking-wider">
-                        NEW
+            <div className="absolute top-4 left-4 flex flex-col gap-1 z-10 pointer-events-none">
+                {isBestseller && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#e85a4f] text-white text-[8px] font-black uppercase rounded-full shadow-xs tracking-wider">
+                        <Flame className="w-2.5 h-2.5 fill-current" />
+                        <span>BEST SELLER</span>
                     </span>
                 )}
-                {isBestseller && (
-                    <span className="px-2.5 py-0.5 bg-[#d4a373] text-white text-[8px] font-black uppercase rounded-full shadow-2xs tracking-wider">
-                        BEST SELLER
+                {isFeatured && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-500 text-white text-[8px] font-black uppercase rounded-full shadow-xs tracking-wider">
+                        <Sparkles className="w-2.5 h-2.5 fill-current" />
+                        <span>FEATURED</span>
+                    </span>
+                )}
+                {isNew && (
+                    <span className="px-2.5 py-0.5 bg-[#3d2314] text-white text-[8px] font-black uppercase rounded-full shadow-xs tracking-wider">
+                        NEW
                     </span>
                 )}
             </div>
@@ -599,7 +649,7 @@ function MerchandiseProductCard({ item }: { item: MerchandiseItem }) {
             <div className="space-y-0.5">
                 <div className="flex items-center gap-1 text-[8px] font-black text-[#8c5a3c] uppercase tracking-wider">
                     <Store className="w-3 h-3" />
-                    <span>{item.purchase_option || 'In Store'}</span>
+                    <span>{purchaseLabel}</span>
                 </div>
                 <h4 className="font-black text-[#3d2314] text-xs leading-snug line-clamp-1">{item.name}</h4>
                 <p className="text-[10px] text-[#6c584c] font-semibold line-clamp-2 leading-tight">

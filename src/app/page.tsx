@@ -765,10 +765,10 @@ export default async function Home() {
             <div className="bg-white p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs flex flex-col justify-between space-y-4 relative overflow-hidden">
 
               {/* Follow Us */}
-              <div className="space-y-3">
+              <div className="space-y-3 w-full min-w-0">
                 {/* Header Title */}
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-md bg-[#FAF0E6] flex items-center justify-center text-[#e85a4f]">
+                  <div className="w-5 h-5 rounded-md bg-[#FAF0E6] flex items-center justify-center text-[#e85a4f] shrink-0">
                     <Share2 className="w-3 h-3" />
                   </div>
                   <span className="text-xs font-black text-[#3d2314] uppercase tracking-wider">
@@ -776,24 +776,25 @@ export default async function Home() {
                   </span>
                 </div>
 
-                <p className="text-[11px] text-[#6c584c] font-medium leading-relaxed whitespace-nowrap">
+                {/* Description - Hapus whitespace-nowrap, tambahkan break-words dan max-width */}
+                <p className="text-[11px] sm:text-xs text-[#6c584c] font-medium leading-relaxed break-words max-w-sm">
                   Ikuti update menu baru, keseruan workshop, dan promo spesial kami
                 </p>
 
-                {/* Social Media Links (Pill / Capsule Style) */}
-                <div className="flex flex-wrap gap-2 pt-0.5">
+                {/* Social Media Links (Pill / Capsule Style - Auto wrap & adaptif) */}
+                <div className="flex flex-wrap items-center gap-2 pt-0.5">
                   {/* Instagram */}
                   <a
                     href="https://www.instagram.com/tomeet.cafe?stkn=NnBva3lubWk5OHFk"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#8c5a3c] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#8c5a3c] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95 shrink-0"
                     title="Instagram @tomeet.cafe"
                   >
-                    <div className="w-5 h-5 rounded-full bg-white text-[#e85a4f] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition">
+                    <div className="w-5 h-5 rounded-full bg-white text-[#e85a4f] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition shrink-0">
                       <FaInstagram className="w-3 h-3" />
                     </div>
-                    <span className="text-[11px] font-black tracking-tight">Instagram</span>
+                    <span className="text-[11px] font-black tracking-tight whitespace-nowrap">Instagram</span>
                   </a>
 
                   {/* TikTok */}
@@ -801,13 +802,13 @@ export default async function Home() {
                     href="https://www.tiktok.com/@tomeet.cafe?_r=1&_t=ZS-99dEumOyfiS"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#3d2314] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#3d2314] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95 shrink-0"
                     title="TikTok @tomeet.cafe"
                   >
-                    <div className="w-5 h-5 rounded-full bg-white text-[#3d2314] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition">
+                    <div className="w-5 h-5 rounded-full bg-white text-[#3d2314] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition shrink-0">
                       <FaTiktok className="w-2.5 h-2.5" />
                     </div>
-                    <span className="text-[11px] font-black tracking-tight">TikTok</span>
+                    <span className="text-[11px] font-black tracking-tight whitespace-nowrap">TikTok</span>
                   </a>
 
                   {/* YouTube */}
@@ -815,13 +816,13 @@ export default async function Home() {
                     href="https://youtube.com/@tomeetcafe"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#e85a4f] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#e85a4f] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95 shrink-0"
                     title="YouTube @tomeetcafe"
                   >
-                    <div className="w-5 h-5 rounded-full bg-white text-[#e85a4f] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition">
+                    <div className="w-5 h-5 rounded-full bg-white text-[#e85a4f] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition shrink-0">
                       <FaYoutube className="w-3 h-3" />
                     </div>
-                    <span className="text-[11px] font-black tracking-tight">YouTube</span>
+                    <span className="text-[11px] font-black tracking-tight whitespace-nowrap">YouTube</span>
                   </a>
                 </div>
               </div>

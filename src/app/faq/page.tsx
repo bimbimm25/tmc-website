@@ -424,7 +424,7 @@ export default function FAQPage() {
                         className="w-full h-full object-cover object-right lg:object-center"
                     />
                     {/* Gradient Overlay Putih Sebelah Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                    <div className="absolute inset-0 bg-linear-to-r from-white via-white/90 to-transparent w-full sm:w-[80%] lg:w-[60%]" />
                 </div>
 
                 {/* Konten Text Hero */}
@@ -453,7 +453,7 @@ export default function FAQPage() {
                             <p className="font-bold text-[#3d2314]">
                                 Kami siap membantu Anda!
                             </p>
-                            <p className="text-[11px] sm:text-xs text-[#6c584c]">
+                            <p className="text-xs sm:text-[14px] text-[#6c584c]">
                                 {renderFormattedText(
                                     bannerSubtitle,
                                     'Temukan jawaban seputar To Meet Cafe, menu lezat kami, reservasi, event seru, dan segala hal yang ingin Anda ketahui.'

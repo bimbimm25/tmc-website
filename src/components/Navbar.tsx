@@ -87,7 +87,7 @@ export default function Navbar() {
                                     className="w-full h-full object-contain"
                                 />
                             </div>
-                            <span className={`font-black text-xs sm:text-[13.5px] tracking-[0.18em] uppercase transition-colors duration-200 ${isScrolled
+                            <span className={`font-black text-xs sm:text-[13px] tracking-[0.18em] uppercase transition-colors duration-200 ${isScrolled
                                     ? 'text-[#3d2314] group-hover:text-[#e85a4f]'
                                     : 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] group-hover:text-[#e85a4f]'
                                 }`}>
@@ -95,8 +95,8 @@ export default function Navbar() {
                             </span>
                         </Link>
 
-                        {/* Desktop Navigation Links (Ukuran pas: 13px - 14px) */}
-                        <nav ref={dropdownRef} className="hidden xl:flex items-center gap-4.5 xl:gap-5 text-[13px] xl:text-[14px] font-black tracking-wider uppercase">
+                        {/* Desktop Navigation Links (Ukuran pas presisi: 12px - 12.5px) */}
+                        <nav ref={dropdownRef} className="hidden xl:flex items-center gap-4.5 xl:gap-5 text-[12px] xl:text-[12.5px] font-black tracking-wider uppercase">
 
                             {/* Home */}
                             <Link
@@ -175,7 +175,7 @@ export default function Navbar() {
                                             </div>
                                             <div>
                                                 <div className="font-black text-xs leading-tight">MERCHANDISE</div>
-                                                <div className="text-[10px] text-[#6c584c] lowercase font-semibold">boneka, topi & aksesoris</div>
+                                                <div className="text-[10px] text-[#6c584c] lowercase font-semibold">boneka, aksesoris, dll</div>
                                             </div>
                                         </Link>
                                     </div>
@@ -316,7 +316,7 @@ export default function Navbar() {
                                 href="https://wa.me/6282141609328"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hidden sm:inline-flex px-4.5 py-2 text-xs font-black tracking-wider uppercase rounded-full shadow-md bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white transition-all duration-300 items-center gap-2 shrink-0 cursor-pointer shadow-rose-500/20"
+                                className="hidden sm:inline-flex px-4.5 py-2 text-[11.5px] font-black tracking-wider uppercase rounded-full shadow-md bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white transition-all duration-300 items-center gap-2 shrink-0 cursor-pointer shadow-rose-500/20"
                             >
                                 <Phone className="w-3.5 h-3.5 fill-current" />
                                 <span>WHATSAPP</span>

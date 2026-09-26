@@ -119,11 +119,8 @@ export default function VisitUsPage() {
                         </h1>
 
                         {/* Subtitle */}
-                        <div className="space-y-1 text-xs sm:text-[13px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
-                            <p className="font-bold text-[#3d2314]">
-                                Dua tempat nyaman, satu pengalaman manis penuh kehangatan.
-                            </p>
-                            <p className="text-[15px] sm:text-xs text-[#6c584c]">
+                        <div className="space-y-1 text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                            <p className="text-xs sm:text-[15px] text-[#6c584c]">
                                 {renderFormattedText(
                                     banner?.subtitle,
                                     'Datang untuk menikmati hidangan lezat, tinggal untuk mengabadikan momen berharga bersama keluarga.'

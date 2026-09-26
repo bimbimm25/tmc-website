@@ -192,16 +192,7 @@ export default function BlogPage() {
                             )}
                         </p>
 
-                        <div className="pt-1 grid grid-cols-2 gap-2 max-w-sm text-center">
-                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                                <div className="text-[9.5px] font-black text-[#8c5a3c] uppercase">Cerita Cafe</div>
-                                <div className="text-[8px] text-[#6c584c] font-semibold">Behind the scenes</div>
-                            </div>
-                            <div className="bg-white/95 backdrop-blur-xs p-2 rounded-2xl border border-[#e6ccb2]/60 shadow-2xs space-y-0.5">
-                                <div className="text-[9.5px] font-black text-[#8c5a3c] uppercase">Aktivitas & Tips</div>
-                                <div className="text-[8px] text-[#6c584c] font-semibold">Tips seru si kecil</div>
-                            </div>
-                        </div>
+                        
 
                         <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
                             <a
