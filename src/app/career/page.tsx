@@ -30,7 +30,7 @@ function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     );
 }
 
-// Helper: Memformat Label Lokasi Outlet Sesuai Nilai Backend (Multi-Format Support)
+// Helper: Memformat Label Lokasi Outlet Sesuai Nilai Backend
 function formatLocationName(loc?: any): { label: string; badgeColor: string } {
     if (!loc) {
         return {
@@ -343,7 +343,7 @@ export default function CareerPage() {
         <div className="min-h-screen space-y-10 sm:space-y-14 pb-14">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION (GRADIEN ASLI SMOOTH + TEKS PAS)  */}
+            {/* 1. HERO SECTION                                   */}
             {/* ================================================= */}
             <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50">
                 <div className="absolute inset-0 z-0">
@@ -357,7 +357,6 @@ export default function CareerPage() {
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
                     <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg space-y-3 sm:space-y-4 text-left">
-
                         <div>
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 text-[#8c5a3c] text-[9.5px] sm:text-[10px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs">
                                 <span>CAREER OPPORTUNITIES</span>
@@ -400,7 +399,6 @@ export default function CareerPage() {
                                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                             </a>
                         </div>
-
                     </div>
                 </div>
             </section>
@@ -466,13 +464,13 @@ export default function CareerPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 3. WHY JOIN US & OPEN POSITIONS                   */}
+            {/* 3. WHY JOIN US & OPEN POSITIONS (GRID 2-2)        */}
             {/* ================================================= */}
             <section ref={openPositionsRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-                    {/* Kiri: Alasan Bergabung */}
-                    <div className="lg:col-span-5 bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
+                    {/* Kiri: Alasan Bergabung (Sticky Sidebar) */}
+                    <div className="lg:col-span-4 bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4 lg:sticky lg:top-24">
                         <div className="space-y-1">
                             <div className="inline-flex items-center gap-1.5 text-[10px] font-black text-[#8c5a3c] uppercase">
                                 <BearPawIcon className="w-3.5 h-3.5" />
@@ -493,7 +491,7 @@ export default function CareerPage() {
                                 </div>
                                 <div>
                                     <div className="font-bold text-xs text-[#3d2314]">Tim yang saling mendukung</div>
-                                    <div className="text-[10.5px] text-[#6c584c]">Bekerja bersama tim yang saling membantu, menghargai, dan tumbuh bersama.</div>
+                                    <div className="text-[10.5px] text-[#6c584c]">Saling membantu, menghargai, dan tumbuh bersama.</div>
                                 </div>
                             </div>
 
@@ -503,7 +501,7 @@ export default function CareerPage() {
                                 </div>
                                 <div>
                                     <div className="font-bold text-xs text-[#3d2314]">Kesempatan belajar setiap hari</div>
-                                    <div className="text-[10.5px] text-[#6c584c]">Kesempatan untuk belajar hal baru dan mengembangkan kemampuan.</div>
+                                    <div className="text-[10.5px] text-[#6c584c]">Belajar hal baru dan mengembangkan skill harian.</div>
                                 </div>
                             </div>
 
@@ -512,18 +510,8 @@ export default function CareerPage() {
                                     <CheckCircle2 className="w-3.5 h-3.5" />
                                 </div>
                                 <div>
-                                    <div className="font-bold text-xs text-[#3d2314]">Suasana Kerja yang Hangat & Positif</div>
-                                    <div className="text-[10.5px] text-[#6c584c]">Lingkungan kerja yang nyaman, penuh semangat, dan menyenangkan.</div>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-2.5">
-                                <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
-                                    <CheckCircle2 className="w-3.5 h-3.5" />
-                                </div>
-                                <div>
-                                    <div className="font-bold text-xs text-[#3d2314]">Peluang berkembang bersama perusahaan</div>
-                                    <div className="text-[10.5px] text-[#6c584c]">Bertumbuh bersama To Meet seiring perjalanan dan perkembangan perusahaan.</div>
+                                    <div className="font-bold text-xs text-[#3d2314]">Suasana Positif & Nyaman</div>
+                                    <div className="text-[10.5px] text-[#6c584c]">Lingkungan kerja yang ramah dan penuh semangat.</div>
                                 </div>
                             </div>
 
@@ -533,157 +521,176 @@ export default function CareerPage() {
                                 </div>
                                 <div>
                                     <div className="font-bold text-xs text-[#3d2314]">Jenjang Karier Terbuka</div>
-                                    <div className="text-[10.5px] text-[#6c584c]">Setiap orang memiliki kesempatan untuk berkembang dan meraih posisi lebih tinggi.</div>
+                                    <div className="text-[10.5px] text-[#6c584c]">Peluang promosi dan posisi lebih tinggi bagi yang berprestasi.</div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="p-3 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/60 text-center">
                             <div className="text-xs font-black text-[#8c5a3c]">Pertanyaan Rekrutmen?</div>
-                            <div className="text-[11px] text-[#6c584c]">Hubungi HR kami di <span className="font-bold text-[#3d2314]">tmc.rekrutmen@gmail.com</span></div>
+                            <div className="text-[10.5px] text-[#6c584c]">Hubungi HR kami di <span className="font-bold text-[#3d2314]">tmc.rekrutmen@gmail.com</span></div>
                         </div>
                     </div>
 
-                    {/* Kanan: Filter Lokasi & Daftar Lowongan Kerja */}
-                    <div className="lg:col-span-7 space-y-4">
+                    {/* Kanan: Filter Lokasi & Grid Kartu Lowongan 2-2 */}
+                    <div className="lg:col-span-8 space-y-4">
 
                         {/* Header + Tabs Filter Lokasi Outlet */}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#e6ccb2]/60 pb-3">
-                            <div className="flex items-center gap-2">
-                                <Briefcase className="w-4 h-4 text-[#8c5a3c]" />
-                                <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide">
-                                    OPEN POSITIONS
-                                </h2>
-                            </div>
+                        <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                                <div className="flex items-center gap-2">
+                                    <Briefcase className="w-4 h-4 text-[#8c5a3c]" />
+                                    <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide">
+                                        OPEN POSITIONS
+                                    </h2>
+                                    <span className="text-xs font-bold text-[#8c5a3c] bg-[#FAF0E6] px-2 py-0.5 rounded-full">
+                                        {filteredCareers.length} Lowongan
+                                    </span>
+                                </div>
 
-                            {/* Pilihan Filter Lokasi Cabang */}
-                            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none max-w-full">
-                                <button
-                                    onClick={() => setSelectedLocationFilter('all')}
-                                    className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'all'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
-                                        }`}
-                                >
-                                    Semua Lokasi
-                                </button>
+                                {/* Filter Tabs Lokasi */}
+                                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none max-w-full">
+                                    <button
+                                        onClick={() => setSelectedLocationFilter('all')}
+                                        className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'all'
+                                                ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                            }`}
+                                    >
+                                        Semua
+                                    </button>
 
-                                <button
-                                    onClick={() => setSelectedLocationFilter('mutiara')}
-                                    className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'mutiara'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
-                                        }`}
-                                >
-                                    Pondok Mutiara
-                                </button>
+                                    <button
+                                        onClick={() => setSelectedLocationFilter('mutiara')}
+                                        className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'mutiara'
+                                                ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                            }`}
+                                    >
+                                        Pondok Mutiara
+                                    </button>
 
-                                <button
-                                    onClick={() => setSelectedLocationFilter('central_kitchen')}
-                                    className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'central_kitchen'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
-                                        }`}
-                                >
-                                    Central Kitchen
-                                </button>
+                                    <button
+                                        onClick={() => setSelectedLocationFilter('central_kitchen')}
+                                        className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'central_kitchen'
+                                                ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                            }`}
+                                    >
+                                        Central Kitchen
+                                    </button>
 
-                                <button
-                                    onClick={() => setSelectedLocationFilter('office')}
-                                    className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'office'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
-                                        }`}
-                                >
-                                    Office
-                                </button>
+                                    <button
+                                        onClick={() => setSelectedLocationFilter('office')}
+                                        className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'office'
+                                                ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                            }`}
+                                    >
+                                        Office
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
+                        {/* Loading State */}
                         {isLoading && (
-                            <div className="bg-white p-8 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
+                            <div className="bg-white p-12 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
                                 <div className="w-6 h-6 border-2 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
                                 <p className="text-xs font-bold text-[#8c5a3c]">Memuat daftar lowongan...</p>
                             </div>
                         )}
 
+                        {/* Empty State */}
                         {!isLoading && filteredCareers.length === 0 && (
-                            <div className="bg-white p-8 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
-                                <BearFaceIcon className="w-7 h-7 text-[#8c5a3c] mx-auto" />
-                                <h3 className="font-black text-xs sm:text-sm text-[#3d2314]">Belum Ada Lowongan Aktif</h3>
-                                <p className="text-[11px] text-[#6c584c]">
+                            <div className="bg-white p-10 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
+                                <BearFaceIcon className="w-8 h-8 text-[#8c5a3c] mx-auto opacity-70" />
+                                <h3 className="font-black text-sm text-[#3d2314]">Belum Ada Lowongan Aktif</h3>
+                                <p className="text-xs text-[#6c584c] max-w-sm mx-auto">
                                     {selectedLocationFilter !== 'all'
                                         ? 'Tidak ada lowongan aktif untuk kategori lokasi ini saat ini.'
-                                        : 'Saat ini semua posisi terisi penuh. Silakan pantau halaman ini secara berkala!'}
+                                        : 'Saat ini semua posisi terisi penuh. Silakan cek berkala kembali!'}
                                 </p>
                             </div>
                         )}
 
-                        {!isLoading && filteredCareers.map((job) => {
-                            const rawLocation = (job as any).location_name || (job as any).location || (job as any).branch;
-                            const locInfo = formatLocationName(rawLocation);
+                        {/* DAFTAR PEKERJAAN: GRID 2-2 KE BAWAH */}
+                        {!isLoading && filteredCareers.length > 0 && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {filteredCareers.map((job) => {
+                                    const rawLocation = (job as any).location_name || (job as any).location || (job as any).branch;
+                                    const locInfo = formatLocationName(rawLocation);
 
-                            return (
-                                <div
-                                    key={job.id}
-                                    className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs hover:border-[#8c5a3c] transition duration-200 space-y-3"
-                                >
-                                    {/* Header Item: Departemen & Tipe Kerja */}
-                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-                                        <div>
-                                            <span className="px-2 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9px] font-black uppercase rounded-md">
-                                                {job.department || 'Operasional Cafe'}
-                                            </span>
-                                            <h3 className="text-sm sm:text-base font-black text-[#3d2314] mt-0.5">{job.title}</h3>
-                                        </div>
-                                        <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[9.5px] font-black uppercase rounded-full self-start sm:self-auto">
-                                            {job.type}
-                                        </span>
-                                    </div>
+                                    return (
+                                        <div
+                                            key={job.id}
+                                            className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs hover:border-[#8c5a3c] hover:shadow-md transition duration-200 flex flex-col justify-between h-full space-y-4 group"
+                                        >
+                                            {/* Bagian Atas: Badge Departemen, Tipe, Judul & Metadata */}
+                                            <div className="space-y-2.5">
+                                                {/* Header Badges */}
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9.5px] font-black uppercase rounded-md tracking-wider">
+                                                        {job.department || 'Operasional'}
+                                                    </span>
+                                                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[9px] font-black uppercase rounded-full">
+                                                        {job.type}
+                                                    </span>
+                                                </div>
 
-                                    {/* Metadata: Lokasi Penempatan & Gaji */}
-                                    <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold">
-                                        <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg border text-[10px] font-black uppercase tracking-wide ${locInfo.badgeColor}`}>
-                                            <MapPin className="w-3.5 h-3.5 shrink-0" />
-                                            <span>{locInfo.label}</span>
-                                        </div>
+                                                {/* Job Title */}
+                                                <div>
+                                                    <h3 className="text-sm sm:text-base font-black text-[#3d2314] group-hover:text-[#8c5a3c] transition leading-snug">
+                                                        {job.title}
+                                                    </h3>
+                                                </div>
 
-                                        {job.salary_range && (
-                                            <div className="flex items-center gap-1 text-emerald-700 bg-emerald-50/70 px-2 py-0.5 rounded-lg border border-emerald-200/60 text-[10px] font-bold">
-                                                <DollarSign className="w-3.5 h-3.5 shrink-0" />
-                                                <span>{job.salary_range}</span>
+                                                {/* Lokasi & Gaji Badges */}
+                                                <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                                    <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-lg border text-[9.5px] font-black uppercase tracking-wide ${locInfo.badgeColor}`}>
+                                                        <MapPin className="w-3 h-3 shrink-0" />
+                                                        <span className="truncate max-w-[140px]">{locInfo.label}</span>
+                                                    </div>
+
+                                                    {job.salary_range && (
+                                                        <div className="flex items-center gap-1 text-emerald-700 bg-emerald-50/70 px-2.5 py-0.5 rounded-lg border border-emerald-200/60 text-[9.5px] font-bold">
+                                                            <DollarSign className="w-3 h-3 shrink-0" />
+                                                            <span>{job.salary_range}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Preview Deskripsi Singkat (Max 3 Baris) */}
+                                                {job.description && (
+                                                    <p className="text-[11px] text-[#6c584c] font-medium leading-relaxed line-clamp-3 pt-1 border-t border-[#e6ccb2]/40">
+                                                        {job.description.replace(/<br\s*\/?>/gi, ' ').replace(/[-*•]/g, '').trim()}
+                                                    </p>
+                                                )}
                                             </div>
-                                        )}
-                                    </div>
 
-                                    {/* Preview Ringkasan Deskripsi */}
-                                    {job.description && (
-                                        <div className="line-clamp-2 border-t border-[#e6ccb2]/40 pt-2 text-[11px]">
-                                            <FormatRichContent text={job.description} />
+                                            {/* Bagian Bawah: Tombol Aksi Kerap Rata */}
+                                            <div className="pt-3 border-t border-[#e6ccb2]/40 grid grid-cols-2 gap-2 mt-auto">
+                                                <button
+                                                    onClick={() => setDetailJob(job)}
+                                                    className="w-full py-2 bg-[#FAF0E6] hover:bg-[#e6ccb2] text-[#8c5a3c] font-black text-[10px] sm:text-[10.5px] rounded-xl transition flex items-center justify-center gap-1 uppercase tracking-wider cursor-pointer"
+                                                >
+                                                    <FileText className="w-3 h-3" />
+                                                    <span>Detail</span>
+                                                </button>
+
+                                                <button
+                                                    onClick={() => handleOpenApply(job)}
+                                                    className="w-full py-2 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-[10px] sm:text-[10.5px] rounded-xl shadow-xs transition flex items-center justify-center gap-1 uppercase tracking-wider cursor-pointer"
+                                                >
+                                                    <span>Lamar</span>
+                                                    <ArrowRight className="w-3 h-3" />
+                                                </button>
+                                            </div>
                                         </div>
-                                    )}
-
-                                    {/* Action Buttons */}
-                                    <div className="pt-2 flex items-center justify-end gap-2 border-t border-[#e6ccb2]/40">
-                                        <button
-                                            onClick={() => setDetailJob(job)}
-                                            className="px-4 py-2 bg-[#FAF0E6] hover:bg-[#e6ccb2] text-[#8c5a3c] font-black text-[10.5px] rounded-xl transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
-                                        >
-                                            <FileText className="w-3.5 h-3.5" />
-                                            <span>LIHAT DETAIL LENGKAP</span>
-                                        </button>
-
-                                        <button
-                                            onClick={() => handleOpenApply(job)}
-                                            className="px-5 py-2 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-[10.5px] rounded-xl shadow-xs transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
-                                        >
-                                            <span>LAMAR SEKARANG</span>
-                                            <ArrowRight className="w-3.5 h-3.5" />
-                                        </button>
-                                    </div>
-                                </div>
-                            );
-                        })}
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
 
                 </div>
@@ -723,7 +730,7 @@ export default function CareerPage() {
                         <div className="space-y-2">
                             <Quote className="w-5 h-5 text-[#8c5a3c]/30" />
                             <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed italic">
-                                &quot;Selama saya bekerja di To Meet, banyak ilmu yang saya dapat, baik dari bagaimana cara tim bekerja, bagaimana SOP dan operasional yang baik dan benar, juga dengan kebersamaan antara saya dan tim. Saya sangat berterima kasih juga kepada beberapa orang yang selalu mendukung saya dalam berkembang dan memberikan saya kesempatan untuk menunjukkan bahwa saya bisa bekerja dengan baik. Harapan saya ke depannya, kami akan selalu tumbuh dan berkembang bersama serta membuat lebih banyak inovasi lagi bersama dalam dunia F&B&quot;
+                                &quot;Selama saya bekerja di To Meet, banyak ilmu yang saya dapat, baik dari bagaimana cara tim bekerja, bagaimana SOP dan operasional yang baik dan benar, juga dengan kebersamaan antara saya dan tim. Saya sangat berterima kasih juga kepada beberapa orang yang selalu mendukung saya dalam berkembang dan memberikan saya kesempatan untuk menunjukkan bahwa saya bisa bekerja dengan baik.&quot;
                             </p>
                         </div>
                         <div className="flex items-center gap-2.5 pt-2 border-t border-[#e6ccb2]/50">
@@ -741,7 +748,7 @@ export default function CareerPage() {
                         <div className="space-y-2">
                             <Quote className="w-5 h-5 text-[#8c5a3c]/30" />
                             <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed italic">
-                                &quot;Bekerja di To Meet Cafe benar-benar pengalaman yang berkesan. Suasannya nyaman banget, seperti rumah kedua, tim dan manajemennya juga suportif. Aku banyak belajar hal baru di sini dan diberi peluang yang luas untuk mengembangkan karir. Thank you, To Meet Cafe, sudah jadi tempat aku untuk belajar dan berkembang&quot;
+                                &quot;Bekerja di To Meet Cafe benar-benar pengalaman yang berkesan. Suasannya nyaman banget, seperti rumah kedua, tim dan manajemennya juga suportif. Aku banyak belajar hal baru di sini dan diberi peluang yang luas untuk mengembangkan karir.&quot;
                             </p>
                         </div>
                         <div className="flex items-center gap-2.5 pt-2 border-t border-[#e6ccb2]/50">
@@ -824,7 +831,6 @@ export default function CareerPage() {
                                 {detailJob.title}
                             </h2>
 
-                            {/* Info Penempatan & Gaji Sesuai Backend */}
                             <div className="flex flex-wrap items-center gap-2.5 text-xs font-bold pt-1">
                                 {(() => {
                                     const rawLocation = (detailJob as any).location_name || (detailJob as any).location || (detailJob as any).branch;
@@ -872,7 +878,7 @@ export default function CareerPage() {
                             </div>
                         )}
 
-                        {/* Benefit Pekerjaan: Hanya tampil jika diisi di dashboard */}
+                        {/* Benefit Pekerjaan */}
                         {detailJob.benefits && detailJob.benefits.trim() !== '' && (
                             <div className="space-y-2">
                                 <h3 className="text-xs font-black text-[#3d2314] uppercase tracking-wider flex items-center gap-1.5">
