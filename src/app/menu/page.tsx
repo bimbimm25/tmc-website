@@ -5,10 +5,13 @@ import Link from 'next/link';
 import {
     Search, Star, Utensils, CupSoda, Cake,
     Info, ChevronRight, Coffee, X, MapPin, AlertCircle, RefreshCw,
-    SlidersHorizontal
+    SlidersHorizontal, Sparkles, ThumbsUp
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
+// Cache in-memory level modul agar saat navigasi page langsung instan tanpa glitch hero-home
+let cachedMenuBanner: BannerItem | null = null;
 
 // Custom SVG Icon
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
@@ -46,7 +49,11 @@ export interface BannerItem {
 
 export default function DigitalMenuPage() {
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-    const [menuBanner, setMenuBanner] = useState<BannerItem | null>(null);
+
+    // Inisialisasi banner langsung dari cache bila sudah pernah dimuat
+    const [menuBanner, setMenuBanner] = useState<BannerItem | null>(() => cachedMenuBanner);
+    const [isBannerResolved, setIsBannerResolved] = useState<boolean>(() => cachedMenuBanner !== null);
+
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [selectedLocation, setSelectedLocation] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -93,7 +100,7 @@ export default function DigitalMenuPage() {
 
             const [resMenu, resBanner] = await Promise.all([
                 fetch(`${API_BASE_URL}/api/menus`, { cache: 'no-store' }),
-                fetch(`${API_BASE_URL}/api/banners/menu`, { cache: 'no-store' }).catch(() => null)
+                fetch(`${API_BASE_URL}/api/banners/menu`, { cache: 'default' }).catch(() => null)
             ]);
 
             if (!resMenu.ok) {
@@ -107,9 +114,13 @@ export default function DigitalMenuPage() {
                 setMenuItems([]);
             }
 
+            // Utamakan banner langsung dari dashboard
             if (resBanner && resBanner.ok) {
                 const jsonBanner = await resBanner.json();
-                setMenuBanner(jsonBanner.data || null);
+                if (jsonBanner?.data) {
+                    cachedMenuBanner = jsonBanner.data;
+                    setMenuBanner(jsonBanner.data);
+                }
             }
         } catch (err) {
             console.error('API Error / Offline:', err);
@@ -117,6 +128,7 @@ export default function DigitalMenuPage() {
             setMenuItems([]);
         } finally {
             setIsLoading(false);
+            setIsBannerResolved(true);
         }
     }
 
@@ -124,10 +136,16 @@ export default function DigitalMenuPage() {
         fetchMenuPageData();
     }, []);
 
+    // Kategori dinamis dari database + default: all, bestseller, dan recommended
     const availableCategories = useMemo(() => {
-        if (menuItems.length === 0) return ['all'];
+        const base = ['all', 'bestseller', 'recommended'];
+        if (menuItems.length === 0) return base;
+
         const unique = Array.from(new Set(menuItems.map(m => m.category).filter(Boolean)));
-        return ['all', 'bestseller', ...unique.filter(c => c.toLowerCase() !== 'bestseller' && c.toLowerCase() !== 'best seller')];
+        const excluded = ['bestseller', 'best seller', 'recommended', 'recommend', 'rekomendasi'];
+        const cleanDynamic = unique.filter(c => !excluded.includes(c.toLowerCase()));
+
+        return [...base, ...cleanDynamic];
     }, [menuItems]);
 
     const filteredMenuItems = useMemo(() => {
@@ -149,18 +167,23 @@ export default function DigitalMenuPage() {
 
             if (selectedCategory === 'all') return true;
             if (selectedCategory === 'bestseller') return Boolean(item.is_bestseller);
+            if (selectedCategory === 'recommended') return Boolean(item.is_recommended);
 
             return (item.category || '').toLowerCase() === selectedCategory.toLowerCase();
         });
     }, [menuItems, selectedCategory, selectedLocation, searchQuery]);
 
-    const heroBackgroundImage = menuBanner?.image
-        ? (menuBanner.image.startsWith('http')
-            ? menuBanner.image
-            : menuBanner.image.startsWith('/img')
+    // Langsung arahkan ke gambar dashboard admin, fallback ke hero-home hanya jika pengecekan tuntas dan dashboard tidak memiliki gambar
+    const heroBackgroundImage = useMemo(() => {
+        if (menuBanner?.image) {
+            return menuBanner.image.startsWith('http')
                 ? menuBanner.image
-                : `${API_BASE_URL}/storage/${menuBanner.image}`)
-        : '/img/hero-home.png';
+                : menuBanner.image.startsWith('/img')
+                    ? menuBanner.image
+                    : `${API_BASE_URL}/storage/${menuBanner.image}`;
+        }
+        return isBannerResolved ? '/img/hero-home.png' : '';
+    }, [menuBanner, isBannerResolved]);
 
     const handleCloseModal = () => {
         setSelectedProduct(null);
@@ -170,34 +193,65 @@ export default function DigitalMenuPage() {
         <div className="min-h-screen pb-16 space-y-4 lg:space-y-8">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION (HANYA DITAMPILKAN DI DESKTOP)    */}
+            {/* 1. HERO SECTION (SMOOTH & ANTI-GLITCH DASHBOARD)  */}
             {/* ================================================= */}
             <section
-                className="hidden lg:flex w-full relative h-screen max-h-[750px] items-center bg-cover bg-right bg-no-repeat border-b border-[#e6ccb2]/60 pt-20 pb-6 overflow-hidden transition-all duration-300"
-                style={{ backgroundImage: `url('${heroBackgroundImage}')` }}
+                className={`hidden lg:flex w-full relative h-screen max-h-[750px] items-center border-b border-[#e6ccb2]/60 pt-20 pb-6 overflow-hidden transition-colors duration-500 ${heroBackgroundImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
+                    }`}
             >
-                <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl" />
+                {/* Background Image Layer dengan Transisi Halus (Smooth Fade-In) */}
+                <div className="absolute inset-0 z-0">
+                    {heroBackgroundImage && (
+                        <img
+                            src={heroBackgroundImage}
+                            alt="Digital Menu Hero Banner"
+                            loading="eager"
+                            fetchPriority="high"
+                            decoding="async"
+                            onLoad={(e) => {
+                                (e.currentTarget as HTMLElement).classList.remove('opacity-0');
+                                (e.currentTarget as HTMLElement).classList.add('opacity-100');
+                            }}
+                            className="w-full h-full object-cover object-right opacity-0 transition-opacity duration-700 ease-out"
+                        />
+                    )}
+                    {/* Gradien Pelindung Kontras Teks */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl pointer-events-none" />
+                </div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 my-auto">
-                    <div className="w-full max-w-lg lg:w-1/2 p-0 space-y-3.5 text-left">
+                    <div
+                        className={`w-full max-w-lg lg:w-1/2 p-0 space-y-3.5 text-left transition-all duration-700 ease-out ${isBannerResolved ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                            }`}
+                    >
                         <div className="inline-flex items-center justify-start gap-2 text-xs font-bold text-[#8c5a3c] tracking-widest uppercase">
                             <Link href="/" className="hover:underline">HOME</Link>
                             <ChevronRight className="w-3 h-3 text-[#8c5a3c]" />
                             <span className="text-[#3d2314] font-black">DIGITAL MENU</span>
                         </div>
 
+                        {/* Title: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <h1 className="text-4xl lg:text-5xl font-black text-[#3d2314] tracking-tight leading-tight">
-                            {menuBanner?.title || 'Our Digital Menu'}
+                            {menuBanner?.title
+                                ? menuBanner.title
+                                : isBannerResolved
+                                    ? 'Our Digital Menu'
+                                    : null}
                         </h1>
 
+                        {/* Subtitle: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <p className="text-sm sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
-                            {menuBanner?.subtitle || 'Explore our wide variety of bear-themed sweet treats, delicious meals, and refreshing drinks crafted with love for you and your family!'}
+                            {menuBanner?.subtitle
+                                ? menuBanner.subtitle
+                                : isBannerResolved
+                                    ? 'Explore our wide variety of bear-themed sweet treats, delicious meals, and refreshing drinks crafted with love for you and your family!'
+                                    : null}
                         </p>
 
                         <div className="pt-2 flex items-center justify-start">
                             <a
-                                href="#menu-content"
-                                className="px-6 py-3 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-black text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
+                                href={menuBanner?.cta_link || "#menu-content"}
+                                className="px-6 py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
                             >
                                 <span>{menuBanner?.cta_text || 'EXPLORE MENU'}</span>
                                 <BearPawIcon className="w-3.5 h-3.5" />
@@ -213,7 +267,7 @@ export default function DigitalMenuPage() {
             <section id="menu-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-4">
                 <div className="bg-white p-4 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6">
 
-                    {/* Filter Tab Lokasi Outlet & Search Bar (Di atas untuk Mobile) */}
+                    {/* Filter Tab Lokasi Outlet & Search Bar */}
                     <div className="space-y-3">
                         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 sm:p-4 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/70">
                             <div className="flex items-center gap-2 text-xs font-black text-[#3d2314] uppercase tracking-wide">
@@ -242,7 +296,7 @@ export default function DigitalMenuPage() {
                             </div>
                         </div>
 
-                        {/* Search Bar untuk Mobile & Desktop */}
+                        {/* Search Bar */}
                         <div className="relative">
                             <input
                                 type="text"
@@ -263,7 +317,7 @@ export default function DigitalMenuPage() {
                         </div>
                     </div>
 
-                    {/* UX KATEGORI MENU KHUSUS MOBILE: Horizontal Pill Chips yang Sangat Rapi & Mudah Dipahami */}
+                    {/* UX Kategori Menu Mobile: Horizontal Pill Chips */}
                     <div className="block lg:hidden">
                         <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none">
                             {availableCategories.map((cat) => {
@@ -271,6 +325,7 @@ export default function DigitalMenuPage() {
                                 let label = cat.toUpperCase();
                                 if (cat === 'all') label = 'SEMUA MENU';
                                 if (cat === 'bestseller') label = 'BEST SELLER';
+                                if (cat === 'recommended') label = 'RECOMMENDED';
 
                                 return (
                                     <button
@@ -282,6 +337,7 @@ export default function DigitalMenuPage() {
                                             }`}
                                     >
                                         {cat === 'bestseller' && <Star className="w-3 h-3 fill-amber-400 text-amber-400" />}
+                                        {cat === 'recommended' && <Sparkles className="w-3 h-3 text-[#e85a4f] fill-current" />}
                                         <span>{label}</span>
                                     </button>
                                 );
@@ -307,6 +363,7 @@ export default function DigitalMenuPage() {
                                     let label = cat.toUpperCase();
                                     if (cat === 'all') label = 'SEMUA MENU';
                                     if (cat === 'bestseller') label = 'BEST SELLER';
+                                    if (cat === 'recommended') label = 'RECOMMENDED';
 
                                     return (
                                         <button
@@ -320,6 +377,8 @@ export default function DigitalMenuPage() {
                                             <span className="flex items-center gap-2 min-w-0 pr-1">
                                                 {cat === 'bestseller' ? (
                                                     <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 shrink-0" />
+                                                ) : cat === 'recommended' ? (
+                                                    <Sparkles className="w-3.5 h-3.5 text-[#e85a4f] fill-[#e85a4f] shrink-0" />
                                                 ) : (
                                                     <Coffee className="w-3.5 h-3.5 shrink-0 text-current" />
                                                 )}
@@ -377,7 +436,6 @@ export default function DigitalMenuPage() {
                             {/* Normal Data State */}
                             {!isLoading && !isError && (
                                 <>
-                                    {/* Header List */}
                                     <div className="flex items-center justify-between border-b border-[#e6ccb2]/60 pb-2.5">
                                         <div className="flex items-center gap-2 text-base font-black text-[#3d2314] uppercase tracking-wide">
                                             <Coffee className="w-4.5 h-4.5 text-[#8c5a3c]" />
@@ -386,7 +444,9 @@ export default function DigitalMenuPage() {
                                                     ? 'DAFTAR MENU TO MEET'
                                                     : selectedCategory === 'bestseller'
                                                         ? 'MENU BEST SELLER'
-                                                        : `KATEGORI ${selectedCategory.toUpperCase()}`}
+                                                        : selectedCategory === 'recommended'
+                                                            ? 'MENU REKOMENDASI'
+                                                            : `KATEGORI ${selectedCategory.toUpperCase()}`}
                                             </h2>
                                         </div>
                                         <span className="text-[11px] font-bold text-[#8c5a3c]">
@@ -394,7 +454,6 @@ export default function DigitalMenuPage() {
                                         </span>
                                     </div>
 
-                                    {/* Grid Produk */}
                                     {filteredMenuItems.length > 0 ? (
                                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4">
                                             {filteredMenuItems.map((item) => (
@@ -523,7 +582,6 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
             onClick={() => onSelect(item)}
             className="bg-[#FAF0E6]/60 rounded-3xl p-3 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-2.5 relative group hover:shadow-md hover:border-[#8c5a3c] transition duration-200 cursor-pointer"
         >
-            {/* Badges */}
             <div className="absolute top-4 left-4 flex flex-col gap-1 z-10">
                 {isBestseller && (
                     <span className="px-2.5 py-0.5 bg-[#d4a373] text-white text-[8px] font-black uppercase rounded-full shadow-2xs tracking-wider">
@@ -537,7 +595,6 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                 )}
             </div>
 
-            {/* Foto Produk */}
             <div className="w-full aspect-square bg-white rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center relative">
                 {item.image ? (
                     <img
@@ -549,6 +606,7 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                                     : `${API_BASE_URL}/storage/${item.image}`
                         }
                         alt={item.name}
+                        loading="lazy"
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                     />
                 ) : (
@@ -556,7 +614,6 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                 )}
             </div>
 
-            {/* Detail */}
             <div className="space-y-0.5">
                 <div className="flex items-center justify-between gap-1">
                     <span className="text-[8px] sm:text-[9px] font-black text-[#8c5a3c] uppercase tracking-wider truncate">
@@ -574,7 +631,6 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                 </p>
             </div>
 
-            {/* Harga & Badge Opsi Pembelian */}
             <div className="flex items-center justify-between pt-1 border-t border-[#e6ccb2]/40">
                 <div className="font-black text-[#3d2314] text-xs">
                     Rp {new Intl.NumberFormat('id-ID').format(item.price)}

@@ -12,6 +12,10 @@ import {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
+// Cache in-memory modul agar saat navigasi page langsung instan tanpa glitch
+let cachedRobloxBanner: BannerItem | null = null;
+let cachedRobloxBadges: RobloxBadgeItem[] | null = null;
+
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     return (
         <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -86,8 +90,11 @@ const MAP_SCREENSHOTS = [
 ];
 
 export default function RobloxPage() {
-    const [badges, setBadges] = useState<RobloxBadgeItem[]>([]);
-    const [banner, setBanner] = useState<BannerItem | null>(null);
+    // Inisialisasi awal langsung dari cache modul jika ada
+    const [badges, setBadges] = useState<RobloxBadgeItem[]>(() => cachedRobloxBadges || []);
+    const [banner, setBanner] = useState<BannerItem | null>(() => cachedRobloxBanner);
+    const [isBannerChecked, setIsBannerChecked] = useState<boolean>(() => cachedRobloxBanner !== null);
+
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
     const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
@@ -103,10 +110,17 @@ export default function RobloxPage() {
             const json = await res.json();
             if (json && json.data) {
                 if (Array.isArray(json.data)) {
+                    cachedRobloxBadges = json.data;
                     setBadges(json.data);
                 } else {
-                    setBadges(json.data.missions || []);
-                    setBanner(json.data.banner || null);
+                    const missionsData = json.data.missions || [];
+                    const bannerData = json.data.banner || null;
+
+                    cachedRobloxBadges = missionsData;
+                    cachedRobloxBanner = bannerData;
+
+                    setBadges(missionsData);
+                    setBanner(bannerData);
                 }
             }
         } catch (error) {
@@ -114,6 +128,7 @@ export default function RobloxPage() {
             setIsError(true);
         } finally {
             setIsLoading(false);
+            setIsBannerChecked(true); // Pengecekan banner dashboard tuntas
         }
     }
 
@@ -168,33 +183,49 @@ export default function RobloxPage() {
         return <Award className="w-4 h-4 text-[#8c5a3c]" />;
     };
 
-    const heroImage = banner?.image
-        ? (banner.image.startsWith('http')
-            ? banner.image
-            : banner.image.startsWith('/img')
+    // Langsung arahkan ke banner dashboard. Fallback ke hero-home hanya jika pengecekan selesai dan dashboard kosong
+    const heroImage = useMemo(() => {
+        if (banner?.image) {
+            return banner.image.startsWith('http')
                 ? banner.image
-                : `${API_BASE_URL}/storage/${banner.image}`)
-        : '/img/hero-home.png';
+                : banner.image.startsWith('/img')
+                    ? banner.image
+                    : `${API_BASE_URL}/storage/${banner.image}`;
+        }
+        return isBannerChecked ? '/img/hero-home.png' : '';
+    }, [banner, isBannerChecked]);
 
     const playLink = banner?.cta_link || 'https://www.roblox.com/share?code=47170fa9c8a5b649b293166187e470c0&type=ExperienceDetails&stamp=1785743470866';
-
     return (
         <div className="min-h-screen space-y-8 sm:space-y-12 pb-16">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION (RESPONSIF: MOBILE vs DESKTOP)    */}
+            {/* 1. HERO SECTION (SMOOTH & ANTI-GLITCH DASHBOARD)  */}
             {/* ================================================= */}
-            <section className="relative w-full min-h-dvh lg:h-screen flex items-center overflow-hidden border-b border-[#e6ccb2]/60 pt-16 pb-4 lg:py-0">
+            <section
+                className={`relative w-full min-h-dvh lg:h-screen flex items-center overflow-hidden border-b border-[#e6ccb2]/60 pt-16 pb-4 lg:py-0 transition-colors duration-500 ${
+                    heroImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
+                }`}
+            >
                 {/* 1. Background Image Cover */}
                 <div className="absolute inset-0 z-0">
-                    <img
-                        src={heroImage}
-                        alt="To Meet Roblox Game Experience"
-                        className="w-full h-full object-cover object-[75%_center] lg:object-right xl:object-center"
-                    />
+                    {heroImage && (
+                        <img
+                            src={heroImage}
+                            alt="To Meet Roblox Game Experience"
+                            loading="eager"
+                            fetchPriority="high"
+                            decoding="async"
+                            onLoad={(e) => {
+                                (e.currentTarget as HTMLElement).classList.remove('opacity-0');
+                                (e.currentTarget as HTMLElement).classList.add('opacity-100');
+                            }}
+                            className="w-full h-full object-cover object-[75%_center] lg:object-right xl:object-center opacity-0 transition-opacity duration-700 ease-out"
+                        />
+                    )}
 
                     {/* Gradien Putih Sisi Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 sm:via-white/80 to-transparent w-full sm:w-4/5 lg:w-3/5 xl:w-1/2" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 sm:via-white/80 to-transparent w-full sm:w-4/5 lg:w-3/5 xl:w-1/2 pointer-events-none" />
 
                     {/* Soft Vignette Bawah di HP */}
                     <div className="block lg:hidden absolute inset-0 bg-gradient-to-t from-white/40 via-transparent to-transparent pointer-events-none" />
@@ -206,7 +237,11 @@ export default function RobloxPage() {
 
                         {/* Kolom Teks: Dibungkus Card Ber-Border Rapi di HP */}
                         <div className="lg:col-span-6 text-left">
-                            <div className="bg-white/85 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-4 sm:p-5 lg:p-0 rounded-3xl lg:rounded-none border border-white/80 lg:border-none shadow-md lg:shadow-none space-y-2.5 sm:space-y-3 max-w-md">
+                            <div
+                                className={`bg-white/85 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-4 sm:p-5 lg:p-0 rounded-3xl lg:rounded-none border border-white/80 lg:border-none shadow-md lg:shadow-none space-y-2.5 sm:space-y-3 max-w-md transition-all duration-700 ease-out ${
+                                    isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                                }`}
+                            >
 
                                 {/* Pill Badge */}
                                 <div>
@@ -216,23 +251,25 @@ export default function RobloxPage() {
                                     </div>
                                 </div>
 
-                                {/* Title */}
+                                {/* Title: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#2e170c] tracking-tight leading-[1.15] uppercase">
-                                    {renderFormattedText(
-                                        banner?.title,
+                                    {banner?.title ? (
+                                        renderFormattedText(banner.title)
+                                    ) : isBannerChecked ? (
                                         <>
                                             TO MEET <br className="hidden sm:block" />
                                             <span className="text-[#8c5a3c]">IN ROBLOX</span>
                                         </>
-                                    )}
+                                    ) : null}
                                 </h1>
 
-                                {/* Subjudul Rapi dengan Warna Teks Asli */}
+                                {/* Subjudul: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                                 <p className="text-xs sm:text-[15px] text-[#4a3427] font-semibold leading-relaxed">
-                                    {renderFormattedText(
-                                        banner?.subtitle,
+                                    {banner?.subtitle ? (
+                                        renderFormattedText(banner.subtitle)
+                                    ) : isBannerChecked ? (
                                         'Selesaikan misi karier dan tantangan Obby di game Roblox, raih badge penanda prestasi, dan tukarkan reward gratis di To Meet Cafe!'
-                                    )}
+                                    ) : null}
                                 </p>
 
                                 {/* Tombol Aksi Sejajar */}
@@ -289,7 +326,11 @@ export default function RobloxPage() {
                     </div>
 
                     {/* 3 Mini Highlight Stats: Presisi Sejajar di Bawah */}
-                    <div className="grid grid-cols-3 gap-2 max-w-md text-center pt-3">
+                    <div
+                        className={`grid grid-cols-3 gap-2 max-w-md text-center pt-3 transition-all duration-700 ease-out delay-100 ${
+                            isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                        }`}
+                    >
                         <div className="bg-white/95 backdrop-blur-xs py-1.5 px-2 rounded-xl border border-[#e6ccb2]/70 shadow-2xs">
                             <div className="text-[11px] font-black text-[#3d2314] leading-none">18.5K</div>
                             <div className="text-[7.5px] text-[#6c584c] font-bold uppercase mt-0.5">Visits</div>

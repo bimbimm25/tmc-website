@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
   Coffee, MapPin, Utensils, Calendar,
@@ -10,6 +13,10 @@ import { FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
 import type { HomeDataResponse, Menu, Event, RobloxMission } from '@/types/api';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
+// Cache in-memory modul agar navigasi antar-halaman seketika tanpa glitch
+let cachedHomeBanner: BannerData | null = null;
+let cachedHomeData: HomeDataResponse['data'] | null = null;
 
 // Interface Data Banner dari Backend
 interface BannerData {
@@ -27,7 +34,6 @@ interface BannerData {
 function FormatTextWithBreak({ text }: { text?: string | null }) {
   if (!text) return null;
 
-  // Memecah teks berdasarkan <br>, <br/>, <br />, atau newline \n
   const lines = text.split(/<br\s*\/?>|\n/gi);
 
   return (
@@ -42,121 +48,132 @@ function FormatTextWithBreak({ text }: { text?: string | null }) {
   );
 }
 
-// Fetch Data Utama Homepage
-async function getHomeData(): Promise<HomeDataResponse['data'] | null> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/api/home-data`, {
-      cache: 'no-store',
-    });
+export default function Home() {
+  const [homeData, setHomeData] = useState<HomeDataResponse['data'] | null>(() => cachedHomeData);
+  const [homeBanner, setHomeBanner] = useState<BannerData | null>(() => cachedHomeBanner);
+  const [isBannerChecked, setIsBannerChecked] = useState<boolean>(() => cachedHomeBanner !== null);
 
-    if (!res.ok) return null;
+  useEffect(() => {
+    async function fetchAllData() {
+      try {
+        const [resHome, resBanner] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/home-data`, { cache: 'no-store' }).catch(() => null),
+          fetch(`${API_BASE_URL}/api/banners/home`, { cache: 'default' }).catch(() => null),
+        ]);
 
-    const json: HomeDataResponse = await res.json();
-    return json.data;
-  } catch (error) {
-    console.error("Error fetching data from API:", error);
-    return null;
-  }
-}
+        if (resHome && resHome.ok) {
+          const jsonHome: HomeDataResponse = await resHome.json();
+          if (jsonHome?.data) {
+            cachedHomeData = jsonHome.data;
+            setHomeData(jsonHome.data);
+          }
+        }
 
-// Fetch Banner Dinamis dari Dashboard Admin (Target: page_key 'home')
-async function getHomeBanner(): Promise<BannerData | null> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/api/banners/home`, {
-      cache: 'no-store',
-    });
+        if (resBanner && resBanner.ok) {
+          const jsonBanner = await resBanner.json();
+          if (jsonBanner?.data) {
+            cachedHomeBanner = jsonBanner.data;
+            setHomeBanner(jsonBanner.data);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching home data:', err);
+      } finally {
+        setIsBannerChecked(true);
+      }
+    }
 
-    if (!res.ok) return null;
-
-    const json = await res.json();
-    return json.data || null;
-  } catch (error) {
-    console.warn("Banner API offline / fallback used:", error);
-    return null;
-  }
-}
-
-export default async function Home() {
-  const [homeData, homeBanner] = await Promise.all([
-    getHomeData(),
-    getHomeBanner()
-  ]);
+    fetchAllData();
+  }, []);
 
   const highlightMenus: Menu[] = homeData?.highlight_menus || [];
   const latestEvent: Event | null = homeData?.latest_event || null;
   const activeMission: RobloxMission | null = homeData?.active_mission || null;
 
-  // Tentukan gambar banner (Dinamis dari Dashboard Admin atau Fallback Default)
-  const heroBackgroundImage = homeBanner?.image
-    ? (homeBanner.image.startsWith('http')
-      ? homeBanner.image
-      : homeBanner.image.startsWith('/img')
+  // Utamakan gambar dari dashboard. Jika tuntas dicek dan tidak ada, baru fallback ke hero-home
+  const heroBackgroundImage = useMemo(() => {
+    if (homeBanner?.image) {
+      return homeBanner.image.startsWith('http')
         ? homeBanner.image
-        : `${API_BASE_URL}/storage/${homeBanner.image}`)
-    : '/img/hero-home.png';
+        : homeBanner.image.startsWith('/img')
+          ? homeBanner.image
+          : `${API_BASE_URL}/storage/${homeBanner.image}`;
+    }
+    return isBannerChecked ? '/img/hero-home.png' : '';
+  }, [homeBanner, isBannerChecked]);
 
   return (
     <div className="space-y-12 lg:space-y-16 pb-16">
 
       {/* ================================================= */}
-      {/* 1. HERO SECTION (DINAMIS & SUPPORTS <BR>)         */}
+      {/* 1. HERO SECTION (SMOOTH & ANTI-GLITCH DASHBOARD)  */}
       {/* ================================================= */}
-      {/* ================================================= */}
-      {/* 1. HERO SECTION (PERSIS SESUAI REFERENSI MOBILE)  */}
-      {/* ================================================= */}
-      <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50">
+      <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50 bg-[#FAF0E6]/30 transition-colors duration-500">
         {/* 1. Background Cover Layer */}
         <div className="absolute inset-0 z-0">
-          <img
-            src={heroBackgroundImage}
-            alt="To Meet Cafe Atmosphere"
-            className="w-full h-full object-cover object-[75%_center] lg:object-right xl:object-center"
-          />
+          {heroBackgroundImage && (
+            <img
+              src={heroBackgroundImage}
+              alt="To Meet Cafe Atmosphere"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              onLoad={(e) => {
+                (e.currentTarget as HTMLElement).classList.remove('opacity-0');
+                (e.currentTarget as HTMLElement).classList.add('opacity-100');
+              }}
+              className="w-full h-full object-cover object-[75%_center] lg:object-right xl:object-center opacity-0 transition-opacity duration-700 ease-out"
+            />
+          )}
 
-          {/* Gradient Overlay: Lembut di mobile dan solid di desktop agar teks kontras & beruang tetap terlihat utuh */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent w-full sm:w-3/4 lg:w-3/5 xl:w-1/2" />
-          <div className="block lg:hidden absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent" />
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent w-full sm:w-3/4 lg:w-3/5 xl:w-1/2 pointer-events-none" />
+          <div className="block lg:hidden absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent pointer-events-none" />
         </div>
 
         {/* 2. Konten Hero Text & Action */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-14 sm:pt-16">
-          <div className="max-w-md lg:max-w-xl space-y-2.5 sm:space-y-3.5 text-left">
+          <div
+            className={`max-w-md lg:max-w-xl space-y-2.5 sm:space-y-3.5 text-left transition-all duration-700 ease-out ${
+              isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            }`}
+          >
 
-            {/* Pill Badge Mungil */}
+            {/* Pill Badge */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-xs text-[#e85a4f] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs">
               <span>WELCOME TO MEET</span>
               <Sparkles className="w-3 h-3 text-amber-500" />
             </div>
 
-            {/* Title Proporsional & Rapi */}
+            {/* Title: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
             <h1 className="text-2xl sm:text-3xl lg:text-[2.6rem] font-black text-[#2e170c] tracking-tight leading-[1.18]">
               {homeBanner?.title ? (
                 <FormatTextWithBreak text={homeBanner.title} />
-              ) : (
+              ) : isBannerChecked ? (
                 <>
                   More than a cafe, <br />
                   It&apos;s a happy place to meet <br />
                   <span className="text-[#8c5a3c]">& create memories.</span>
                 </>
-              )}
+              ) : null}
             </h1>
 
-            {/* Subtitle */}
+            {/* Subtitle: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
             <p className="text-sm sm:text-[14px] text-[#4a3427] font-semibold leading-relaxed max-w-md">
               {homeBanner?.subtitle ? (
                 <FormatTextWithBreak text={homeBanner.subtitle} />
-              ) : (
+              ) : isBannerChecked ? (
                 'To Meet is a cozy bear-themed cafe & playground created for everyone to enjoy sweet treats, good times, and heartwarming moments together.'
-              )}
+              ) : null}
             </p>
 
-            {/* Tombol Aksi Kapsul Berdampingan Seperti Referensi */}
+            {/* Tombol Aksi Kapsul Berdampingan */}
             <div className="pt-2 flex flex-row items-center gap-2 sm:gap-3">
               <a
-                href="#locations"
+                href={homeBanner?.cta_link || "#locations"}
                 className="px-4 sm:px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black rounded-full text-[10.5px] sm:text-xs transition duration-200 shadow-md shadow-rose-500/20 inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap"
               >
-                <span>VISIT OUR CAFES</span>
+                <span>{homeBanner?.cta_text || "VISIT OUR CAFES"}</span>
                 <MapPin className="w-3.5 h-3.5 shrink-0" />
               </a>
 
@@ -188,14 +205,15 @@ export default async function Home() {
         </div>
 
         {/* Adventure Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-5 items-stretch">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3.5 sm:gap-4 md:gap-5 items-stretch">
 
           {/* 1. Visit Cafe */}
           <a
             href="/visit-us"
-            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
+            className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
+            {/* Slot Gambar Konsisten */}
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3.5">
               <img
                 src="/img/icon-visit-cafe.png"
                 alt="Visit Cafe"
@@ -203,16 +221,15 @@ export default async function Home() {
               />
             </div>
 
-            <div className="w-full flex flex-col justify-end flex-1">
-              {/* Slot Judul Terkunci Tinggi (Konsisten 1 atau 2 baris) */}
-              <div className="h-8 sm:h-9 flex items-center justify-center">
-                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+            {/* Container Teks Rata & Sejajar */}
+            <div className="w-full flex flex-col flex-1 justify-between items-center text-center">
+              <div className="min-h-[2.5rem] flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-snug">
                   VISIT CAFE
                 </h3>
               </div>
-              {/* Slot Deskripsi Terkunci Tinggi */}
-              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
-                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+              <div className="flex-1 flex items-start justify-center pt-1.5">
+                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                   Cek lokasi makan enak, playground, dan santai bareng keluarga.
                 </p>
               </div>
@@ -222,9 +239,9 @@ export default async function Home() {
           {/* 2. Menu */}
           <Link
             href="/menu"
-            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
+            className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3.5">
               <img
                 src="/img/icon-menu.png"
                 alt="Menu"
@@ -232,14 +249,14 @@ export default async function Home() {
               />
             </div>
 
-            <div className="w-full flex flex-col justify-end flex-1">
-              <div className="h-8 sm:h-9 flex items-center justify-center">
-                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+            <div className="w-full flex flex-col flex-1 justify-between items-center text-center">
+              <div className="min-h-[2.5rem] flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-snug">
                   MENU
                 </h3>
               </div>
-              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
-                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+              <div className="flex-1 flex items-start justify-center pt-1.5">
+                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                   Makanan dan minuman lezat yang dibuat penuh cinta.
                 </p>
               </div>
@@ -249,9 +266,9 @@ export default async function Home() {
           {/* 3. Event & Workshop */}
           <Link
             href="/event"
-            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
+            className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3.5">
               <img
                 src="/img/icon-event.png"
                 alt="Event & Workshop"
@@ -259,14 +276,14 @@ export default async function Home() {
               />
             </div>
 
-            <div className="w-full flex flex-col justify-end flex-1">
-              <div className="h-8 sm:h-9 flex items-center justify-center">
-                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+            <div className="w-full flex flex-col flex-1 justify-between items-center text-center">
+              <div className="min-h-[2.5rem] flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-snug">
                   EVENT & WORKSHOP
                 </h3>
               </div>
-              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
-                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+              <div className="flex-1 flex items-start justify-center pt-1.5">
+                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                   Aktivitas seru, kreasi manis, dan workshop interaktif.
                 </p>
               </div>
@@ -276,9 +293,9 @@ export default async function Home() {
           {/* 4. Merchandise */}
           <Link
             href="/merchandise"
-            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
+            className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3.5">
               <img
                 src="/img/icon-merchandise.png"
                 alt="Merchandise"
@@ -286,14 +303,14 @@ export default async function Home() {
               />
             </div>
 
-            <div className="w-full flex flex-col justify-end flex-1">
-              <div className="h-8 sm:h-9 flex items-center justify-center">
-                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+            <div className="w-full flex flex-col flex-1 justify-between items-center text-center">
+              <div className="min-h-[2.5rem] flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-snug">
                   MERCHANDISE
                 </h3>
               </div>
-              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
-                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+              <div className="flex-1 flex items-start justify-center pt-1.5">
+                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                   Bawa pulang suvenir dan boneka beruang lucu To Meet.
                 </p>
               </div>
@@ -303,9 +320,9 @@ export default async function Home() {
           {/* 5. Roblox */}
           <Link
             href="/roblox"
-            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
+            className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3.5">
               <img
                 src="/img/icon-roblox.png"
                 alt="Roblox"
@@ -313,14 +330,14 @@ export default async function Home() {
               />
             </div>
 
-            <div className="w-full flex flex-col justify-end flex-1">
-              <div className="h-8 sm:h-9 flex items-center justify-center">
-                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
+            <div className="w-full flex flex-col flex-1 justify-between items-center text-center">
+              <div className="min-h-[2.5rem] flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-snug">
                   ROBLOX
                 </h3>
               </div>
-              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
-                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+              <div className="flex-1 flex items-start justify-center pt-1.5">
+                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                   Jelajahi dunia cafe virtual 3D dan selesaikan misinya!
                 </p>
               </div>
@@ -330,9 +347,9 @@ export default async function Home() {
           {/* 6. Birthday / Private Event */}
           <Link
             href="/birthday"
-            className="bg-white p-3.5 sm:p-4 md:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
+            className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3.5">
               <img
                 src="/img/icon-birthday.png"
                 alt="Birthday / Private Event"
@@ -340,14 +357,14 @@ export default async function Home() {
               />
             </div>
 
-            <div className="w-full flex flex-col justify-end flex-1">
-              <div className="h-8 sm:h-9 flex items-center justify-center">
-                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-tight">
-                  BIRTHDAY & EVENT
+            <div className="w-full flex flex-col flex-1 justify-between items-center text-center">
+              <div className="min-h-[2.5rem] flex items-center justify-center">
+                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-snug">
+                  BIRTHDAY & PRIVATE EVENT
                 </h3>
               </div>
-              <div className="h-9 sm:h-11 flex items-center justify-center mt-1">
-                <p className="text-[10px] sm:text-[11px] text-[#6c584c] font-semibold leading-snug line-clamp-2">
+              <div className="flex-1 flex items-start justify-center pt-1.5">
+                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                   Rayakan momen spesial penuh kebahagiaan di To Meet!
                 </p>
               </div>
@@ -776,12 +793,12 @@ export default async function Home() {
                   </span>
                 </div>
 
-                {/* Description - Hapus whitespace-nowrap, tambahkan break-words dan max-width */}
+                {/* Description */}
                 <p className="text-[11px] sm:text-xs text-[#6c584c] font-medium leading-relaxed break-words max-w-sm">
                   Ikuti update menu baru, keseruan workshop, dan promo spesial kami
                 </p>
 
-                {/* Social Media Links (Pill / Capsule Style - Auto wrap & adaptif) */}
+                {/* Social Media Links */}
                 <div className="flex flex-wrap items-center gap-2 pt-0.5">
                   {/* Instagram */}
                   <a

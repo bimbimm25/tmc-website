@@ -10,6 +10,9 @@ import {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
+// Cache in-memory level modul agar saat navigasi page langsung instan tanpa glitch
+let cachedEventBanner: BannerItem | null = null;
+
 function BearPawIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
     return (
         <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -96,7 +99,11 @@ function FormatTextWithBreak({ text }: { text?: string | null }) {
 
 export default function EventPage() {
     const [events, setEvents] = useState<EventItem[]>([]);
-    const [eventBanner, setEventBanner] = useState<BannerItem | null>(null);
+
+    // Inisialisasi awal langsung dari cache modul jika ada
+    const [eventBanner, setEventBanner] = useState<BannerItem | null>(() => cachedEventBanner);
+    const [isBannerChecked, setIsBannerChecked] = useState<boolean>(() => cachedEventBanner !== null);
+
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
@@ -141,7 +148,7 @@ export default function EventPage() {
 
             const [resEvents, resBanner] = await Promise.all([
                 fetch(`${API_BASE_URL}/api/events`, { cache: 'no-store' }),
-                fetch(`${API_BASE_URL}/api/banners/event`, { cache: 'no-store' }).catch(() => null)
+                fetch(`${API_BASE_URL}/api/banners/event`, { cache: 'default' }).catch(() => null)
             ]);
 
             if (!resEvents.ok) {
@@ -160,9 +167,13 @@ export default function EventPage() {
                 setEvents([]);
             }
 
+            // Ambil banner langsung dari dashboard
             if (resBanner && resBanner.ok) {
                 const jsonBanner = await resBanner.json();
-                setEventBanner(jsonBanner.data || null);
+                if (jsonBanner?.data) {
+                    cachedEventBanner = jsonBanner.data;
+                    setEventBanner(jsonBanner.data);
+                }
             }
         } catch (err) {
             console.error('Gagal mengambil data event dari API:', err);
@@ -170,6 +181,7 @@ export default function EventPage() {
             setEvents([]);
         } finally {
             setIsLoading(false);
+            setIsBannerChecked(true); // Pengecekan banner dashboard tuntas
         }
     }
 
@@ -195,13 +207,17 @@ export default function EventPage() {
         });
     }, [events, selectedCategory]);
 
-    const heroImageSrc = eventBanner?.image
-        ? (eventBanner.image.startsWith('http')
-            ? eventBanner.image
-            : eventBanner.image.startsWith('/img')
+    // Langsung arahkan ke banner dashboard. Fallback ke hero-home hanya jika pengecekan selesai dan dashboard kosong
+    const heroImageSrc = useMemo(() => {
+        if (eventBanner?.image) {
+            return eventBanner.image.startsWith('http')
                 ? eventBanner.image
-                : `${API_BASE_URL}/storage/${eventBanner.image}`)
-        : '/img/hero-home.png';
+                : eventBanner.image.startsWith('/img')
+                    ? eventBanner.image
+                    : `${API_BASE_URL}/storage/${eventBanner.image}`;
+        }
+        return isBannerChecked ? '/img/hero-home.png' : '';
+    }, [eventBanner, isBannerChecked]);
 
     const handleCloseModal = () => {
         setSelectedEvent(null);
@@ -211,23 +227,38 @@ export default function EventPage() {
         <div className="min-h-screen pb-12 space-y-6 sm:space-y-10">
 
             {/* ================================================= */}
-            {/* 1. HERO BANNER (HANYA DITAMPILKAN DI DESKTOP)     */}
+            {/* 1. HERO BANNER (SMOOTH & ANTI-GLITCH DASHBOARD)   */}
             {/* ================================================= */}
-            <section className="hidden lg:flex relative w-full h-screen min-h-dvh items-center overflow-hidden">
+            <section
+                className={`hidden lg:flex relative w-full h-screen min-h-dvh items-center overflow-hidden transition-colors duration-500 ${heroImageSrc ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
+                    }`}
+            >
                 {/* Background Image Full Cover */}
                 <div className="absolute inset-0 z-0">
-                    <img
-                        src={heroImageSrc}
-                        alt="To Meet Event & Workshop"
-                        className="w-full h-full object-cover object-right lg:object-center"
-                    />
+                    {heroImageSrc && (
+                        <img
+                            src={heroImageSrc}
+                            alt="To Meet Event & Workshop"
+                            loading="eager"
+                            fetchPriority="high"
+                            decoding="async"
+                            onLoad={(e) => {
+                                (e.currentTarget as HTMLElement).classList.remove('opacity-0');
+                                (e.currentTarget as HTMLElement).classList.add('opacity-100');
+                            }}
+                            className="w-full h-full object-cover object-right lg:object-center opacity-0 transition-opacity duration-700 ease-out"
+                        />
+                    )}
                     {/* Gradient Overlay Putih Sebelah Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2 pointer-events-none" />
                 </div>
 
                 {/* Konten Text Hero */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
-                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+                    <div
+                        className={`max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5 transition-all duration-700 ease-out ${isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                            }`}
+                    >
 
                         {/* Pill Badge */}
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
@@ -235,25 +266,25 @@ export default function EventPage() {
                             <BearPawIcon className="w-3 h-3" />
                         </div>
 
-                        {/* Title dengan Ukuran Pas */}
+                        {/* Title: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
                             {eventBanner?.title ? (
                                 <FormatTextWithBreak text={eventBanner.title} />
-                            ) : (
+                            ) : isBannerChecked ? (
                                 <>
                                     EVENT & <br />
                                     <span className="text-[#8c5a3c]">WORKSHOP</span>
                                 </>
-                            )}
+                            ) : null}
                         </h1>
 
-                        {/* Subtitle */}
+                        {/* Subtitle: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                             {eventBanner?.subtitle ? (
                                 <FormatTextWithBreak text={eventBanner.subtitle} />
-                            ) : (
+                            ) : isBannerChecked ? (
                                 'Ikuti berbagai kelas seni edukatif, workshop kreasi seru, dan aktivitas akhir pekan menyenangkan di To Meet Cafe.'
-                            )}
+                            ) : null}
                         </p>
 
                         {/* Tombol Aksi */}
@@ -302,8 +333,8 @@ export default function EventPage() {
                                         key={cat}
                                         onClick={() => setSelectedCategory(cat)}
                                         className={`px-3 py-1.5 rounded-full text-[11px] font-black transition tracking-wider shrink-0 cursor-pointer flex items-center gap-1.5 uppercase ${isSelected
-                                                ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                                : 'bg-[#FAF0E6]/50 text-[#6c584c] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
+                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                            : 'bg-[#FAF0E6]/50 text-[#6c584c] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
                                             }`}
                                     >
                                         <Palette className="w-3 h-3" />
