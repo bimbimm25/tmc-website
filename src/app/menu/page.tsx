@@ -231,7 +231,7 @@ export default function DigitalMenuPage() {
                         </div>
 
                         {/* Title: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
-                        <h1 className="text-4xl lg:text-5xl font-black text-[#3d2314] tracking-tight leading-tight">
+                        <h1 className="text-4xl lg:text-4xl font-black text-[#3d2314] tracking-tight leading-tight">
                             {menuBanner?.title
                                 ? menuBanner.title
                                 : isBannerResolved
