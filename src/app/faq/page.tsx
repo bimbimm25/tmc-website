@@ -519,8 +519,8 @@ export default function FAQPage() {
             {/* 2. CATEGORY NAVIGATION HORIZONTAL TABS            */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-0">
-                <div className="bg-white p-3 sm:p-4 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-x-auto scrollbar-none">
-                    <div className="flex items-stretch gap-2.5 min-w-max lg:min-w-0 lg:grid lg:grid-cols-6">
+                <div className="bg-white p-3.5 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    <div className="flex items-stretch gap-3 min-w-max lg:min-w-0 lg:grid lg:grid-cols-6">
                         {CATEGORIES.map((cat) => {
                             const IconComponent = cat.icon;
                             const isActive = selectedCategory === cat.id && searchQuery.trim() === '';
@@ -532,28 +532,29 @@ export default function FAQPage() {
                                         setSelectedCategory(cat.id);
                                         setSearchQuery('');
                                     }}
-                                    className={`p-3 rounded-2xl transition flex flex-col items-center justify-center text-center space-y-1.5 cursor-pointer w-32 sm:w-36 lg:w-full shrink-0 ${isActive
-                                            ? 'bg-[#FAF0E6] border border-[#e6ccb2] shadow-2xs'
-                                            : 'hover:bg-[#FAF0E6]/50 border border-transparent'
+                                    className={`p-3.5 sm:p-4 rounded-2xl transition flex flex-col items-center justify-center text-center space-y-2 cursor-pointer w-36 sm:w-40 lg:w-full shrink-0 ${isActive
+                                        ? 'bg-[#FAF0E6] border border-[#e6ccb2] shadow-2xs'
+                                        : 'hover:bg-[#FAF0E6]/50 border border-transparent'
                                         }`}
                                 >
                                     <div
-                                        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center transition-colors ${isActive
-                                                ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                                : 'bg-[#FAF0E6] text-[#8c5a3c]'
+                                        className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-colors shadow-2xs ${isActive
+                                            ? 'bg-[#8c5a3c] text-white'
+                                            : 'bg-[#FAF0E6] text-[#8c5a3c]'
                                             }`}
                                     >
-                                        <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                        <IconComponent className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                                     </div>
 
                                     <div className="space-y-0.5 w-full px-1">
                                         <div
-                                            className={`text-[10.5px] sm:text-xs font-black tracking-wider uppercase leading-tight ${isActive ? 'text-[#8c5a3c]' : 'text-[#3d2314]'
+                                            className={`text-xs sm:text-[13px] font-black tracking-wider uppercase leading-tight ${isActive ? 'text-[#8c5a3c]' : 'text-[#3d2314]'
                                                 }`}
                                         >
                                             {cat.name}
                                         </div>
-                                        <div className="text-[9.5px] sm:text-[10px] text-[#6c584c] font-semibold leading-relaxed break-words">
+                                        {/* Deskripsi Kategori: Patokan text-xs sm:text-sm */}
+                                        <div className="text-xs sm:text-[12.5px] text-[#6c584c] font-semibold leading-relaxed break-words">
                                             {cat.desc}
                                         </div>
                                     </div>
@@ -568,26 +569,26 @@ export default function FAQPage() {
             {/* 3. MAIN FAQ CONTENT & SIDEBAR                     */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
 
                     {/* KOLOM KIRI: SEARCH INPUT + ACCORDION FAQ */}
-                    <div className="lg:col-span-8 space-y-4">
+                    <div className="lg:col-span-8 space-y-6">
 
                         {/* SEARCH INPUT BAR DI ATAS FAQ */}
-                        <div className="bg-white p-2 rounded-2xl border border-[#e6ccb2]/80 shadow-2xs">
+                        <div className="bg-white p-3 sm:p-3.5 rounded-2xl border border-[#e6ccb2]/80 shadow-2xs">
                             <div className="relative flex items-center">
                                 <input
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Cari pertanyaan kamu di sini..."
-                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/60 rounded-xl pl-10 pr-10 py-2.5 text-xs text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] placeholder:text-stone-400 transition"
+                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/60 rounded-xl pl-11 pr-11 py-3 text-xs sm:text-sm text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] placeholder:text-[#a08a7b] transition"
                                 />
-                                <Search className="w-4 h-4 text-stone-400 absolute left-3.5" />
+                                <Search className="w-5 h-5 text-[#8c5a3c] absolute left-3.5" />
                                 {searchQuery && (
                                     <button
                                         onClick={() => setSearchQuery('')}
-                                        className="p-1 text-stone-400 hover:text-stone-700 absolute right-3 cursor-pointer"
+                                        className="p-1.5 text-stone-400 hover:text-stone-700 absolute right-3 cursor-pointer transition"
                                         title="Hapus pencarian"
                                     >
                                         <X className="w-4 h-4" />
@@ -597,14 +598,15 @@ export default function FAQPage() {
                         </div>
 
                         {/* Section Header */}
-                        <div className="border-b border-[#e6ccb2]/60 pb-3 space-y-0.5">
-                            <div className="flex items-center gap-2">
-                                <BearPawIcon className="w-4 h-4 text-[#8c5a3c]" />
-                                <h2 className="text-base sm:text-lg font-black text-[#3d2314] uppercase tracking-wide">
+                        <div className="border-b border-[#e6ccb2]/60 pb-3.5 space-y-1">
+                            <div className="flex items-center gap-2.5">
+                                <BearPawIcon className="w-5 h-5 text-[#8c5a3c]" />
+                                <h2 className="text-base sm:text-lg lg:text-xl font-black text-[#3d2314] uppercase tracking-wide">
                                     {searchQuery.trim() !== '' ? `HASIL PENCARIAN: "${searchQuery}"` : activeCategoryInfo.name}
                                 </h2>
                             </div>
-                            <p className="text-xs text-[#6c584c] font-semibold">
+                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                            <p className="text-xs sm:text-sm text-[#6c584c] font-semibold">
                                 {searchQuery.trim() !== ''
                                     ? `Ditemukan ${filteredFAQs.length} pertanyaan terkait`
                                     : activeCategoryInfo.desc}
@@ -612,12 +614,13 @@ export default function FAQPage() {
                         </div>
 
                         {/* Accordion List */}
-                        <div className="space-y-3">
+                        <div className="space-y-3.5">
                             {filteredFAQs.length === 0 ? (
-                                <div className="bg-white p-10 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
-                                    <HelpCircle className="w-8 h-8 text-[#8c5a3c] mx-auto opacity-60" />
-                                    <h3 className="font-black text-sm text-[#3d2314]">Pertanyaan Tidak Ditemukan</h3>
-                                    <p className="text-xs text-[#6c584c]">
+                                <div className="bg-white p-12 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2.5">
+                                    <HelpCircle className="w-10 h-10 text-[#8c5a3c] mx-auto opacity-60" />
+                                    <h3 className="font-black text-base text-[#3d2314]">Pertanyaan Tidak Ditemukan</h3>
+                                    {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                                    <p className="text-xs sm:text-sm text-[#6c584c] max-w-md mx-auto leading-relaxed">
                                         Tidak ada pertanyaan yang cocok dengan kata kunci pencarian Anda. Silakan hubungi kami langsung via WhatsApp!
                                     </p>
                                 </div>
@@ -637,8 +640,8 @@ export default function FAQPage() {
                                                 className="w-full p-4 sm:p-5 flex items-center justify-between gap-3 text-left cursor-pointer"
                                                 aria-expanded={isExpanded}
                                             >
-                                                <div className="flex items-center gap-3">
-                                                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-xs font-black ${isExpanded
+                                                <div className="flex items-center gap-3.5">
+                                                    <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center shrink-0 text-xs sm:text-sm font-black shadow-2xs transition-colors ${isExpanded
                                                         ? 'bg-[#e85a4f] text-white'
                                                         : 'bg-[#FAF0E6] text-[#8c5a3c]'
                                                         }`}>
@@ -649,18 +652,21 @@ export default function FAQPage() {
                                                     </span>
                                                 </div>
 
-                                                <div className="shrink-0 text-[#8c5a3c]">
+                                                <div className="shrink-0 text-[#8c5a3c] pl-2">
                                                     {isExpanded ? (
-                                                        <ChevronUp className="w-4 h-4" />
+                                                        <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5" />
                                                     ) : (
-                                                        <ChevronDown className="w-4 h-4" />
+                                                        <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
                                                     )}
                                                 </div>
                                             </button>
 
                                             {isExpanded && (
-                                                <div className="px-5 pb-5 pt-0 text-xs text-[#5a4232] font-semibold leading-relaxed border-t border-[#e6ccb2]/40 pt-3 ml-9">
-                                                    {item.answer}
+                                                <div className="px-5 pb-5 pt-3 border-t border-[#e6ccb2]/40 ml-10 sm:ml-11">
+                                                    {/* Jawaban FAQ: Patokan text-xs sm:text-sm */}
+                                                    <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed">
+                                                        {item.answer}
+                                                    </p>
                                                 </div>
                                             )}
                                         </div>
@@ -674,15 +680,16 @@ export default function FAQPage() {
                     <div className="lg:col-span-4 space-y-6">
 
                         {/* CARD 1: MASIH ADA PERTANYAAN? */}
-                        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
-                            <div className="space-y-1">
+                        <div className="bg-white p-6 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
+                            <div className="space-y-1.5">
                                 <div className="flex items-center justify-between">
-                                    <h3 className="font-black text-sm sm:text-base text-[#3d2314]">
+                                    <h3 className="font-black text-base sm:text-lg text-[#3d2314]">
                                         Masih ada pertanyaan?
                                     </h3>
-                                    <Sparkles className="w-4 h-4 text-amber-500" />
+                                    <Sparkles className="w-5 h-5 text-amber-500" />
                                 </div>
-                                <p className="text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                                     Tim kami siap membantu menjawab pertanyaan dan kebutuhan Anda setiap hari.
                                 </p>
                             </div>
@@ -691,113 +698,113 @@ export default function FAQPage() {
                                 href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20ingin%20bertanya%20seputar%20cafe"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-full py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-xs rounded-2xl shadow-md transition flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer"
+                                className="w-full py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-xs sm:text-sm rounded-2xl shadow-md transition flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer"
                             >
-                                <MessageCircle className="w-4 h-4" />
+                                <MessageCircle className="w-4 h-4 fill-current" />
                                 <span>CHAT VIA WHATSAPP</span>
                             </a>
                         </div>
 
                         {/* CARD 2: TAUTAN CEPAT (QUICK LINKS) */}
-                        <div className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
-                            <div className="flex items-center justify-between border-b border-[#e6ccb2]/50 pb-2.5">
-                                <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wider">
+                        <div className="bg-white p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3.5">
+                            <div className="flex items-center justify-between border-b border-[#e6ccb2]/50 pb-3">
+                                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wider">
                                     TAUTAN CEPAT
                                 </h3>
-                                <BearPawIcon className="w-3.5 h-3.5 text-[#8c5a3c]" />
+                                <BearPawIcon className="w-4 h-4 text-[#8c5a3c]" />
                             </div>
 
-                            <div className="space-y-1 text-xs font-bold">
+                            <div className="space-y-1.5 text-xs sm:text-sm font-bold">
                                 <Link
                                     href="/menu"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
+                                    className="p-2.5 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>Menu Cafe</span>
-                                    <ArrowRight className="w-3.5 h-3.5" />
+                                    <ArrowRight className="w-4 h-4" />
                                 </Link>
                                 <Link
                                     href="/event"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
+                                    className="p-2.5 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>Event & Workshop</span>
-                                    <ArrowRight className="w-3.5 h-3.5" />
+                                    <ArrowRight className="w-4 h-4" />
                                 </Link>
                                 <Link
                                     href="/birthday"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
+                                    className="p-2.5 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>Ulang Tahun & Acara Privat</span>
-                                    <ArrowRight className="w-3.5 h-3.5" />
+                                    <ArrowRight className="w-4 h-4" />
                                 </Link>
                                 <Link
                                     href="/merchandise"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
+                                    className="p-2.5 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>Katalog Merchandise</span>
-                                    <ArrowRight className="w-3.5 h-3.5" />
+                                    <ArrowRight className="w-4 h-4" />
                                 </Link>
                                 <Link
                                     href="/roblox"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
+                                    className="p-2.5 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>To Meet di Roblox</span>
-                                    <ArrowRight className="w-3.5 h-3.5" />
+                                    <ArrowRight className="w-4 h-4" />
                                 </Link>
                                 <Link
                                     href="/blog"
-                                    className="p-2 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
+                                    className="p-2.5 rounded-xl flex items-center justify-between text-[#5a4232] hover:bg-[#FAF0E6]/50 hover:text-[#8c5a3c] transition"
                                 >
                                     <span>Blog & Cerita</span>
-                                    <ArrowRight className="w-3.5 h-3.5" />
+                                    <ArrowRight className="w-4 h-4" />
                                 </Link>
                             </div>
                         </div>
 
                         {/* CARD 3: JAM BUKA CAFE */}
-                        <div className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3.5">
-                            <div className="flex items-center gap-2 border-b border-[#e6ccb2]/50 pb-2.5">
+                        <div className="bg-white p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
+                            <div className="flex items-center gap-2 border-b border-[#e6ccb2]/50 pb-3">
                                 <Clock className="w-4 h-4 text-[#8c5a3c]" />
-                                <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wider">
+                                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wider">
                                     JAM BUKA OPERASIONAL
                                 </h3>
                             </div>
 
-                            <div className="space-y-3 text-xs">
+                            <div className="space-y-3.5">
                                 {/* Cabang 1: Heavenland Park */}
-                                <div className="bg-[#FAF0E6]/50 p-3 rounded-2xl border border-[#e6ccb2]/60 space-y-1.5">
+                                <div className="bg-[#FAF0E6]/50 p-3.5 rounded-2xl border border-[#e6ccb2]/60 space-y-2">
                                     <div className="flex items-center justify-between gap-2">
-                                        <span className="text-[10px] font-black text-[#e85a4f] uppercase tracking-wider">
+                                        <span className="text-[11px] sm:text-xs font-black text-[#e85a4f] uppercase tracking-wider">
                                             HEAVENLAND PARK
                                         </span>
-                                        <span className="text-[10px] font-black uppercase tracking-wide text-red-700 bg-red-100 border border-red-300 px-2 py-1 rounded-full shadow-sm">
+                                        <span className="text-[10px] sm:text-[10.5px] font-black uppercase tracking-wide text-red-700 bg-red-100 border border-red-300 px-2 py-0.5 rounded-full shadow-2xs">
                                             Sedang Direnovasi
                                         </span>
                                     </div>
                                     <div className="flex items-center justify-between text-[#3d2314]">
-                                        <span className="text-[#6c584c] font-semibold">Saat ini belum buka</span>
-                                        <span className="font-black text-xs">Pantau info terbaru</span>
+                                        <span className="text-xs sm:text-sm text-[#6c584c] font-semibold">Saat ini belum buka</span>
+                                        <span className="font-black text-xs sm:text-sm">Pantau info terbaru</span>
                                     </div>
                                 </div>
 
                                 {/* Cabang 2: Pondok Mutiara */}
-                                <div className="bg-[#FAF0E6]/50 p-3 rounded-2xl border border-[#e6ccb2]/60 space-y-1.5">
+                                <div className="bg-[#FAF0E6]/50 p-3.5 rounded-2xl border border-[#e6ccb2]/60 space-y-2">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-[10px] font-black text-[#8c5a3c] uppercase tracking-wider">
+                                        <span className="text-[11px] sm:text-xs font-black text-[#8c5a3c] uppercase tracking-wider">
                                             PONDOK MUTIARA
                                         </span>
-                                        <span className="text-[9px] font-black text-rose-600 bg-rose-50 border border-rose-200/80 px-1.5 py-0.5 rounded">
+                                        <span className="text-[10px] sm:text-[10.5px] font-black text-rose-600 bg-rose-50 border border-rose-200/80 px-2 py-0.5 rounded-full shadow-2xs">
                                             Senin Libur
                                         </span>
                                     </div>
                                     <div className="flex items-center justify-between text-[#3d2314]">
-                                        <span className="text-[#6c584c] font-semibold">Selasa – Minggu</span>
-                                        <span className="font-black text-xs">12.00 – 21.00 WIB</span>
+                                        <span className="text-xs sm:text-sm text-[#6c584c] font-semibold">Selasa – Minggu</span>
+                                        <span className="font-black text-xs sm:text-sm">12.00 – 21.00 WIB</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="pt-2 border-t border-[#e6ccb2]/40 text-center">
-                                <span className="text-[10px] font-black text-[#8c5a3c] uppercase">
+                                <span className="text-[11px] sm:text-xs font-black text-[#8c5a3c] uppercase tracking-wider">
                                     Sampai jumpa di To Meet Cafe!
                                 </span>
                             </div>
@@ -812,16 +819,17 @@ export default function FAQPage() {
             {/* 4. BOTTOM CONTACT CTA SECTION                     */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-white p-5 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-                    <div className="flex flex-col sm:flex-row items-center gap-3.5">
-                        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
-                            <BearFaceIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left">
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
+                            <BearFaceIcon className="w-6 h-6 sm:w-7 sm:h-7" />
                         </div>
-                        <div className="space-y-0.5">
-                            <h3 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight uppercase">
+                        <div className="space-y-1">
+                            <h3 className="font-black text-sm sm:text-base lg:text-lg text-[#3d2314] tracking-tight uppercase">
                                 Belum menemukan jawaban yang Anda cari?
                             </h3>
-                            <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed max-w-xl">
+                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                            <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed max-w-xl">
                                 Jangan ragu untuk menghubungi kami, tim kami akan dengan senang hati membantu Anda!
                             </p>
                         </div>
@@ -831,14 +839,13 @@ export default function FAQPage() {
                         href="https://wa.me/6282141609328"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-5 sm:px-6 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-[11px] sm:text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider shrink-0 cursor-pointer whitespace-nowrap"
+                        className="px-6 sm:px-7 py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-xs sm:text-sm rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-2 uppercase tracking-wider shrink-0 cursor-pointer whitespace-nowrap"
                     >
-                        <MessageCircle className="w-3.5 h-3.5" />
+                        <MessageCircle className="w-4 h-4" />
                         <span>HUBUNGI KAMI</span>
                     </a>
                 </div>
             </section>
-
         </div>
-    );
+    )
 }

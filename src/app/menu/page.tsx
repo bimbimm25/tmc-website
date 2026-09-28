@@ -264,31 +264,31 @@ export default function DigitalMenuPage() {
             {/* ================================================= */}
             {/* 2. MAIN CONTENT AREA & UX KATEGORI MOBILE         */}
             {/* ================================================= */}
-            <section id="menu-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-4">
-                <div className="bg-white p-4 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6">
+            <section id="menu-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-6">
+                <div className="bg-white p-4 sm:p-8 lg:p-10 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6 lg:space-y-8">
 
                     {/* Filter Tab Lokasi Outlet & Search Bar */}
-                    <div className="space-y-3">
-                        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 sm:p-4 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/70">
-                            <div className="flex items-center gap-2 text-xs font-black text-[#3d2314] uppercase tracking-wide">
-                                <MapPin className="w-4 h-4 text-[#8c5a3c]" />
+                    <div className="space-y-3.5 lg:space-y-4">
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 sm:p-4 lg:p-5 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/70">
+                            <div className="flex items-center gap-2 text-xs lg:text-sm font-black text-[#3d2314] uppercase tracking-wide">
+                                <MapPin className="w-4 h-4 lg:w-4.5 lg:h-4.5 text-[#8c5a3c]" />
                                 <span>PILIH OUTLET:</span>
                             </div>
-                            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 max-w-full">
+                            <div className="flex items-center gap-1.5 lg:gap-2 overflow-x-auto pb-1 sm:pb-0 max-w-full">
                                 <button
                                     onClick={() => setSelectedLocation('all')}
-                                    className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'all'
-                                        ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                        : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                    className={`px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-[11px] lg:text-xs xl:text-[13px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'all'
+                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                            : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
                                         }`}
                                 >
                                     Semua Outlet
                                 </button>
                                 <button
                                     onClick={() => setSelectedLocation('pondok_mutiara')}
-                                    className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'pondok_mutiara'
-                                        ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                        : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                    className={`px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-[11px] lg:text-xs xl:text-[13px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'pondok_mutiara'
+                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                            : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
                                         }`}
                                 >
                                     Pondok Mutiara
@@ -303,15 +303,15 @@ export default function DigitalMenuPage() {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="Cari makanan / minuman lezat..."
-                                className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-2xl pl-10 pr-9 py-2.5 text-xs text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
+                                className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-2xl pl-10 lg:pl-12 pr-9 lg:pr-11 py-2.5 lg:py-3.5 text-xs lg:text-sm text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
                             />
-                            <Search className="w-4 h-4 text-[#8c5a3c] absolute left-3.5 top-3" />
+                            <Search className="w-4 h-4 lg:w-5 lg:h-5 text-[#8c5a3c] absolute left-3.5 lg:left-4 top-3 lg:top-3.5" />
                             {searchQuery && (
                                 <button
                                     onClick={() => setSearchQuery('')}
-                                    className="absolute right-3 top-3 text-[#8c5a3c] hover:text-[#3d2314] cursor-pointer"
+                                    className="absolute right-3 lg:right-4 top-3 lg:top-3.5 text-[#8c5a3c] hover:text-[#3d2314] cursor-pointer"
                                 >
-                                    <X className="w-4 h-4" />
+                                    <X className="w-4 h-4 lg:w-5 lg:h-5" />
                                 </button>
                             )}
                         </div>
@@ -332,8 +332,8 @@ export default function DigitalMenuPage() {
                                         key={cat}
                                         onClick={() => setSelectedCategory(cat)}
                                         className={`px-3.5 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition shrink-0 cursor-pointer flex items-center gap-1.5 ${isSelected
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-[#FAF0E6]/70 text-[#3d2314] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
+                                                ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                                : 'bg-[#FAF0E6]/70 text-[#3d2314] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         {cat === 'bestseller' && <Star className="w-3 h-3 fill-amber-400 text-amber-400" />}
@@ -348,15 +348,15 @@ export default function DigitalMenuPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
                         {/* SIDEBAR FILTER (KIRI - HANYA DESKTOP) */}
-                        <aside className="hidden lg:block lg:col-span-3 lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:flex lg:flex-col gap-3">
-                            <div className="text-xs font-black text-[#3d2314] uppercase tracking-wider px-1 flex items-center gap-1.5">
-                                <SlidersHorizontal className="w-3.5 h-3.5 text-[#8c5a3c]" />
+                        <aside className="hidden lg:block lg:col-span-3 lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:flex lg:flex-col gap-3.5">
+                            <div className="text-xs lg:text-sm font-black text-[#3d2314] uppercase tracking-wider px-1 flex items-center gap-2">
+                                <SlidersHorizontal className="w-4 h-4 text-[#8c5a3c]" />
                                 <span>Kategori Menu</span>
                             </div>
 
                             <nav
                                 onWheel={(e) => e.stopPropagation()}
-                                className="flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto lg:flex-1 lg:min-h-0 overscroll-contain pr-1.5 pb-3 scrollbar-thin scrollbar-thumb-[#8c5a3c]/30 scrollbar-track-transparent"
+                                className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto lg:flex-1 lg:min-h-0 overscroll-contain pr-1.5 pb-3 scrollbar-thin scrollbar-thumb-[#8c5a3c]/30 scrollbar-track-transparent"
                             >
                                 {availableCategories.map((cat) => {
                                     const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
@@ -369,28 +369,28 @@ export default function DigitalMenuPage() {
                                         <button
                                             key={cat}
                                             onClick={() => setSelectedCategory(cat)}
-                                            className={`flex items-center justify-between px-3.5 py-2.5 rounded-2xl transition shrink-0 cursor-pointer text-left w-full ${isSelected
-                                                ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                                : 'bg-[#FAF0E6]/50 text-[#3d2314] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
+                                            className={`flex items-center justify-between px-3.5 lg:px-4 py-2.5 lg:py-3 rounded-2xl transition shrink-0 cursor-pointer text-left w-full ${isSelected
+                                                    ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                                    : 'bg-[#FAF0E6]/50 text-[#3d2314] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
                                                 }`}
                                         >
-                                            <span className="flex items-center gap-2 min-w-0 pr-1">
+                                            <span className="flex items-center gap-2.5 min-w-0 pr-1">
                                                 {cat === 'bestseller' ? (
-                                                    <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 shrink-0" />
+                                                    <Star className="w-4 h-4 text-amber-400 fill-amber-400 shrink-0" />
                                                 ) : cat === 'recommended' ? (
-                                                    <Sparkles className="w-3.5 h-3.5 text-[#e85a4f] fill-[#e85a4f] shrink-0" />
+                                                    <Sparkles className="w-4 h-4 text-[#e85a4f] fill-[#e85a4f] shrink-0" />
                                                 ) : (
-                                                    <Coffee className="w-3.5 h-3.5 shrink-0 text-current" />
+                                                    <Coffee className="w-4 h-4 shrink-0 text-current" />
                                                 )}
-                                                <span className="text-[10.5px] font-black uppercase tracking-tight leading-none truncate whitespace-nowrap">
+                                                <span className="text-[10.5px] lg:text-xs xl:text-[13px] font-black uppercase tracking-tight leading-none truncate whitespace-nowrap">
                                                     {label}
                                                 </span>
                                             </span>
 
                                             {isSelected ? (
-                                                <X className="w-3.5 h-3.5 shrink-0 hidden lg:block" />
+                                                <X className="w-4 h-4 shrink-0 hidden lg:block" />
                                             ) : (
-                                                <ChevronRight className="w-3.5 h-3.5 shrink-0 hidden lg:block opacity-60" />
+                                                <ChevronRight className="w-4 h-4 shrink-0 hidden lg:block opacity-60" />
                                             )}
                                         </button>
                                     );
@@ -404,8 +404,8 @@ export default function DigitalMenuPage() {
                             {/* Loading State */}
                             {isLoading && (
                                 <div className="py-20 text-center space-y-3">
-                                    <div className="w-8 h-8 border-3 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
-                                    <p className="text-xs font-black text-[#8c5a3c] uppercase tracking-wider">
+                                    <div className="w-8 h-8 lg:w-10 lg:h-10 border-3 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
+                                    <p className="text-xs lg:text-sm font-black text-[#8c5a3c] uppercase tracking-wider">
                                         Memuat data menu...
                                     </p>
                                 </div>
@@ -413,21 +413,21 @@ export default function DigitalMenuPage() {
 
                             {/* Error State */}
                             {!isLoading && isError && (
-                                <div className="py-16 text-center space-y-3.5 bg-[#FAF0E6]/50 rounded-3xl border border-rose-200/80 p-6">
-                                    <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
-                                        <AlertCircle className="w-6 h-6" />
+                                <div className="py-16 lg:py-20 text-center space-y-3.5 bg-[#FAF0E6]/50 rounded-3xl border border-rose-200/80 p-6 lg:p-8">
+                                    <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
+                                        <AlertCircle className="w-6 h-6 lg:w-7 lg:h-7" />
                                     </div>
                                     <div className="space-y-1">
-                                        <h4 className="font-black text-sm text-[#3d2314]">Gagal Memuat Data Menu</h4>
-                                        <p className="text-xs text-[#6c584c] font-semibold max-w-sm mx-auto">
+                                        <h4 className="font-black text-sm lg:text-base text-[#3d2314]">Gagal Memuat Data Menu</h4>
+                                        <p className="text-xs lg:text-sm text-[#6c584c] font-semibold max-w-sm mx-auto">
                                             Server Sedang Sibuk atau Anda Sedang Offline. Silakan coba lagi nanti.
                                         </p>
                                     </div>
                                     <button
                                         onClick={fetchMenuPageData}
-                                        className="px-4 py-2 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-bold text-xs rounded-full transition inline-flex items-center gap-2 cursor-pointer shadow-xs"
+                                        className="px-4 lg:px-5 py-2 lg:py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-bold text-xs lg:text-sm rounded-full transition inline-flex items-center gap-2 cursor-pointer shadow-xs"
                                     >
-                                        <RefreshCw className="w-3.5 h-3.5" />
+                                        <RefreshCw className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
                                         <span>Coba Lagi</span>
                                     </button>
                                 </div>
@@ -436,9 +436,9 @@ export default function DigitalMenuPage() {
                             {/* Normal Data State */}
                             {!isLoading && !isError && (
                                 <>
-                                    <div className="flex items-center justify-between border-b border-[#e6ccb2]/60 pb-2.5">
-                                        <div className="flex items-center gap-2 text-base font-black text-[#3d2314] uppercase tracking-wide">
-                                            <Coffee className="w-4.5 h-4.5 text-[#8c5a3c]" />
+                                    <div className="flex items-center justify-between border-b border-[#e6ccb2]/60 pb-3">
+                                        <div className="flex items-center gap-2.5 text-base lg:text-lg xl:text-xl font-black text-[#3d2314] uppercase tracking-wide">
+                                            <Coffee className="w-4.5 h-4.5 lg:w-5 lg:h-5 text-[#8c5a3c]" />
                                             <h2>
                                                 {selectedCategory === 'all'
                                                     ? 'DAFTAR MENU TO MEET'
@@ -449,24 +449,24 @@ export default function DigitalMenuPage() {
                                                             : `KATEGORI ${selectedCategory.toUpperCase()}`}
                                             </h2>
                                         </div>
-                                        <span className="text-[11px] font-bold text-[#8c5a3c]">
+                                        <span className="text-[11px] lg:text-xs xl:text-[13px] font-bold text-[#8c5a3c]">
                                             {filteredMenuItems.length} Menu
                                         </span>
                                     </div>
 
                                     {filteredMenuItems.length > 0 ? (
-                                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4 lg:gap-5">
                                             {filteredMenuItems.map((item) => (
                                                 <MenuProductCard key={item.id} item={item} onSelect={setSelectedProduct} />
                                             ))}
                                         </div>
                                     ) : (
-                                        <div className="py-16 text-center space-y-2 bg-[#FAF0E6]/50 rounded-3xl border border-[#e6ccb2]/60 p-6">
-                                            <div className="w-12 h-12 rounded-2xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/60">
-                                                <Info className="w-6 h-6" />
+                                        <div className="py-16 lg:py-20 text-center space-y-2.5 bg-[#FAF0E6]/50 rounded-3xl border border-[#e6ccb2]/60 p-6 lg:p-8">
+                                            <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/60">
+                                                <Info className="w-6 h-6 lg:w-7 lg:h-7" />
                                             </div>
-                                            <h4 className="font-black text-sm text-[#3d2314]">Tidak Ada Data Menu</h4>
-                                            <p className="text-xs text-[#6c584c] font-semibold max-w-xs mx-auto">
+                                            <h4 className="font-black text-sm lg:text-base text-[#3d2314]">Tidak Ada Data Menu</h4>
+                                            <p className="text-xs lg:text-sm text-[#6c584c] font-semibold max-w-sm mx-auto">
                                                 {searchQuery
                                                     ? 'Menu dengan kata kunci tersebut tidak ditemukan.'
                                                     : 'Belum ada menu yang ditambahkan pada filter ini.'}
@@ -625,8 +625,8 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                         </span>
                     )}
                 </div>
-                <h4 className="font-black text-[#3d2314] text-xs leading-snug line-clamp-1">{item.name}</h4>
-                <p className="text-[10px] text-[#6c584c] font-semibold line-clamp-2 leading-tight">
+                <h4 className="font-black text-[#3d2314] text-md leading-snug line-clamp-1">{item.name}</h4>
+                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold line-clamp-2 leading-tight">
                     {item.description}
                 </p>
             </div>

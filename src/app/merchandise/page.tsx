@@ -270,8 +270,8 @@ export default function MerchandisePage() {
                                         <BearFaceIcon className="w-4 h-4" />
                                     </div>
                                     <div className="leading-none">
-                                        <span className="text-[11px] font-black text-[#3d2314] block tracking-tight">100% Original</span>
-                                        <span className="text-[9px] text-[#6c584c] font-bold block mt-0.5">Official Item</span>
+                                        <span className="text-sm font-black text-[#3d2314] block tracking-tight">100% Original</span>
+                                        <span className="text-xs text-[#6c584c] font-bold block mt-0.5">Official Item</span>
                                     </div>
                                 </div>
 
@@ -280,8 +280,8 @@ export default function MerchandisePage() {
                                         <Sparkles className="w-4 h-4" />
                                     </div>
                                     <div className="leading-none">
-                                        <span className="text-[11px] font-black text-[#3d2314] block tracking-tight">Cute Design</span>
-                                        <span className="text-[9px] text-[#6c584c] font-bold block mt-0.5">Aesthetic</span>
+                                        <span className="text-sm  font-black text-[#3d2314] block tracking-tight">Cute Design</span>
+                                        <span className="text-xs text-[#6c584c] font-bold block mt-0.5">Aesthetic</span>
                                     </div>
                                 </div>
 
@@ -290,8 +290,8 @@ export default function MerchandisePage() {
                                         <Gift className="w-4 h-4" />
                                     </div>
                                     <div className="leading-none">
-                                        <span className="text-[11px] font-black text-[#3d2314] block tracking-tight">Great Gift</span>
-                                        <span className="text-[9px] text-[#6c584c] font-bold block mt-0.5">For Loved Ones</span>
+                                        <span className="text-sm font-black text-[#3d2314] block tracking-tight">Great Gift</span>
+                                        <span className="text-xs text-[#6c584c] font-bold block mt-0.5">For Loved Ones</span>
                                     </div>
                                 </div>
                             </div>
@@ -545,10 +545,10 @@ export default function MerchandisePage() {
                             <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <BearFaceIcon className="w-4 h-4" />
                             </div>
-                            <h4 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">
+                            <h4 className="font-black text-sm text-[#3d2314] uppercase tracking-wide">
                                 100% Official
                             </h4>
-                            <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
+                            <p className="text-xs text-[#6c584c] font-semibold leading-relaxed">
                                 To Meet Merchandise
                             </p>
                         </div>
@@ -557,10 +557,10 @@ export default function MerchandisePage() {
                             <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <Gift className="w-4 h-4" />
                             </div>
-                            <h4 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">
+                            <h4 className="font-black text-sm text-[#3d2314] uppercase tracking-wide">
                                 Great for Gift
                             </h4>
-                            <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
+                            <p className="text-xs text-[#6c584c] font-semibold leading-relaxed">
                                 and Collection
                             </p>
                         </div>
@@ -569,10 +569,10 @@ export default function MerchandisePage() {
                             <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <ShieldCheck className="w-4 h-4" />
                             </div>
-                            <h4 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">
+                            <h4 className="font-black text-sm text-[#3d2314] uppercase tracking-wide">
                                 Quality You Can
                             </h4>
-                            <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
+                            <p className="text-xs text-[#6c584c] font-semibold leading-relaxed">
                                 Trust
                             </p>
                         </div>
@@ -581,10 +581,10 @@ export default function MerchandisePage() {
                             <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <Heart className="w-4 h-4 text-[#e85a4f] fill-current" />
                             </div>
-                            <h4 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">
+                            <h4 className="font-black text-sm text-[#3d2314] uppercase tracking-wide">
                                 Support To Meet
                             </h4>
-                            <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
+                            <p className="text-xs text-[#6c584c] font-semibold leading-relaxed">
                                 Community
                             </p>
                         </div>

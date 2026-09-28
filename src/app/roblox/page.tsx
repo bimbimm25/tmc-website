@@ -71,7 +71,7 @@ const MAP_SCREENSHOTS = [
         title: 'Indoor Cafe',
         tag: 'Indoor Cafe',
         image: '/img/roblox/indoor-cafe-roblox.png',
-        desc: 'Jelajahi bagian dalam cafe sambil menyelesaikan misi dan menikmati detail dunia game.'
+        desc: 'Jelajahi bagian dalam cafe sambil menyelesaikan misi dan menikmati detail game'
     },
     {
         id: 3,
@@ -224,7 +224,7 @@ export default function RobloxPage() {
                     )}
 
                     {/* Gradien Putih Sisi Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 sm:via-white/80 to-transparent w-full sm:w-4/5 lg:w-3/5 xl:w-1/2 pointer-events-none" />
+                    <div className="absolute inset-0 bg-linear-to-r from-white via-white/85 sm:via-white/80 to-transparent w-full sm:w-[82%] lg:w-[68%] xl:w-[68%] pointer-events-none" />
 
                     {/* Soft Vignette Bawah di HP */}
                     <div className="block lg:hidden absolute inset-0 bg-gradient-to-t from-white/40 via-transparent to-transparent pointer-events-none" />
@@ -446,10 +446,10 @@ export default function RobloxPage() {
                             </div>
 
                             <div className="space-y-1">
-                                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase leading-tight line-clamp-1">
+                                <h3 className="font-black text-md text-[#3d2314] uppercase leading-tight line-clamp-1">
                                     {spot.title}
                                 </h3>
-                                <p className="text-[12px] text-[#6c584c] font-semibold leading-relaxed line-clamp-2">
+                                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed break-words">
                                     {spot.desc}
                                 </p>
                             </div>
@@ -499,21 +499,21 @@ export default function RobloxPage() {
                                         {getCategoryIcon(categoryKey)}
                                     </div>
                                     <div>
-                                        <h3 className="font-black text-sm sm:text-base text-[#3d2314] uppercase tracking-wide">
+                                        <h3 className="font-black text-base sm:text-lg text-[#3d2314] uppercase tracking-wide">
                                             {categoryKey}
                                         </h3>
-                                        <p className="text-[12px] text-[#6c584c] font-semibold">
+                                        <p className="text-xs sm:text-sm text-[#6c584c] font-semibold">
                                             Selesaikan misi in-game dan tunjukkan badge ke kasir untuk menukarkan reward
                                         </p>
                                     </div>
                                 </div>
 
-                                <span className="px-3 py-1 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] font-black uppercase rounded-full border border-[#e6ccb2]/60 shrink-0">
+                                <span className="px-3 py-1 bg-[#FAF0E6] text-[#8c5a3c] text-[11px] sm:text-xs font-black uppercase rounded-full border border-[#e6ccb2]/60 shrink-0">
                                     {missionList.length} TANTANGAN
                                 </span>
                             </div>
 
-                            <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-2 bg-[#FAF0E6]/50 rounded-xl text-[10px] font-black text-stone-500 uppercase tracking-wider">
+                            <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-2 bg-[#FAF0E6]/50 rounded-xl text-[10.5px] sm:text-xs font-black text-stone-500 uppercase tracking-wider">
                                 <div className="col-span-4">Badge</div>
                                 <div className="col-span-5">Mission</div>
                                 <div className="col-span-3 text-right">Reward</div>
@@ -548,27 +548,27 @@ export default function RobloxPage() {
                                                 </div>
 
                                                 <div className="min-w-0 space-y-0.5">
-                                                    <span className="text-[8.5px] font-black text-[#8c5a3c] uppercase tracking-wider block">
+                                                    <span className="text-[9px] sm:text-[10px] font-black text-[#8c5a3c] uppercase tracking-wider block">
                                                         BADGE
                                                     </span>
-                                                    <h4 className="font-black text-xs sm:text-sm text-[#3d2314] leading-snug truncate">
+                                                    <h4 className="font-black text-sm sm:text-base text-[#3d2314] leading-snug truncate">
                                                         {badgeTitle}
                                                     </h4>
                                                 </div>
                                             </div>
 
                                             <div className="md:col-span-5 border-t md:border-t-0 border-[#e6ccb2]/50 pt-2 md:pt-0 space-y-0.5">
-                                                <span className="text-[8.5px] font-black text-stone-400 uppercase tracking-wider block md:hidden">
+                                                <span className="text-[9px] sm:text-[10px] font-black text-stone-400 uppercase tracking-wider block md:hidden">
                                                     MISSION:
                                                 </span>
-                                                <p className="text-xs font-black text-[#3d2314] leading-snug">
+                                                <p className="text-xs sm:text-sm font-black text-[#3d2314] leading-snug">
                                                     {missionRequirement}
                                                 </p>
                                             </div>
 
                                             <div className="md:col-span-3 border-t md:border-t-0 border-[#e6ccb2]/50 pt-2 md:pt-0 flex items-center justify-between md:justify-end gap-2 text-right">
-                                                <span className="text-[8.5px] font-bold text-stone-400 uppercase block md:hidden">REWARD</span>
-                                                <div className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10.5px] font-black rounded-lg shadow-2xs">
+                                                <span className="text-[9px] sm:text-[10px] font-bold text-stone-400 uppercase block md:hidden">REWARD</span>
+                                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10.5px] sm:text-xs font-black rounded-lg shadow-2xs">
                                                     <Gift className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                                                     <span>{cafeReward}</span>
                                                 </div>
@@ -591,7 +591,7 @@ export default function RobloxPage() {
                     {/* Header Section */}
                     <div className="flex items-center gap-2 border-b border-[#e6ccb2]/60 pb-3">
                         <ShieldCheck className="w-5 h-5 text-[#e85a4f] shrink-0" />
-                        <h2 className="text-xs sm:text-sm font-black text-[#3d2314] uppercase tracking-wide">
+                        <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide">
                             CARA KLAIM HADIAH LANGSUNG DI OUTLET TO MEET CAFE
                         </h2>
                     </div>
@@ -604,10 +604,10 @@ export default function RobloxPage() {
                                 1
                             </div>
                             <div className="space-y-0.5">
-                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                                <h4 className="font-black text-sm sm:text-base text-[#3d2314] tracking-tight uppercase">
                                     Selesaikan Misi Game
                                 </h4>
-                                <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                                     Mainkan game To Meet Universe di Roblox dan selesaikan misi sampai badge terbuka di profilmu.
                                 </p>
                             </div>
@@ -619,10 +619,10 @@ export default function RobloxPage() {
                                 2
                             </div>
                             <div className="space-y-0.5">
-                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                                <h4 className="font-black text-sm sm:text-base text-[#3d2314] tracking-tight uppercase">
                                     Tunjukkan Profil ke Kasir
                                 </h4>
-                                <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                                     Kunjungi outlet To Meet Cafe dan perlihatkan badge Roblox yang sudah berhasil didapatkan kepada staff kasir dan bawa id Roblox mu.
                                 </p>
                             </div>
@@ -634,10 +634,10 @@ export default function RobloxPage() {
                                 3
                             </div>
                             <div className="space-y-0.5">
-                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                                <h4 className="font-black text-sm sm:text-base text-[#3d2314] tracking-tight uppercase">
                                     Nikmati Hadiah Gratis
                                 </h4>
-                                <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                                     Staff kami akan memverifikasi dan langsung menyerahkan reward sesuai misi.
                                 </p>
                             </div>

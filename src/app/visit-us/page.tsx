@@ -200,12 +200,12 @@ export default function VisitUsPage() {
                 <div className="text-center space-y-0.5">
                     <div className="inline-flex items-center gap-2">
                         <span className="w-5 h-0.5 bg-[#e6ccb2] rounded-full"></span>
-                        <h2 className="text-base sm:text-xl font-black text-[#3d2314] tracking-tight uppercase">
+                        <h2 className="text-md font-black text-[#3d2314] tracking-tight uppercase">
                             CHOOSE YOUR OUR LOCATIONS
                         </h2>
                         <span className="w-5 h-0.5 bg-[#e6ccb2] rounded-full"></span>
                     </div>
-                    <p className="text-[11px] text-[#6c584c] font-semibold">
+                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold">
                         Pilih lokasi cabang terdekat yang ingin kamu kunjungi
                     </p>
                 </div>
@@ -240,19 +240,19 @@ export default function VisitUsPage() {
                             </div>
 
                             <div className="px-1 space-y-2 text-center">
-                                <h3 className="text-base sm:text-lg font-black text-[#3d2314] uppercase tracking-wide leading-tight">
+                                <h3 className="text-md font-black text-[#3d2314] uppercase tracking-wide leading-tight">
                                     HEAVENLAND PARK
                                 </h3>
 
-                                <p className="text-[10px] font-black text-[#8c5a3c] uppercase tracking-wider">
+                                <p className="text-xs sm:text-sm font-black text-[#8c5a3c] uppercase tracking-wider">
                                     DESSERT • MINI PLAYGROUND
                                 </p>
 
                                 <div className="rounded-2xl border border-[#f0d9bf] bg-[#FAF0E6]/70 px-3 py-2 text-center">
-                                    <p className="text-[10px] font-black uppercase tracking-wider text-[#8c5a3c]">
+                                    <p className="text-sm font-black uppercase tracking-wider text-[#8c5a3c]">
                                         INFORMASI KUNJUNGAN
                                     </p>
-                                    <p className="mt-1 text-[10px] text-[#6c584c] font-semibold leading-relaxed">
+                                    <p className="mt-1 text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                                         Silakan cek cabang lain atau tunggu update resmi dari To Meet Cafe untuk pembukaan kembali.
                                     </p>
                                 </div>
@@ -263,9 +263,9 @@ export default function VisitUsPage() {
                             <button
                                 type="button"
                                 disabled
-                                className="w-full py-2.5 bg-[#c7b8a7] text-white font-black text-[11px] rounded-xl transition flex items-center justify-center gap-1.5 uppercase tracking-wider shadow-xs cursor-not-allowed"
+                                className="w-full py-3 bg-[#c7b8a7] text-white font-black text-[11px] rounded-xl transition flex items-center justify-center gap-1.5 uppercase tracking-wider shadow-xs cursor-not-allowed"
                             >
-                                <MapPin className="w-3.5 h-3.5" />
+                                <MapPin className="w-4 h-4" />
                                 <span>VISIT HEAVENLAND PARK</span>
                                 <ArrowRight className="w-3 h-3" />
                             </button>
@@ -299,41 +299,41 @@ export default function VisitUsPage() {
                             </div>
 
                             <div className="px-1 space-y-1 text-center">
-                                <h3 className="text-base sm:text-lg font-black text-[#3d2314] uppercase tracking-wide leading-tight">
+                                <h3 className="text-md font-black text-[#3d2314] uppercase tracking-wide leading-tight">
                                     PONDOK MUTIARA
                                 </h3>
 
-                                <p className="text-[10px] font-black text-[#8c5a3c] uppercase tracking-wider">
+                                <p className="text-sm sm:text-sm font-black text-[#8c5a3c] uppercase tracking-wider">
                                     CAFE • PLAYGROUND • EVENT • BIRTHDAY
                                 </p>
 
-                                <div className="grid grid-cols-4 gap-1.5 pt-1 text-center">
-                                    <div className="bg-[#FAF0E6]/50 p-1.5 rounded-xl border border-[#e6ccb2]/60 space-y-0.5">
-                                        <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
-                                            <BearFaceIcon className="w-3 h-3" />
+                                <div className="grid grid-cols-4 gap-2 pt-2 text-center">
+                                    <div className="bg-[#FAF0E6]/50 p-2 rounded-xl border border-[#e6ccb2]/60 space-y-1.5">
+                                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
+                                            <BearFaceIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                                         </div>
-                                        <div className="text-[8.5px] font-black text-[#3d2314] leading-tight truncate">Cafe</div>
+                                        <div className="text-[10px] sm:text-[11px] font-black text-[#3d2314] leading-tight">Cafe</div>
                                     </div>
 
-                                    <div className="bg-[#FAF0E6]/50 p-1.5 rounded-xl border border-[#e6ccb2]/60 space-y-0.5">
-                                        <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
-                                            <Home className="w-3.5 h-3.5" />
+                                    <div className="bg-[#FAF0E6]/50 p-2 rounded-xl border border-[#e6ccb2]/60 space-y-1.5">
+                                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
+                                            <Home className="w-4 h-4 sm:w-5 sm:h-5" />
                                         </div>
-                                        <div className="text-[8.5px] font-black text-[#3d2314] leading-tight truncate">Indoor Area</div>
+                                        <div className="text-[10px] sm:text-[11px] font-black text-[#3d2314] leading-tight">Indoor Area</div>
                                     </div>
 
-                                    <div className="bg-[#FAF0E6]/50 p-1.5 rounded-xl border border-[#e6ccb2]/60 space-y-0.5">
-                                        <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
-                                            <Sparkles className="w-3 h-3 text-amber-500" />
+                                    <div className="bg-[#FAF0E6]/50 p-2 rounded-xl border border-[#e6ccb2]/60 space-y-1.5">
+                                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
+                                            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />
                                         </div>
-                                        <div className="text-[8.5px] font-black text-[#3d2314] leading-tight truncate">Event & Birthday</div>
+                                        <div className="text-[10px] sm:text-[11px] font-black text-[#3d2314] leading-tight">Event & Birthday</div>
                                     </div>
 
-                                    <div className="bg-[#FAF0E6]/50 p-1.5 rounded-xl border border-[#e6ccb2]/60 space-y-0.5">
-                                        <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
-                                            <Sparkles className="w-3 h-3" />
+                                    <div className="bg-[#FAF0E6]/50 p-2 rounded-xl border border-[#e6ccb2]/60 space-y-1.5">
+                                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
+                                            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
                                         </div>
-                                        <div className="text-[8.5px] font-black text-[#3d2314] leading-tight truncate">Playground</div>
+                                        <div className="text-[10px] sm:text-[11px] font-black text-[#3d2314] leading-tight">Playground</div>
                                     </div>
                                 </div>
                             </div>
@@ -342,7 +342,7 @@ export default function VisitUsPage() {
                         <div className="pt-3 space-y-1">
                             <Link
                                 href="/visit-us/pondok-mutiara"
-                                className="w-full py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-xl transition flex items-center justify-center gap-1.5 uppercase tracking-wider shadow-xs cursor-pointer"
+                                className="w-full py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-xl transition flex items-center justify-center gap-1.5 uppercase tracking-wider shadow-xs cursor-pointer"
                             >
                                 <MapPin className="w-3.5 h-3.5" />
                                 <span>VISIT PONDOK MUTIARA</span>

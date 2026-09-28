@@ -64,7 +64,7 @@ function FormatDescription({ text }: { text?: string | null }) {
                 if (trimmed.startsWith('-') || trimmed.startsWith('*') || trimmed.startsWith('•')) {
                     const content = trimmed.replace(/^[-*•]\s*/, '');
                     return (
-                        <div key={idx} className="flex items-start gap-1.5 text-[10.5px] leading-relaxed text-[#6c584c]">
+                        <div key={idx} className="flex items-start gap-1.5 text-xs leading-relaxed text-[#6c584c]">
                             <span className="text-[#8c5a3c] font-black leading-none mt-0.5">•</span>
                             <span className="font-semibold">{content}</span>
                         </div>
@@ -319,7 +319,7 @@ export default function EventPage() {
 
                     {/* Header & Filter Tabs Dinamis */}
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-[#e6ccb2]/50 pb-3">
-                        <div className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-black text-[#3d2314] uppercase tracking-wide">
+                        <div className="inline-flex items-center gap-1.5 text-md  font-black text-[#3d2314] uppercase tracking-wide">
                             <BearPawIcon className="w-3.5 h-3.5 text-[#8c5a3c]" />
                             <h2>WHAT&apos;S HAPPENING</h2>
                         </div>
@@ -332,7 +332,7 @@ export default function EventPage() {
                                     <button
                                         key={cat}
                                         onClick={() => setSelectedCategory(cat)}
-                                        className={`px-3 py-1.5 rounded-full text-[11px] font-black transition tracking-wider shrink-0 cursor-pointer flex items-center gap-1.5 uppercase ${isSelected
+                                        className={`px-3 py-1.5 rounded-full text-xs font-black transition tracking-wider shrink-0 cursor-pointer flex items-center gap-1.5 uppercase ${isSelected
                                             ? 'bg-[#8c5a3c] text-white shadow-xs'
                                             : 'bg-[#FAF0E6]/50 text-[#6c584c] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
                                             }`}
@@ -361,8 +361,8 @@ export default function EventPage() {
                             <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
                                 <AlertCircle className="w-4 h-4" />
                             </div>
-                            <h4 className="font-black text-xs text-[#3d2314]">Gagal Memuat Data</h4>
-                            <p className="text-[11px] text-[#6c584c] font-semibold max-w-xs mx-auto">
+                            <h4 className="font-black text-sm text-[#3d2314]">Gagal Memuat Data</h4>
+                            <p className="text-xs text-[#6c584c] font-semibold max-w-xs mx-auto">
                                 Ada Kesalahan Saat Memuat Data
                             </p>
                             <button
@@ -381,8 +381,8 @@ export default function EventPage() {
                             <div className="w-9 h-9 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/60">
                                 <Info className="w-4 h-4" />
                             </div>
-                            <h4 className="font-black text-xs text-[#3d2314]">Belum Ada Kegiatan</h4>
-                            <p className="text-[10px] text-[#6c584c] font-semibold max-w-xs mx-auto">
+                            <h4 className="font-black text-sm text-[#3d2314]">Belum Ada Kegiatan</h4>
+                            <p className="text-xs text-[#6c584c] font-semibold max-w-xs mx-auto">
                                 Tunggu Kegiatan Selanjutnya di To Meet
                             </p>
                         </div>
@@ -431,22 +431,22 @@ export default function EventPage() {
                                         {/* Detail Teks & List Deskripsi */}
                                         <div className="space-y-1">
                                             <div className="flex items-center justify-between">
-                                                <span className="text-[9px] font-black text-[#8c5a3c] uppercase tracking-wider">
+                                                <span className="text-[10px] font-black text-[#8c5a3c] uppercase tracking-wider">
                                                     {item.category || item.type || 'WORKSHOP'}
                                                 </span>
                                                 {item.location_name && (
-                                                    <span className="text-[8px] font-bold text-stone-600 bg-white px-1.5 py-0.5 rounded border border-[#e6ccb2]/50">
+                                                    <span className="text-[9px] font-bold text-stone-600 bg-white px-1.5 py-0.5 rounded border border-[#e6ccb2]/50">
                                                         {item.location_name}
                                                     </span>
                                                 )}
                                             </div>
 
-                                            <h3 className="font-black text-[#3d2314] text-xs sm:text-sm leading-snug line-clamp-1">
+                                            <h3 className="font-black text-[#3d2314] text-md leading-snug line-clamp-1">
                                                 {item.title}
                                             </h3>
 
                                             {/* Render Deskripsi Cerdas */}
-                                            <div className="line-clamp-3 pt-0.5">
+                                            <div className="line-clamp-3 pt-0.5 text-sm">
                                                 <FormatDescription text={item.description} />
                                             </div>
                                         </div>
@@ -525,15 +525,15 @@ export default function EventPage() {
 
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                                <span className="text-[10px] font-black text-[#8c5a3c] uppercase tracking-wider">
+                                <span className="text-[12px] font-black text-[#8c5a3c] uppercase tracking-wider">
                                     {selectedEvent.category || selectedEvent.type || 'WORKSHOP'}
                                 </span>
-                                <span className="px-2 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9px] font-black uppercase rounded-md">
+                                <span className="px-2 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] font-black uppercase rounded-md">
                                     {selectedEvent.location_name || 'Semua Lokasi'}
                                 </span>
                             </div>
 
-                            <h3 className="font-black text-[#3d2314] text-lg sm:text-xl leading-tight">
+                            <h3 className="font-black text-[#3d2314] text-xl leading-tight">
                                 {selectedEvent.title}
                             </h3>
 
@@ -602,7 +602,7 @@ export default function EventPage() {
                                 <Calendar className="w-4 h-4" />
                             </div>
                             <div className="font-black text-[#8c5a3c] text-[10px]">1</div>
-                            <div className="font-bold text-[10px] sm:text-[11px] text-[#3d2314]">Pilih Acara</div>
+                            <div className="font-bold text-xs text-[#3d2314]">Pilih Acara</div>
                         </div>
 
                         <div className="bg-white p-3 rounded-2xl border border-rose-100/80 text-center space-y-1">
@@ -610,7 +610,7 @@ export default function EventPage() {
                                 <Phone className="w-4 h-4 fill-current" />
                             </div>
                             <div className="font-black text-[#8c5a3c] text-[10px]">2</div>
-                            <div className="font-bold text-[10px] sm:text-[11px] text-[#3d2314]">Chat Admin</div>
+                            <div className="font-bold text-xs text-[#3d2314]">Chat Admin</div>
                         </div>
 
                         <div className="bg-white p-3 rounded-2xl border border-rose-100/80 text-center space-y-1">
@@ -618,7 +618,7 @@ export default function EventPage() {
                                 <CheckCircle2 className="w-4 h-4" />
                             </div>
                             <div className="font-black text-[#8c5a3c] text-[10px]">3</div>
-                            <div className="font-bold text-[10px] sm:text-[11px] text-[#3d2314]">Konfirmasi</div>
+                            <div className="font-bold text-xs text-[#3d2314]">Konfirmasi</div>
                         </div>
 
                         <div className="bg-white p-3 rounded-2xl border border-rose-100/80 text-center space-y-1">
@@ -626,7 +626,7 @@ export default function EventPage() {
                                 <Gift className="w-4 h-4" />
                             </div>
                             <div className="font-black text-[#8c5a3c] text-[10px]">4</div>
-                            <div className="font-bold text-[10px] sm:text-[11px] text-[#3d2314]">Have Fun!</div>
+                            <div className="font-bold text-xs text-[#3d2314]">Have Fun!</div>
                         </div>
                     </div>
                 </div>
@@ -645,10 +645,10 @@ export default function EventPage() {
                     <Smile className="w-4 h-4" />
                 </div>
                 <div className="space-y-0.5">
-                    <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                    <h4 className="font-black text-sm text-[#3d2314] tracking-tight uppercase">
                         All Ages Welcome
                     </h4>
-                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                         Fun activities for all
                     </p>
                 </div>
@@ -660,10 +660,10 @@ export default function EventPage() {
                     <Palette className="w-4 h-4" />
                 </div>
                 <div className="space-y-0.5">
-                    <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                    <h4 className="font-black text-sm text-[#3d2314] tracking-tight uppercase">
                         Materials Provided
                     </h4>
-                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                         Safe & non-toxic
                     </p>
                 </div>
@@ -675,10 +675,10 @@ export default function EventPage() {
                     <Users className="w-4 h-4" />
                 </div>
                 <div className="space-y-0.5">
-                    <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                    <h4 className="font-black text-sm text-[#3d2314] tracking-tight uppercase">
                         Small Groups
                     </h4>
-                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                         Engaging & cozy
                     </p>
                 </div>
@@ -690,10 +690,10 @@ export default function EventPage() {
                     <Heart className="w-4 h-4 fill-current" />
                 </div>
                 <div className="space-y-0.5">
-                    <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                    <h4 className="font-black text-sm text-[#3d2314] tracking-tight uppercase">
                         Sweet Memories
                     </h4>
-                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                         Precious moments
                     </p>
                 </div>

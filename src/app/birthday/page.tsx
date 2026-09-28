@@ -438,11 +438,11 @@ export default function BirthdayPage() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#e6ccb2]/60 pb-3">
                     <div className="flex items-center gap-2">
                         <BearPawIcon className="w-4 h-4 text-[#8c5a3c]" />
-                        <h2 className="text-base sm:text-lg font-black text-[#3d2314] uppercase tracking-wide">
+                        <h2 className="text-lg sm:text-xl font-black text-[#3d2314] uppercase tracking-wide">
                             OUR PACKAGES
                         </h2>
                     </div>
-                    <span className="text-xs font-bold text-[#8c5a3c]">
+                    <span className="text-sm sm:text-base font-bold text-[#8c5a3c]">
                         Paket Perayaan Lengkap & Fleksibel
                     </span>
                 </div>
@@ -450,17 +450,17 @@ export default function BirthdayPage() {
                 {isLoading && (
                     <div className="py-16 text-center space-y-2 bg-white rounded-3xl border border-[#e6ccb2]/60 p-6">
                         <div className="w-6 h-6 border-2 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
-                        <p className="text-xs font-bold text-[#8c5a3c]">Memuat paket birthday...</p>
+                        <p className="text-xs sm:text-sm font-bold text-[#8c5a3c]">Memuat paket birthday...</p>
                     </div>
                 )}
 
                 {!isLoading && isError && (
                     <div className="py-12 text-center space-y-2.5 bg-[#FAF0E6]/50 rounded-3xl border border-rose-200 p-6">
                         <AlertCircle className="w-6 h-6 text-rose-600 mx-auto" />
-                        <h4 className="font-black text-xs text-[#3d2314]">Gagal Memuat Paket</h4>
+                        <h4 className="font-black text-sm sm:text-base text-[#3d2314]">Gagal Memuat Paket</h4>
                         <button
                             onClick={fetchBirthdayData}
-                            className="px-4 py-1.5 bg-[#8c5a3c] text-white text-xs font-bold rounded-full cursor-pointer"
+                            className="px-4 py-1.5 bg-[#8c5a3c] text-white text-xs sm:text-sm font-bold rounded-full cursor-pointer"
                         >
                             Coba Lagi
                         </button>
@@ -470,8 +470,8 @@ export default function BirthdayPage() {
                 {!isLoading && !isError && packages.length === 0 && (
                     <div className="py-16 text-center space-y-2 bg-white rounded-3xl border border-[#e6ccb2]/60 p-6">
                         <Info className="w-6 h-6 text-[#8c5a3c]" />
-                        <h4 className="font-black text-sm text-[#3d2314]">Belum Ada Paket Birthday</h4>
-                        <p className="text-xs text-[#6c584c]">Paket perayaan sedang disiapkan oleh tim To Meet Cafe.</p>
+                        <h4 className="font-black text-sm sm:text-base text-[#3d2314]">Belum Ada Paket Birthday</h4>
+                        <p className="text-xs sm:text-sm text-[#6c584c]">Paket perayaan sedang disiapkan oleh tim To Meet Cafe.</p>
                     </div>
                 )}
 
@@ -509,16 +509,16 @@ export default function BirthdayPage() {
                                             ) : (
                                                 <div className="flex flex-col items-center justify-center text-center p-2.5 space-y-1 text-[#a08a7b]">
                                                     <ImageOff className="w-4.5 h-4.5 opacity-60" />
-                                                    <span className="text-[8px] font-black tracking-wider uppercase">Belum ada gambar</span>
+                                                    <span className="text-[8px] sm:text-[10px] font-black tracking-wider uppercase">Belum ada gambar</span>
                                                 </div>
                                             )}
 
-                                            <div className="absolute top-2 left-2 bg-[#3d2314]/85 backdrop-blur-xs text-white px-2 py-0.5 rounded-full text-[7.5px] font-black uppercase tracking-wider shadow-xs">
+                                            <div className="absolute top-2 left-2 bg-[#3d2314]/85 backdrop-blur-xs text-white px-2 py-0.5 rounded-full text-[7.5px] sm:text-[8px] font-black uppercase tracking-wider shadow-xs">
                                                 {idx === 0 ? 'BASIC' : idx === 1 ? 'DELUXE' : 'PREMIUM'}
                                             </div>
 
                                             {hasFreeMcGames && (
-                                                <div className="absolute top-2 right-2 bg-gradient-to-r from-amber-500 to-[#e85a4f] text-white px-2 py-0.5 rounded-full text-[7.5px] font-black uppercase tracking-wider shadow-xs flex items-center gap-1">
+                                                <div className="absolute top-2 right-2 bg-gradient-to-r from-amber-500 to-[#e85a4f] text-white px-2 py-0.5 rounded-full text-[7.5px] sm:text-[8px] font-black uppercase tracking-wider shadow-xs flex items-center gap-1">
                                                     <PartyPopper className="w-2.5 h-2.5" />
                                                     <span>+ Free MC & Games</span>
                                                 </div>
@@ -527,17 +527,17 @@ export default function BirthdayPage() {
 
                                         <div className="p-3.5 space-y-2">
                                             <div>
-                                                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] leading-tight">
+                                                <h3 className="font-black text-sm sm:text-base text-[#3d2314] leading-tight">
                                                     {pkg.title}
                                                 </h3>
                                                 {pkg.capacity && (
-                                                    <span className="text-[9px] font-bold text-[#8c5a3c] mt-0.5 block">
+                                                    <span className="text-xs sm:text-sm font-bold text-[#8c5a3c] mt-0.5 block">
                                                         Kapasitas hingga {pkg.capacity} Tamu
                                                     </span>
                                                 )}
 
                                                 {hasFreeMcGames && (
-                                                    <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200/80 rounded-md text-[8.5px] font-black uppercase tracking-wider">
+                                                    <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200/80 rounded-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider">
                                                         <Sparkles className="w-2.5 h-2.5 text-amber-600" />
                                                         <span>+ Free MC & Fun Games</span>
                                                     </span>
@@ -545,25 +545,25 @@ export default function BirthdayPage() {
                                             </div>
 
                                             <div className="space-y-1 border-t border-[#e6ccb2]/50 pt-2">
-                                                <span className="text-[8px] font-black text-[#8c5a3c] uppercase tracking-wider block">
+                                                <span className="text-[10px] sm:text-xs font-black text-[#8c5a3c] uppercase tracking-wider block">
                                                     Highlight Fasilitas:
                                                 </span>
                                                 {previewFacilities.length > 0 ? (
                                                     <div className="space-y-1 text-left">
                                                         {previewFacilities.map((item, fIdx) => (
-                                                            <div key={fIdx} className="flex items-start gap-1.5 text-[10px] text-[#5a4232] font-semibold">
+                                                            <div key={fIdx} className="flex items-start gap-1.5 text-xs sm:text-sm text-[#5a4232] font-semibold">
                                                                 <BearPawIcon className="w-2.5 h-2.5 text-[#8c5a3c] shrink-0 mt-0.5" />
                                                                 <span className="line-clamp-1">{item}</span>
                                                             </div>
                                                         ))}
                                                         {remainingCount > 0 && (
-                                                            <span className="text-[9px] font-bold text-[#8c5a3c] block pt-0.5">
+                                                            <span className="text-xs sm:text-sm font-bold text-[#8c5a3c] block pt-0.5">
                                                                 +{remainingCount} fasilitas lainnya...
                                                             </span>
                                                         )}
                                                     </div>
                                                 ) : (
-                                                    <p className="text-[10px] text-[#6c584c] italic">Klik tombol detail untuk rincian fasilitas.</p>
+                                                    <p className="text-xs sm:text-sm text-[#6c584c] italic">Klik tombol detail untuk rincian fasilitas.</p>
                                                 )}
                                             </div>
                                         </div>
@@ -572,19 +572,19 @@ export default function BirthdayPage() {
                                     <div className="p-3.5 pt-0 border-t border-[#e6ccb2]/40 space-y-2 mt-0.5">
                                         <div className="flex items-baseline justify-between pt-1.5">
                                             <div>
-                                                <span className="text-[8px] font-bold text-[#8c5a3c] uppercase block">Start from</span>
-                                                <span className="font-black text-xs sm:text-sm text-[#3d2314]">
+                                                <span className="text-[10px] sm:text-xs font-bold text-[#8c5a3c] uppercase block">Start from</span>
+                                                <span className="font-black text-sm sm:text-base text-[#3d2314]">
                                                     Rp {new Intl.NumberFormat('id-ID').format(pkg.price)}
                                                 </span>
                                             </div>
-                                            <span className={`text-[8.5px] font-bold italic ${taxNotice.isIncluded ? 'text-emerald-700' : 'text-[#8c5a3c]'}`}>
+                                            <span className={`text-[9px] sm:text-[10px] font-bold italic ${taxNotice.isIncluded ? 'text-emerald-700' : 'text-[#8c5a3c]'}`}>
                                                 {taxNotice.text}
                                             </span>
                                         </div>
 
                                         <button
                                             onClick={() => setSelectedPackage(pkg)}
-                                            className="w-full py-2.25 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[9px] rounded-lg transition text-center uppercase tracking-wider shadow-xs cursor-pointer flex items-center justify-center gap-1.5"
+                                            className="w-full py-2.25 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[10px] sm:text-xs rounded-lg transition text-center uppercase tracking-wider shadow-xs cursor-pointer flex items-center justify-center gap-1.5"
                                         >
                                             <span>VIEW DETAIL & FASILITAS</span>
                                             <ArrowRight className="w-3 h-3" />
@@ -619,21 +619,21 @@ export default function BirthdayPage() {
                         {OFFICIAL_ADDONS.map((addon) => (
                             <div
                                 key={addon.id}
-                                className="h-full bg-[#FAF0E6]/50 p-4 sm:p-5 rounded-2xl border border-[#e6ccb2]/70 space-y-2.5 flex flex-col justify-between"
+                                className="h-full bg-[#FAF0E6]/50 p-4 sm:p-5 rounded-2xl border border-[#e6ccb2]/70 space-y-3 flex flex-col justify-between"
                             >
-                                <div className="space-y-1">
-                                    <div className="flex items-center justify-between">
-                                        <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase">
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <h3 className="font-black text-sm sm:text-base text-[#3d2314] uppercase leading-snug">
                                             {addon.name}
                                         </h3>
-                                        <Layers className="w-4 h-4 text-[#8c5a3c]" />
+                                        <Layers className="w-4 h-4 text-[#8c5a3c] shrink-0" />
                                     </div>
-                                    <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
+                                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                                         {addon.desc}
                                     </p>
                                 </div>
                                 <div className="pt-2 border-t border-[#e6ccb2]/50 flex items-center justify-between gap-2">
-                                    <span className="text-[8.5px] sm:text-[9px] font-bold text-[#8c5a3c] uppercase leading-none">Biaya Tambahan</span>
+                                    <span className="text-[9px] sm:text-[10px] font-bold text-[#8c5a3c] uppercase leading-none">Biaya Tambahan</span>
                                     <span className="font-black text-[10.5px] sm:text-xs text-[#3d2314] leading-none">{addon.price}</span>
                                 </div>
                             </div>

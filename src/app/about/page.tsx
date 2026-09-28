@@ -558,88 +558,137 @@ export default function AboutPage() {
             {/* ================================================= */}
             {/* 5. WHAT MAKES US SPECIAL & STATS                  */}
             {/* ================================================= */}
-            <section className="w-full py-14">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
+            {/* ================================================= */}
+            {/* 5. WHAT MAKES US SPECIAL & STATS SECTION          */}
+            {/* ================================================= */}
+            <section className="w-full py-16 sm:py-20">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center bg-white p-5 lg:p-7 rounded-3xl border border-[#e6ccb2]/60 shadow-2xs">
+                    {/* Features Card Box */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center bg-white p-6 sm:p-8 lg:p-10 rounded-3xl border border-[#e6ccb2]/70 shadow-2xs">
                         <div className="lg:col-span-3 text-center lg:text-left">
-                            <h2 className="text-lg sm:text-xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
+                            <h2 className="text-xl sm:text-2xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
                                 WHAT MAKES<br />US SPECIAL?
-                                <Sparkles className="inline-block w-4 h-4 ml-1.5 text-[#e85a4f]" />
+                                <Sparkles className="inline-block w-5 h-5 ml-1.5 text-[#e85a4f]" />
                             </h2>
                         </div>
 
-                        <div className="lg:col-span-9 grid grid-cols-2 md:grid-cols-4 gap-3.5">
-                            <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-2.5">
-                                <BearFaceIcon className="w-6 h-6 text-[#8c5a3c] shrink-0" />
-                                <div>
-                                    <h4 className="font-black text-xs text-[#3d2314] uppercase">BEAR THEME</h4>
-                                    <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed mt-0.5">Our lovable bear friends are everywhere!</p>
+                        <div className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+                            {/* Feature 1 */}
+                            <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
+                                    <BearFaceIcon className="w-6 h-6" />
+                                </div>
+                                <div className="space-y-0.5">
+                                    <h4 className="font-black text-xs sm:text-[13px] text-[#3d2314] uppercase tracking-wide">
+                                        BEAR THEME
+                                    </h4>
+                                    <p className="text-xs sm:text-[12.5px] text-[#6c584c] font-semibold leading-relaxed">
+                                        Our lovable bear friends are everywhere!
+                                    </p>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-2.5">
-                                <Smile className="w-6 h-6 text-[#8c5a3c] shrink-0" />
-                                <div>
-                                    <h4 className="font-black text-xs text-[#3d2314] uppercase">COZY VIBES</h4>
-                                    <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed mt-0.5">Warm, aesthetic, and instagrammable place.</p>
+                            {/* Feature 2 */}
+                            <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
+                                    <Smile className="w-5 h-5" />
+                                </div>
+                                <div className="space-y-0.5">
+                                    <h4 className="font-black text-xs sm:text-[13px] text-[#3d2314] uppercase tracking-wide">
+                                        COZY VIBES
+                                    </h4>
+                                    <p className="text-xs sm:text-[12.5px] text-[#6c584c] font-semibold leading-relaxed">
+                                        Warm, aesthetic, and instagrammable place.
+                                    </p>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-2.5">
-                                <Utensils className="w-6 h-6 text-[#8c5a3c] shrink-0" />
-                                <div>
-                                    <h4 className="font-black text-xs text-[#3d2314] uppercase">DELICIOUS TREATS</h4>
-                                    <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed mt-0.5">Made with love using quality ingredients.</p>
+                            {/* Feature 3 */}
+                            <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
+                                    <Utensils className="w-5 h-5" />
+                                </div>
+                                <div className="space-y-0.5">
+                                    <h4 className="font-black text-xs sm:text-[13px] text-[#3d2314] uppercase tracking-wide">
+                                        DELICIOUS TREATS
+                                    </h4>
+                                    <p className="text-xs sm:text-[12.5px] text-[#6c584c] font-semibold leading-relaxed">
+                                        Made with love using quality ingredients.
+                                    </p>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-2.5">
-                                <Users className="w-6 h-6 text-[#8c5a3c] shrink-0" />
-                                <div>
-                                    <h4 className="font-black text-xs text-[#3d2314] uppercase">FOR EVERYONE</h4>
-                                    <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed mt-0.5">Kids, teens, families — all welcome!</p>
+                            {/* Feature 4 */}
+                            <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
+                                    <Users className="w-5 h-5" />
+                                </div>
+                                <div className="space-y-0.5">
+                                    <h4 className="font-black text-xs sm:text-[13px] text-[#3d2314] uppercase tracking-wide">
+                                        FOR EVERYONE
+                                    </h4>
+                                    <p className="text-xs sm:text-[12.5px] text-[#6c584c] font-semibold leading-relaxed">
+                                        Kids, teens, families — all welcome!
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-[#fdf3f1] p-5 sm:p-6 rounded-3xl border border-rose-100/60 text-center shadow-2xs">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="space-y-0.5">
-                                <div className="flex items-center justify-center gap-1 text-[#e85a4f]">
-                                    <Star className="w-3.5 h-3.5" />
-                                    <span className="text-xl sm:text-2xl font-black">2+</span>
+                    {/* Stats Counter Card */}
+                    <div className="bg-[#fdf3f1] p-6 sm:p-8 rounded-3xl border border-rose-100 text-center shadow-2xs">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div className="space-y-1">
+                                <div className="flex items-center justify-center gap-1.5 text-[#e85a4f]">
+                                    <Star className="w-4 h-4 fill-current" />
+                                    <span className="text-2xl sm:text-3xl font-black tracking-tight">2+</span>
                                 </div>
-                                <div className="text-[11px] font-black text-[#3d2314] uppercase">YEARS OF HAPPINESS</div>
-                                <p className="text-[10.5px] text-[#6c584c] font-semibold leading-relaxed">Thank you for being part of our journey!</p>
+                                <div className="text-xs sm:text-[12.5px] font-black text-[#3d2314] uppercase tracking-wide">
+                                    YEARS OF HAPPINESS
+                                </div>
+                                <p className="text-[11px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                    Thank you for being part of our journey!
+                                </p>
                             </div>
 
-                            <div className="space-y-0.5">
-                                <div className="flex items-center justify-center gap-1 text-[#e85a4f]">
-                                    <Smile className="w-3.5 h-3.5" />
-                                    <span className="text-xl sm:text-2xl font-black">50K+</span>
+                            <div className="space-y-1">
+                                <div className="flex items-center justify-center gap-1.5 text-[#e85a4f]">
+                                    <Smile className="w-4 h-4" />
+                                    <span className="text-2xl sm:text-3xl font-black tracking-tight">50K+</span>
                                 </div>
-                                <div className="text-[11px] font-black text-[#3d2314] uppercase">HAPPY CUSTOMERS</div>
-                                <p className="text-[10.5px] text-[#6c584c] font-semibold leading-relaxed">We&apos;re grateful for all your love & support!</p>
+                                <div className="text-xs sm:text-[12.5px] font-black text-[#3d2314] uppercase tracking-wide">
+                                    HAPPY CUSTOMERS
+                                </div>
+                                <p className="text-[11px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                    We&apos;re grateful for all your love & support!
+                                </p>
                             </div>
 
-                            <div className="space-y-0.5">
-                                <div className="flex items-center justify-center gap-1 text-[#e85a4f]">
-                                    <BearPawIcon className="w-3.5 h-3.5" />
-                                    <span className="text-xl sm:text-2xl font-black">10+</span>
+                            <div className="space-y-1">
+                                <div className="flex items-center justify-center gap-1.5 text-[#e85a4f]">
+                                    <BearPawIcon className="w-4 h-4 fill-current" />
+                                    <span className="text-2xl sm:text-3xl font-black tracking-tight">10+</span>
                                 </div>
-                                <div className="text-[11px] font-black text-[#3d2314] uppercase">EVENTS EACH MONTH</div>
-                                <p className="text-[10.5px] text-[#6c584c] font-semibold leading-relaxed">Creating fun and memorable experiences!</p>
+                                <div className="text-xs sm:text-[12.5px] font-black text-[#3d2314] uppercase tracking-wide">
+                                    EVENTS EACH MONTH
+                                </div>
+                                <p className="text-[11px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                    Creating fun and memorable experiences!
+                                </p>
                             </div>
 
-                            <div className="space-y-0.5">
-                                <div className="flex items-center justify-center gap-1 text-[#e85a4f]">
-                                    <Heart className="w-3.5 h-3.5 fill-current" />
-                                    <span className="text-xl sm:text-2xl font-black">1</span>
+                            <div className="space-y-1">
+                                <div className="flex items-center justify-center gap-1.5 text-[#e85a4f]">
+                                    <Heart className="w-4 h-4 fill-current" />
+                                    <span className="text-2xl sm:text-3xl font-black tracking-tight">1</span>
                                 </div>
-                                <div className="text-[11px] font-black text-[#3d2314] uppercase">BIG FAMILY</div>
-                                <p className="text-[10.5px] text-[#6c584c] font-semibold leading-relaxed">Because To Meet is more than just a place.</p>
+                                <div className="text-xs sm:text-[12.5px] font-black text-[#3d2314] uppercase tracking-wide">
+                                    BIG FAMILY
+                                </div>
+                                <p className="text-[11px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                    Because To Meet is more than just a place.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -650,23 +699,23 @@ export default function AboutPage() {
             {/* ================================================= */}
             {/* 6. BOTTOM CTA SECTION                             */}
             {/* ================================================= */}
-            <section className="w-full pb-14">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
-                    <div className="space-y-1">
-                        <h3 className="text-lg sm:text-2xl font-black text-[#3d2314]">
+            <section className="w-full pb-16 sm:pb-20">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+                    <div className="space-y-1.5">
+                        <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight">
                             Let&apos;s create more sweet memories together!
                         </h3>
-                        <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
+                        <p className="text-sm sm:text-base text-[#6c584c] font-semibold leading-relaxed max-w-2xl mx-auto">
                             Come, meet, enjoy, and be part of the To Meet family.
                         </p>
                     </div>
 
-                    <div className="flex justify-center pt-1">
+                    <div className="flex justify-center pt-2">
                         <Link
                             href="/visit-us"
-                            className="px-6 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-extrabold rounded-full text-xs transition duration-200 shadow-md shadow-rose-500/20 inline-flex items-center gap-2 tracking-wider uppercase cursor-pointer"
+                            className="px-7 sm:px-8 py-3 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-xs sm:text-sm rounded-full transition duration-200 shadow-md shadow-rose-500/20 inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
                         >
-                            <MapPin className="w-3.5 h-3.5" />
+                            <MapPin className="w-4 h-4" />
                             <span>VISIT OUR CAFES</span>
                         </Link>
                     </div>

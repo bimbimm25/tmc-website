@@ -263,24 +263,24 @@ export default function BlogPage() {
             {/* 2. MAIN BLOG CONTENT                              */}
             {/* ================================================= */}
             <section id="articles" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14 pt-20 sm:pt-24 lg:pt-0">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
 
                     {/* KOLOM KIRI (FEATURED ARTICLE & LATEST POSTS) */}
-                    <div className="lg:col-span-8 space-y-8">
+                    <div className="lg:col-span-8 space-y-8 lg:space-y-10">
 
                         {/* FEATURED ARTICLE (ARTIKEL PILIHAN UTAMA) */}
                         {featured && selectedCategory === 'all' && !searchQuery && (
-                            <div className="space-y-3">
+                            <div className="space-y-3.5">
                                 <div className="flex items-center gap-2">
-                                    <Sparkles className="w-4 h-4 text-amber-500" />
-                                    <h2 className="text-xs sm:text-sm font-black text-[#3d2314] uppercase tracking-wider">
+                                    <Sparkles className="w-5 h-5 text-amber-500" />
+                                    <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wider">
                                         FEATURED ARTICLE
                                     </h2>
                                 </div>
 
                                 <div
                                     onClick={() => handleNavigateToArticle(featured.slug)}
-                                    className="bg-white rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden hover:border-[#8c5a3c] transition duration-200 cursor-pointer"
+                                    className="bg-white rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden hover:border-[#8c5a3c] transition duration-200 cursor-pointer group"
                                 >
                                     <div className="grid grid-cols-1 sm:grid-cols-12 gap-0 items-center">
                                         <div className="sm:col-span-6 aspect-16/10 sm:aspect-auto sm:h-full bg-[#FAF0E6]/50 overflow-hidden flex items-center justify-center">
@@ -288,36 +288,37 @@ export default function BlogPage() {
                                                 <img
                                                     src={getImageUrl(featured.image)!}
                                                     alt={featured.title}
-                                                    className="w-full h-full object-cover"
+                                                    className="w-full h-full object-cover group-hover:scale-103 transition duration-300"
                                                 />
                                             ) : (
-                                                <div className="flex flex-col items-center justify-center text-center p-6 space-y-1 text-[#a08a7b]">
-                                                    <ImageOff className="w-7 h-7 opacity-60" />
-                                                    <span className="text-[10px] font-black tracking-wider uppercase">Belum ada gambar</span>
+                                                <div className="flex flex-col items-center justify-center text-center p-6 space-y-1.5 text-[#a08a7b]">
+                                                    <ImageOff className="w-8 h-8 opacity-60" />
+                                                    <span className="text-[11px] sm:text-xs font-black tracking-wider uppercase">Belum ada gambar</span>
                                                 </div>
                                             )}
                                         </div>
 
-                                        <div className="sm:col-span-6 p-5 sm:p-6 space-y-3">
-                                            <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9.5px] font-black uppercase rounded-md">
+                                        <div className="sm:col-span-6 p-6 sm:p-7 space-y-3.5">
+                                            <span className="px-3 py-1 bg-[#FAF0E6] text-[#8c5a3c] text-[10.5px] sm:text-xs font-black uppercase rounded-md tracking-wider">
                                                 {featured.category?.name || 'Cerita Cafe'}
                                             </span>
 
-                                            <h3 className="text-base sm:text-lg font-black text-[#3d2314] leading-snug hover:text-[#8c5a3c] transition">
+                                            <h3 className="text-lg sm:text-xl font-black text-[#3d2314] leading-snug group-hover:text-[#8c5a3c] transition">
                                                 {featured.title}
                                             </h3>
 
-                                            <p className="text-xs text-[#5a4232] font-semibold leading-relaxed line-clamp-2">
-                                                {featured.meta_description || featured.content.slice(0, 120) + '...'}
+                                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed line-clamp-3">
+                                                {featured.meta_description || featured.content.slice(0, 140) + '...'}
                                             </p>
 
-                                            <div className="pt-2 flex items-center justify-between border-t border-[#e6ccb2]/50 text-[11px] font-bold text-[#6c584c]">
+                                            <div className="pt-3 flex items-center justify-between border-t border-[#e6ccb2]/50 text-xs font-bold text-[#6c584c]">
                                                 <div className="flex items-center gap-1.5">
-                                                    <Clock className="w-3.5 h-3.5 text-[#8c5a3c]" />
+                                                    <Clock className="w-4 h-4 text-[#8c5a3c]" />
                                                     <span>{formatDate(featured.created_at)}</span>
                                                 </div>
 
-                                                <span className="px-4 py-1.5 bg-[#e85a4f] hover:bg-[#d4483e] text-white font-black text-[10.5px] rounded-full shadow-2xs transition inline-flex items-center gap-1 uppercase tracking-wider">
+                                                <span className="px-4.5 py-2 bg-[#e85a4f] group-hover:bg-[#d4483e] text-white font-black text-[11px] sm:text-xs rounded-full shadow-2xs transition inline-flex items-center gap-1.5 uppercase tracking-wider">
                                                     <span>READ MORE</span>
                                                     <ArrowRight className="w-3.5 h-3.5" />
                                                 </span>
@@ -329,33 +330,33 @@ export default function BlogPage() {
                         )}
 
                         {/* LATEST ARTICLES GRID */}
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between border-b border-[#e6ccb2]/60 pb-3">
+                        <div className="space-y-5">
+                            <div className="flex items-center justify-between border-b border-[#e6ccb2]/60 pb-3.5">
                                 <div className="flex items-center gap-2">
-                                    <BearPawIcon className="w-4 h-4 text-[#8c5a3c]" />
-                                    <h2 className="text-xs sm:text-sm font-black text-[#3d2314] uppercase tracking-wider">
+                                    <BearPawIcon className="w-5 h-5 text-[#8c5a3c]" />
+                                    <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wider">
                                         LATEST ARTICLES
                                     </h2>
                                 </div>
-                                <span className="text-[11px] font-bold text-[#8c5a3c]">
+                                <span className="text-xs sm:text-sm font-bold text-[#8c5a3c]">
                                     {filteredPosts.length} Artikel Ditemukan
                                 </span>
                             </div>
 
                             {isLoading && (
-                                <div className="py-16 text-center space-y-2 bg-white rounded-3xl border border-[#e6ccb2]/60 p-6">
-                                    <div className="w-6 h-6 border-2 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
-                                    <p className="text-xs font-bold text-[#8c5a3c]">Memuat artikel...</p>
+                                <div className="py-20 text-center space-y-3 bg-white rounded-3xl border border-[#e6ccb2]/60 p-8">
+                                    <div className="w-8 h-8 border-3 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
+                                    <p className="text-xs sm:text-sm font-bold text-[#8c5a3c]">Memuat artikel...</p>
                                 </div>
                             )}
 
                             {!isLoading && isError && (
-                                <div className="py-12 text-center space-y-2.5 bg-[#FAF0E6]/50 rounded-3xl border border-rose-200 p-6">
-                                    <AlertCircle className="w-6 h-6 text-rose-600 mx-auto" />
-                                    <h4 className="font-black text-xs text-[#3d2314]">Gagal Memuat Artikel</h4>
+                                <div className="py-16 text-center space-y-3 bg-[#FAF0E6]/50 rounded-3xl border border-rose-200 p-8">
+                                    <AlertCircle className="w-7 h-7 text-rose-600 mx-auto" />
+                                    <h4 className="font-black text-sm sm:text-base text-[#3d2314]">Gagal Memuat Artikel</h4>
                                     <button
                                         onClick={fetchBlogData}
-                                        className="px-4 py-1.5 bg-[#8c5a3c] text-white text-xs font-bold rounded-full cursor-pointer"
+                                        className="px-5 py-2 bg-[#8c5a3c] text-white text-xs sm:text-sm font-bold rounded-full cursor-pointer hover:bg-[#73482f] transition"
                                     >
                                         Coba Lagi
                                     </button>
@@ -363,15 +364,15 @@ export default function BlogPage() {
                             )}
 
                             {!isLoading && !isError && filteredPosts.length === 0 && (
-                                <div className="py-16 text-center space-y-2 bg-white rounded-3xl border border-[#e6ccb2]/60 p-6">
-                                    <BookOpen className="w-6 h-6 text-[#8c5a3c] mx-auto" />
-                                    <h4 className="font-black text-sm text-[#3d2314]">Artikel Tidak Ditemukan</h4>
-                                    <p className="text-xs text-[#6c584c]">Coba ubah kata kunci pencarian atau kategori filter.</p>
+                                <div className="py-20 text-center space-y-3 bg-white rounded-3xl border border-[#e6ccb2]/60 p-8">
+                                    <BookOpen className="w-8 h-8 text-[#8c5a3c] mx-auto" />
+                                    <h4 className="font-black text-base sm:text-lg text-[#3d2314]">Artikel Tidak Ditemukan</h4>
+                                    <p className="text-xs sm:text-sm text-[#6c584c]">Coba ubah kata kunci pencarian atau kategori filter.</p>
                                 </div>
                             )}
 
                             {!isLoading && !isError && filteredPosts.length > 0 && (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                                     {filteredPosts.slice(0, visibleCount).map((post) => {
                                         const postImg = getImageUrl(post.image);
 
@@ -390,32 +391,33 @@ export default function BlogPage() {
                                                                 className="w-full h-full object-cover group-hover:scale-103 transition duration-300"
                                                             />
                                                         ) : (
-                                                            <div className="flex flex-col items-center justify-center text-center p-4 space-y-1 text-[#a08a7b]">
-                                                                <ImageOff className="w-5 h-5 opacity-60" />
-                                                                <span className="text-[9px] font-black tracking-wider uppercase">Belum ada gambar</span>
+                                                            <div className="flex flex-col items-center justify-center text-center p-5 space-y-1 text-[#a08a7b]">
+                                                                <ImageOff className="w-6 h-6 opacity-60" />
+                                                                <span className="text-[10px] sm:text-[11px] font-black tracking-wider uppercase">Belum ada gambar</span>
                                                             </div>
                                                         )}
 
-                                                        <div className="absolute top-2.5 left-2.5 bg-[#3d2314]/80 backdrop-blur-xs text-white px-2 py-0.5 rounded-md text-[8.5px] font-black uppercase tracking-wider">
+                                                        <div className="absolute top-3 left-3 bg-[#3d2314]/85 backdrop-blur-xs text-white px-2.5 py-0.5 rounded-md text-[9.5px] sm:text-[10px] font-black uppercase tracking-wider">
                                                             {post.category?.name || 'Blog'}
                                                         </div>
                                                     </div>
 
-                                                    <div className="p-4 space-y-1.5">
-                                                        <h3 className="font-black text-xs sm:text-[13px] text-[#3d2314] leading-snug line-clamp-2 group-hover:text-[#8c5a3c] transition">
+                                                    <div className="p-4 sm:p-5 space-y-2">
+                                                        <h3 className="font-black text-sm sm:text-[15px] text-[#3d2314] leading-snug line-clamp-2 group-hover:text-[#8c5a3c] transition">
                                                             {post.title}
                                                         </h3>
 
-                                                        <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed line-clamp-2">
+                                                        {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                                                        <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed line-clamp-2">
                                                             {post.meta_description || post.content.slice(0, 80) + '...'}
                                                         </p>
                                                     </div>
                                                 </div>
 
-                                                <div className="p-4 pt-0 flex items-center justify-between border-t border-[#e6ccb2]/40 text-[10px] font-bold text-[#6c584c]">
+                                                <div className="p-4 sm:p-5 pt-0 flex items-center justify-between border-t border-[#e6ccb2]/40 text-xs font-bold text-[#6c584c]">
                                                     <span>{formatDate(post.created_at)}</span>
-                                                    <span className="w-6 h-6 rounded-full bg-[#FAF0E6] group-hover:bg-[#8c5a3c] text-[#8c5a3c] group-hover:text-white flex items-center justify-center transition">
-                                                        <ArrowRight className="w-3 h-3" />
+                                                    <span className="w-7 h-7 rounded-full bg-[#FAF0E6] group-hover:bg-[#8c5a3c] text-[#8c5a3c] group-hover:text-white flex items-center justify-center transition shadow-2xs">
+                                                        <ArrowRight className="w-3.5 h-3.5" />
                                                     </span>
                                                 </div>
                                             </div>
@@ -425,10 +427,10 @@ export default function BlogPage() {
                             )}
 
                             {filteredPosts.length > visibleCount && (
-                                <div className="text-center pt-2">
+                                <div className="text-center pt-4">
                                     <button
                                         onClick={() => setVisibleCount((prev) => prev + 6)}
-                                        className="px-6 py-2.5 bg-white hover:bg-[#FAF0E6] border border-[#e6ccb2] text-[#3d2314] font-black text-xs rounded-full shadow-2xs transition cursor-pointer uppercase tracking-wider"
+                                        className="px-7 py-3 bg-white hover:bg-[#FAF0E6] border border-[#e6ccb2] text-[#3d2314] font-black text-xs sm:text-sm rounded-full shadow-2xs transition cursor-pointer uppercase tracking-wider"
                                     >
                                         LOAD MORE ARTICLES
                                     </button>
@@ -438,83 +440,83 @@ export default function BlogPage() {
                     </div>
 
                     {/* KOLOM KANAN (SIDEBAR: SEARCH, CATEGORIES, POPULAR) */}
-                    <div className="lg:col-span-4 space-y-6">
+                    <div className="lg:col-span-4 space-y-6 lg:space-y-7">
 
                         {/* Search Input Box */}
-                        <div className="bg-white p-3 rounded-2xl border border-[#e6ccb2]/80 shadow-2xs">
+                        <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-[#e6ccb2]/80 shadow-2xs">
                             <div className="relative">
                                 <input
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Search articles..."
-                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/60 rounded-xl pl-9 pr-3 py-2 text-xs text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c]"
+                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/60 rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] transition"
                                 />
-                                <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
+                                <Search className="w-4.5 h-4.5 text-stone-400 absolute left-3.5 top-3" />
                             </div>
                         </div>
 
                         {/* Categories Box */}
-                        <div className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
-                            <div className="flex items-center justify-between border-b border-[#e6ccb2]/50 pb-2.5">
-                                <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wider">
+                        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
+                            <div className="flex items-center justify-between border-b border-[#e6ccb2]/50 pb-3">
+                                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wider">
                                     CATEGORIES
                                 </h3>
-                                <BearPawIcon className="w-3.5 h-3.5 text-[#8c5a3c]" />
+                                <BearPawIcon className="w-4 h-4 text-[#8c5a3c]" />
                             </div>
 
-                            <div className="space-y-1 text-xs font-bold">
+                            <div className="space-y-1.5 text-xs sm:text-sm font-bold">
                                 <button
                                     onClick={() => setSelectedCategory('all')}
-                                    className={`w-full p-2 rounded-xl flex items-center justify-between transition cursor-pointer ${selectedCategory === 'all'
-                                        ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                        : 'text-[#5a4232] hover:bg-[#FAF0E6]'
+                                    className={`w-full p-2.5 rounded-xl flex items-center justify-between transition cursor-pointer ${selectedCategory === 'all'
+                                            ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                            : 'text-[#5a4232] hover:bg-[#FAF0E6]'
                                         }`}
                                 >
                                     <span>All Articles</span>
-                                    <span className="text-[10px] opacity-80">{totalArticlesCount}</span>
+                                    <span className="text-[11px] sm:text-xs opacity-80">{totalArticlesCount}</span>
                                 </button>
 
                                 {categories.map((cat) => (
                                     <button
                                         key={cat.id}
                                         onClick={() => setSelectedCategory(cat.slug)}
-                                        className={`w-full p-2 rounded-xl flex items-center justify-between transition cursor-pointer ${selectedCategory === cat.slug
-                                            ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                            : 'text-[#5a4232] hover:bg-[#FAF0E6]'
+                                        className={`w-full p-2.5 rounded-xl flex items-center justify-between transition cursor-pointer ${selectedCategory === cat.slug
+                                                ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                                : 'text-[#5a4232] hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         <span>{cat.name}</span>
-                                        <span className="text-[10px] opacity-80">{cat.posts_count}</span>
+                                        <span className="text-[11px] sm:text-xs opacity-80">{cat.posts_count}</span>
                                     </button>
                                 ))}
                             </div>
                         </div>
 
                         {/* Popular Articles Box */}
-                        <div className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
-                            <div className="flex items-center gap-1.5 border-b border-[#e6ccb2]/50 pb-2.5">
-                                <TrendingUp className="w-4 h-4 text-[#8c5a3c]" />
-                                <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wider">
+                        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
+                            <div className="flex items-center gap-2 border-b border-[#e6ccb2]/50 pb-3">
+                                <TrendingUp className="w-4.5 h-4.5 text-[#8c5a3c]" />
+                                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wider">
                                     POPULAR ARTICLES
                                 </h3>
                             </div>
 
-                            <div className="space-y-3">
+                            <div className="space-y-3.5">
                                 {popular.map((pop, idx) => (
                                     <div
                                         key={pop.id}
                                         onClick={() => handleNavigateToArticle(pop.slug)}
                                         className="flex items-start gap-3 group cursor-pointer"
                                     >
-                                        <div className="w-6 h-6 rounded-full bg-[#FAF0E6] text-[#8c5a3c] font-black text-xs flex items-center justify-center shrink-0">
+                                        <div className="w-7 h-7 rounded-full bg-[#FAF0E6] text-[#8c5a3c] font-black text-xs sm:text-[13px] flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
                                             {idx + 1}
                                         </div>
                                         <div className="space-y-0.5 min-w-0">
-                                            <h4 className="font-bold text-xs text-[#3d2314] leading-snug group-hover:text-[#8c5a3c] transition truncate">
+                                            <h4 className="font-bold text-xs sm:text-sm text-[#3d2314] leading-snug group-hover:text-[#8c5a3c] transition truncate">
                                                 {pop.title}
                                             </h4>
-                                            <div className="text-[9.5px] text-stone-400 font-semibold">
+                                            <div className="text-[10.5px] sm:text-xs text-stone-400 font-semibold">
                                                 {formatDate(pop.created_at)} • {pop.views || 0} views
                                             </div>
                                         </div>
@@ -532,16 +534,17 @@ export default function BlogPage() {
             {/* 3. BOTTOM CTA: GOT A SWEET STORY IDEA?            */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-white p-5 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-                    <div className="flex flex-col sm:flex-row items-center gap-3.5">
-                        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
-                            <BearFaceIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left">
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
+                            <BearFaceIcon className="w-6 h-6 sm:w-7 sm:h-7" />
                         </div>
-                        <div className="space-y-0.5">
-                            <h3 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight uppercase">
+                        <div className="space-y-1">
+                            <h3 className="font-black text-sm sm:text-base lg:text-lg text-[#3d2314] tracking-tight uppercase">
                                 Got a sweet story idea?
                             </h3>
-                            <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed max-w-xl">
+                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                            <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed max-w-xl">
                                 Kami senang mendengar ide cerita, kolaborasi, dan pengalaman manismu di To Meet Cafe!
                             </p>
                         </div>
@@ -551,10 +554,10 @@ export default function BlogPage() {
                         href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20punya%20ide%20cerita/kolaborasi%20untuk%20blog"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-5 sm:px-6 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:scale-95 text-white font-black text-[11px] sm:text-xs rounded-full shadow-md shadow-[#8c5a3c]/15 transition inline-flex items-center gap-1.5 uppercase tracking-wider shrink-0 cursor-pointer whitespace-nowrap"
+                        className="px-6 sm:px-7 py-3 bg-[#8c5a3c] hover:bg-[#73482f] active:scale-95 text-white font-black text-xs sm:text-sm rounded-full shadow-md shadow-[#8c5a3c]/15 transition inline-flex items-center gap-2 uppercase tracking-wider shrink-0 cursor-pointer whitespace-nowrap"
                     >
                         <span>CONTACT US</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
+                        <ArrowRight className="w-4 h-4" />
                     </a>
                 </div>
             </section>

@@ -134,9 +134,8 @@ export default function Home() {
         {/* 2. Konten Hero Text & Action */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-14 sm:pt-16">
           <div
-            className={`max-w-md lg:max-w-xl space-y-2.5 sm:space-y-3.5 text-left transition-all duration-700 ease-out ${
-              isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-            }`}
+            className={`max-w-md lg:max-w-xl space-y-2.5 sm:space-y-3.5 text-left transition-all duration-700 ease-out ${isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+              }`}
           >
 
             {/* Pill Badge */}
@@ -672,41 +671,41 @@ export default function Home() {
         <div className="space-y-6 sm:space-y-8">
 
           {/* Title Section dengan Spacing Lega */}
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3d2314] tracking-tight uppercase">
+          <div className="flex items-center gap-2.5">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#3d2314] tracking-tight uppercase">
               VISIT US
             </h2>
-            <Heart className="w-5 h-5 text-[#e85a4f] fill-current" />
+            <Heart className="w-6 h-6 sm:w-7 sm:h-7 text-[#e85a4f] fill-current" />
           </div>
 
           {/* Cards Container: Grid 3 Kolom di Laptop, Stack di HP */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 items-stretch">
 
             {/* 1. Outlet Heavenland Park */}
-            <div className="bg-[#f8f1ea] p-5 sm:p-6 rounded-[2rem] border border-[#d8b598]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-5 opacity-90">
-              <div className="grid grid-cols-12 gap-3.5 items-center">
+            <div className="bg-[#f8f1ea] p-6 sm:p-7 rounded-[2rem] border border-[#d8b598]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-6 opacity-95">
+              <div className="grid grid-cols-12 gap-4 items-center">
 
                 {/* Teks Kiri */}
-                <div className="col-span-7 space-y-2">
-                  <h3 className="font-black text-[#3d2314] text-sm uppercase tracking-wide">
+                <div className="col-span-7 space-y-2.5">
+                  <h3 className="font-black text-[#3d2314] text-base sm:text-lg uppercase tracking-wide leading-tight">
                     HEAVENLAND PARK
                   </h3>
-                  <p className="text-[11px] text-[#6c584c] font-bold leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#6c584c] font-bold leading-relaxed">
                     Jl. Raya Prajurit, Heavenland Park<br />
                     Sidoarjo, Jawa Timur
                   </p>
-                  <div className="pt-1">
-                    <span className="text-[10px] text-[#8c5a3c] font-black uppercase tracking-wider block">
-                      Renovasi
+                  <div className="pt-1.5 space-y-0.5">
+                    <span className="text-[11px] sm:text-xs text-[#8c5a3c] font-black uppercase tracking-wider block">
+                      Status Cabang
                     </span>
-                    <span className="text-xs text-[#3d2314] font-black">
-                      Cabang sedang di renovasi
+                    <span className="text-xs sm:text-sm text-[#e85a4f] font-black block">
+                      Sedang Renovasi
                     </span>
                   </div>
                 </div>
 
                 {/* Foto Kanan */}
-                <div className="col-span-5 aspect-square bg-[#f4ece1] rounded-2xl overflow-hidden border border-[#e6ccb2]/60 shadow-2xs relative">
+                <div className="col-span-5 aspect-square bg-[#f4ece1] rounded-2xl overflow-hidden border border-[#e6ccb2]/70 shadow-2xs relative">
                   <img
                     src="/img/tmc-heaveland-park.png"
                     alt="To Meet Cafe Heavenland Park"
@@ -718,43 +717,43 @@ export default function Home() {
               </div>
 
               {/* Tombol Direction */}
-              <div>
+              <div className="pt-2">
                 <button
                   type="button"
-                  className="w-40 py-2.5 bg-[#c7b0a0] text-white font-black text-[10px] rounded-full text-center transition tracking-wider flex items-center justify-center gap-1.5 uppercase shadow-xs cursor-not-allowed opacity-90"
+                  className="w-full sm:w-auto px-6 py-3 bg-[#c7b0a0] text-white font-black text-xs sm:text-[12.5px] rounded-full text-center transition tracking-wider flex items-center justify-center gap-2 uppercase shadow-xs cursor-not-allowed opacity-90"
                   disabled
                 >
-                  <span>Sedang Renovasi</span>
-                  <MapPin className="w-3.5 h-3.5" />
+                  <span>SEDANG RENOVASI</span>
+                  <MapPin className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
             {/* 2. Outlet Pondok Mutiara */}
-            <div className="bg-white p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-5">
-              <div className="grid grid-cols-12 gap-3.5 items-center">
+            <div className="bg-white p-6 sm:p-7 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-6">
+              <div className="grid grid-cols-12 gap-4 items-center">
 
                 {/* Teks Kiri */}
-                <div className="col-span-7 space-y-2">
-                  <h3 className="font-black text-[#3d2314] text-sm uppercase tracking-wide">
+                <div className="col-span-7 space-y-2.5">
+                  <h3 className="font-black text-[#3d2314] text-base sm:text-lg uppercase tracking-wide leading-tight">
                     PONDOK MUTIARA
                   </h3>
-                  <p className="text-[11px] text-[#6c584c] font-bold leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#6c584c] font-bold leading-relaxed">
                     Jl. Pondok Mutiara No.1<br />
                     Sidoarjo, Jawa Timur
                   </p>
-                  <div className="pt-1">
-                    <span className="text-[10px] text-[#8c5a3c] font-black uppercase tracking-wider block">
-                      Open Daily
+                  <div className="pt-1.5 space-y-0.5">
+                    <span className="text-[11px] sm:text-xs text-[#8c5a3c] font-black uppercase tracking-wider block">
+                      Jam Operasional
                     </span>
-                    <span className="text-xs text-[#3d2314] font-black">
+                    <span className="text-xs sm:text-sm text-[#3d2314] font-black block">
                       10.00 – 22.00 WIB
                     </span>
                   </div>
                 </div>
 
                 {/* Foto Kanan */}
-                <div className="col-span-5 aspect-square bg-[#f4ece1] rounded-2xl overflow-hidden border border-[#e6ccb2]/60 shadow-2xs">
+                <div className="col-span-5 aspect-square bg-[#f4ece1] rounded-2xl overflow-hidden border border-[#e6ccb2]/70 shadow-2xs">
                   <img
                     src="/img/tmc-pondok-mutiara.png"
                     alt="To Meet Cafe Pondok Mutiara"
@@ -765,53 +764,53 @@ export default function Home() {
               </div>
 
               {/* Tombol Direction */}
-              <div>
+              <div className="pt-2">
                 <a
                   href="https://maps.app.goo.gl/8mZuEJCFvSwbcALe7"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-32 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-xs rounded-full text-center transition tracking-wider flex items-center justify-center gap-1.5 uppercase shadow-xs cursor-pointer"
+                  className="w-full sm:w-auto px-7 py-3 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-xs sm:text-[12.5px] rounded-full text-center transition tracking-wider inline-flex items-center justify-center gap-2 uppercase shadow-xs cursor-pointer"
                 >
                   <span>DIRECTION</span>
-                  <MapPin className="w-3.5 h-3.5" />
+                  <MapPin className="w-4 h-4" />
                 </a>
               </div>
             </div>
 
             {/* 3. Social & Contact Card */}
-            <div className="bg-white p-5 sm:p-6 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs flex flex-col justify-between space-y-4 relative overflow-hidden">
+            <div className="bg-white p-6 sm:p-7 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs flex flex-col justify-between space-y-6 relative overflow-hidden">
 
               {/* Follow Us */}
-              <div className="space-y-3 w-full min-w-0">
+              <div className="space-y-3.5 w-full min-w-0">
                 {/* Header Title */}
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-md bg-[#FAF0E6] flex items-center justify-center text-[#e85a4f] shrink-0">
-                    <Share2 className="w-3 h-3" />
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-[#e85a4f] shrink-0 shadow-2xs">
+                    <Share2 className="w-3.5 h-3.5" />
                   </div>
-                  <span className="text-xs font-black text-[#3d2314] uppercase tracking-wider">
+                  <span className="text-sm sm:text-[15px] font-black text-[#3d2314] uppercase tracking-wider">
                     Follow Our Journey!
                   </span>
                 </div>
 
                 {/* Description */}
-                <p className="text-[11px] sm:text-xs text-[#6c584c] font-medium leading-relaxed break-words max-w-sm">
-                  Ikuti update menu baru, keseruan workshop, dan promo spesial kami
+                <p className="text-xs sm:text-sm text-[#6c584c] font-medium leading-relaxed break-words max-w-sm">
+                  Ikuti update menu baru, keseruan workshop, dan promo spesial kami.
                 </p>
 
                 {/* Social Media Links */}
-                <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                <div className="flex flex-wrap items-center gap-2.5 pt-1">
                   {/* Instagram */}
                   <a
                     href="https://www.instagram.com/tomeet.cafe?stkn=NnBva3lubWk5OHFk"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#8c5a3c] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95 shrink-0"
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#FAF0E6]/90 hover:bg-[#8c5a3c] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95 shrink-0"
                     title="Instagram @tomeet.cafe"
                   >
                     <div className="w-5 h-5 rounded-full bg-white text-[#e85a4f] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition shrink-0">
                       <FaInstagram className="w-3 h-3" />
                     </div>
-                    <span className="text-[11px] font-black tracking-tight whitespace-nowrap">Instagram</span>
+                    <span className="text-xs sm:text-[12.5px] font-black tracking-tight whitespace-nowrap">Instagram</span>
                   </a>
 
                   {/* TikTok */}
@@ -819,13 +818,13 @@ export default function Home() {
                     href="https://www.tiktok.com/@tomeet.cafe?_r=1&_t=ZS-99dEumOyfiS"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#3d2314] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95 shrink-0"
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#FAF0E6]/90 hover:bg-[#3d2314] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95 shrink-0"
                     title="TikTok @tomeet.cafe"
                   >
                     <div className="w-5 h-5 rounded-full bg-white text-[#3d2314] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition shrink-0">
                       <FaTiktok className="w-2.5 h-2.5" />
                     </div>
-                    <span className="text-[11px] font-black tracking-tight whitespace-nowrap">TikTok</span>
+                    <span className="text-xs sm:text-[12.5px] font-black tracking-tight whitespace-nowrap">TikTok</span>
                   </a>
 
                   {/* YouTube */}
@@ -833,29 +832,29 @@ export default function Home() {
                     href="https://youtube.com/@tomeetcafe"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0E6]/80 hover:bg-[#e85a4f] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95 shrink-0"
+                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#FAF0E6]/90 hover:bg-[#e85a4f] text-[#3d2314] hover:text-white border border-[#e6ccb2]/80 transition-all duration-200 group shadow-2xs hover:shadow-xs active:scale-95 shrink-0"
                     title="YouTube @tomeetcafe"
                   >
                     <div className="w-5 h-5 rounded-full bg-white text-[#e85a4f] group-hover:bg-white/20 group-hover:text-white flex items-center justify-center transition shrink-0">
                       <FaYoutube className="w-3 h-3" />
                     </div>
-                    <span className="text-[11px] font-black tracking-tight whitespace-nowrap">YouTube</span>
+                    <span className="text-xs sm:text-[12.5px] font-black tracking-tight whitespace-nowrap">YouTube</span>
                   </a>
                 </div>
               </div>
 
               {/* Chat With Us */}
-              <div className="space-y-2 pt-1">
+              <div className="space-y-2.5 pt-2 border-t border-[#e6ccb2]/50">
                 <div className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#e85a4f]" />
-                  <span className="text-xs font-black text-[#3d2314]">Chat with us!</span>
+                  <MapPin className="w-4 h-4 text-[#e85a4f]" />
+                  <span className="text-xs sm:text-sm font-black text-[#3d2314]">Chat with us!</span>
                 </div>
                 <div>
                   <a
                     href="https://wa.me/6282141609328"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto px-6 py-3 bg-[#5cb85c] hover:bg-[#4cae4c] active:bg-[#449d44] text-white font-black text-xs rounded-full text-center transition flex items-center justify-center gap-2 tracking-wider uppercase shadow-xs cursor-pointer"
+                    className="w-full sm:w-auto px-6 py-3 bg-[#5cb85c] hover:bg-[#4cae4c] active:bg-[#449d44] text-white font-black text-xs sm:text-[12.5px] rounded-full text-center transition flex items-center justify-center gap-2 tracking-wider uppercase shadow-xs cursor-pointer"
                   >
                     <MessageCircle className="w-4 h-4 fill-current" />
                     <span>CHAT VIA WHATSAPP</span>

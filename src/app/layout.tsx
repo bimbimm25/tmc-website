@@ -4,6 +4,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SmoothScroll from '@/components/SmoothScroll';
+import ScrollToTop from '@/components/ScrollToTop';
 
 const jakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -13,6 +14,7 @@ const jakartaSans = Plus_Jakarta_Sans({
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tomeetcafe.id';
+
 
 export const viewport: Viewport = {
   themeColor: '#E4CFB8',
@@ -184,6 +186,7 @@ export default function RootLayout({
       },
     ],
   };
+  
 
   return (
     <html
@@ -199,6 +202,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-[#fffaf1] text-[#3d2314] font-sans antialiased selection:bg-[#8c5a3c] selection:text-white min-h-screen flex flex-col">
+        <ScrollToTop/>
         <SmoothScroll>
           <Navbar />
           <main className="bg-[#fffaf1] flex-1">{children}</main>

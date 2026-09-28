@@ -361,9 +361,8 @@ export default function CareerPage() {
             {/* 1. HERO SECTION (SMOOTH & ANTI-GLITCH DASHBOARD)  */}
             {/* ================================================= */}
             <section
-                className={`relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50 transition-colors duration-500 ${
-                    heroImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
-                }`}
+                className={`relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50 transition-colors duration-500 ${heroImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
+                    }`}
             >
                 {/* 1. Background Cover Layer */}
                 <div className="absolute inset-0 z-0">
@@ -388,9 +387,8 @@ export default function CareerPage() {
                 {/* 2. Konten Text Hero */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
                     <div
-                        className={`w-full max-w-sm sm:max-w-md lg:max-w-lg space-y-3 sm:space-y-4 text-left transition-all duration-700 ease-out ${
-                            isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-                        }`}
+                        className={`w-full max-w-sm sm:max-w-md lg:max-w-lg space-y-3 sm:space-y-4 text-left transition-all duration-700 ease-out ${isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                            }`}
                     >
                         <div>
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 text-[#8c5a3c] text-[9.5px] sm:text-[10px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs">
@@ -444,61 +442,86 @@ export default function CareerPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 2. OUR VALUES SECTION                             */}
+            {/* 2. OUR CORE VALUES                                */}
             {/* ================================================= */}
-            <section id="our-values" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 scroll-mt-20">
-                <div className="text-center space-y-0.5">
+            <section id="our-values" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5 scroll-mt-20">
+                <div className="text-center space-y-1">
                     <div className="inline-flex items-center gap-2">
                         <span className="w-5 h-0.5 bg-[#e6ccb2] rounded-full"></span>
-                        <h2 className="text-base sm:text-xl font-black text-[#3d2314] tracking-tight uppercase">
+                        <h2 className="text-lg sm:text-2xl font-black text-[#3d2314] tracking-tight uppercase">
                             OUR CORE VALUES
                         </h2>
                         <span className="w-5 h-0.5 bg-[#e6ccb2] rounded-full"></span>
                     </div>
-                    <p className="text-[11px] text-[#6c584c] font-semibold">
+                    {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold">
                         Fondasi utama yang membuat tim To Meet selalu kompak dan solid
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
-                        <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#e85a4f] mx-auto flex items-center justify-center">
-                            <Heart className="w-4 h-4" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 items-stretch">
+                    {/* Value 1 */}
+                    <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-2 text-center flex flex-col justify-between">
+                        <div className="space-y-2">
+                            <div className="w-10 h-10 rounded-2xl bg-[#FAF0E6] text-[#e85a4f] mx-auto flex items-center justify-center shadow-2xs">
+                                <Heart className="w-5 h-5 fill-current" />
+                            </div>
+                            <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
+                                Heartfelt Hospitality
+                            </h3>
+                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed">
+                                Melayani pengunjung dan rekan kerja dengan tulus, ramah, dan senyuman hangat.
+                            </p>
                         </div>
-                        <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase">Heartfelt Hospitality</h3>
-                        <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed">
-                            Melayani pengunjung dan rekan kerja dengan tulus, ramah, dan senyuman hangat.
-                        </p>
                     </div>
 
-                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
-                        <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center">
-                            <Smile className="w-4 h-4" />
+                    {/* Value 2 */}
+                    <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-2 text-center flex flex-col justify-between">
+                        <div className="space-y-2">
+                            <div className="w-10 h-10 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center shadow-2xs">
+                                <Smile className="w-5 h-5" />
+                            </div>
+                            <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
+                                Playful Creativity
+                            </h3>
+                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed">
+                                Membawa keceriaan dalam setiap hidangan, workshop, dan interaksi tanpa batas.
+                            </p>
                         </div>
-                        <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase">Playful Creativity</h3>
-                        <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed">
-                            Membawa keceriaan dalam setiap hidangan, workshop, dan interaksi tanpa batas.
-                        </p>
                     </div>
 
-                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
-                        <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-amber-600 mx-auto flex items-center justify-center">
-                            <Users className="w-4 h-4" />
+                    {/* Value 3 */}
+                    <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-2 text-center flex flex-col justify-between">
+                        <div className="space-y-2">
+                            <div className="w-10 h-10 rounded-2xl bg-[#FAF0E6] text-amber-600 mx-auto flex items-center justify-center shadow-2xs">
+                                <Users className="w-5 h-5" />
+                            </div>
+                            <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
+                                One Big Family
+                            </h3>
+                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed">
+                                Saling mendukung, mendengarkan, dan bertumbuh dalam suasana kerja yang sehat.
+                            </p>
                         </div>
-                        <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase">One Big Family</h3>
-                        <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed">
-                            Saling mendukung, mendengarkan, dan bertumbuh dalam suasana kerja yang sehat.
-                        </p>
                     </div>
 
-                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-1.5 text-center">
-                        <div className="w-9 h-9 rounded-2xl bg-[#FAF0E6] text-emerald-600 mx-auto flex items-center justify-center">
-                            <Award className="w-4 h-4" />
+                    {/* Value 4 */}
+                    <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-2 text-center flex flex-col justify-between">
+                        <div className="space-y-2">
+                            <div className="w-10 h-10 rounded-2xl bg-[#FAF0E6] text-emerald-600 mx-auto flex items-center justify-center shadow-2xs">
+                                <Award className="w-5 h-5" />
+                            </div>
+                            <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
+                                Quality Excellence
+                            </h3>
+                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed">
+                                Menjaga standar kualitas terbaik dari rasa hidangan hingga kenyamanan playground.
+                            </p>
                         </div>
-                        <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase">Quality Excellence</h3>
-                        <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed">
-                            Menjaga standar kualitas terbaik dari rasa hidangan hingga kenyamanan playground.
-                        </p>
                     </div>
                 </div>
             </section>
@@ -507,146 +530,156 @@ export default function CareerPage() {
             {/* 3. WHY JOIN US & OPEN POSITIONS (GRID 2-2 GABUNG) */}
             {/* ================================================= */}
             <section ref={openPositionsRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
                     {/* Kiri: Alasan Bergabung (Sticky Sidebar Ringkas) */}
-                    <div className="lg:col-span-4 bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4 lg:sticky lg:top-24">
-                        <div className="space-y-1">
-                            <div className="inline-flex items-center gap-1.5 text-[10px] font-black text-[#8c5a3c] uppercase">
-                                <BearPawIcon className="w-3.5 h-3.5" />
+                    <div className="lg:col-span-4 bg-white p-6 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-5 lg:sticky lg:top-24">
+                        <div className="space-y-1.5">
+                            <div className="inline-flex items-center gap-1.5 text-xs font-black text-[#8c5a3c] uppercase">
+                                <BearPawIcon className="w-4 h-4" />
                                 <span>MENGAPA BERGABUNG?</span>
                             </div>
-                            <h2 className="text-lg sm:text-xl font-black text-[#3d2314] leading-tight uppercase">
+                            <h2 className="text-xl sm:text-2xl font-black text-[#3d2314] leading-tight uppercase">
                                 Tempat Tepat Untuk Meniti Karir & Berkarya
                             </h2>
-                            <p className="text-xs text-[#5a4232] font-semibold leading-relaxed">
+                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed">
                                 Kami membuka ruang belajar dan berkembang di industri F&B dan Family Entertainment yang menyenangkan.
                             </p>
                         </div>
 
-                        <div className="space-y-2.5 pt-1">
-                            <div className="flex items-start gap-2.5">
-                                <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
-                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                        <div className="space-y-3 pt-1">
+                            <div className="flex items-start gap-3">
+                                <div className="w-6 h-6 rounded-lg bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
+                                    <CheckCircle2 className="w-4 h-4" />
                                 </div>
-                                <div>
-                                    <div className="font-bold text-xs text-[#3d2314]">Tim yang saling mendukung</div>
-                                    <div className="text-[10.5px] text-[#6c584c]">Saling membantu, menghargai, dan tumbuh bersama.</div>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-2.5">
-                                <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
-                                    <CheckCircle2 className="w-3.5 h-3.5" />
-                                </div>
-                                <div>
-                                    <div className="font-bold text-xs text-[#3d2314]">Kesempatan belajar setiap hari</div>
-                                    <div className="text-[10.5px] text-[#6c584c]">Belajar hal baru dan mengembangkan skill harian.</div>
+                                <div className="space-y-0.5">
+                                    <div className="font-bold text-xs sm:text-sm text-[#3d2314]">Tim yang saling mendukung</div>
+                                    <div className="text-[11px] sm:text-xs text-[#6c584c]">Saling membantu, menghargai, dan tumbuh bersama.</div>
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-2.5">
-                                <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
-                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                            <div className="flex items-start gap-3">
+                                <div className="w-6 h-6 rounded-lg bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
+                                    <CheckCircle2 className="w-4 h-4" />
                                 </div>
-                                <div>
-                                    <div className="font-bold text-xs text-[#3d2314]">Suasana Positif & Nyaman</div>
-                                    <div className="text-[10.5px] text-[#6c584c]">Lingkungan kerja yang ramah dan penuh semangat.</div>
+                                <div className="space-y-0.5">
+                                    <div className="font-bold text-xs sm:text-sm text-[#3d2314]">Kesempatan belajar setiap hari</div>
+                                    <div className="text-[11px] sm:text-xs text-[#6c584c]">Belajar hal baru dan mengembangkan skill harian.</div>
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-2.5">
-                                <div className="w-5 h-5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
-                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                            <div className="flex items-start gap-3">
+                                <div className="w-6 h-6 rounded-lg bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
+                                    <CheckCircle2 className="w-4 h-4" />
                                 </div>
-                                <div>
-                                    <div className="font-bold text-xs text-[#3d2314]">Jenjang Karier Terbuka</div>
-                                    <div className="text-[10.5px] text-[#6c584c]">Peluang promosi dan posisi lebih tinggi bagi yang berprestasi.</div>
+                                <div className="space-y-0.5">
+                                    <div className="font-bold text-xs sm:text-sm text-[#3d2314]">Suasana Positif & Nyaman</div>
+                                    <div className="text-[11px] sm:text-xs text-[#6c584c]">Lingkungan kerja yang ramah dan penuh semangat.</div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-start gap-3">
+                                <div className="w-6 h-6 rounded-lg bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 mt-0.5">
+                                    <CheckCircle2 className="w-4 h-4" />
+                                </div>
+                                <div className="space-y-0.5">
+                                    <div className="font-bold text-xs sm:text-sm text-[#3d2314]">Jenjang Karier Terbuka</div>
+                                    <div className="text-[11px] sm:text-xs text-[#6c584c]">Peluang promosi dan posisi lebih tinggi bagi yang berprestasi.</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="p-3 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/60 text-center">
-                            <div className="text-xs font-black text-[#8c5a3c]">Pertanyaan Rekrutmen?</div>
-                            <div className="text-[10.5px] text-[#6c584c]">Hubungi HR kami di <span className="font-bold text-[#3d2314]">tmc.rekrutmen@gmail.com</span></div>
+                        <div className="p-3.5 bg-[#FAF0E6]/60 rounded-2xl border border-[#e6ccb2]/70 text-center space-y-1">
+                            <div className="text-xs sm:text-sm font-black text-[#8c5a3c]">Pertanyaan Rekrutmen?</div>
+                            <div className="text-[11px] sm:text-xs text-[#6c584c]">
+                                Hubungi HR kami di <span className="font-bold text-[#3d2314]">tmc.rekrutmen@gmail.com</span>
+                            </div>
                         </div>
                     </div>
 
                     {/* Kanan: Filter Lokasi & Grid Kartu Lowongan 2-2 */}
-                    <div className="lg:col-span-8 space-y-4">
+                    <div className="lg:col-span-8 space-y-5">
 
                         {/* Header + Tabs Filter Lokasi Outlet */}
-                        <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3">
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                                <div className="flex items-center gap-2">
-                                    <Briefcase className="w-4 h-4 text-[#8c5a3c]" />
-                                    <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide">
+                        <div className="bg-white p-4 sm:p-5 lg:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
+                            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
+
+                                {/* Kiri: Title & Badge Jumlah Lowongan (Dengan margin/padding aman agar tidak mepet) */}
+                                <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+                                    <Briefcase className="w-5 h-5 text-[#8c5a3c] shrink-0" />
+                                    <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide whitespace-nowrap">
                                         OPEN POSITIONS
                                     </h2>
-                                    <span className="text-xs font-bold text-[#8c5a3c] bg-[#FAF0E6] px-2 py-0.5 rounded-full">
+                                    <span className="text-xs sm:text-sm font-bold text-[#8c5a3c] bg-[#FAF0E6] px-3 py-1 rounded-full whitespace-nowrap shrink-0">
                                         {filteredCareers.length} Lowongan
                                     </span>
                                 </div>
 
-                                {/* Filter Tabs Lokasi */}
-                                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none max-w-full">
+                                {/* Kanan: Filter Tabs Lokasi (Scrollbar otomatis hilang/tidak terlihat) */}
+                                <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto py-1 scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                                     <button
+                                        type="button"
                                         onClick={() => setSelectedLocationFilter('all')}
-                                        className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'all'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                        className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'all'
+                                                ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         Semua
                                     </button>
 
                                     <button
+                                        type="button"
                                         onClick={() => setSelectedLocationFilter('mutiara')}
-                                        className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'mutiara'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                        className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'mutiara'
+                                                ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         Pondok Mutiara
                                     </button>
 
                                     <button
+                                        type="button"
                                         onClick={() => setSelectedLocationFilter('central_kitchen')}
-                                        className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'central_kitchen'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                        className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'central_kitchen'
+                                                ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         Central Kitchen
                                     </button>
 
                                     <button
+                                        type="button"
                                         onClick={() => setSelectedLocationFilter('office')}
-                                        className={`px-3 py-1 rounded-full text-[10.5px] font-black uppercase tracking-wider transition cursor-pointer shrink-0 ${selectedLocationFilter === 'office'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                        className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'office'
+                                                ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         Office
                                     </button>
                                 </div>
+
                             </div>
                         </div>
 
                         {/* Loading State */}
                         {isLoading && (
-                            <div className="bg-white p-12 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
-                                <div className="w-6 h-6 border-2 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
-                                <p className="text-xs font-bold text-[#8c5a3c]">Memuat daftar lowongan...</p>
+                            <div className="bg-white p-16 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-3">
+                                <div className="w-8 h-8 border-3 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
+                                <p className="text-xs sm:text-sm font-bold text-[#8c5a3c]">Memuat daftar lowongan...</p>
                             </div>
                         )}
 
                         {/* Empty State */}
                         {!isLoading && filteredCareers.length === 0 && (
-                            <div className="bg-white p-10 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2">
-                                <BearFaceIcon className="w-8 h-8 text-[#8c5a3c] mx-auto opacity-70" />
-                                <h3 className="font-black text-sm text-[#3d2314]">Belum Ada Lowongan Aktif</h3>
-                                <p className="text-xs text-[#6c584c] max-w-sm mx-auto">
+                            <div className="bg-white p-12 sm:p-16 rounded-3xl border border-[#e6ccb2]/80 text-center space-y-2.5">
+                                <BearFaceIcon className="w-10 h-10 text-[#8c5a3c] mx-auto opacity-70" />
+                                <h3 className="font-black text-sm sm:text-base text-[#3d2314]">Belum Ada Lowongan Aktif</h3>
+                                <p className="text-xs sm:text-sm text-[#6c584c] max-w-sm mx-auto">
                                     {selectedLocationFilter !== 'all'
                                         ? 'Tidak ada lowongan aktif untuk kategori lokasi ini saat ini.'
                                         : 'Saat ini semua posisi terisi penuh. Silakan cek berkala kembali!'}
@@ -656,7 +689,7 @@ export default function CareerPage() {
 
                         {/* DAFTAR PEKERJAAN: GRID 2-2 KE BAWAH DENGAN LIST BULLETS */}
                         {!isLoading && filteredCareers.length > 0 && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                                 {filteredCareers.map((job) => {
                                     const rawLocation = (job as any).location_name || (job as any).location || (job as any).branch;
                                     const locInfo = formatLocationName(rawLocation);
@@ -664,16 +697,16 @@ export default function CareerPage() {
                                     return (
                                         <div
                                             key={job.id}
-                                            className="bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs hover:border-[#8c5a3c] hover:shadow-md transition duration-200 flex flex-col justify-between h-full space-y-3.5 group"
+                                            className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs hover:border-[#8c5a3c] hover:shadow-md transition duration-200 flex flex-col justify-between h-full space-y-4 group"
                                         >
-                                            {/* Bagian Atas: Badge, Judul, Metadata, & Tanggung Jawab (Bullet List) */}
-                                            <div className="space-y-2.5">
+                                            {/* Bagian Atas: Badge, Judul, Metadata, & Tanggung Jawab */}
+                                            <div className="space-y-3">
                                                 {/* Header Badges */}
                                                 <div className="flex items-center justify-between gap-2">
-                                                    <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9.5px] font-black uppercase rounded-md tracking-wider">
+                                                    <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] sm:text-[11px] font-black uppercase rounded-md tracking-wider">
                                                         {job.department || 'Operasional'}
                                                     </span>
-                                                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[9px] font-black uppercase rounded-full">
+                                                    <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[9.5px] sm:text-[10px] font-black uppercase rounded-full">
                                                         {job.type}
                                                     </span>
                                                 </div>
@@ -687,26 +720,26 @@ export default function CareerPage() {
 
                                                 {/* Lokasi & Gaji Badges */}
                                                 <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                                                    <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-lg border text-[9.5px] font-black uppercase tracking-wide ${locInfo.badgeColor}`}>
+                                                    <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-lg border text-[10px] sm:text-[10.5px] font-black uppercase tracking-wide ${locInfo.badgeColor}`}>
                                                         <MapPin className="w-3 h-3 shrink-0" />
                                                         <span className="truncate max-w-[130px]">{locInfo.label}</span>
                                                     </div>
 
                                                     {job.salary_range && (
-                                                        <div className="flex items-center gap-1 text-emerald-700 bg-emerald-50/70 px-2.5 py-0.5 rounded-lg border border-emerald-200/60 text-[9.5px] font-bold">
+                                                        <div className="flex items-center gap-1 text-emerald-700 bg-emerald-50/70 px-2.5 py-0.5 rounded-lg border border-emerald-200/60 text-[10px] sm:text-[10.5px] font-bold">
                                                             <DollarSign className="w-3 h-3 shrink-0" />
                                                             <span>{job.salary_range}</span>
                                                         </div>
                                                     )}
                                                 </div>
 
-                                                {/* Preview Deskripsi dalam Bentuk List Bullet Points (Maksimal 3 Butir) */}
+                                                {/* Preview Deskripsi dalam Bentuk List Bullet Points */}
                                                 {job.description && (
-                                                    <div className="pt-2 border-t border-[#e6ccb2]/40">
-                                                        <span className="block text-[9.5px] font-black text-[#8c5a3c] uppercase tracking-wider mb-1.5">
+                                                    <div className="pt-2 border-t border-[#e6ccb2]/40 space-y-1.5">
+                                                        <span className="block text-[10px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider">
                                                             Tanggung Jawab Utama:
                                                         </span>
-                                                        <div className="bg-[#FAF0E6]/30 p-2.5 rounded-2xl border border-[#e6ccb2]/40">
+                                                        <div className="bg-[#FAF0E6]/30 p-3 rounded-2xl border border-[#e6ccb2]/40 text-xs sm:text-sm text-[#5a4232]">
                                                             <FormatRichContent text={job.description} maxItems={3} />
                                                         </div>
                                                     </div>
@@ -717,18 +750,18 @@ export default function CareerPage() {
                                             <div className="pt-3 border-t border-[#e6ccb2]/40 grid grid-cols-2 gap-2 mt-auto">
                                                 <button
                                                     onClick={() => setDetailJob(job)}
-                                                    className="w-full py-2 bg-[#FAF0E6] hover:bg-[#e6ccb2] text-[#8c5a3c] font-black text-[10px] sm:text-[10.5px] rounded-xl transition flex items-center justify-center gap-1 uppercase tracking-wider cursor-pointer"
+                                                    className="w-full py-2.5 bg-[#FAF0E6] hover:bg-[#e6ccb2] text-[#8c5a3c] font-black text-[11px] sm:text-xs rounded-xl transition flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer"
                                                 >
-                                                    <FileText className="w-3 h-3" />
+                                                    <FileText className="w-3.5 h-3.5" />
                                                     <span>Detail</span>
                                                 </button>
 
                                                 <button
                                                     onClick={() => handleOpenApply(job)}
-                                                    className="w-full py-2 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-[10px] sm:text-[10.5px] rounded-xl shadow-xs transition flex items-center justify-center gap-1 uppercase tracking-wider cursor-pointer"
+                                                    className="w-full py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-[11px] sm:text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer"
                                                 >
                                                     <span>Lamar</span>
-                                                    <ArrowRight className="w-3 h-3" />
+                                                    <ArrowRight className="w-3.5 h-3.5" />
                                                 </button>
                                             </div>
                                         </div>
@@ -744,65 +777,74 @@ export default function CareerPage() {
             {/* ================================================= */}
             {/* 4. WHAT OUR TEAM SAYS                             */}
             {/* ================================================= */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3.5">
-                <div className="text-center space-y-0.5">
-                    <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide">
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
+                <div className="text-center space-y-1">
+                    <h2 className="text-lg sm:text-2xl font-black text-[#3d2314] uppercase tracking-wide">
                         WHAT OUR TEAM SAYS
                     </h2>
-                    <p className="text-[11px] text-[#6c584c] font-semibold">Kisah nyata dari anggota keluarga beruang To Meet</p>
+                    {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold">
+                        Kisah nyata dari anggota keluarga beruang To Meet
+                    </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3 flex flex-col justify-between">
-                        <div className="space-y-2">
-                            <Quote className="w-5 h-5 text-[#8c5a3c]/30" />
-                            <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed italic">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    {/* Testimonial 1 */}
+                    <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4 flex flex-col justify-between">
+                        <div className="space-y-2.5">
+                            <Quote className="w-6 h-6 text-[#8c5a3c]/30" />
+                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed italic">
                                 &quot;Banyak banget pelajaran dan pengalaman seru selama bekerja di To Meet, dengan tim yang solid dan asik diajak kerja sama. Terima kasih sudah memberikan kesempatan bagi saya untuk tumbuh dan berkembang&quot;
                             </p>
                         </div>
-                        <div className="flex items-center gap-2.5 pt-2 border-t border-[#e6ccb2]/50">
-                            <div className="w-8 h-8 rounded-full bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center font-black text-xs">
+                        <div className="flex items-center gap-3 pt-3 border-t border-[#e6ccb2]/50">
+                            <div className="w-9 h-9 rounded-full bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center font-black text-xs sm:text-sm shadow-2xs">
                                 A
                             </div>
                             <div>
-                                <div className="font-black text-xs text-[#3d2314]">Adel</div>
-                                <div className="text-[9.5px] text-[#6c584c] font-semibold">Kitchen Leader</div>
+                                <div className="font-black text-xs sm:text-sm text-[#3d2314]">Adel</div>
+                                <div className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold">Kitchen Leader</div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3 flex flex-col justify-between">
-                        <div className="space-y-2">
-                            <Quote className="w-5 h-5 text-[#8c5a3c]/30" />
-                            <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed italic">
+                    {/* Testimonial 2 */}
+                    <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4 flex flex-col justify-between">
+                        <div className="space-y-2.5">
+                            <Quote className="w-6 h-6 text-[#8c5a3c]/30" />
+                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed italic">
                                 &quot;Selama saya bekerja di To Meet, banyak ilmu yang saya dapat, baik dari bagaimana cara tim bekerja, bagaimana SOP dan operasional yang baik dan benar, juga dengan kebersamaan antara saya dan tim. Saya sangat berterima kasih juga kepada beberapa orang yang selalu mendukung saya dalam berkembang dan memberikan saya kesempatan untuk menunjukkan bahwa saya bisa bekerja dengan baik.&quot;
                             </p>
                         </div>
-                        <div className="flex items-center gap-2.5 pt-2 border-t border-[#e6ccb2]/50">
-                            <div className="w-8 h-8 rounded-full bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center font-black text-xs">
+                        <div className="flex items-center gap-3 pt-3 border-t border-[#e6ccb2]/50">
+                            <div className="w-9 h-9 rounded-full bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center font-black text-xs sm:text-sm shadow-2xs">
                                 A
                             </div>
                             <div>
-                                <div className="font-black text-xs text-[#3d2314]">Affanin</div>
-                                <div className="text-[9.5px] text-[#6c584c] font-semibold">Front Leader</div>
+                                <div className="font-black text-xs sm:text-sm text-[#3d2314]">Affanin</div>
+                                <div className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold">Front Leader</div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3 flex flex-col justify-between">
-                        <div className="space-y-2">
-                            <Quote className="w-5 h-5 text-[#8c5a3c]/30" />
-                            <p className="text-[11px] text-[#5a4232] font-semibold leading-relaxed italic">
+                    {/* Testimonial 3 */}
+                    <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4 flex flex-col justify-between">
+                        <div className="space-y-2.5">
+                            <Quote className="w-6 h-6 text-[#8c5a3c]/30" />
+                            {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                            <p className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed italic">
                                 &quot;Bekerja di To Meet Cafe benar-benar pengalaman yang berkesan. Suasannya nyaman banget, seperti rumah kedua, tim dan manajemennya juga suportif. Aku banyak belajar hal baru di sini dan diberi peluang yang luas untuk mengembangkan karir.&quot;
                             </p>
                         </div>
-                        <div className="flex items-center gap-2.5 pt-2 border-t border-[#e6ccb2]/50">
-                            <div className="w-8 h-8 rounded-full bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center font-black text-xs">
+                        <div className="flex items-center gap-3 pt-3 border-t border-[#e6ccb2]/50">
+                            <div className="w-9 h-9 rounded-full bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center font-black text-xs sm:text-sm shadow-2xs">
                                 V
                             </div>
                             <div>
-                                <div className="font-black text-xs text-[#3d2314]">Vania</div>
-                                <div className="text-[9.5px] text-[#6c584c] font-semibold">Greater Leader</div>
+                                <div className="font-black text-xs sm:text-sm text-[#3d2314]">Vania</div>
+                                <div className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold">Greater Leader</div>
                             </div>
                         </div>
                     </div>
@@ -813,16 +855,17 @@ export default function CareerPage() {
             {/* 5. BIG CTA SECTION                                */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-[#8c5a3c] text-white p-6 sm:p-10 rounded-3xl shadow-lg relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-5">
-                    <div className="space-y-1.5 text-center lg:text-left z-10 max-w-xl">
-                        <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/10 text-white text-[10px] font-black uppercase tracking-wider">
-                            <Sparkles className="w-3 h-3 text-amber-300" />
+                <div className="bg-[#8c5a3c] text-white p-6 sm:p-10 lg:p-12 rounded-3xl shadow-lg relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6">
+                    <div className="space-y-2 text-center lg:text-left z-10 max-w-xl">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-[10.5px] sm:text-xs font-black uppercase tracking-wider">
+                            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                             <span>KAMI TUNGGU KEDATANGANMU</span>
                         </div>
                         <h2 className="text-xl sm:text-2xl lg:text-3xl font-black uppercase leading-tight">
                             Ready to be part of our bear family?
                         </h2>
-                        <p className="text-xs text-stone-200 font-semibold leading-relaxed">
+                        {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                        <p className="text-xs sm:text-sm text-stone-200 font-semibold leading-relaxed">
                             Kirimkan CV dan portofolio Anda sekarang juga. Mari ciptakan kebahagiaan manis bersama di To Meet Cafe & Playground!
                         </p>
                     </div>
@@ -830,10 +873,10 @@ export default function CareerPage() {
                     <div className="z-10 shrink-0">
                         <button
                             onClick={scrollToPositions}
-                            className="px-6 py-3 bg-white hover:bg-[#FAF0E6] active:bg-stone-200 text-[#3d2314] font-black text-xs rounded-full shadow-md transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
+                            className="px-7 py-3 sm:px-8 sm:py-3.5 bg-white hover:bg-[#FAF0E6] active:bg-stone-200 text-[#3d2314] font-black text-xs sm:text-sm rounded-full shadow-md transition inline-flex items-center gap-2 uppercase tracking-wider cursor-pointer"
                         >
                             <span>APPLY SEKARANG</span>
-                            <ArrowRight className="w-3.5 h-3.5 text-[#8c5a3c]" />
+                            <ArrowRight className="w-4 h-4 text-[#8c5a3c]" />
                         </button>
                     </div>
                 </div>
@@ -852,7 +895,7 @@ export default function CareerPage() {
                     <div
                         id="career-detail-modal-card"
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white w-full max-w-xl rounded-3xl p-6 sm:p-7 border border-[#e6ccb2] shadow-2xl space-y-5 relative my-auto max-h-[90vh] overflow-y-auto"
+                        className="bg-white w-full max-w-xl rounded-3xl p-6 sm:p-8 border border-[#e6ccb2] shadow-2xl space-y-5 relative my-auto max-h-[90vh] overflow-y-auto"
                     >
                         <button
                             onClick={() => setDetailJob(null)}
@@ -861,12 +904,12 @@ export default function CareerPage() {
                             <X className="w-4 h-4" />
                         </button>
 
-                        <div className="space-y-2 border-b border-[#e6ccb2]/60 pb-4">
+                        <div className="space-y-2.5 border-b border-[#e6ccb2]/60 pb-4">
                             <div className="flex items-center gap-2">
-                                <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] font-black uppercase rounded-md">
+                                <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10.5px] sm:text-xs font-black uppercase rounded-md">
                                     {detailJob.department || 'Operasional Cafe'}
                                 </span>
-                                <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-black uppercase rounded-md">
+                                <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10.5px] sm:text-xs font-black uppercase rounded-md">
                                     {detailJob.type}
                                 </span>
                             </div>
@@ -875,12 +918,12 @@ export default function CareerPage() {
                                 {detailJob.title}
                             </h2>
 
-                            <div className="flex flex-wrap items-center gap-2.5 text-xs font-bold pt-1">
+                            <div className="flex flex-wrap items-center gap-2.5 text-xs sm:text-sm font-bold pt-1">
                                 {(() => {
                                     const rawLocation = (detailJob as any).location_name || (detailJob as any).location || (detailJob as any).branch;
                                     const loc = formatLocationName(rawLocation);
                                     return (
-                                        <div className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border text-[11px] font-black uppercase ${loc.badgeColor}`}>
+                                        <div className={`flex items-center gap-1.5 px-3 py-1 rounded-lg border text-xs font-black uppercase ${loc.badgeColor}`}>
                                             <Building className="w-3.5 h-3.5 shrink-0" />
                                             <span>Penempatan: {loc.label}</span>
                                         </div>
@@ -888,7 +931,7 @@ export default function CareerPage() {
                                 })()}
 
                                 {detailJob.salary_range && (
-                                    <div className="flex items-center gap-1 text-emerald-700 bg-emerald-50/70 px-3 py-1 rounded-lg border border-emerald-200/60 text-[11px] font-black">
+                                    <div className="flex items-center gap-1 text-emerald-700 bg-emerald-50/70 px-3 py-1 rounded-lg border border-emerald-200/60 text-xs font-black">
                                         <DollarSign className="w-3.5 h-3.5 shrink-0" />
                                         <span>Gaji: {detailJob.salary_range}</span>
                                     </div>
@@ -898,11 +941,11 @@ export default function CareerPage() {
 
                         {detailJob.description && detailJob.description.trim() !== '' && (
                             <div className="space-y-2">
-                                <h3 className="text-xs font-black text-[#3d2314] uppercase tracking-wider flex items-center gap-1.5">
-                                    <Briefcase className="w-3.5 h-3.5 text-[#8c5a3c]" />
+                                <h3 className="text-xs sm:text-sm font-black text-[#3d2314] uppercase tracking-wider flex items-center gap-1.5">
+                                    <Briefcase className="w-4 h-4 text-[#8c5a3c]" />
                                     <span>Deskripsi Pekerjaan:</span>
                                 </h3>
-                                <div className="bg-[#FAF0E6]/40 p-4 rounded-2xl border border-[#e6ccb2]/60">
+                                <div className="bg-[#FAF0E6]/40 p-4 rounded-2xl border border-[#e6ccb2]/60 text-xs sm:text-sm text-[#5a4232]">
                                     <FormatRichContent text={detailJob.description} />
                                 </div>
                             </div>
@@ -910,11 +953,11 @@ export default function CareerPage() {
 
                         {detailJob.requirements && detailJob.requirements.trim() !== '' && (
                             <div className="space-y-2">
-                                <h3 className="text-xs font-black text-[#3d2314] uppercase tracking-wider flex items-center gap-1.5">
-                                    <CheckCircle2 className="w-3.5 h-3.5 text-[#8c5a3c]" />
+                                <h3 className="text-xs sm:text-sm font-black text-[#3d2314] uppercase tracking-wider flex items-center gap-1.5">
+                                    <CheckCircle2 className="w-4 h-4 text-[#8c5a3c]" />
                                     <span>Persyaratan (Requirements):</span>
                                 </h3>
-                                <div className="bg-[#FAF0E6]/40 p-4 rounded-2xl border border-[#e6ccb2]/60">
+                                <div className="bg-[#FAF0E6]/40 p-4 rounded-2xl border border-[#e6ccb2]/60 text-xs sm:text-sm text-[#5a4232]">
                                     <FormatRichContent text={detailJob.requirements} />
                                 </div>
                             </div>
@@ -922,11 +965,11 @@ export default function CareerPage() {
 
                         {detailJob.benefits && detailJob.benefits.trim() !== '' && (
                             <div className="space-y-2">
-                                <h3 className="text-xs font-black text-[#3d2314] uppercase tracking-wider flex items-center gap-1.5">
-                                    <Gift className="w-3.5 h-3.5 text-[#e85a4f]" />
+                                <h3 className="text-xs sm:text-sm font-black text-[#3d2314] uppercase tracking-wider flex items-center gap-1.5">
+                                    <Gift className="w-4 h-4 text-[#e85a4f]" />
                                     <span>Benefit Pekerjaan:</span>
                                 </h3>
-                                <div className="bg-[#FAF0E6]/40 p-4 rounded-2xl border border-[#e6ccb2]/60">
+                                <div className="bg-[#FAF0E6]/40 p-4 rounded-2xl border border-[#e6ccb2]/60 text-xs sm:text-sm text-[#5a4232]">
                                     <FormatRichContent text={detailJob.benefits} />
                                 </div>
                             </div>
@@ -935,16 +978,16 @@ export default function CareerPage() {
                         <div className="pt-3 border-t border-[#e6ccb2]/50 flex items-center justify-end gap-2.5">
                             <button
                                 onClick={() => setDetailJob(null)}
-                                className="px-5 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold rounded-xl transition cursor-pointer"
+                                className="px-5 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs sm:text-sm font-bold rounded-xl transition cursor-pointer"
                             >
                                 Tutup
                             </button>
                             <button
                                 onClick={() => handleOpenApply(detailJob)}
-                                className="px-6 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-xl shadow-xs transition flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                                className="px-6 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs sm:text-sm rounded-xl shadow-xs transition flex items-center gap-2 uppercase tracking-wider cursor-pointer"
                             >
                                 <span>Lamar Posisi Ini</span>
-                                <ArrowRight className="w-3.5 h-3.5" />
+                                <ArrowRight className="w-4 h-4" />
                             </button>
                         </div>
                     </div>
@@ -966,12 +1009,13 @@ export default function CareerPage() {
                         onClick={(e) => e.stopPropagation()}
                         className="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-[#e6ccb2] overflow-hidden my-auto max-h-[90vh] overflow-y-auto"
                     >
-                        <div className="px-5 py-4 border-b border-[#e6ccb2]/60 flex items-center justify-between bg-[#FAF0E6]/60">
+                        <div className="px-6 py-4.5 border-b border-[#e6ccb2]/60 flex items-center justify-between bg-[#FAF0E6]/60">
                             <div>
-                                <h3 className="font-bold text-[#3d2314] text-sm sm:text-base">
+                                <h3 className="font-bold text-[#3d2314] text-base sm:text-lg">
                                     Lamar Posisi: {selectedJob.title}
                                 </h3>
-                                <p className="text-[10.5px] text-[#6c584c] font-medium mt-0.5">
+                                {/* Deskripsi: Patokan text-xs sm:text-sm */}
+                                <p className="text-xs sm:text-sm text-[#6c584c] font-medium mt-0.5">
                                     Penempatan: {formatLocationName((selectedJob as any).location_name || (selectedJob as any).location || (selectedJob as any).branch).label} • {selectedJob.type}
                                 </p>
                             </div>
@@ -984,26 +1028,26 @@ export default function CareerPage() {
                         </div>
 
                         {submitSuccess ? (
-                            <div className="p-8 text-center space-y-3">
-                                <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
-                                    <CheckCircle2 className="w-7 h-7" />
+                            <div className="p-8 sm:p-10 text-center space-y-3">
+                                <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+                                    <CheckCircle2 className="w-8 h-8" />
                                 </div>
-                                <h4 className="font-black text-base text-stone-900">Lamaran Terkirim!</h4>
-                                <p className="text-xs text-stone-600 max-w-xs mx-auto">
+                                <h4 className="font-black text-lg text-stone-900">Lamaran Terkirim!</h4>
+                                <p className="text-xs sm:text-sm text-stone-600 max-w-xs mx-auto">
                                     Terima kasih! Berkas lamaran Anda telah berhasil diteruskan ke tim HRD To Meet Cafe.
                                 </p>
                             </div>
                         ) : (
-                            <form onSubmit={handleSubmitApplication} className="p-5 space-y-3">
+                            <form onSubmit={handleSubmitApplication} className="p-6 space-y-4">
                                 {formError && (
-                                    <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-center gap-2">
+                                    <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm rounded-xl flex items-center gap-2">
                                         <AlertCircle className="w-4 h-4 shrink-0" />
                                         <span>{formError}</span>
                                     </div>
                                 )}
 
                                 <div>
-                                    <label className="block text-[10px] font-bold text-stone-800 uppercase tracking-wider mb-1">
+                                    <label className="block text-[11px] sm:text-xs font-bold text-stone-800 uppercase tracking-wider mb-1">
                                         Nama Lengkap <span className="text-rose-500">*</span>
                                     </label>
                                     <input
@@ -1012,13 +1056,13 @@ export default function CareerPage() {
                                         value={fullName}
                                         onChange={(e) => setFullName(e.target.value)}
                                         placeholder="Contoh: Bima Ardiansyah"
-                                        className="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
+                                        className="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
                                     />
                                 </div>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                                     <div>
-                                        <label className="block text-[10px] font-bold text-stone-800 uppercase tracking-wider mb-1">
+                                        <label className="block text-[11px] sm:text-xs font-bold text-stone-800 uppercase tracking-wider mb-1">
                                             Email Aktif <span className="text-rose-500">*</span>
                                         </label>
                                         <input
@@ -1027,12 +1071,12 @@ export default function CareerPage() {
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             placeholder="nama@email.com"
-                                            className="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
+                                            className="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-[10px] font-bold text-stone-800 uppercase tracking-wider mb-1">
+                                        <label className="block text-[11px] sm:text-xs font-bold text-stone-800 uppercase tracking-wider mb-1">
                                             Nomor WhatsApp / HP <span className="text-rose-500">*</span>
                                         </label>
                                         <input
@@ -1041,13 +1085,13 @@ export default function CareerPage() {
                                             value={phone}
                                             onChange={(e) => setPhone(e.target.value)}
                                             placeholder="08123456789"
-                                            className="w-full border border-stone-200 rounded-xl px-3 py-2 text-xs text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
+                                            className="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-[10px] font-bold text-stone-800 uppercase tracking-wider mb-1">
+                                    <label className="block text-[11px] sm:text-xs font-bold text-stone-800 uppercase tracking-wider mb-1">
                                         Surat Pengantar / Catatan Singkat
                                     </label>
                                     <textarea
@@ -1055,12 +1099,12 @@ export default function CareerPage() {
                                         value={coverLetter}
                                         onChange={(e) => setCoverLetter(e.target.value)}
                                         placeholder="Ceritakan secara singkat pengalaman dan motivasi Anda bergabung..."
-                                        className="w-full border border-stone-200 rounded-xl p-2.5 text-xs text-stone-800 focus:outline-none focus:border-[#8c5a3c] leading-relaxed resize-none"
+                                        className="w-full border border-stone-200 rounded-xl p-3 text-xs sm:text-sm text-stone-800 focus:outline-none focus:border-[#8c5a3c] leading-relaxed resize-none"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-[10px] font-bold text-stone-800 uppercase tracking-wider mb-1">
+                                    <label className="block text-[11px] sm:text-xs font-bold text-stone-800 uppercase tracking-wider mb-1">
                                         Upload Berkas CV / Resume (PDF/DOCX, Max 5MB) <span className="text-rose-500">*</span>
                                     </label>
                                     <input
@@ -1068,28 +1112,28 @@ export default function CareerPage() {
                                         required
                                         accept=".pdf,.doc,.docx"
                                         onChange={(e) => setResumeFile(e.target.files ? e.target.files[0] : null)}
-                                        className="w-full text-xs text-stone-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#FAF0E6] file:text-[#8c5a3c] hover:file:bg-[#e6ccb2] transition cursor-pointer"
+                                        className="w-full text-xs sm:text-sm text-stone-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-[#FAF0E6] file:text-[#8c5a3c] hover:file:bg-[#e6ccb2] transition cursor-pointer"
                                     />
                                 </div>
 
-                                <div className="pt-3 flex justify-end gap-2 border-t border-stone-100">
+                                <div className="pt-3 flex justify-end gap-2.5 border-t border-stone-100">
                                     <button
                                         type="button"
                                         onClick={() => setIsApplyModalOpen(false)}
-                                        className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold rounded-xl transition cursor-pointer"
+                                        className="px-5 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs sm:text-sm font-bold rounded-xl transition cursor-pointer"
                                     >
                                         Batal
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="px-5 py-2 bg-[#8c5a3c] hover:bg-[#73482f] text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                                        className="px-6 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
                                     >
                                         {isSubmitting ? (
                                             <span>Mengirim...</span>
                                         ) : (
                                             <>
-                                                <Send className="w-3.5 h-3.5" />
+                                                <Send className="w-4 h-4" />
                                                 <span>Kirim Lamaran</span>
                                             </>
                                         )}
@@ -1100,7 +1144,6 @@ export default function CareerPage() {
                     </div>
                 </div>
             )}
-
         </div>
-    );
+    )
 }
