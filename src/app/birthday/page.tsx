@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import {
     Phone, Users, Clock, Sparkles, Heart, Utensils,
@@ -10,6 +10,10 @@ import {
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
+// Cache in-memory modul agar saat navigasi page langsung instan tanpa glitch
+let cachedBirthdayBanner: BannerItem | null = null;
+let cachedBirthdayPackages: BirthdayPackageItem[] | null = null;
 
 // Add-Ons Resmi Otomatis (Built-in)
 const OFFICIAL_ADDONS = [
@@ -160,8 +164,11 @@ function shouldHideAddons(title?: string | null): boolean {
 }
 
 export default function BirthdayPage() {
-    const [packages, setPackages] = useState<BirthdayPackageItem[]>([]);
-    const [banner, setBanner] = useState<BannerItem | null>(null);
+    // Inisialisasi awal langsung dari cache modul jika ada
+    const [packages, setPackages] = useState<BirthdayPackageItem[]>(() => cachedBirthdayPackages || []);
+    const [banner, setBanner] = useState<BannerItem | null>(() => cachedBirthdayBanner);
+    const [isBannerChecked, setIsBannerChecked] = useState<boolean>(() => cachedBirthdayBanner !== null);
+
     const [selectedPackage, setSelectedPackage] = useState<BirthdayPackageItem | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
@@ -251,6 +258,7 @@ export default function BirthdayPage() {
                         item.type === 'birthday_package' || (item.category && item.category.toLowerCase().includes('birthday'))
                     );
                     const sortedFiltered = [...filtered].sort((a: any, b: any) => Number(a.price || 0) - Number(b.price || 0));
+                    cachedBirthdayPackages = sortedFiltered;
                     setPackages(sortedFiltered);
                 }
             } else {
@@ -258,18 +266,28 @@ export default function BirthdayPage() {
                 if (json && json.data) {
                     if (Array.isArray(json.data)) {
                         const sortedPackages = [...json.data].sort((a: BirthdayPackageItem, b: BirthdayPackageItem) => Number(a.price || 0) - Number(b.price || 0));
+                        cachedBirthdayPackages = sortedPackages;
                         setPackages(sortedPackages);
                     } else {
                         const sortedPackages = [...(json.data.packages || [])].sort((a: BirthdayPackageItem, b: BirthdayPackageItem) => Number(a.price || 0) - Number(b.price || 0));
+                        const bannerData = json.data.banner || null;
+
+                        cachedBirthdayPackages = sortedPackages;
+                        cachedBirthdayBanner = bannerData;
+
                         setPackages(sortedPackages);
-                        setBanner(json.data.banner || null);
+                        setBanner(bannerData);
                     }
                 }
             }
 
+            // Ambil banner langsung dari endpoint spesifik jika ada
             if (resBanner && resBanner.ok) {
                 const jsonB = await resBanner.json();
-                if (jsonB.data) setBanner(jsonB.data);
+                if (jsonB.data) {
+                    cachedBirthdayBanner = jsonB.data;
+                    setBanner(jsonB.data);
+                }
             }
         } catch (error) {
             console.error('Gagal memuat data birthday:', error);
@@ -277,6 +295,7 @@ export default function BirthdayPage() {
             setPackages([]);
         } finally {
             setIsLoading(false);
+            setIsBannerChecked(true); // Pengecekan banner dashboard tuntas
         }
     }
 
@@ -284,13 +303,17 @@ export default function BirthdayPage() {
         fetchBirthdayData();
     }, []);
 
-    const heroImage = banner?.image
-        ? (banner.image.startsWith('http')
-            ? banner.image
-            : banner.image.startsWith('/img')
+    // Langsung arahkan ke banner dashboard. Fallback ke hero-home hanya jika pengecekan selesai dan dashboard kosong
+    const heroImage = useMemo(() => {
+        if (banner?.image) {
+            return banner.image.startsWith('http')
                 ? banner.image
-                : `${API_BASE_URL}/storage/${banner.image}`)
-        : '/img/hero-home.png';
+                : banner.image.startsWith('/img')
+                    ? banner.image
+                    : `${API_BASE_URL}/storage/${banner.image}`;
+        }
+        return isBannerChecked ? '/img/hero-home.png' : '';
+    }, [banner, isBannerChecked]);
 
     const defaultBookingLink = "https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20tertarik%20untuk%20booking%20paket%20Birthday%20&%20Private%20Event";
 
@@ -298,23 +321,38 @@ export default function BirthdayPage() {
         <div className="min-h-screen space-y-10 sm:space-y-14 pb-16">
 
             {/* ================================================= */}
-            {/* 1. HERO BANNER FULL 1 LAYAR (CLEAN & SUBJUDUL PAS) */}
+            {/* 1. HERO BANNER FULL 1 LAYAR (SMOOTH & ANTI-GLITCH)*/}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50">
+            <section
+                className={`relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50 transition-colors duration-500 ${heroImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
+                    }`}
+            >
                 {/* 1. Background Cover Layer & Gradien Asli */}
                 <div className="absolute inset-0 z-0">
-                    <img
-                        src={heroImage}
-                        alt="Birthday and Private Event at To Meet Cafe"
-                        className="w-full h-full object-cover object-[75%_center] lg:object-center"
-                    />
+                    {heroImage && (
+                        <img
+                            src={heroImage}
+                            alt="Birthday and Private Event at To Meet Cafe"
+                            loading="eager"
+                            fetchPriority="high"
+                            decoding="async"
+                            onLoad={(e) => {
+                                (e.currentTarget as HTMLElement).classList.remove('opacity-0');
+                                (e.currentTarget as HTMLElement).classList.add('opacity-100');
+                            }}
+                            className="w-full h-full object-cover object-[75%_center] lg:object-center opacity-0 transition-opacity duration-700 ease-out"
+                        />
+                    )}
                     {/* Lapisan gradien putih halus sisi kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2 pointer-events-none" />
                 </div>
 
                 {/* 2. Konten Hero Text & Buttons */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
-                    <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5 text-left">
+                    <div
+                        className={`w-full max-w-sm sm:max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5 text-left transition-all duration-700 ease-out ${isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                            }`}
+                    >
 
                         {/* Pill Badge */}
                         <div className="flex">
@@ -324,24 +362,26 @@ export default function BirthdayPage() {
                             </div>
                         </div>
 
-                        {/* Judul Utama */}
+                        {/* Judul Utama: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
-                            {renderFormattedText(
-                                banner?.title,
+                            {banner?.title ? (
+                                renderFormattedText(banner.title)
+                            ) : isBannerChecked ? (
                                 <>
                                     BIRTHDAY & <br />
                                     <span>PRIVATE EVENT</span> <br />
                                     <span className="text-[#8c5a3c]">AT TO MEET</span>
                                 </>
-                            )}
+                            ) : null}
                         </h1>
 
-                        {/* Subjudul: Bersih tanpa box, dibatasi max-w-[260px] di mobile agar pas di area putih */}
+                        {/* Subjudul: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-[260px] sm:max-w-md">
-                            {renderFormattedText(
-                                banner?.subtitle,
+                            {banner?.subtitle ? (
+                                renderFormattedText(banner.subtitle)
+                            ) : isBannerChecked ? (
                                 'Rayakan hari spesial si kecil di dunia beruang yang hangat dan ceria! Kami siapkan seluruh detail dekorasi dan makanan, Anda cukup menikmati momen bahagianya.'
-                            )}
+                            ) : null}
                         </p>
 
                         {/* 3 Mini Feature Cards: Sejajar Rapi */}
@@ -703,57 +743,95 @@ export default function BirthdayPage() {
 
             {/* 5. HOW TO BOOK */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-white p-5 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6">
+                <div className="bg-white p-5 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-5">
+                    {/* Header Section */}
                     <div className="flex items-center gap-2 border-b border-[#e6ccb2]/60 pb-3">
-                        <BearPawIcon className="w-4 h-4 text-[#8c5a3c]" />
-                        <h2 className="text-base sm:text-lg font-black text-[#3d2314] uppercase tracking-wide">
+                        <BearPawIcon className="w-5 h-5 text-[#8c5a3c] shrink-0" />
+                        <h2 className="text-xs sm:text-sm font-black text-[#3d2314] uppercase tracking-wide">
                             HOW TO BOOK
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
-                            <div className="w-8 h-8 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-xs mx-auto shadow-xs">
-                                1
+                    {/* 4 Step Cards */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+                        {/* Step 1 */}
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 flex flex-col items-center text-center space-y-2">
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-[11px] shadow-2xs shrink-0">
+                                    1
+                                </div>
+                                <div className="w-7 h-7 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center border border-[#e6ccb2]/70 shadow-2xs">
+                                    <MessageSquare className="w-3.5 h-3.5" />
+                                </div>
                             </div>
-                            <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/50">
-                                <MessageSquare className="w-4 h-4" />
+                            <div className="space-y-0.5">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                                    Contact Us
+                                </h4>
+                                <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                    Chat with us via WhatsApp to check availability.
+                                </p>
                             </div>
-                            <h4 className="font-black text-xs text-[#3d2314]">Contact Us</h4>
-                            <p className="text-[10px] text-[#6c584c] font-semibold">Chat with us via WhatsApp to check availability.</p>
                         </div>
 
-                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
-                            <div className="w-8 h-8 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-xs mx-auto shadow-xs">
-                                2
+                        {/* Step 2 */}
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 flex flex-col items-center text-center space-y-2">
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-[11px] shadow-2xs shrink-0">
+                                    2
+                                </div>
+                                <div className="w-7 h-7 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center border border-[#e6ccb2]/70 shadow-2xs">
+                                    <CalendarCheck className="w-3.5 h-3.5" />
+                                </div>
                             </div>
-                            <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/50">
-                                <CalendarCheck className="w-4 h-4" />
+                            <div className="space-y-0.5">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                                    Choose Date & Package
+                                </h4>
+                                <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                    Select your preferred date and birthday package.
+                                </p>
                             </div>
-                            <h4 className="font-black text-xs text-[#3d2314]">Choose Date & Package</h4>
-                            <p className="text-[10px] text-[#6c584c] font-semibold">Select your preferred date and birthday package.</p>
                         </div>
 
-                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
-                            <div className="w-8 h-8 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-xs mx-auto shadow-xs">
-                                3
+                        {/* Step 3 */}
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 flex flex-col items-center text-center space-y-2">
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-[11px] shadow-2xs shrink-0">
+                                    3
+                                </div>
+                                <div className="w-7 h-7 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center border border-[#e6ccb2]/70 shadow-2xs">
+                                    <CreditCard className="w-3.5 h-3.5" />
+                                </div>
                             </div>
-                            <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/50">
-                                <CreditCard className="w-4 h-4" />
+                            <div className="space-y-0.5">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                                    Confirm & Pay Deposit
+                                </h4>
+                                <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                    We&apos;ll confirm your booking after the deposit.
+                                </p>
                             </div>
-                            <h4 className="font-black text-xs text-[#3d2314]">Confirm & Pay Deposit</h4>
-                            <p className="text-[10px] text-[#6c584c] font-semibold">We&apos;ll confirm your booking after the deposit.</p>
                         </div>
 
-                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-2 text-center">
-                            <div className="w-8 h-8 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-xs mx-auto shadow-xs">
-                                4
+                        {/* Step 4 */}
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 flex flex-col items-center text-center space-y-2">
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-[#e85a4f] text-white flex items-center justify-center font-black text-[11px] shadow-2xs shrink-0">
+                                    4
+                                </div>
+                                <div className="w-7 h-7 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center border border-[#e6ccb2]/70 shadow-2xs">
+                                    <BearFaceIcon className="w-3.5 h-3.5" />
+                                </div>
                             </div>
-                            <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/50">
-                                <BearFaceIcon className="w-4 h-4" />
+                            <div className="space-y-0.5">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                                    Enjoy Your Day!
+                                </h4>
+                                <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                    We&apos;ll handle the rest, you make sweet memories!
+                                </p>
                             </div>
-                            <h4 className="font-black text-xs text-[#3d2314]">Enjoy Your Day!</h4>
-                            <p className="text-[10px] text-[#6c584c] font-semibold">We&apos;ll handle the rest, you make sweet memories!</p>
                         </div>
                     </div>
                 </div>

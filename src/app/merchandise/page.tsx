@@ -643,10 +643,10 @@ export default function MerchandisePage() {
                             </div>
                         </div>
 
-                        {/* Sisi Kanan: 2 Foto Polaroid Ramping & Pas
+                        {/* Sisi Kanan: 2 Foto Polaroid Ramping & Pas */}
                         <div className="flex items-center gap-2 sm:gap-3.5 lg:gap-4 shrink-0">
 
-                            {/* Polaroid 1 }
+                            {/* Polaroid 1 */}
                             <div className="w-16 sm:w-24 lg:w-32 aspect-[3/4] bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform -rotate-3 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border sm:border-2 border-white">
                                 <img
                                     src="/img/mc-1.png"
@@ -658,7 +658,7 @@ export default function MerchandisePage() {
                                 </span>
                             </div>
 
-                            {/* Polaroid 2 }
+                            {/* Polaroid 2 */}
                             <div className="w-16 sm:w-24 lg:w-32 aspect-[3/4] bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform rotate-3 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border sm:border-2 border-white">
                                 <img
                                     src="/img/mc-2.png"
@@ -670,7 +670,7 @@ export default function MerchandisePage() {
                                 </span>
                             </div>
 
-                        </div> */}
+                        </div> 
 
                     </div>
                 </div>

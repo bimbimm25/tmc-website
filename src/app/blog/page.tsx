@@ -9,6 +9,13 @@ import {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
+// Cache in-memory level modul agar saat navigasi page langsung instan tanpa glitch
+let cachedBlogBanner: BannerItem | null = null;
+let cachedBlogPosts: PostItem[] | null = null;
+let cachedBlogCategories: CategoryItem[] | null = null;
+let cachedBlogFeatured: PostItem | null = null;
+let cachedBlogPopular: PostItem[] | null = null;
+
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     return (
         <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -69,15 +76,20 @@ export interface BannerItem {
     title?: string | null;
     subtitle?: string | null;
     image?: string | null;
+    cta_text?: string | null;
+    cta_link?: string | null;
 }
 
 export default function BlogPage() {
     const router = useRouter();
-    const [posts, setPosts] = useState<PostItem[]>([]);
-    const [categories, setCategories] = useState<CategoryItem[]>([]);
-    const [featured, setFeatured] = useState<PostItem | null>(null);
-    const [popular, setPopular] = useState<PostItem[]>([]);
-    const [banner, setBanner] = useState<BannerItem | null>(null);
+
+    // Inisialisasi state dari cache in-memory modul
+    const [posts, setPosts] = useState<PostItem[]>(() => cachedBlogPosts || []);
+    const [categories, setCategories] = useState<CategoryItem[]>(() => cachedBlogCategories || []);
+    const [featured, setFeatured] = useState<PostItem | null>(() => cachedBlogFeatured);
+    const [popular, setPopular] = useState<PostItem[]>(() => cachedBlogPopular || []);
+    const [banner, setBanner] = useState<BannerItem | null>(() => cachedBlogBanner);
+    const [isBannerChecked, setIsBannerChecked] = useState<boolean>(() => cachedBlogBanner !== null);
 
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -95,16 +107,30 @@ export default function BlogPage() {
 
             const json = await res.json();
             if (json && json.data) {
-                setPosts(json.data.posts || []);
-                setCategories(json.data.categories || []);
-                setFeatured(json.data.featured || null);
-                setPopular(json.data.popular || []);
-                setBanner(json.data.banner || null);
+                const postsData = json.data.posts || [];
+                const categoriesData = json.data.categories || [];
+                const featuredData = json.data.featured || null;
+                const popularData = json.data.popular || [];
+                const bannerData = json.data.banner || null;
+
+                // Simpan ke in-memory cache
+                cachedBlogPosts = postsData;
+                cachedBlogCategories = categoriesData;
+                cachedBlogFeatured = featuredData;
+                cachedBlogPopular = popularData;
+                cachedBlogBanner = bannerData;
+
+                setPosts(postsData);
+                setCategories(categoriesData);
+                setFeatured(featuredData);
+                setPopular(popularData);
+                setBanner(bannerData);
             }
         } catch {
             setIsError(true);
         } finally {
             setIsLoading(false);
+            setIsBannerChecked(true); // Pengecekan banner dashboard tuntas
         }
     }
 
@@ -124,13 +150,17 @@ export default function BlogPage() {
 
     const totalArticlesCount = posts.length;
 
-    const heroImage = banner?.image
-        ? (banner.image.startsWith('http')
-            ? banner.image
-            : banner.image.startsWith('/img')
+    // Prioritaskan gambar dari dashboard. Fallback ke hero-home hanya jika pengecekan selesai dan dashboard kosong
+    const heroImage = useMemo(() => {
+        if (banner?.image) {
+            return banner.image.startsWith('http')
                 ? banner.image
-                : `${API_BASE_URL}/storage/${banner.image}`)
-        : '/img/hero-home.png';
+                : banner.image.startsWith('/img')
+                    ? banner.image
+                    : `${API_BASE_URL}/storage/${banner.image}`;
+        }
+        return isBannerChecked ? '/img/hero-home.png' : '';
+    }, [banner, isBannerChecked]);
 
     const getImageUrl = (img?: string | null) => {
         if (!img || img.trim() === '') return null;
@@ -155,45 +185,67 @@ export default function BlogPage() {
         <div className="min-h-screen space-y-6 sm:space-y-10 pb-16">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION (HANYA DITAMPILKAN DI DESKTOP)    */}
+            {/* 1. HERO SECTION (SMOOTH & ANTI-GLITCH DASHBOARD)  */}
             {/* ================================================= */}
-            <section className="hidden lg:flex relative w-full h-screen min-h-dvh items-center overflow-hidden">
+            <section
+                className={`hidden lg:flex relative w-full h-screen min-h-dvh items-center overflow-hidden transition-colors duration-500 ${heroImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
+                    }`}
+            >
+                {/* 1. Background Cover Layer */}
                 <div className="absolute inset-0 z-0">
-                    <img
-                        src={heroImage}
-                        alt="To Meet Blog Showcase"
-                        className="w-full h-full object-cover object-right lg:object-center"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                    {heroImage && (
+                        <img
+                            src={heroImage}
+                            alt="To Meet Blog Showcase"
+                            loading="eager"
+                            fetchPriority="high"
+                            decoding="async"
+                            onLoad={(e) => {
+                                (e.currentTarget as HTMLElement).classList.remove('opacity-0');
+                                (e.currentTarget as HTMLElement).classList.add('opacity-100');
+                            }}
+                            className="w-full h-full object-cover object-right lg:object-center opacity-0 transition-opacity duration-700 ease-out"
+                        />
+                    )}
+                    {/* Gradient Overlay Putih Sebelah Kiri */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2 pointer-events-none" />
                 </div>
 
+                {/* 2. Konten Text Hero */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
-                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+                    <div
+                        className={`max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5 transition-all duration-700 ease-out ${isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                            }`}
+                    >
 
+                        {/* Pill Badge */}
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
                             <span>TO MEET STORIES & TIPS</span>
                             <Sparkles className="w-3 h-3 text-amber-500" />
                         </div>
 
+                        {/* Title: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
-                            {renderFormattedText(
-                                banner?.title,
+                            {banner?.title ? (
+                                renderFormattedText(banner.title)
+                            ) : isBannerChecked ? (
                                 <>
                                     TO MEET <br />
                                     <span className="text-[#8c5a3c]">BLOG & STORIES</span>
                                 </>
-                            )}
+                            ) : null}
                         </h1>
 
+                        {/* Subtitle: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
-                            {renderFormattedText(
-                                banner?.subtitle,
+                            {banner?.subtitle ? (
+                                renderFormattedText(banner.subtitle)
+                            ) : isBannerChecked ? (
                                 'Cerita seru, resep lezat, info acara, dan update terbaru seputar dunia To Meet Cafe.'
-                            )}
+                            ) : null}
                         </p>
 
-                        
-
+                        {/* Tombol Aksi */}
                         <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
                             <a
                                 href="#articles"
@@ -226,7 +278,7 @@ export default function BlogPage() {
                                     </h2>
                                 </div>
 
-                                <div 
+                                <div
                                     onClick={() => handleNavigateToArticle(featured.slug)}
                                     className="bg-white rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-hidden hover:border-[#8c5a3c] transition duration-200 cursor-pointer"
                                 >
@@ -415,8 +467,8 @@ export default function BlogPage() {
                                 <button
                                     onClick={() => setSelectedCategory('all')}
                                     className={`w-full p-2 rounded-xl flex items-center justify-between transition cursor-pointer ${selectedCategory === 'all'
-                                            ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                            : 'text-[#5a4232] hover:bg-[#FAF0E6]'
+                                        ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                        : 'text-[#5a4232] hover:bg-[#FAF0E6]'
                                         }`}
                                 >
                                     <span>All Articles</span>
@@ -428,8 +480,8 @@ export default function BlogPage() {
                                         key={cat.id}
                                         onClick={() => setSelectedCategory(cat.slug)}
                                         className={`w-full p-2 rounded-xl flex items-center justify-between transition cursor-pointer ${selectedCategory === cat.slug
-                                                ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                                : 'text-[#5a4232] hover:bg-[#FAF0E6]'
+                                            ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                            : 'text-[#5a4232] hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         <span>{cat.name}</span>
@@ -450,8 +502,8 @@ export default function BlogPage() {
 
                             <div className="space-y-3">
                                 {popular.map((pop, idx) => (
-                                    <div 
-                                        key={pop.id} 
+                                    <div
+                                        key={pop.id}
                                         onClick={() => handleNavigateToArticle(pop.slug)}
                                         className="flex items-start gap-3 group cursor-pointer"
                                     >
@@ -481,15 +533,15 @@ export default function BlogPage() {
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white p-5 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-                    <div className="flex items-center gap-3.5">
-                        <div className="w-11 h-11 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
-                            <BearFaceIcon className="w-6 h-6" />
+                    <div className="flex flex-col sm:flex-row items-center gap-3.5">
+                        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
+                            <BearFaceIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                         </div>
-                        <div>
-                            <h3 className="font-black text-sm sm:text-base text-[#3d2314]">
+                        <div className="space-y-0.5">
+                            <h3 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight uppercase">
                                 Got a sweet story idea?
                             </h3>
-                            <p className="text-xs text-[#6c584c] font-semibold mt-0.5">
+                            <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed max-w-xl">
                                 Kami senang mendengar ide cerita, kolaborasi, dan pengalaman manismu di To Meet Cafe!
                             </p>
                         </div>
@@ -499,14 +551,13 @@ export default function BlogPage() {
                         href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20punya%20ide%20cerita/kolaborasi%20untuk%20blog"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-full shadow-md shadow-[#8c5a3c]/15 transition inline-flex items-center gap-1.5 uppercase tracking-wider shrink-0 cursor-pointer"
+                        className="px-5 sm:px-6 py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:scale-95 text-white font-black text-[11px] sm:text-xs rounded-full shadow-md shadow-[#8c5a3c]/15 transition inline-flex items-center gap-1.5 uppercase tracking-wider shrink-0 cursor-pointer whitespace-nowrap"
                     >
                         <span>CONTACT US</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                     </a>
                 </div>
             </section>
-
         </div>
     );
 }

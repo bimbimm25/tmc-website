@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
     MapPin, Clock, Car, Camera, ExternalLink,
@@ -9,6 +9,9 @@ import {
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
+// Cache in-memory modul agar saat navigasi page langsung instan tanpa glitch
+let cachedVisitBanner: BannerItem | null = null;
 
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     return (
@@ -53,17 +56,24 @@ export interface BannerItem {
 }
 
 export default function VisitUsPage() {
-    const [banner, setBanner] = useState<BannerItem | null>(null);
+    // Inisialisasi awal langsung dari cache modul jika ada
+    const [banner, setBanner] = useState<BannerItem | null>(() => cachedVisitBanner);
+    const [isBannerChecked, setIsBannerChecked] = useState<boolean>(() => cachedVisitBanner !== null);
 
     async function fetchBanner() {
         try {
-            const res = await fetch(`${API_BASE_URL}/api/banners/visit-us`, { cache: 'no-store' });
+            const res = await fetch(`${API_BASE_URL}/api/banners/visit-us`, { cache: 'default' });
             if (res.ok) {
                 const json = await res.json();
-                if (json && json.data) setBanner(json.data);
+                if (json && json.data) {
+                    cachedVisitBanner = json.data;
+                    setBanner(json.data);
+                }
             }
         } catch {
             // fallback
+        } finally {
+            setIsBannerChecked(true); // Pengecekan banner dashboard tuntas
         }
     }
 
@@ -71,35 +81,54 @@ export default function VisitUsPage() {
         fetchBanner();
     }, []);
 
-    const heroImage = banner?.image
-        ? (banner.image.startsWith('http')
-            ? banner.image
-            : banner.image.startsWith('/img')
+    // Langsung utamakan gambar dari dashboard. Fallback ke hero-home hanya jika pengecekan selesai dan dashboard kosong
+    const heroImage = useMemo(() => {
+        if (banner?.image) {
+            return banner.image.startsWith('http')
                 ? banner.image
-                : `${API_BASE_URL}/storage/${banner.image}`)
-        : '/img/hero-home.png';
+                : banner.image.startsWith('/img')
+                    ? banner.image
+                    : `${API_BASE_URL}/storage/${banner.image}`;
+        }
+        return isBannerChecked ? '/img/hero-home.png' : '';
+    }, [banner, isBannerChecked]);
 
     return (
         <div className="min-h-screen space-y-8 sm:space-y-12 pb-12">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION FULL 1 LAYAR (VISIT US)           */}
+            {/* 1. HERO SECTION FULL 1 LAYAR (SMOOTH & DASHBOARD) */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+            <section
+                className={`relative w-full h-screen min-h-dvh flex items-center overflow-hidden transition-colors duration-500 ${heroImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
+                    }`}
+            >
                 {/* Background Image Full Cover */}
                 <div className="absolute inset-0 z-0">
-                    <img
-                        src={heroImage}
-                        alt="To Meet Cafe Building Entrance"
-                        className="w-full h-full object-cover object-right lg:object-center"
-                    />
+                    {heroImage && (
+                        <img
+                            src={heroImage}
+                            alt="To Meet Cafe Building Entrance"
+                            loading="eager"
+                            fetchPriority="high"
+                            decoding="async"
+                            onLoad={(e) => {
+                                (e.currentTarget as HTMLElement).classList.remove('opacity-0');
+                                (e.currentTarget as HTMLElement).classList.add('opacity-100');
+                            }}
+                            className="w-full h-full object-cover object-right lg:object-center opacity-0 transition-opacity duration-700 ease-out"
+                        />
+                    )}
                     {/* Gradient Overlay Putih Sebelah Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2 pointer-events-none" />
                 </div>
 
                 {/* Konten Text Hero */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
-                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+                    <div
+                        className={`max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5 transition-all duration-700 ease-out ${isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                            }`}
+                    >
 
                         {/* Pill Badge */}
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
@@ -107,24 +136,26 @@ export default function VisitUsPage() {
                             <BearPawIcon className="w-3 h-3" />
                         </div>
 
-                        {/* Title Proporsional */}
+                        {/* Title: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
-                            {renderFormattedText(
-                                banner?.title,
+                            {banner?.title ? (
+                                renderFormattedText(banner.title)
+                            ) : isBannerChecked ? (
                                 <>
                                     VISIT <br />
                                     <span className="text-[#8c5a3c]">TO MEET CAFE!</span>
                                 </>
-                            )}
+                            ) : null}
                         </h1>
 
-                        {/* Subtitle */}
+                        {/* Subtitle: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <div className="space-y-1 text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                             <p className="text-xs sm:text-[15px] text-[#6c584c]">
-                                {renderFormattedText(
-                                    banner?.subtitle,
+                                {banner?.subtitle ? (
+                                    renderFormattedText(banner.subtitle)
+                                ) : isBannerChecked ? (
                                     'Datang untuk menikmati hidangan lezat, tinggal untuk mengabadikan momen berharga bersama keluarga.'
-                                )}
+                                ) : null}
                             </p>
                         </div>
 
@@ -141,10 +172,10 @@ export default function VisitUsPage() {
                         {/* Tombol Aksi */}
                         <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
                             <a
-                                href="#choose-location"
+                                href={banner?.cta_link || "#choose-location"}
                                 className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
                             >
-                                <span>PILIH LOKASI CABANG</span>
+                                <span>{banner?.cta_text || 'PILIH LOKASI CABANG'}</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
                             </a>
 
@@ -338,51 +369,65 @@ export default function VisitUsPage() {
             {/* 3. INFO BAR BOTTOM: 2 TEMPAT 2 CERITA             */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                <div className="bg-white p-4 sm:p-5 lg:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-center">
 
-                        <div className="lg:col-span-4 flex items-center gap-3 border-b lg:border-b-0 lg:border-r border-[#e6ccb2]/60 pb-3 lg:pb-0 lg:pr-3">
+                        {/* Kolom Kiri: Branding Text */}
+                        <div className="lg:col-span-5 flex items-center gap-3 border-b lg:border-b-0 lg:border-r border-[#e6ccb2]/60 pb-3.5 lg:pb-0 lg:pr-6">
                             <div className="w-10 h-10 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shrink-0 shadow-2xs">
                                 <BearFaceIcon className="w-5 h-5" />
                             </div>
-                            <div>
-                                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] leading-tight uppercase">
+                            <div className="space-y-0.5">
+                                <h3 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight leading-tight uppercase">
                                     2 TEMPAT • 2 CERITA<br />
                                     <span className="text-[#8c5a3c]">1 KESERUAN BERSAMA!</span>
                                 </h3>
-                                <p className="text-[9.5px] text-[#6c584c] font-semibold mt-0.5">
+                                <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
                                     Kunjungi kedua cabang To Meet dan nikmati kehangatannya!
                                 </p>
                             </div>
                         </div>
 
-                        <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-                            <div className="p-1.5 space-y-0.5">
-                                <div className="w-6 h-6 rounded-lg bg-[#FAF0E6]/50 text-[#e85a4f] mx-auto flex items-center justify-center border border-[#e6ccb2]/60">
-                                    <User className="w-3 h-3" />
+                        {/* Kolom Kanan: 4 Mini Feature Badges */}
+                        <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 text-center">
+                            {/* Feature 1 */}
+                            <div className="p-2 rounded-2xl bg-[#FAF0E6]/30 border border-[#e6ccb2]/50 space-y-1.5 flex flex-col items-center justify-center shadow-2xs">
+                                <div className="w-7 h-7 rounded-xl bg-white text-[#e85a4f] flex items-center justify-center shadow-2xs border border-[#e6ccb2]/50">
+                                    <User className="w-3.5 h-3.5" />
                                 </div>
-                                <div className="text-[10px] font-black text-[#3d2314]">Family Friendly</div>
+                                <span className="text-[11px] sm:text-xs font-black text-[#3d2314] tracking-tight block uppercase">
+                                    Family Friendly
+                                </span>
                             </div>
 
-                            <div className="p-1.5 space-y-0.5">
-                                <div className="w-6 h-6 rounded-lg bg-[#FAF0E6]/50 text-[#8c5a3c] mx-auto flex items-center justify-center border border-[#e6ccb2]/60">
-                                    <BearFaceIcon className="w-3 h-3" />
+                            {/* Feature 2 */}
+                            <div className="p-2 rounded-2xl bg-[#FAF0E6]/30 border border-[#e6ccb2]/50 space-y-1.5 flex flex-col items-center justify-center shadow-2xs">
+                                <div className="w-7 h-7 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs border border-[#e6ccb2]/50">
+                                    <BearFaceIcon className="w-3.5 h-3.5" />
                                 </div>
-                                <div className="text-[10px] font-black text-[#3d2314]">Cafe Tema Beruang</div>
+                                <span className="text-[11px] sm:text-xs font-black text-[#3d2314] tracking-tight block uppercase">
+                                    Tema Beruang
+                                </span>
                             </div>
 
-                            <div className="p-1.5 space-y-0.5">
-                                <div className="w-6 h-6 rounded-lg bg-[#FAF0E6]/50 text-amber-600 mx-auto flex items-center justify-center border border-[#e6ccb2]/60">
-                                    <Clock className="w-3 h-3" />
+                            {/* Feature 3 */}
+                            <div className="p-2 rounded-2xl bg-[#FAF0E6]/30 border border-[#e6ccb2]/50 space-y-1.5 flex flex-col items-center justify-center shadow-2xs">
+                                <div className="w-7 h-7 rounded-xl bg-white text-amber-600 flex items-center justify-center shadow-2xs border border-[#e6ccb2]/50">
+                                    <Clock className="w-3.5 h-3.5" />
                                 </div>
-                                <div className="text-[10px] font-black text-[#3d2314]">Selasa - Minggu</div>
+                                <span className="text-[11px] sm:text-xs font-black text-[#3d2314] tracking-tight block uppercase">
+                                    Selasa - Minggu
+                                </span>
                             </div>
 
-                            <div className="p-1.5 space-y-0.5">
-                                <div className="w-6 h-6 rounded-lg bg-[#FAF0E6]/50 text-emerald-600 mx-auto flex items-center justify-center border border-[#e6ccb2]/60">
-                                    <Camera className="w-3 h-3" />
+                            {/* Feature 4 */}
+                            <div className="p-2 rounded-2xl bg-[#FAF0E6]/30 border border-[#e6ccb2]/50 space-y-1.5 flex flex-col items-center justify-center shadow-2xs">
+                                <div className="w-7 h-7 rounded-xl bg-white text-emerald-600 flex items-center justify-center shadow-2xs border border-[#e6ccb2]/50">
+                                    <Camera className="w-3.5 h-3.5" />
                                 </div>
-                                <div className="text-[10px] font-black text-[#3d2314]">Spot Foto Cantik</div>
+                                <span className="text-[11px] sm:text-xs font-black text-[#3d2314] tracking-tight block uppercase">
+                                    Spot Cantik
+                                </span>
                             </div>
                         </div>
 

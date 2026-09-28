@@ -580,7 +580,7 @@ export default function EventPage() {
                         <h2 className="text-lg sm:text-xl lg:text-2xl font-black text-[#3d2314] tracking-tight leading-tight uppercase">
                             Book Your<br />Fun Activity Now!
                         </h2>
-                        <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
+                        <p className="text-sm sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
                             Pilih workshop favoritmu dan konfirmasi jadwal langsung melalui WhatsApp.
                         </p>
                         <div className="pt-1">
@@ -588,7 +588,7 @@ export default function EventPage() {
                                 href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20booking%20activity"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-5 py-2 bg-[#3d2314] hover:bg-[#201007] text-white font-black text-[11px] rounded-full shadow-xs transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                                className="px-5 py-2 bg-[#3d2314] hover:bg-[#201007] text-white font-black text-[12px] rounded-full shadow-xs transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
                             >
                                 <span>BOOK VIA WHATSAPP</span>
                                 <Phone className="w-3.5 h-3.5 fill-current" />
@@ -636,44 +636,72 @@ export default function EventPage() {
             {/* 5. BENEFITS SECTION                               */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-white p-4 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+    <div className="bg-white p-4 sm:p-5 lg:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-4 text-center">
 
-                        <div className="flex flex-col items-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
-                                <Smile className="w-4 h-4" />
-                            </div>
-                            <h4 className="font-black text-[11px] text-[#3d2314] uppercase">All Ages Welcome</h4>
-                            <p className="text-[9px] text-[#6c584c] font-semibold">Fun activities for all</p>
-                        </div>
-
-                        <div className="flex flex-col items-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
-                                <Palette className="w-4 h-4" />
-                            </div>
-                            <h4 className="font-black text-[11px] text-[#3d2314] uppercase">Materials Provided</h4>
-                            <p className="text-[9px] text-[#6c584c] font-semibold">Safe & non-toxic</p>
-                        </div>
-
-                        <div className="flex flex-col items-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
-                                <Users className="w-4 h-4" />
-                            </div>
-                            <h4 className="font-black text-[11px] text-[#3d2314] uppercase">Small Groups</h4>
-                            <p className="text-[9px] text-[#6c584c] font-semibold">Engaging & cozy</p>
-                        </div>
-
-                        <div className="flex flex-col items-center space-y-1">
-                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
-                                <Heart className="w-4 h-4 text-[#e85a4f] fill-current" />
-                            </div>
-                            <h4 className="font-black text-[11px] text-[#3d2314] uppercase">Sweet Memories</h4>
-                            <p className="text-[9px] text-[#6c584c] font-semibold">Precious moments</p>
-                        </div>
-
-                    </div>
+            {/* Feature 1 */}
+            <div className="flex flex-col items-center space-y-1.5 p-2 rounded-2xl transition-colors">
+                <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shadow-2xs">
+                    <Smile className="w-4 h-4" />
                 </div>
-            </section>
+                <div className="space-y-0.5">
+                    <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                        All Ages Welcome
+                    </h4>
+                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                        Fun activities for all
+                    </p>
+                </div>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="flex flex-col items-center space-y-1.5 p-2 rounded-2xl transition-colors">
+                <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shadow-2xs">
+                    <Palette className="w-4 h-4" />
+                </div>
+                <div className="space-y-0.5">
+                    <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                        Materials Provided
+                    </h4>
+                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                        Safe & non-toxic
+                    </p>
+                </div>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="flex flex-col items-center space-y-1.5 p-2 rounded-2xl transition-colors">
+                <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shadow-2xs">
+                    <Users className="w-4 h-4" />
+                </div>
+                <div className="space-y-0.5">
+                    <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                        Small Groups
+                    </h4>
+                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                        Engaging & cozy
+                    </p>
+                </div>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="flex flex-col items-center space-y-1.5 p-2 rounded-2xl transition-colors">
+                <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#e85a4f] flex items-center justify-center shadow-2xs">
+                    <Heart className="w-4 h-4 fill-current" />
+                </div>
+                <div className="space-y-0.5">
+                    <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                        Sweet Memories
+                    </h4>
+                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                        Precious moments
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
         </div>
     );
 }

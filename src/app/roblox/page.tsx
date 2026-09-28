@@ -203,9 +203,8 @@ export default function RobloxPage() {
             {/* 1. HERO SECTION (SMOOTH & ANTI-GLITCH DASHBOARD)  */}
             {/* ================================================= */}
             <section
-                className={`relative w-full min-h-dvh lg:h-screen flex items-center overflow-hidden border-b border-[#e6ccb2]/60 pt-16 pb-4 lg:py-0 transition-colors duration-500 ${
-                    heroImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
-                }`}
+                className={`relative w-full min-h-dvh lg:h-screen flex items-center overflow-hidden border-b border-[#e6ccb2]/60 pt-16 pb-4 lg:py-0 transition-colors duration-500 ${heroImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
+                    }`}
             >
                 {/* 1. Background Image Cover */}
                 <div className="absolute inset-0 z-0">
@@ -238,9 +237,8 @@ export default function RobloxPage() {
                         {/* Kolom Teks: Dibungkus Card Ber-Border Rapi di HP */}
                         <div className="lg:col-span-6 text-left">
                             <div
-                                className={`bg-white/85 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-4 sm:p-5 lg:p-0 rounded-3xl lg:rounded-none border border-white/80 lg:border-none shadow-md lg:shadow-none space-y-2.5 sm:space-y-3 max-w-md transition-all duration-700 ease-out ${
-                                    isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-                                }`}
+                                className={`bg-white/85 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-4 sm:p-5 lg:p-0 rounded-3xl lg:rounded-none border border-white/80 lg:border-none shadow-md lg:shadow-none space-y-2.5 sm:space-y-3 max-w-md transition-all duration-700 ease-out ${isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                                    }`}
                             >
 
                                 {/* Pill Badge */}
@@ -327,9 +325,8 @@ export default function RobloxPage() {
 
                     {/* 3 Mini Highlight Stats: Presisi Sejajar di Bawah */}
                     <div
-                        className={`grid grid-cols-3 gap-2 max-w-md text-center pt-3 transition-all duration-700 ease-out delay-100 ${
-                            isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-                        }`}
+                        className={`grid grid-cols-3 gap-2 max-w-md text-center pt-3 transition-all duration-700 ease-out delay-100 ${isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                            }`}
                     >
                         <div className="bg-white/95 backdrop-blur-xs py-1.5 px-2 rounded-xl border border-[#e6ccb2]/70 shadow-2xs">
                             <div className="text-[11px] font-black text-[#3d2314] leading-none">18.5K</div>
@@ -452,7 +449,7 @@ export default function RobloxPage() {
                                 <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase leading-tight line-clamp-1">
                                     {spot.title}
                                 </h3>
-                                <p className="text-[10px] text-[#6c584c] font-semibold leading-relaxed line-clamp-2">
+                                <p className="text-[12px] text-[#6c584c] font-semibold leading-relaxed line-clamp-2">
                                     {spot.desc}
                                 </p>
                             </div>
@@ -505,7 +502,7 @@ export default function RobloxPage() {
                                         <h3 className="font-black text-sm sm:text-base text-[#3d2314] uppercase tracking-wide">
                                             {categoryKey}
                                         </h3>
-                                        <p className="text-[10.5px] text-[#6c584c] font-semibold">
+                                        <p className="text-[12px] text-[#6c584c] font-semibold">
                                             Selesaikan misi in-game dan tunjukkan badge ke kasir untuk menukarkan reward
                                         </p>
                                     </div>
@@ -591,45 +588,56 @@ export default function RobloxPage() {
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white p-5 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
+                    {/* Header Section */}
                     <div className="flex items-center gap-2 border-b border-[#e6ccb2]/60 pb-3">
-                        <ShieldCheck className="w-5 h-5 text-[#e85a4f]" />
-                        <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide">
+                        <ShieldCheck className="w-5 h-5 text-[#e85a4f] shrink-0" />
+                        <h2 className="text-xs sm:text-sm font-black text-[#3d2314] uppercase tracking-wide">
                             CARA KLAIM HADIAH LANGSUNG DI OUTLET TO MEET CAFE
                         </h2>
                     </div>
 
+                    {/* 3 Step Cards */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-1.5 flex items-start gap-3">
-                            <div className="w-7 h-7 rounded-xl bg-[#8c5a3c] text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
+                        {/* Step 1 */}
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 flex items-start gap-3">
+                            <div className="w-7 h-7 rounded-xl bg-[#8c5a3c] text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5 shadow-2xs">
                                 1
                             </div>
-                            <div>
-                                <h4 className="font-black text-xs text-[#3d2314]">Selesaikan Misi Game</h4>
-                                <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
+                            <div className="space-y-0.5">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                                    Selesaikan Misi Game
+                                </h4>
+                                <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
                                     Mainkan game To Meet Universe di Roblox dan selesaikan misi sampai badge terbuka di profilmu.
                                 </p>
                             </div>
                         </div>
 
-                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 space-y-1.5 flex items-start gap-3">
-                            <div className="w-7 h-7 rounded-xl bg-[#8c5a3c] text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
+                        {/* Step 2 */}
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 flex items-start gap-3">
+                            <div className="w-7 h-7 rounded-xl bg-[#8c5a3c] text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5 shadow-2xs">
                                 2
                             </div>
-                            <div>
-                                <h4 className="font-black text-xs text-[#3d2314]">Tunjukkan Profil ke Kasir</h4>
-                                <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
+                            <div className="space-y-0.5">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                                    Tunjukkan Profil ke Kasir
+                                </h4>
+                                <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
                                     Kunjungi outlet To Meet Cafe dan perlihatkan badge Roblox yang sudah berhasil didapatkan kepada staff kasir dan bawa id Roblox mu.
                                 </p>
                             </div>
                         </div>
 
-                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/50 space-y-1.5 flex items-start gap-3">
-                            <div className="w-7 h-7 rounded-xl bg-[#8c5a3c] text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
+                        {/* Step 3 */}
+                        <div className="bg-[#FAF0E6]/50 p-4 rounded-2xl border border-[#e6ccb2]/60 flex items-start gap-3">
+                            <div className="w-7 h-7 rounded-xl bg-[#8c5a3c] text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5 shadow-2xs">
                                 3
                             </div>
-                            <div>
-                                <h4 className="font-black text-xs text-[#3d2314]">Nikmati Hadiah Gratis</h4>
-                                <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
+                            <div className="space-y-0.5">
+                                <h4 className="font-black text-[11px] sm:text-xs text-[#3d2314] tracking-tight uppercase">
+                                    Nikmati Hadiah Gratis
+                                </h4>
+                                <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
                                     Staff kami akan memverifikasi dan langsung menyerahkan reward sesuai misi.
                                 </p>
                             </div>

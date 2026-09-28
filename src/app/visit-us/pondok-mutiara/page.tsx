@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
     MapPin, Clock, Car, Navigation,
@@ -13,6 +13,9 @@ import {
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
+// Cache in-memory modul agar saat navigasi page langsung instan tanpa glitch
+let cachedPondokMutiaraBanner: BannerItem | null = null;
 
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     return (
@@ -119,18 +122,25 @@ const GALLERY_PAGES = [
 ];
 
 export default function PondokMutiaraPage() {
-    const [banner, setBanner] = useState<BannerItem | null>(null);
+    // Inisialisasi awal langsung dari cache modul jika ada
+    const [banner, setBanner] = useState<BannerItem | null>(() => cachedPondokMutiaraBanner);
+    const [isBannerChecked, setIsBannerChecked] = useState<boolean>(() => cachedPondokMutiaraBanner !== null);
     const [currentPageIndex, setCurrentPageIndex] = useState<number>(0);
 
     async function fetchBanner() {
         try {
-            const res = await fetch(`${API_BASE_URL}/api/banners/pondok-mutiara`, { cache: 'no-store' });
+            const res = await fetch(`${API_BASE_URL}/api/banners/pondok-mutiara`, { cache: 'default' });
             if (res.ok) {
                 const json = await res.json();
-                if (json && json.data) setBanner(json.data);
+                if (json && json.data) {
+                    cachedPondokMutiaraBanner = json.data;
+                    setBanner(json.data);
+                }
             }
         } catch {
             // fallback
+        } finally {
+            setIsBannerChecked(true); // Pengecekan banner dashboard tuntas
         }
     }
 
@@ -148,13 +158,17 @@ export default function PondokMutiaraPage() {
         setCurrentPageIndex((prev) => (prev < totalPages - 1 ? prev + 1 : 0));
     };
 
-    const heroImage = banner?.image
-        ? (banner.image.startsWith('http')
-            ? banner.image
-            : banner.image.startsWith('/img')
+    // Prioritaskan gambar dari dashboard. Fallback ke hero-home hanya jika pengecekan selesai dan dashboard kosong
+    const heroImage = useMemo(() => {
+        if (banner?.image) {
+            return banner.image.startsWith('http')
                 ? banner.image
-                : `${API_BASE_URL}/storage/${banner.image}`)
-        : '/img/hero-home.png';
+                : banner.image.startsWith('/img')
+                    ? banner.image
+                    : `${API_BASE_URL}/storage/${banner.image}`;
+        }
+        return isBannerChecked ? '/img/hero-home.png' : '';
+    }, [banner, isBannerChecked]);
 
     const googleMapsUrl = "https://maps.app.goo.gl/zWp8wcEhyK4VpczDA";
     const reservationWaUrl = "https://wa.me/628123456789?text=Halo%20To%20Meet%20Cafe,%20saya%20ingin%20reservasi%20meja%20di%20Cabang%20Pondok%20Mutiara";
@@ -165,50 +179,76 @@ export default function PondokMutiaraPage() {
             {/* ================================================= */}
             {/* 1. HERO SECTION (BANNER FULL 1 LAYAR DARI ADMIN)  */}
             {/* ================================================= */}
-            <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden">
+            <section
+                className={`relative w-full h-screen min-h-dvh flex items-center overflow-hidden transition-colors duration-500 ${
+                    heroImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
+                }`}
+            >
+                {/* 1. Background Cover Layer */}
                 <div className="absolute inset-0 z-0">
-                    <img
-                        src={heroImage}
-                        alt="To Meet Cafe Pondok Mutiara"
-                        className="w-full h-full object-cover object-[60%_center] lg:object-center"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2" />
+                    {heroImage && (
+                        <img
+                            src={heroImage}
+                            alt="To Meet Cafe Pondok Mutiara"
+                            loading="eager"
+                            fetchPriority="high"
+                            decoding="async"
+                            onLoad={(e) => {
+                                (e.currentTarget as HTMLElement).classList.remove('opacity-0');
+                                (e.currentTarget as HTMLElement).classList.add('opacity-100');
+                            }}
+                            className="w-full h-full object-cover object-[60%_center] lg:object-center opacity-0 transition-opacity duration-700 ease-out"
+                        />
+                    )}
+                    {/* Gradient Overlay Putih Sebelah Kiri */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2 pointer-events-none" />
                 </div>
 
+                {/* 2. Konten Text Hero */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
-                    <div className="max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5">
+                    <div
+                        className={`max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5 transition-all duration-700 ease-out ${
+                            isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                        }`}
+                    >
 
+                        {/* Pill Badge */}
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-[#8c5a3c] text-[9.5px] font-black tracking-wider uppercase border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
                             <span>OUTLET 2 • PONDOK MUTIARA</span>
                             <Sparkles className="w-3 h-3 text-amber-500" />
                         </div>
 
+                        {/* Title: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
-                            {renderFormattedText(
-                                banner?.title,
+                            {banner?.title ? (
+                                renderFormattedText(banner.title)
+                            ) : isBannerChecked ? (
                                 <>
                                     VISIT US! <br />
                                     <span className="text-[#8c5a3c]">PONDOK MUTIARA</span>
                                 </>
-                            )}
+                            ) : null}
                         </h1>
 
+                        {/* Subtitle: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
-                            {renderFormattedText(
-                                banner?.subtitle,
+                            {banner?.subtitle ? (
+                                renderFormattedText(banner.subtitle)
+                            ) : isBannerChecked ? (
                                 'Suasana indoor yang luas, sejuk, dan nyaman dengan playground bertingkat, menu makanan berat lezat, serta ruang privat untuk keluarga Anda.'
-                            )}
+                            ) : null}
                         </p>
 
+                        {/* Tombol Aksi */}
                         <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
                             <a
-                                href={reservationWaUrl}
+                                href={banner?.cta_link || reservationWaUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
                             >
                                 <Phone className="w-3.5 h-3.5 fill-current" />
-                                <span>RESERVASI SEKARANG</span>
+                                <span>{banner?.cta_text || 'RESERVASI SEKARANG'}</span>
                             </a>
 
                             <a
@@ -220,6 +260,7 @@ export default function PondokMutiaraPage() {
                             </a>
                         </div>
 
+                        {/* Breadcrumbs Navigasi */}
                         <div className="pt-1 flex items-center gap-2 text-xs font-bold text-[#8c5a3c]">
                             <Link href="/visit-us" className="hover:underline">Visit Us</Link>
                             <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
