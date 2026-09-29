@@ -798,7 +798,7 @@ export default function FAQPage() {
                                     </div>
                                     <div className="flex items-center justify-between text-[#3d2314]">
                                         <span className="text-xs sm:text-sm text-[#6c584c] font-semibold">Selasa – Minggu</span>
-                                        <span className="font-black text-xs sm:text-sm">12.00 – 21.00 WIB</span>
+                                        <span className="font-black text-xs sm:text-sm">12.00 – 22.00 WIB</span>
                                     </div>
                                 </div>
                             </div>
