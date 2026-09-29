@@ -691,8 +691,7 @@ export default function Home() {
                     HEAVENLAND PARK
                   </h3>
                   <p className="text-xs sm:text-sm text-[#6c584c] font-bold leading-relaxed">
-                    Jl. Raya Prajurit, Heavenland Park<br />
-                    Sidoarjo, Jawa Timur
+                    Ruko Heavenland Park, BB-26, Ngemplak, Klurak, Kec. Candi, Kabupaten Sidoarjo, Jawa Timur 61217
                   </p>
                   <div className="pt-1.5 space-y-0.5">
                     <span className="text-[11px] sm:text-xs text-[#8c5a3c] font-black uppercase tracking-wider block">
@@ -739,15 +738,14 @@ export default function Home() {
                     PONDOK MUTIARA
                   </h3>
                   <p className="text-xs sm:text-sm text-[#6c584c] font-bold leading-relaxed">
-                    Jl. Pondok Mutiara No.1<br />
-                    Sidoarjo, Jawa Timur
+                    harum, Ruko, Jl. Pd. Mutiara No.1A blok B, Jati, Kec. Sidoarjo, Kabupaten Sidoarjo, Jawa Timur 61226
                   </p>
                   <div className="pt-1.5 space-y-0.5">
                     <span className="text-[11px] sm:text-xs text-[#8c5a3c] font-black uppercase tracking-wider block">
                       Jam Operasional
                     </span>
                     <span className="text-xs sm:text-sm text-[#3d2314] font-black block">
-                      10.00 – 22.00 WIB
+                      12.00 – 22.00 WIB
                     </span>
                   </div>
                 </div>
