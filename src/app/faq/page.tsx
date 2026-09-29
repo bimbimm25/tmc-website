@@ -792,7 +792,7 @@ export default function FAQPage() {
                                         <span className="text-[11px] sm:text-xs font-black text-[#8c5a3c] uppercase tracking-wider">
                                             PONDOK MUTIARA
                                         </span>
-                                        <span className="text-[10px] sm:text-[10.5px] font-black text-rose-600 bg-rose-50 border border-rose-200/80 px-2 py-0.5 rounded-full shadow-2xs">
+                                        <span className="text-[10px] sm:text-[10.5px] font-black uppercase tracking-wide text-rose-600 bg-rose-50 border border-rose-200/80 px-2 py-0.5 rounded-full shadow-2xs">
                                             Senin Libur
                                         </span>
                                     </div>
