@@ -1,17 +1,15 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import Link from 'next/link';
 import {
-    Sparkles, Gift, Coffee, Boxes,
-    ShoppingBag, ShieldCheck, Heart,
-    ChevronDown, Phone, MessageCircle, X, Store,
-    Search, AlertCircle, RefreshCw, Info, ImageOff, Flame
+    Sparkles, Gift, ShieldCheck, Heart,
+    ChevronDown, Phone, MessageCircle, X,
+    Search, AlertCircle, RefreshCw, Info, Flame
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
-// Cache memori modul agar saat pindah-pindah halaman langsung instan tanpa glitch
+// Cache memori modul agar saat navigasi rute langsung instan tanpa glitch
 let cachedMerchBanner: BannerItem | null = null;
 
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
@@ -54,6 +52,7 @@ export interface MerchandiseItem {
     description: string;
     price: number;
     image?: string | null;
+    stock?: number;
     is_new?: boolean | number;
     is_best_seller?: boolean | number;
     is_bestseller?: boolean | number;
@@ -76,8 +75,6 @@ export interface BannerItem {
 
 export default function MerchandisePage() {
     const [merchItems, setMerchItems] = useState<MerchandiseItem[]>([]);
-
-    // Inisialisasi awal langsung dari cache modul jika ada (menghindari glitch hero-home)
     const [merchBanner, setMerchBanner] = useState<BannerItem | null>(() => cachedMerchBanner);
     const [isBannerChecked, setIsBannerChecked] = useState<boolean>(() => cachedMerchBanner !== null);
 
@@ -87,6 +84,24 @@ export default function MerchandisePage() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
     const [displayCount, setDisplayCount] = useState<number>(8);
+    const [selectedProduct, setSelectedProduct] = useState<MerchandiseItem | null>(null);
+
+    // Kunci skrol halaman belakang sepenuhnya apabila modal dibuka
+    useEffect(() => {
+        if (selectedProduct) {
+            const originalHtmlOverflow = document.documentElement.style.overflow;
+            const originalBodyOverflow = document.body.style.overflow;
+
+            // Kunci kedua-dua html dan body agar halaman belakang pegun (diam)
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+
+            return () => {
+                document.documentElement.style.overflow = originalHtmlOverflow;
+                document.body.style.overflow = originalBodyOverflow;
+            };
+        }
+    }, [selectedProduct]);
 
     async function fetchMerchandiseData() {
         try {
@@ -109,7 +124,6 @@ export default function MerchandisePage() {
                 setMerchItems([]);
             }
 
-            // Ambil banner langsung dari dashboard
             if (resBanner && resBanner.ok) {
                 const jsonBanner = await resBanner.json();
                 if (jsonBanner?.data) {
@@ -123,7 +137,7 @@ export default function MerchandisePage() {
             setMerchItems([]);
         } finally {
             setIsLoading(false);
-            setIsBannerChecked(true); // Pengecekan banner dashboard tuntas
+            setIsBannerChecked(true);
         }
     }
 
@@ -136,12 +150,6 @@ export default function MerchandisePage() {
             merchItems.map(m => m.category || m.category_slug).filter(Boolean)
         )) as string[];
         return ['all', 'best_seller', ...unique];
-    }, [merchItems]);
-
-    const bestSellerCount = useMemo(() => {
-        return merchItems.filter(item =>
-            item.is_active !== false && Boolean(item.is_best_seller ?? item.is_bestseller)
-        ).length;
     }, [merchItems]);
 
     const filteredAndSortedItems = useMemo(() => {
@@ -182,7 +190,6 @@ export default function MerchandisePage() {
         return filteredAndSortedItems.slice(0, displayCount);
     }, [filteredAndSortedItems, displayCount]);
 
-    // Langsung arahkan ke gambar dashboard admin, fallback ke hero-home hanya jika pengecekan tuntas dan dashboard tidak memiliki gambar
     const heroImageSrc = useMemo(() => {
         if (merchBanner?.image) {
             return merchBanner.image.startsWith('http')
@@ -204,10 +211,10 @@ export default function MerchandisePage() {
         <div className="min-h-screen pb-16 space-y-6 sm:space-y-10">
 
             {/* ================================================= */}
-            {/* 1. HERO BANNER (SMOOTH & ANTI-GLITCH DASHBOARD)   */}
+            {/* 1. HERO BANNER                                    */}
             {/* ================================================= */}
             <section
-                className={`hidden lg:flex relative w-full h-screen max-h-[720px] items-center overflow-hidden border-b border-[#e6ccb2]/60 transition-colors duration-500 ${heroImageSrc ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
+                className={`hidden lg:flex relative w-full h-screen max-h-180 items-center overflow-hidden border-b border-[#e6ccb2]/60 transition-colors duration-500 ${heroImageSrc ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
                     }`}
             >
                 <div className="absolute inset-0 z-0">
@@ -225,8 +232,7 @@ export default function MerchandisePage() {
                             className="w-full h-full object-cover object-right xl:object-center opacity-0 transition-opacity duration-700 ease-out"
                         />
                     )}
-                    {/* Gradien pelindung teks */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent w-full lg:w-3/5 xl:w-1/2 pointer-events-none" />
+                    <div className="absolute inset-0 bg-linear-to-r from-white via-white/90 to-transparent w-full lg:w-3/5 xl:w-1/2 pointer-events-none" />
                 </div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-16 sm:pt-20">
@@ -240,7 +246,6 @@ export default function MerchandisePage() {
                                 <Sparkles className="w-3 h-3 text-amber-500" />
                             </div>
 
-                            {/* Title: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                             <div className="space-y-1">
                                 <h1 className="text-3xl lg:text-[2.4rem] font-black text-[#3d2314] tracking-tight leading-[1.15] uppercase">
                                     {merchBanner?.title ? (
@@ -254,7 +259,6 @@ export default function MerchandisePage() {
                                 </h1>
                             </div>
 
-                            {/* Subtitle: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                             <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                                 {merchBanner?.subtitle ? (
                                     renderFormattedText(merchBanner.subtitle)
@@ -263,7 +267,6 @@ export default function MerchandisePage() {
                                 ) : null}
                             </p>
 
-                            {/* 3 Values Mini Cards */}
                             <div className="grid grid-cols-3 gap-3 pt-1 max-w-md">
                                 <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-3 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1.5 shadow-2xs">
                                     <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs">
@@ -280,7 +283,7 @@ export default function MerchandisePage() {
                                         <Sparkles className="w-4 h-4" />
                                     </div>
                                     <div className="leading-none">
-                                        <span className="text-sm  font-black text-[#3d2314] block tracking-tight">Cute Design</span>
+                                        <span className="text-sm font-black text-[#3d2314] block tracking-tight">Cute Design</span>
                                         <span className="text-xs text-[#6c584c] font-bold block mt-0.5">Aesthetic</span>
                                     </div>
                                 </div>
@@ -296,14 +299,13 @@ export default function MerchandisePage() {
                                 </div>
                             </div>
 
-                            {/* Call To Action Buttons */}
                             <div className="pt-1.5 flex flex-row items-center gap-2.5">
                                 <a
                                     href={merchBanner?.cta_link || "#catalog"}
                                     className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-xs rounded-full shadow-md shadow-rose-500/25 transition-all duration-200 flex items-center justify-center gap-2 uppercase tracking-wider cursor-pointer whitespace-nowrap"
                                 >
                                     <span>{merchBanner?.cta_text || 'LIHAT KATALOG'}</span>
-                                    <ShoppingBag className="w-3.5 h-3.5 shrink-0" />
+                                    <Sparkles className="w-3.5 h-3.5 shrink-0" />
                                 </a>
 
                                 <a
@@ -324,12 +326,12 @@ export default function MerchandisePage() {
             {/* ================================================= */}
             {/* 2. MAIN MERCHANDISE SECTION                       */}
             {/* ================================================= */}
-            <section id="catalog" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14 pt-20 sm:pt-24 lg:pt-0">
-                <div className="bg-white p-4 sm:p-6 lg:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
+            <section id="catalog" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14 pt-20 sm:pt-24 lg:pt-6">
+                <div className="bg-white p-4 sm:p-8 lg:p-10 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6 lg:space-y-8">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
                         {/* SIDEBAR FILTER (KIRI) */}
-                        <aside className="lg:col-span-3 space-y-4 lg:sticky lg:top-24">
+                        <aside className="lg:col-span-3 space-y-4 lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:flex lg:flex-col lg:min-h-0">
                             {/* Search Box */}
                             <div className="relative">
                                 <input
@@ -337,29 +339,31 @@ export default function MerchandisePage() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Cari produk merchandise..."
-                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-2xl pl-10 pr-9 py-2.5 text-xs text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
+                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-2xl pl-10 lg:pl-12 pr-9 lg:pr-11 py-2.5 lg:py-3.5 text-xs lg:text-sm text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
                                 />
-                                <Search className="w-4 h-4 text-[#8c5a3c] absolute left-3.5 top-3" />
+                                <Search className="w-4 h-4 lg:w-5 lg:h-5 text-[#8c5a3c] absolute left-3.5 lg:left-4 top-3 lg:top-3.5" />
                                 {searchQuery && (
                                     <button
+                                        type="button"
                                         onClick={() => setSearchQuery('')}
-                                        className="absolute right-3 top-3 text-[#8c5a3c] hover:text-[#3d2314] cursor-pointer"
+                                        className="absolute right-3 lg:right-4 top-3 lg:top-3.5 text-[#8c5a3c] hover:text-[#3d2314] cursor-pointer"
                                     >
-                                        <X className="w-4 h-4" />
+                                        <X className="w-4 h-4 lg:w-5 lg:h-5" />
                                     </button>
                                 )}
                             </div>
 
-                            <div className="flex items-center justify-between pb-2 border-b border-[#e6ccb2]/60">
-                                <h3 className="font-black text-xs text-[#3d2314] uppercase tracking-wider flex items-center gap-1.5">
-                                    <BearPawIcon className="w-3.5 h-3.5 text-[#8c5a3c]" />
-                                    <span>CATEGORIES</span>
-                                </h3>
+                            <div className="text-xs lg:text-sm font-black text-[#3d2314] uppercase tracking-wider px-1 flex items-center gap-2 border-b border-[#e6ccb2]/60 pb-2.5">
+                                <BearPawIcon className="w-4 h-4 text-[#8c5a3c]" />
+                                <span>Kategori Merchandise</span>
                             </div>
 
                             {/* Navigasi Kategori */}
-                            <div className="bg-[#FAF0E6]/40 p-2 rounded-2xl border border-[#e6ccb2]/40">
-                                <nav className="flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-y-auto lg:max-h-[340px] pr-1 scrollbar-thin text-xs font-black uppercase tracking-wide">
+                            <div className="bg-[#FAF0E6]/40 p-2 sm:p-2.5 rounded-2xl border border-[#e6ccb2]/60 lg:flex-1 lg:min-h-0 lg:flex lg:flex-col">
+                                <nav
+                                    onWheel={(e) => e.stopPropagation()}
+                                    className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto lg:flex-1 lg:min-h-0 overscroll-contain pr-1 scrollbar-thin scrollbar-thumb-[#8c5a3c]/30 scrollbar-track-transparent text-xs font-black uppercase tracking-wide"
+                                >
                                     {availableCategories.map((cat) => {
                                         const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
                                         const isBestSellerOption = cat === 'best_seller';
@@ -367,26 +371,27 @@ export default function MerchandisePage() {
                                         return (
                                             <button
                                                 key={cat}
+                                                type="button"
                                                 onClick={() => {
                                                     setSelectedCategory(cat);
                                                     setDisplayCount(8);
                                                 }}
-                                                className={`flex items-center justify-between px-3.5 py-2 rounded-xl transition shrink-0 cursor-pointer text-left ${isSelected
+                                                className={`flex items-center justify-between px-3.5 lg:px-4 py-2.5 lg:py-3 rounded-2xl transition shrink-0 cursor-pointer text-left w-full ${isSelected
                                                     ? isBestSellerOption
-                                                        ? 'bg-[#e85a4f] text-white shadow-2xs font-extrabold'
-                                                        : 'bg-[#8c5a3c] text-white shadow-2xs font-extrabold'
+                                                        ? 'bg-[#e85a4f] text-white shadow-xs font-black'
+                                                        : 'bg-[#8c5a3c] text-white shadow-xs font-black'
                                                     : isBestSellerOption
                                                         ? 'bg-rose-50/80 text-rose-700 hover:bg-[#e85a4f] hover:text-white border border-rose-200/60'
-                                                        : 'bg-white/80 text-[#3d2314] hover:bg-[#FAF0E6] hover:text-[#8c5a3c]'
+                                                        : 'bg-[#FAF0E6]/50 text-[#3d2314] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
                                                     }`}
                                             >
-                                                <span className="flex items-center gap-2">
+                                                <span className="flex items-center gap-2.5 min-w-0 pr-1">
                                                     {isBestSellerOption ? (
-                                                        <Flame className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-rose-600'}`} />
+                                                        <Flame className={`w-4 h-4 shrink-0 ${isSelected ? 'text-white' : 'text-rose-600'}`} />
                                                     ) : (
-                                                        <BearPawIcon className={`w-3 h-3 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`} />
+                                                        <BearPawIcon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`} />
                                                     )}
-                                                    <span>
+                                                    <span className="text-[10.5px] lg:text-xs xl:text-[13px] font-black uppercase tracking-tight leading-none truncate whitespace-nowrap">
                                                         {cat === 'all'
                                                             ? 'All Products'
                                                             : isBestSellerOption
@@ -396,7 +401,7 @@ export default function MerchandisePage() {
                                                 </span>
 
                                                 {isSelected && !isBestSellerOption && (
-                                                    <X className="w-3 h-3 hidden lg:block opacity-80" />
+                                                    <X className="w-4 h-4 hidden lg:block opacity-80 shrink-0" />
                                                 )}
                                             </button>
                                         );
@@ -405,18 +410,18 @@ export default function MerchandisePage() {
                             </div>
 
                             {/* Promo Card Chat WA */}
-                            <div className="hidden lg:block bg-[#fdf3f1] p-4 rounded-2xl border border-rose-100 space-y-2.5 text-center">
-                                <h4 className="font-black text-xs sm:text-[13px] text-[#3d2314] leading-snug">
+                            <div className="hidden lg:block bg-[#fdf3f1] p-4.5 rounded-2xl border border-rose-100 space-y-2.5 text-center mt-auto">
+                                <h4 className="font-black text-xs sm:text-sm text-[#3d2314] leading-snug">
                                     Can&apos;t find what you&apos;re looking for?
                                 </h4>
-                                <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
-                                    Tanyakan ketersediaan stok produk langsung ke admin.
+                                <p className="text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                    Tanyakan ketersediaan stok produk langsung ke admin kami.
                                 </p>
                                 <a
                                     href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20tanya%20stok%20merchandise"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-full py-2 bg-[#3d2314] hover:bg-[#201007] text-white font-black text-[11px] rounded-xl flex items-center justify-center gap-1.5 transition uppercase tracking-wider cursor-pointer"
+                                    className="w-full py-2.5 bg-[#3d2314] hover:bg-[#201007] text-white font-black text-xs rounded-xl flex items-center justify-center gap-2 transition uppercase tracking-wider cursor-pointer shadow-xs"
                                 >
                                     <span>CHAT VIA WA</span>
                                     <MessageCircle className="w-3.5 h-3.5 fill-current" />
@@ -425,19 +430,20 @@ export default function MerchandisePage() {
                         </aside>
 
                         {/* PRODUCT GRID & SORTING (KANAN) */}
-                        <main className="lg:col-span-9 space-y-5">
+                        <main className="lg:col-span-9 space-y-6">
 
                             {/* Header Sort & Counter */}
                             <div className="flex items-center justify-between border-b border-[#e6ccb2]/60 pb-3">
-                                <div className="flex items-center gap-2 text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide">
+                                <div className="flex items-center gap-2.5 text-base lg:text-lg xl:text-xl font-black text-[#3d2314] uppercase tracking-wide">
+                                    <BearPawIcon className="w-4.5 h-4.5 lg:w-5 lg:h-5 text-[#8c5a3c]" />
                                     <h2>{categoryTitle}</h2>
-                                    <span className="text-xs font-semibold text-[#6c584c] lowercase">
+                                    <span className="text-xs lg:text-sm font-semibold text-[#6c584c] lowercase">
                                         ({filteredAndSortedItems.length} item)
                                     </span>
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                    <label htmlFor="sortBy" className="text-xs font-bold text-[#6c584c] hidden sm:block">
+                                    <label htmlFor="sortBy" className="text-xs lg:text-sm font-bold text-[#6c584c] hidden sm:block">
                                         Urutkan:
                                     </label>
                                     <div className="relative">
@@ -445,23 +451,23 @@ export default function MerchandisePage() {
                                             id="sortBy"
                                             value={sortBy}
                                             onChange={(e) => setSortBy(e.target.value)}
-                                            className="bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-xl px-3 py-1.5 text-xs text-[#3d2314] font-black focus:outline-none appearance-none pr-8 cursor-pointer"
+                                            className="bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-xl px-3.5 py-2 text-xs lg:text-sm text-[#3d2314] font-black focus:outline-none appearance-none pr-8 cursor-pointer"
                                         >
                                             <option value="featured">Paling Populer (Featured)</option>
                                             <option value="newest">Produk Terbaru</option>
                                             <option value="price-low">Harga: Termurah</option>
                                             <option value="price-high">Harga: Tertinggi</option>
                                         </select>
-                                        <ChevronDown className="w-3.5 h-3.5 text-[#8c5a3c] absolute right-2.5 top-2.5 pointer-events-none" />
+                                        <ChevronDown className="w-4 h-4 text-[#8c5a3c] absolute right-2.5 top-3 pointer-events-none" />
                                     </div>
                                 </div>
                             </div>
 
                             {/* Loading State */}
                             {isLoading && (
-                                <div className="py-16 text-center space-y-2">
-                                    <div className="w-6 h-6 border-2 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
-                                    <p className="text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider">
+                                <div className="py-20 text-center space-y-3">
+                                    <div className="w-8 h-8 lg:w-10 lg:h-10 border-3 border-[#8c5a3c] border-t-transparent rounded-full animate-spin mx-auto" />
+                                    <p className="text-xs lg:text-sm font-black text-[#8c5a3c] uppercase tracking-wider">
                                         Memuat produk merchandise...
                                     </p>
                                 </div>
@@ -469,19 +475,20 @@ export default function MerchandisePage() {
 
                             {/* Error State */}
                             {!isLoading && isError && (
-                                <div className="py-10 text-center space-y-2.5 bg-[#FAF0E6]/50 rounded-2xl border border-rose-200 p-5">
-                                    <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
-                                        <AlertCircle className="w-4 h-4" />
+                                <div className="py-16 lg:py-20 text-center space-y-3.5 bg-[#FAF0E6]/50 rounded-3xl border border-rose-200/80 p-6 lg:p-8">
+                                    <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
+                                        <AlertCircle className="w-6 h-6 lg:w-7 lg:h-7" />
                                     </div>
-                                    <h4 className="font-black text-xs text-[#3d2314]">Gagal Memuat Data Merchandise</h4>
-                                    <p className="text-[11px] text-[#6c584c] font-semibold max-w-xs mx-auto">
-                                        Server Sedang Sibuk Atau Error
+                                    <h4 className="font-black text-sm lg:text-base text-[#3d2314]">Gagal Memuat Data Merchandise</h4>
+                                    <p className="text-xs lg:text-sm text-[#6c584c] font-semibold max-w-xs mx-auto">
+                                        Server Sedang Sibuk Atau Sedang Offline.
                                     </p>
                                     <button
+                                        type="button"
                                         onClick={fetchMerchandiseData}
-                                        className="px-3.5 py-1.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-bold text-[10px] rounded-full transition inline-flex items-center gap-1.5 cursor-pointer shadow-xs"
+                                        className="px-4 lg:px-5 py-2 lg:py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-bold text-xs lg:text-sm rounded-full transition inline-flex items-center gap-2 cursor-pointer shadow-xs"
                                     >
-                                        <RefreshCw className="w-3.5 h-3.5" />
+                                        <RefreshCw className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
                                         <span>Coba Lagi</span>
                                     </button>
                                 </div>
@@ -489,12 +496,12 @@ export default function MerchandisePage() {
 
                             {/* Empty State */}
                             {!isLoading && !isError && filteredAndSortedItems.length === 0 && (
-                                <div className="py-12 text-center space-y-1.5 bg-[#FAF0E6]/50 rounded-2xl border border-[#e6ccb2]/60 p-5">
-                                    <div className="w-9 h-9 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/60">
-                                        <Info className="w-4 h-4" />
+                                <div className="py-16 lg:py-20 text-center space-y-2.5 bg-[#FAF0E6]/50 rounded-3xl border border-[#e6ccb2]/60 p-6 lg:p-8">
+                                    <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-white text-[#8c5a3c] flex items-center justify-center mx-auto border border-[#e6ccb2]/60">
+                                        <Info className="w-6 h-6 lg:w-7 lg:h-7" />
                                     </div>
-                                    <h4 className="font-black text-xs text-[#3d2314]">Belum Ada Produk</h4>
-                                    <p className="text-[10px] text-[#6c584c] font-semibold max-w-xs mx-auto">
+                                    <h4 className="font-black text-sm lg:text-base text-[#3d2314]">Belum Ada Produk</h4>
+                                    <p className="text-xs lg:text-sm text-[#6c584c] font-semibold max-w-sm mx-auto">
                                         {selectedCategory === 'best_seller'
                                             ? 'Belum ada produk yang ditandai sebagai Best Seller.'
                                             : searchQuery
@@ -504,24 +511,29 @@ export default function MerchandisePage() {
                                 </div>
                             )}
 
-                            {/* Grid 4 Kolom Produk Dinamis */}
+                            {/* Grid 4 Kolom Produk */}
                             {!isLoading && !isError && displayedItems.length > 0 && (
-                                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4 lg:gap-5">
                                     {displayedItems.map((item) => (
-                                        <MerchandiseProductCard key={item.id} item={item} />
+                                        <MerchandiseProductCard
+                                            key={item.id}
+                                            item={item}
+                                            onSelect={(prod) => setSelectedProduct(prod)}
+                                        />
                                     ))}
                                 </div>
                             )}
 
                             {/* Tombol Load More */}
                             {!isLoading && !isError && displayedItems.length < filteredAndSortedItems.length && (
-                                <div className="pt-2 text-center">
+                                <div className="pt-4 text-center">
                                     <button
+                                        type="button"
                                         onClick={() => setDisplayCount(prev => prev + 4)}
-                                        className="px-5 py-2 bg-[#FAF0E6] hover:bg-[#8c5a3c] hover:text-white text-[#8c5a3c] font-black text-xs rounded-full border border-[#e6ccb2] transition uppercase tracking-wider inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                                        className="px-6 py-2.5 bg-[#FAF0E6] hover:bg-[#8c5a3c] hover:text-white text-[#8c5a3c] font-black text-xs sm:text-sm rounded-full border border-[#e6ccb2] transition uppercase tracking-wider inline-flex items-center gap-2 cursor-pointer shadow-2xs"
                                     >
                                         <span>LOAD MORE PRODUCTS</span>
-                                        <ChevronDown className="w-3.5 h-3.5" />
+                                        <ChevronDown className="w-4 h-4" />
                                     </button>
                                 </div>
                             )}
@@ -532,9 +544,6 @@ export default function MerchandisePage() {
                 </div>
             </section>
 
-            {/* ================================================= */}
-            {/* 3. BENEFITS / FEATURES SECTION (OPTIMAL TEXT)     */}
-            {/* ================================================= */}
             {/* ================================================= */}
             {/* 3. BENEFITS / FEATURES SECTION                    */}
             {/* ================================================= */}
@@ -596,10 +605,7 @@ export default function MerchandisePage() {
             {/* 4. ORDER / WHATSAPP CTA SECTION                   */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Kontainer terkunci pipih mengikuti rasio strip gambar banner, tidak melar ke atas-bawah */}
-                <div className="relative w-full aspect-[16/5] sm:aspect-[16/4] lg:aspect-[1920/420] rounded-2xl sm:rounded-[2.5rem] overflow-hidden shadow-md border border-[#e6ccb2]/60">
-
-                    {/* 1. Background Image Banner Full Menutupi Presisi */}
+                <div className="relative w-full aspect-16/5 sm:aspect-16/4 lg:aspect-1920/420 rounded-2xl sm:rounded-[2.5rem] overflow-hidden shadow-md border border-[#e6ccb2]/60">
                     <img
                         src="/img/banner-section-merch.png"
                         alt="To Meet Cafe Merchandise Banner"
@@ -607,29 +613,21 @@ export default function MerchandisePage() {
                         style={{ objectPosition: 'center 60%' }}
                     />
 
-                    {/* 2. Layer Konten Pas di Dalam Strip Tanpa Menambah Tinggi */}
                     <div className="relative z-10 w-full h-full flex items-center justify-between px-4 sm:px-8 lg:px-12">
-
-                        {/* Sisi Kiri: Teks & Tombol */}
                         <div className="max-w-[55%] sm:max-w-md lg:max-w-xl space-y-1 sm:space-y-2 text-left">
-
-                            {/* Pill Badge */}
                             <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-[#ffd6a5] text-[8px] sm:text-[10px] font-black tracking-widest uppercase border border-white/20">
                                 <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-300" />
                                 <span>ORDER DIRECTLY</span>
                             </div>
 
-                            {/* Heading Putih Terang */}
                             <h2 className="text-xs sm:text-xl lg:text-3xl font-black text-white tracking-tight uppercase leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                                 Want to order or ask more?
                             </h2>
 
-                            {/* Deskripsi */}
                             <p className="text-[8.5px] sm:text-xs lg:text-sm text-stone-100 font-semibold leading-tight drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)] line-clamp-1 sm:line-clamp-2">
                                 Chat with us on WhatsApp to check stock and place your order!
                             </p>
 
-                            {/* Tombol WhatsApp */}
                             <div className="pt-0.5 sm:pt-1">
                                 <a
                                     href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20order%20merchandise"
@@ -643,11 +641,9 @@ export default function MerchandisePage() {
                             </div>
                         </div>
 
-                        {/* Sisi Kanan: 2 Foto Polaroid Ramping & Pas */}
+                        {/* Sisi Kanan: 2 Foto Polaroid */}
                         <div className="flex items-center gap-2 sm:gap-3.5 lg:gap-4 shrink-0">
-
-                            {/* Polaroid 1 */}
-                            <div className="w-16 sm:w-24 lg:w-32 aspect-[3/4] bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform -rotate-3 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border sm:border-2 border-white">
+                            <div className="w-16 sm:w-24 lg:w-32 aspect-3/4 bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform -rotate-3 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border sm:border-2 border-white">
                                 <img
                                     src="/img/mc-1.png"
                                     alt="Merchandise 1"
@@ -658,8 +654,7 @@ export default function MerchandisePage() {
                                 </span>
                             </div>
 
-                            {/* Polaroid 2 */}
-                            <div className="w-16 sm:w-24 lg:w-32 aspect-[3/4] bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform rotate-3 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border sm:border-2 border-white">
+                            <div className="w-16 sm:w-24 lg:w-32 aspect-3/4 bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform rotate-3 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border sm:border-2 border-white">
                                 <img
                                     src="/img/mc-2.png"
                                     alt="Merchandise 2"
@@ -669,104 +664,195 @@ export default function MerchandisePage() {
                                     For Your Friend
                                 </span>
                             </div>
-
-                        </div> 
-
+                        </div>
                     </div>
                 </div>
             </section>
+
+            {/* ================================================= */}
+            {/* MODAL DETAIL PRODUK MERCHANDISE                   */}
+            {/* ================================================= */}
+            {selectedProduct && (
+                <div
+                    onClick={() => setSelectedProduct(null)}
+                    onWheel={(e) => e.stopPropagation()}
+                    onTouchMove={(e) => e.stopPropagation()}
+                    className="fixed inset-0 z-50 w-screen h-[100dvh] flex items-center justify-center bg-black/65 backdrop-blur-xs p-4 overscroll-none"
+                >
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="bg-white w-full max-w-sm sm:max-w-md rounded-3xl p-5 sm:p-6 border border-[#e6ccb2] shadow-2xl space-y-4 relative my-auto max-h-[88vh] overflow-y-auto scrollbar-none"
+                    >
+                        {/* Butang Tutup */}
+                        <button
+                            type="button"
+                            onClick={() => setSelectedProduct(null)}
+                            className="absolute right-3.5 top-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FAF0E6] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition cursor-pointer z-10"
+                        >
+                            <X className="w-4 h-4" />
+                        </button>
+
+                        {/* Gambar Produk */}
+                        <div className="relative w-full h-44 sm:h-52 rounded-2xl overflow-hidden bg-[#FAF0E6]/50 border border-[#e6ccb2]/60 shadow-2xs">
+                            <img
+                                src={
+                                    selectedProduct.image
+                                        ? (selectedProduct.image.startsWith('http') || selectedProduct.image.startsWith('/img')
+                                            ? selectedProduct.image
+                                            : `${API_BASE_URL}/storage/${selectedProduct.image}`)
+                                        : '/img/placeholder-food.png'
+                                }
+                                alt={selectedProduct.name}
+                                className="w-full h-full object-cover object-center"
+                            />
+                        </div>
+
+                        {/* Maklumat Produk */}
+                        <div className="space-y-2.5">
+                            <div className="flex items-center justify-between gap-2">
+                                <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] sm:text-[11px] font-black uppercase rounded-md tracking-wider">
+                                    {selectedProduct.category || 'MERCHANDISE'}
+                                </span>
+
+                                <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] sm:text-[10.5px] font-black uppercase tracking-wider">
+                                    {(selectedProduct.stock !== undefined ? selectedProduct.stock > 0 : selectedProduct.is_active !== false)
+                                        ? 'READY STOCK'
+                                        : 'HABIS'}
+                                </span>
+                            </div>
+
+                            <div className="space-y-0.5">
+                                <h2 className="text-base sm:text-lg font-black text-[#3d2314] leading-snug">
+                                    {selectedProduct.name}
+                                </h2>
+                                <div className="text-sm sm:text-base font-black text-[#8c5a3c]">
+                                    Rp.{Number(selectedProduct.price || 0).toLocaleString('id-ID')}
+                                </div>
+                            </div>
+
+                            {/* Penerangan Produk */}
+                            <div className="bg-[#FAF0E6]/30 p-3 rounded-2xl border border-[#e6ccb2]/50 text-xs sm:text-sm text-[#5a4232] font-medium leading-relaxed max-h-32 overflow-y-auto scrollbar-none">
+                                {selectedProduct.description || 'Belum ada deskripsi lengkap untuk produk ini.'}
+                            </div>
+                        </div>
+
+                        {/* Butang Tindakan */}
+                        <div className="pt-2.5 border-t border-[#e6ccb2]/50 flex items-center justify-between gap-2.5">
+                            <button
+                                type="button"
+                                onClick={() => setSelectedProduct(null)}
+                                className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs sm:text-sm font-bold rounded-xl transition cursor-pointer"
+                            >
+                                Tutup
+                            </button>
+
+                            <a
+                                href={`https://wa.me/6282141609328?text=${encodeURIComponent(
+                                    `Halo To Meet Cafe, saya ingin memesan merchandise "${selectedProduct.name}" (Rp.${Number(selectedProduct.price || 0).toLocaleString('id-ID')}). Apakah stok masih tersedia?`
+                                )}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-5 py-2 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs sm:text-sm rounded-xl shadow-xs transition flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                            >
+                                <MessageCircle className="w-4 h-4 fill-current" />
+                                <span>Pesan via WA</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     );
 }
 
-function MerchandiseProductCard({ item }: { item: MerchandiseItem }) {
-    const isNew = Boolean(item.is_new);
-    const isBestseller = Boolean(item.is_best_seller ?? item.is_bestseller);
-    const isFeatured = Boolean(item.is_featured);
-    const hasImage = Boolean(item.image && item.image.trim() !== '');
+interface MerchandiseProductCardProps {
+    item: MerchandiseItem;
+    onSelect?: (product: MerchandiseItem) => void;
+}
 
-    const imageSrc = hasImage
-        ? (item.image!.startsWith('http')
-            ? item.image!
-            : item.image!.startsWith('/img')
-                ? item.image!
-                : `${API_BASE_URL}/storage/${item.image}`)
-        : null;
+function MerchandiseProductCard({ item, onSelect }: MerchandiseProductCardProps) {
+    const rawNumber = Number(item.price) || 0;
+    const formattedPrice = `Rp.${rawNumber.toLocaleString('id-ID')}`;
 
-    const purchaseLabel = useMemo(() => {
-        const raw = item.purchase_type || item.purchase_option || 'in_store';
-        if (raw === 'in_store' || raw === 'In Store') return 'In Store';
-        if (raw === 'whatsapp' || raw === 'WhatsApp Order') return 'WhatsApp Order';
-        if (raw === 'online' || raw === 'Online / Delivery') return 'Online Delivery';
-        return raw;
-    }, [item.purchase_type, item.purchase_option]);
+    const imageUrl = item.image
+        ? (item.image.startsWith('http') || item.image.startsWith('/img')
+            ? item.image
+            : `${API_BASE_URL}/storage/${item.image}`)
+        : '/img/placeholder-food.png';
+
+    const categoryName = item.category || 'MERCHANDISE';
+    const isAvailable = item.stock !== undefined ? item.stock > 0 : item.is_active !== false;
+    const statusLabel = isAvailable ? 'READY STOCK' : 'HABIS';
 
     return (
-        <div className="bg-[#FAF0E6]/60 rounded-3xl p-3 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-2.5 relative group hover:shadow-md hover:border-[#8c5a3c] transition duration-200">
-
-            {/* Badges Status */}
-            <div className="absolute top-4 left-4 flex flex-col gap-1 z-10 pointer-events-none">
-                {isBestseller && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#e85a4f] text-white text-[8px] font-black uppercase rounded-full shadow-xs tracking-wider">
-                        <Flame className="w-2.5 h-2.5 fill-current" />
-                        <span>BEST SELLER</span>
-                    </span>
-                )}
-                {isFeatured && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-500 text-white text-[8px] font-black uppercase rounded-full shadow-xs tracking-wider">
-                        <Sparkles className="w-2.5 h-2.5 fill-current" />
-                        <span>FEATURED</span>
-                    </span>
-                )}
-                {isNew && (
-                    <span className="px-2.5 py-0.5 bg-[#3d2314] text-white text-[8px] font-black uppercase rounded-full shadow-xs tracking-wider">
-                        NEW
-                    </span>
-                )}
-            </div>
-
-            {/* Foto Produk */}
-            <div className="w-full aspect-square bg-white rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center relative">
-                {imageSrc ? (
+        <div
+            onClick={() => onSelect && onSelect(item)}
+            className="group bg-[#FAF0E6]/40 hover:bg-[#FAF0E6]/60 rounded-3xl border border-[#e6ccb2]/80 hover:border-[#8c5a3c]/60 shadow-2xs hover:shadow-xs transition-all duration-200 p-3 sm:p-3.5 flex flex-col justify-between cursor-pointer space-y-3 overflow-hidden"
+        >
+            <div className="space-y-2.5">
+                {/* 1. Foto Merchandise */}
+                <div className="relative aspect-4/3 sm:aspect-square w-full rounded-2xl overflow-hidden bg-white border border-[#e6ccb2]/50 shadow-2xs">
                     <img
-                        src={imageSrc}
+                        src={imageUrl}
                         alt={item.name}
                         loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                     />
-                ) : (
-                    <div className="flex flex-col items-center justify-center text-center p-3 space-y-1 text-[#a08a7b]">
-                        <ImageOff className="w-5 h-5 opacity-60" />
-                        <span className="text-[9px] font-bold tracking-wider uppercase">Belum ada foto</span>
-                    </div>
-                )}
+
+                    {Boolean(item.is_bestseller ?? item.is_best_seller) && (
+                        <div className="absolute top-2 left-2">
+                            <span className="px-2 py-0.5 rounded-full bg-[#e85a4f] text-white text-[8px] sm:text-[8.5px] font-black uppercase tracking-wider shadow-2xs">
+                                BEST SELLER
+                            </span>
+                        </div>
+                    )}
+
+                    {!isAvailable && (
+                        <div className="absolute inset-0 bg-black/45 backdrop-blur-[1px] flex items-center justify-center">
+                            <span className="px-2.5 py-1 bg-white/95 text-[#e85a4f] font-black text-[10px] uppercase tracking-wider rounded-full shadow-md">
+                                HABIS
+                            </span>
+                        </div>
+                    )}
+                </div>
+
+                {/* 2. Kategori & Badge Outlet */}
+                <div className="flex items-center justify-between gap-1.5 pt-0.5">
+                    <span className="text-[10px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider truncate">
+                        {categoryName}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-white text-[#8c5a3c] text-[8.5px] sm:text-[9px] font-bold tracking-tight border border-[#e6ccb2]/80 shrink-0 whitespace-nowrap">
+                        To Meet
+                    </span>
+                </div>
+
+                {/* 3. Nama & Deskripsi */}
+                <div className="space-y-1">
+                    <h3 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight leading-snug line-clamp-1 uppercase group-hover:text-[#8c5a3c] transition-colors">
+                        {item.name}
+                    </h3>
+                    <p className="text-[11px] sm:text-xs text-[#6c584c] font-medium leading-relaxed line-clamp-2 min-h-8">
+                        {item.description || '-'}
+                    </p>
+                </div>
             </div>
 
-            {/* Detail Teks & Opsi Pembelian */}
-            <div className="space-y-0.5">
-                <div className="flex items-center gap-1 text-[8px] font-black text-[#8c5a3c] uppercase tracking-wider">
-                    <Store className="w-3 h-3" />
-                    <span>{purchaseLabel}</span>
-                </div>
-                <h4 className="font-black text-[#3d2314] text-xs leading-snug line-clamp-1">{item.name}</h4>
-                <p className="text-[10px] text-[#6c584c] font-semibold line-clamp-2 leading-tight">
-                    {item.description || 'Official merchandise khas To Meet Cafe.'}
-                </p>
-            </div>
+            {/* 4. Footer */}
+            <div className="pt-2 flex items-center justify-between gap-1.5 border-t border-[#e6ccb2]/40 min-w-0">
+                <span className="font-black text-xs sm:text-sm text-[#3d2314] whitespace-nowrap tabular-nums shrink-0">
+                    {formattedPrice}
+                </span>
 
-            {/* Harga & Tombol Order WhatsApp */}
-            <div className="flex items-center justify-between pt-1.5 border-t border-[#e6ccb2]/40">
-                <div className="font-black text-[#3d2314] text-xs">
-                    Rp {new Intl.NumberFormat('id-ID').format(item.price)}
-                </div>
-                <button
-                    title="Pesan via WhatsApp"
-                    onClick={() => window.open(`https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20pesan%20merchandise%20${encodeURIComponent(item.name)}`, '_blank')}
-                    className="w-7 h-7 rounded-full bg-white hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition shadow-2xs border border-[#e6ccb2]/50 cursor-pointer"
+                <span
+                    title={statusLabel}
+                    className={`px-2 py-0.5 rounded-full text-[8px] sm:text-[8.5px] font-black uppercase tracking-wider border shadow-2xs shrink-0 whitespace-nowrap ${isAvailable
+                        ? 'bg-white text-[#3d2314] border-[#e6ccb2]/80'
+                        : 'bg-rose-50 text-rose-600 border-rose-200'
+                        }`}
                 >
-                    <ShoppingBag className="w-3.5 h-3.5" />
-                </button>
+                    {statusLabel}
+                </span>
             </div>
         </div>
     );
