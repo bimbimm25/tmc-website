@@ -704,7 +704,7 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                     )}
                 </div>
                 <h4 className="font-black text-[#3d2314] text-md leading-snug line-clamp-1">{item.name}</h4>
-                <p className="text-xs sm:text-sm text-[#6c584c] font-semibold line-clamp-2 leading-tight">
+                <p className="text-[13px] text-[#6c584c] font-semibold line-clamp-2 leading-tight">
                     {item.description}
                 </p>
             </div>

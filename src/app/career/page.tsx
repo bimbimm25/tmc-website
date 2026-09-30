@@ -616,7 +616,7 @@ export default function CareerPage() {
 
                         <div className="p-3.5 bg-[#FAF0E6]/60 rounded-2xl border border-[#e6ccb2]/70 text-center space-y-1">
                             <div className="text-xs sm:text-sm font-black text-[#8c5a3c]">Pertanyaan Rekrutmen?</div>
-                            <div className="text-[11px] sm:text-xs text-[#6c584c]">
+                            <div className="text-[13px] text-[#6c584c]">
                                 Hubungi HR kami di <span className="font-bold text-[#3d2314]">tmc.rekrutmen@gmail.com</span>
                             </div>
                         </div>
@@ -1058,7 +1058,7 @@ export default function CareerPage() {
                             </div>
                             <div>
                                 <div className="font-black text-xs sm:text-sm text-[#3d2314]">Adel</div>
-                                <div className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold">Kitchen Leader</div>
+                                <div className="text-sm text-[#6c584c] font-semibold">Kitchen Leader</div>
                             </div>
                         </div>
                     </div>
@@ -1078,7 +1078,7 @@ export default function CareerPage() {
                             </div>
                             <div>
                                 <div className="font-black text-xs sm:text-sm text-[#3d2314]">Affanin</div>
-                                <div className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold">Front Leader</div>
+                                <div className="text-sm text-[#6c584c] font-semibold">Front Leader</div>
                             </div>
                         </div>
                     </div>
@@ -1098,7 +1098,7 @@ export default function CareerPage() {
                             </div>
                             <div>
                                 <div className="font-black text-xs sm:text-sm text-[#3d2314]">Vania</div>
-                                <div className="text-[10.5px] sm:text-xs text-[#6c584c] font-semibold">Greater Leader</div>
+                                <div className="text-sm text-[#6c584c] font-semibold">Greater Leader</div>
                             </div>
                         </div>
                     </div>
