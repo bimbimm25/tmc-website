@@ -111,8 +111,8 @@ function FormatRichContent({ text, maxItems }: { text?: string | null; maxItems?
 
                 return (
                     <div key={idx} className="flex items-start gap-2 text-xs leading-relaxed text-[#5a4232]">
-                        <span className="text-[#8c5a3c] font-black leading-none mt-1 shrink-0">•</span>
-                        <span className="font-semibold">{content}</span>
+                        <span className="text-[#8c5a3c] font-black leading-none shrink-0">•</span>
+                        <span className="font-semibold text-sm sm:text-sm">{content}</span>
                     </div>
                 );
             })}
@@ -435,7 +435,7 @@ export default function CareerPage() {
                         </h1>
 
                         {/* Subtitle: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
-                        <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-[260px] sm:max-w-md">
+                        <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-65 sm:max-w-md">
                             {banner?.subtitle ? (
                                 renderFormattedText(banner.subtitle)
                             ) : isBannerChecked ? (
@@ -579,7 +579,7 @@ export default function CareerPage() {
                                 </div>
                                 <div className="space-y-0.5">
                                     <div className="font-bold text-xs sm:text-sm text-[#3d2314]">Tim yang saling mendukung</div>
-                                    <div className="text-[11px] sm:text-xs text-[#6c584c]">Saling membantu, menghargai, dan tumbuh bersama.</div>
+                                    <div className="text-xs sm:text-sm text-[#6c584c] font-semibold **:text-xs **:sm:text-sm **:font-semibold **:leading-relaxed">Saling membantu, menghargai, dan tumbuh bersama.</div>
                                 </div>
                             </div>
 
@@ -589,7 +589,7 @@ export default function CareerPage() {
                                 </div>
                                 <div className="space-y-0.5">
                                     <div className="font-bold text-xs sm:text-sm text-[#3d2314]">Kesempatan belajar setiap hari</div>
-                                    <div className="text-[11px] sm:text-xs text-[#6c584c]">Belajar hal baru dan mengembangkan skill harian.</div>
+                                    <div className="text-xs sm:text-sm text-[#6c584c] font-semibold **:text-xs **:sm:text-sm **:font-semibold **:leading-relaxed">Belajar hal baru dan mengembangkan skill harian.</div>
                                 </div>
                             </div>
 
@@ -599,7 +599,7 @@ export default function CareerPage() {
                                 </div>
                                 <div className="space-y-0.5">
                                     <div className="font-bold text-xs sm:text-sm text-[#3d2314]">Suasana Positif & Nyaman</div>
-                                    <div className="text-[11px] sm:text-xs text-[#6c584c]">Lingkungan kerja yang ramah dan penuh semangat.</div>
+                                    <div className="text-xs sm:text-sm text-[#6c584c] font-semibold **:text-xs **:sm:text-sm **:font-semibold **:leading-relaxed">Lingkungan kerja yang ramah dan penuh semangat.</div>
                                 </div>
                             </div>
 
@@ -609,7 +609,7 @@ export default function CareerPage() {
                                 </div>
                                 <div className="space-y-0.5">
                                     <div className="font-bold text-xs sm:text-sm text-[#3d2314]">Jenjang Karier Terbuka</div>
-                                    <div className="text-[11px] sm:text-xs text-[#6c584c]">Peluang promosi dan posisi lebih tinggi bagi yang berprestasi.</div>
+                                    <div className="text-xs sm:text-sm text-[#6c584c] font-semibold **:text-xs **:sm:text-sm **:font-semibold **:leading-relaxed">Peluang promosi dan posisi lebih tinggi bagi yang berprestasi.</div>
                                 </div>
                             </div>
                         </div>
@@ -886,7 +886,7 @@ export default function CareerPage() {
                                                                 <span className="block text-[10.5px] font-black text-[#8c5a3c] uppercase tracking-wider">
                                                                     Tanggung Jawab Utama:
                                                                 </span>
-                                                                <div className="bg-[#FAF0E6]/30 p-3 rounded-2xl border border-[#e6ccb2]/40 text-xs text-[#5a4232]">
+                                                                <div className="bg-[#FAF0E6]/30 p-3 rounded-2xl border border-[#e6ccb2]/40 text-xs sm:text-sm text-[#5a4232]">
                                                                     <FormatRichContent text={job.description} maxItems={3} />
                                                                 </div>
                                                             </div>
@@ -989,7 +989,7 @@ export default function CareerPage() {
                                                             <span className="block text-[10px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider">
                                                                 Tanggung Jawab Utama:
                                                             </span>
-                                                            <div className="bg-[#FAF0E6]/30 p-3 rounded-2xl border border-[#e6ccb2]/40 text-xs sm:text-sm text-[#5a4232]">
+                                                            <div className="bg-[#FAF0E6]/30 p-3 rounded-2xl border border-[#e6ccb2]/40 text-sm sm:text-[15px] text-[#5a4232] font-semibold **:text-sm **:sm:text-[15px] **:font-semibold **:leading-relaxed">
                                                                 <FormatRichContent text={job.description} maxItems={3} />
                                                             </div>
                                                         </div>

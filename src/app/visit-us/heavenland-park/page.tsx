@@ -192,7 +192,7 @@ export default function HeavenlandParkPage() {
                                 <span>PANDUAN KUNJUNGAN</span>
                             </a>
                         </div>
-
+                            
                         {/* Breadcrumbs Navigasi */}
                         <div className="pt-1 flex items-center gap-2 text-xs font-bold text-[#8c5a3c]">
                             <Link href="/visit-us" className="hover:underline">Visit Us</Link>
