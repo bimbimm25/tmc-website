@@ -129,9 +129,6 @@ export default function AboutPage() {
         <div className="min-h-screen overflow-hidden space-y-0">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION (SMOOTH & ANTI-GLITCH)            */}
-            {/* ================================================= */}
-            {/* ================================================= */}
             {/* 1. HERO SECTION (SMOOTH & ANTI-GLITCH DASHBOARD)  */}
             {/* ================================================= */}
             <section
@@ -155,32 +152,30 @@ export default function AboutPage() {
                         />
                     )}
 
-                    {/* Gradien Putih Halus Sisi Kiri (Desktop) */}
-                    <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full lg:w-3/5 xl:w-1/2 pointer-events-none" />
-
-                    {/* Soft Vignette Khusus Mobile agar Karakter Beruang Stand Out */}
-                    <div className="block lg:hidden absolute inset-0 bg-gradient-to-t from-white/90 via-white/30 to-transparent pointer-events-none" />
+                    {/* Gradien dari samping (Kiri ke Kanan) baik di Mobile maupun Desktop:
+            Membuat teks hitam/gelap terbaca jelas tanpa membuat background full putih */}
+                    <div className="absolute inset-0 bg-linear-to-r from-white/95 via-white/70 sm:via-white/60 to-transparent w-110 sm:w-4/5 lg:w-3/5 xl:w-1/2 pointer-events-none" />
 
                     {/* Watermark Paw prints samar di latar belakang */}
                     <BearPawIcon className="absolute top-20 right-6 w-16 h-16 text-white/30 rotate-12 pointer-events-none" />
                     <BearPawIcon className="absolute top-44 right-24 w-8 h-8 text-white/20 -rotate-15 pointer-events-none" />
                 </div>
 
-                {/* 2. Konten Text Hero */}
+                {/* 2. Konten Text Hero (Direct di atas gambar tanpa kartu/container putih di mobile) */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-14 sm:pt-16">
                     <div
-                        className={`max-w-md lg:max-w-xl space-y-2.5 sm:space-y-3 bg-white/85 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none p-4 sm:p-5 lg:p-0 rounded-2xl lg:rounded-none border border-white/80 lg:border-none shadow-md lg:shadow-none transition-all duration-700 ease-out ${isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                        className={`max-w-[85%] sm:max-w-md lg:max-w-xl space-y-2.5 sm:space-y-3 transition-all duration-700 ease-out ${isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
                             }`}
                     >
 
                         {/* Pill Badge */}
-                        <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white text-[#e85a4f] text-[9px] font-black border border-[#e6ccb2]/80 shadow-2xs">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-xs text-[#e85a4f] text-[10px] font-black border border-[#e6ccb2]/80 shadow-2xs">
                             <span>ABOUT TO MEET</span>
                             <BearPawIcon className="w-2.5 h-2.5" />
                         </div>
 
-                        {/* Title: Dahulukan Dashboard -> Fallback Default jika tuntas & kosong */}
-                        <h1 className="text-xl sm:text-2xl lg:text-[2.2rem] font-black text-[#2e170c] tracking-tight leading-[1.2]">
+                        {/* Title */}
+                        <h1 className="text-2xl sm:text-3xl lg:text-[2.2rem] font-black text-[#2e170c] tracking-tight leading-[1.2] uppercase">
                             {aboutBanner?.title ? (
                                 renderFormattedText(aboutBanner.title)
                             ) : isBannerChecked ? (
@@ -192,8 +187,8 @@ export default function AboutPage() {
                             ) : null}
                         </h1>
 
-                        {/* Subtitle: Dahulukan Dashboard -> Fallback Default jika tuntas & kosong */}
-                        <p className="text-[11px] sm:text-xs lg:text-[15px] text-[#4a3427] font-semibold leading-relaxed max-w-md">
+                        {/* Subtitle / Deskripsi */}
+                        <p className="text-xs sm:text-sm lg:text-[15px] text-[#4a3427] font-bold leading-relaxed max-w-sm sm:max-w-md">
                             {aboutBanner?.subtitle ? (
                                 renderFormattedText(aboutBanner.subtitle)
                             ) : isBannerChecked ? (
@@ -201,11 +196,11 @@ export default function AboutPage() {
                             ) : null}
                         </p>
 
-                        {/* Tombol Aksi */}
-                        <div className="pt-1 grid grid-cols-2 sm:flex sm:flex-row items-center gap-2 max-w-sm sm:max-w-none">
+                        {/* Tombol Aksi Sejajar: Ukuran pas & rapi */}
+                        <div className="pt-1.5 flex flex-row items-center gap-2.5 max-w-sm sm:max-w-none">
                             <a
                                 href={aboutBanner?.cta_link || "#story"}
-                                className="w-full sm:w-auto px-4 sm:px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black rounded-full text-[10.5px] sm:text-xs transition duration-200 shadow-md shadow-rose-500/20 flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap"
+                                className="px-4 sm:px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black rounded-full text-[11px] sm:text-xs transition duration-200 shadow-md shadow-rose-500/20 flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap"
                             >
                                 <span>{aboutBanner?.cta_text || 'OUR STORY'}</span>
                                 <BearPawIcon className="w-3 h-3 shrink-0" />
@@ -213,7 +208,7 @@ export default function AboutPage() {
 
                             <Link
                                 href="/#locations"
-                                className="w-full sm:w-auto px-4 sm:px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full transition flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md whitespace-nowrap"
+                                className="px-4 sm:px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-[11px] sm:text-xs rounded-full transition flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md whitespace-nowrap"
                             >
                                 <MapPin className="w-3 h-3 shrink-0" />
                                 <span>VISIT OUR CAFES</span>

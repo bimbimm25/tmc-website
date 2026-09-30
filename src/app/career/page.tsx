@@ -7,7 +7,7 @@ import {
     Sparkles, Heart, Smile, Users, Award, ShieldCheck,
     Coffee, GraduationCap, PartyPopper, CheckCircle2,
     Send, X, Quote, ChevronRight, AlertCircle, Compass,
-    FileText, Gift, Check, Building, Mail
+    FileText, Gift, Check, Building, Mail, ChevronDown, ChevronLeft,
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
@@ -186,6 +186,30 @@ export default function CareerPage() {
     const [resumeFile, setResumeFile] = useState<File | null>(null);
 
     const openPositionsRef = useRef<HTMLDivElement>(null);
+
+    //dropdown
+    const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
+
+    //slide mobile 
+    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+    const sliderRef = useRef<HTMLDivElement>(null);
+
+    const handleScrollMobile = () => {
+        if (!sliderRef.current) return;
+        const container = sliderRef.current;
+        const index = Math.round(container.scrollLeft / container.clientWidth);
+        setCurrentSlideIndex(index);
+    };
+
+    const scrollToSlide = (index: number) => {
+        if (!sliderRef.current) return;
+        const container = sliderRef.current;
+        container.scrollTo({
+            left: index * container.clientWidth,
+            behavior: 'smooth'
+        });
+        setCurrentSlideIndex(index);
+    };
 
     useEffect(() => {
         const isModalActive = Boolean(isApplyModalOpen || detailJob);
@@ -381,7 +405,7 @@ export default function CareerPage() {
                         />
                     )}
                     {/* Gradient Overlay Putih Sebelah Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2 pointer-events-none" />
+                    <div className="absolute inset-0 bg-linear-to-r from-white via-white/85 to-transparent w-120 sm:w-2/3 lg:w-1/2 pointer-events-none" />
                 </div>
 
                 {/* 2. Konten Text Hero */}
@@ -602,28 +626,110 @@ export default function CareerPage() {
                     <div className="lg:col-span-8 space-y-5">
 
                         {/* Header + Tabs Filter Lokasi Outlet */}
-                        <div className="bg-white p-4 sm:p-5 lg:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
-                            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
+                        <div className="bg-white p-4 sm:p-5 lg:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3 lg:space-y-0">
+                            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-6">
 
-                                {/* Kiri: Title & Badge Jumlah Lowongan (Dengan margin/padding aman agar tidak mepet) */}
-                                <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-                                    <Briefcase className="w-5 h-5 text-[#8c5a3c] shrink-0" />
-                                    <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide whitespace-nowrap">
-                                        OPEN POSITIONS
-                                    </h2>
-                                    <span className="text-xs sm:text-sm font-bold text-[#8c5a3c] bg-[#FAF0E6] px-3 py-1 rounded-full whitespace-nowrap shrink-0">
+                                {/* Kiri: Title & Badge Jumlah Lowongan */}
+                                <div className="flex items-center justify-between lg:justify-start gap-2.5 sm:gap-3 shrink-0">
+                                    <div className="flex items-center gap-2.5">
+                                        <Briefcase className="w-5 h-5 text-[#8c5a3c] shrink-0" />
+                                        <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide whitespace-nowrap">
+                                            OPEN POSITIONS
+                                        </h2>
+                                    </div>
+                                    <span className="text-xs sm:text-sm font-bold text-[#8c5a3c] bg-[#FAF0E6] px-3 py-1 rounded-full whitespace-nowrap shrink-0 border border-[#e6ccb2]/60 shadow-2xs">
                                         {filteredCareers.length} Lowongan
                                     </span>
                                 </div>
 
-                                {/* Kanan: Filter Tabs Lokasi (Scrollbar otomatis hilang/tidak terlihat) */}
-                                <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto py-1 scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                                {/* ================================================= */}
+                                {/* A. KHUSUS MOBILE: ELEGANT DROPDOWN                */}
+                                {/* ================================================= */}
+                                <div className="block lg:hidden relative z-20 pt-1">
+                                    {/* Tombol Trigger Dropdown Utama */}
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsLocationDropdownOpen(prev => !prev)}
+                                        className="w-full bg-[#FAF0E6]/60 hover:bg-[#FAF0E6] border border-[#e6ccb2]/80 rounded-2xl px-3.5 py-2.5 flex items-center justify-between transition-all duration-200 shadow-2xs cursor-pointer text-left active:scale-[0.99]"
+                                    >
+                                        <div className="flex items-center gap-2.5 min-w-0">
+                                            <span className="w-2 h-2 rounded-full bg-[#8c5a3c] shrink-0" />
+                                            <div className="truncate">
+                                                <span className="text-[9.5px] uppercase font-bold text-[#8c5a3c]/80 tracking-widest block leading-none">
+                                                    Lokasi Penempatan:
+                                                </span>
+                                                <span className="text-xs sm:text-sm font-black text-[#3d2314] tracking-wide block mt-0.5 truncate">
+                                                    {selectedLocationFilter === 'all'
+                                                        ? 'Semua Lokasi'
+                                                        : selectedLocationFilter === 'mutiara'
+                                                            ? 'Pondok Mutiara'
+                                                            : selectedLocationFilter === 'central_kitchen'
+                                                                ? 'Central Kitchen'
+                                                                : 'Office'}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Panah Halus Berotasi */}
+                                        <div className={`w-6 h-6 rounded-full bg-white/80 border border-[#e6ccb2]/60 flex items-center justify-center text-[#8c5a3c] transition-transform duration-300 shrink-0 ${isLocationDropdownOpen ? 'rotate-180 bg-[#8c5a3c] text-white' : ''
+                                            }`}>
+                                            <ChevronDown className="w-3.5 h-3.5" />
+                                        </div>
+                                    </button>
+
+                                    {/* List Menu Dropdown dengan Animasi Smooth Accordion */}
+                                    <div
+                                        className={`grid transition-all duration-300 ease-in-out ${isLocationDropdownOpen
+                                            ? 'grid-rows-[1fr] opacity-100 mt-2'
+                                            : 'grid-rows-[0fr] opacity-0 mt-0 pointer-events-none'
+                                            }`}
+                                    >
+                                        <div className="overflow-hidden">
+                                            <div className="bg-white rounded-2xl border border-[#e6ccb2]/70 shadow-md p-1.5 space-y-0.5">
+                                                {[
+                                                    { id: 'all', label: 'Semua Lokasi' },
+                                                    { id: 'mutiara', label: 'Pondok Mutiara' },
+                                                    { id: 'central_kitchen', label: 'Central Kitchen' },
+                                                    { id: 'office', label: 'Office' }
+                                                ].map((loc) => {
+                                                    const isSelected = selectedLocationFilter === loc.id;
+                                                    return (
+                                                        <button
+                                                            key={loc.id}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setSelectedLocationFilter(loc.id);
+                                                                setIsLocationDropdownOpen(false);
+                                                            }}
+                                                            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition text-left cursor-pointer ${isSelected
+                                                                ? 'bg-[#FAF0E6] text-[#8c5a3c] font-black'
+                                                                : 'text-[#5a4232] hover:bg-stone-50 font-bold text-xs'
+                                                                }`}
+                                                        >
+                                                            <span className="text-xs tracking-wide">
+                                                                {loc.label}
+                                                            </span>
+                                                            {isSelected && (
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-[#8c5a3c] shrink-0" />
+                                                            )}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* ================================================= */}
+                                {/* B. KHUSUS DESKTOP: HORIZONTAL TABS ASLI           */}
+                                {/* ================================================= */}
+                                <div className="hidden lg:flex items-center gap-2 sm:gap-2.5 overflow-x-auto py-1">
                                     <button
                                         type="button"
                                         onClick={() => setSelectedLocationFilter('all')}
-                                        className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'all'
-                                                ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
+                                        className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'all'
+                                            ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                            : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         Semua
@@ -632,9 +738,9 @@ export default function CareerPage() {
                                     <button
                                         type="button"
                                         onClick={() => setSelectedLocationFilter('mutiara')}
-                                        className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'mutiara'
-                                                ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
+                                        className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'mutiara'
+                                            ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                            : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         Pondok Mutiara
@@ -643,9 +749,9 @@ export default function CareerPage() {
                                     <button
                                         type="button"
                                         onClick={() => setSelectedLocationFilter('central_kitchen')}
-                                        className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'central_kitchen'
-                                                ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
+                                        className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'central_kitchen'
+                                            ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                            : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         Central Kitchen
@@ -654,9 +760,9 @@ export default function CareerPage() {
                                     <button
                                         type="button"
                                         onClick={() => setSelectedLocationFilter('office')}
-                                        className={`px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'office'
-                                                ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                                : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
+                                        className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === 'office'
+                                            ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                            : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
                                             }`}
                                     >
                                         Office
@@ -687,86 +793,234 @@ export default function CareerPage() {
                             </div>
                         )}
 
-                        {/* DAFTAR PEKERJAAN: GRID 2-2 KE BAWAH DENGAN LIST BULLETS */}
+                        {/* DAFTAR PEKERJAAN: SLIDER SATU PER SATU DI MOBILE & GRID 2-KOLOM DI DESKTOP */}
                         {!isLoading && filteredCareers.length > 0 && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                                {filteredCareers.map((job) => {
-                                    const rawLocation = (job as any).location_name || (job as any).location || (job as any).branch;
-                                    const locInfo = formatLocationName(rawLocation);
+                            <div className="space-y-4">
 
-                                    return (
-                                        <div
-                                            key={job.id}
-                                            className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs hover:border-[#8c5a3c] hover:shadow-md transition duration-200 flex flex-col justify-between h-full space-y-4 group"
-                                        >
-                                            {/* Bagian Atas: Badge, Judul, Metadata, & Tanggung Jawab */}
-                                            <div className="space-y-3">
-                                                {/* Header Badges */}
-                                                <div className="flex items-center justify-between gap-2">
-                                                    <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] sm:text-[11px] font-black uppercase rounded-md tracking-wider">
-                                                        {job.department || 'Operasional'}
-                                                    </span>
-                                                    <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[9.5px] sm:text-[10px] font-black uppercase rounded-full">
-                                                        {job.type}
-                                                    </span>
-                                                </div>
+                                {/* ================================================= */}
+                                {/* A. TAMPILAN MOBILE: SLIDE SATU PER SATU (SMOOTH)   */}
+                                {/* ================================================= */}
+                                <div className="block sm:hidden relative">
 
-                                                {/* Job Title */}
-                                                <div>
-                                                    <h3 className="text-sm sm:text-base font-black text-[#3d2314] group-hover:text-[#8c5a3c] transition leading-snug">
-                                                        {job.title}
-                                                    </h3>
-                                                </div>
+                                    {/* Header Mini Navigasi & Counter Slide */}
+                                    <div className="flex items-center justify-between px-1 pb-2">
+                                        <span className="text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider">
+                                            Posisi ({currentSlideIndex + 1} dari {filteredCareers.length})
+                                        </span>
 
-                                                {/* Lokasi & Gaji Badges */}
-                                                <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                                                    <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-lg border text-[10px] sm:text-[10.5px] font-black uppercase tracking-wide ${locInfo.badgeColor}`}>
-                                                        <MapPin className="w-3 h-3 shrink-0" />
-                                                        <span className="truncate max-w-[130px]">{locInfo.label}</span>
+                                        {/* Tombol Navigasi Panah Kiri - Kanan */}
+                                        <div className="flex items-center gap-1.5">
+                                            <button
+                                                type="button"
+                                                onClick={() => scrollToSlide(Math.max(0, currentSlideIndex - 1))}
+                                                disabled={currentSlideIndex === 0}
+                                                className="w-7 h-7 rounded-full bg-white border border-[#e6ccb2]/80 text-[#8c5a3c] flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition"
+                                                aria-label="Lowongan Sebelumnya"
+                                            >
+                                                <ChevronLeft className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => scrollToSlide(Math.min(filteredCareers.length - 1, currentSlideIndex + 1))}
+                                                disabled={currentSlideIndex === filteredCareers.length - 1}
+                                                className="w-7 h-7 rounded-full bg-white border border-[#e6ccb2]/80 text-[#8c5a3c] flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed shadow-2xs active:scale-95 transition"
+                                                aria-label="Lowongan Berikutnya"
+                                            >
+                                                <ChevronRight className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Slider Container: Scrollbar Default Panjang Dihapus Total */}
+                                    <div
+                                        ref={sliderRef}
+                                        onScroll={handleScrollMobile}
+                                        className="flex items-stretch overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scroll-smooth scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-0"
+                                        style={{
+                                            scrollbarWidth: 'none',
+                                            msOverflowStyle: 'none',
+                                        }}
+                                    >
+                                        {filteredCareers.map((job) => {
+                                            const rawLocation = (job as any).location_name || (job as any).location || (job as any).branch;
+                                            const locInfo = formatLocationName(rawLocation);
+
+                                            return (
+                                                <div
+                                                    key={job.id}
+                                                    className="w-full shrink-0 snap-center bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs flex flex-col justify-between space-y-4"
+                                                >
+                                                    {/* Konten Kartu Lowongan Tetap Sama */}
+                                                    <div className="space-y-3">
+                                                        <div className="flex items-center justify-between gap-2">
+                                                            <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10.5px] font-black uppercase rounded-md tracking-wider">
+                                                                {job.department || 'Operasional'}
+                                                            </span>
+                                                            <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-black uppercase rounded-full">
+                                                                {job.type}
+                                                            </span>
+                                                        </div>
+
+                                                        <div>
+                                                            <h3 className="text-base font-black text-[#3d2314] leading-snug">
+                                                                {job.title}
+                                                            </h3>
+                                                        </div>
+
+                                                        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                                            <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-lg border text-[10.5px] font-black uppercase tracking-wide ${locInfo.badgeColor}`}>
+                                                                <MapPin className="w-3 h-3 shrink-0" />
+                                                                <span className="truncate max-w-[130px]">{locInfo.label}</span>
+                                                            </div>
+
+                                                            {job.salary_range && (
+                                                                <div className="flex items-center gap-1 text-emerald-700 bg-emerald-50/70 px-2.5 py-0.5 rounded-lg border border-emerald-200/60 text-[10.5px] font-bold">
+                                                                    <DollarSign className="w-3 h-3 shrink-0" />
+                                                                    <span>{job.salary_range}</span>
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {job.description && (
+                                                            <div className="pt-2 border-t border-[#e6ccb2]/40 space-y-1.5">
+                                                                <span className="block text-[10.5px] font-black text-[#8c5a3c] uppercase tracking-wider">
+                                                                    Tanggung Jawab Utama:
+                                                                </span>
+                                                                <div className="bg-[#FAF0E6]/30 p-3 rounded-2xl border border-[#e6ccb2]/40 text-xs text-[#5a4232]">
+                                                                    <FormatRichContent text={job.description} maxItems={3} />
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
 
-                                                    {job.salary_range && (
-                                                        <div className="flex items-center gap-1 text-emerald-700 bg-emerald-50/70 px-2.5 py-0.5 rounded-lg border border-emerald-200/60 text-[10px] sm:text-[10.5px] font-bold">
-                                                            <DollarSign className="w-3 h-3 shrink-0" />
-                                                            <span>{job.salary_range}</span>
+                                                    <div className="pt-3 border-t border-[#e6ccb2]/40 grid grid-cols-2 gap-2 mt-auto">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setDetailJob(job)}
+                                                            className="w-full py-2.5 bg-[#FAF0E6] hover:bg-[#e6ccb2] text-[#8c5a3c] font-black text-xs rounded-xl transition flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                                                        >
+                                                            <FileText className="w-3.5 h-3.5" />
+                                                            <span>Detail</span>
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleOpenApply(job)}
+                                                            className="w-full py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                                                        >
+                                                            <span>Lamar</span>
+                                                            <ArrowRight className="w-3.5 h-3.5" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+
+                                    {/* Pagination Dots (Indikator Posisi Halus) */}
+                                    {filteredCareers.length > 1 && (
+                                        <div className="flex items-center justify-center gap-1.5 pt-2">
+                                            {filteredCareers.map((_, dotIdx) => (
+                                                <button
+                                                    key={dotIdx}
+                                                    type="button"
+                                                    onClick={() => scrollToSlide(dotIdx)}
+                                                    className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${currentSlideIndex === dotIdx
+                                                        ? 'w-6 bg-[#8c5a3c]'
+                                                        : 'w-1.5 bg-[#e6ccb2]/80 hover:bg-[#8c5a3c]/50'
+                                                        }`}
+                                                    aria-label={`Ke slide lowongan ${dotIdx + 1}`}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* ================================================= */}
+                                {/* B. TAMPILAN DESKTOP/TABLET: GRID 2 KOLOM (ORIGINAL)*/}
+                                {/* ================================================= */}
+                                <div className="hidden sm:grid sm:grid-cols-2 gap-4 sm:gap-5">
+                                    {filteredCareers.map((job) => {
+                                        const rawLocation = (job as any).location_name || (job as any).location || (job as any).branch;
+                                        const locInfo = formatLocationName(rawLocation);
+
+                                        return (
+                                            <div
+                                                key={job.id}
+                                                className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs hover:border-[#8c5a3c] hover:shadow-md transition duration-200 flex flex-col justify-between h-full space-y-4 group"
+                                            >
+                                                {/* Bagian Atas: Badge, Judul, Metadata, & Tanggung Jawab */}
+                                                <div className="space-y-3">
+                                                    {/* Header Badges */}
+                                                    <div className="flex items-center justify-between gap-2">
+                                                        <span className="px-2.5 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[10px] sm:text-[11px] font-black uppercase rounded-md tracking-wider">
+                                                            {job.department || 'Operasional'}
+                                                        </span>
+                                                        <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[9.5px] sm:text-[10px] font-black uppercase rounded-full">
+                                                            {job.type}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Job Title */}
+                                                    <div>
+                                                        <h3 className="text-sm sm:text-base font-black text-[#3d2314] group-hover:text-[#8c5a3c] transition leading-snug">
+                                                            {job.title}
+                                                        </h3>
+                                                    </div>
+
+                                                    {/* Lokasi & Gaji Badges */}
+                                                    <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                                        <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-lg border text-[10px] sm:text-[10.5px] font-black uppercase tracking-wide ${locInfo.badgeColor}`}>
+                                                            <MapPin className="w-3 h-3 shrink-0" />
+                                                            <span className="truncate max-w-[130px]">{locInfo.label}</span>
+                                                        </div>
+
+                                                        {job.salary_range && (
+                                                            <div className="flex items-center gap-1 text-emerald-700 bg-emerald-50/70 px-2.5 py-0.5 rounded-lg border border-emerald-200/60 text-[10px] sm:text-[10.5px] font-bold">
+                                                                <DollarSign className="w-3 h-3 shrink-0" />
+                                                                <span>{job.salary_range}</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Preview Deskripsi dalam Bentuk List Bullet Points */}
+                                                    {job.description && (
+                                                        <div className="pt-2 border-t border-[#e6ccb2]/40 space-y-1.5">
+                                                            <span className="block text-[10px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider">
+                                                                Tanggung Jawab Utama:
+                                                            </span>
+                                                            <div className="bg-[#FAF0E6]/30 p-3 rounded-2xl border border-[#e6ccb2]/40 text-xs sm:text-sm text-[#5a4232]">
+                                                                <FormatRichContent text={job.description} maxItems={3} />
+                                                            </div>
                                                         </div>
                                                     )}
                                                 </div>
 
-                                                {/* Preview Deskripsi dalam Bentuk List Bullet Points */}
-                                                {job.description && (
-                                                    <div className="pt-2 border-t border-[#e6ccb2]/40 space-y-1.5">
-                                                        <span className="block text-[10px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider">
-                                                            Tanggung Jawab Utama:
-                                                        </span>
-                                                        <div className="bg-[#FAF0E6]/30 p-3 rounded-2xl border border-[#e6ccb2]/40 text-xs sm:text-sm text-[#5a4232]">
-                                                            <FormatRichContent text={job.description} maxItems={3} />
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
+                                                {/* Bagian Bawah: Tombol Aksi */}
+                                                <div className="pt-3 border-t border-[#e6ccb2]/40 grid grid-cols-2 gap-2 mt-auto">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setDetailJob(job)}
+                                                        className="w-full py-2.5 bg-[#FAF0E6] hover:bg-[#e6ccb2] text-[#8c5a3c] font-black text-[11px] sm:text-xs rounded-xl transition flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                                                    >
+                                                        <FileText className="w-3.5 h-3.5" />
+                                                        <span>Detail</span>
+                                                    </button>
 
-                                            {/* Bagian Bawah: Tombol Aksi Kerap Rata */}
-                                            <div className="pt-3 border-t border-[#e6ccb2]/40 grid grid-cols-2 gap-2 mt-auto">
-                                                <button
-                                                    onClick={() => setDetailJob(job)}
-                                                    className="w-full py-2.5 bg-[#FAF0E6] hover:bg-[#e6ccb2] text-[#8c5a3c] font-black text-[11px] sm:text-xs rounded-xl transition flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer"
-                                                >
-                                                    <FileText className="w-3.5 h-3.5" />
-                                                    <span>Detail</span>
-                                                </button>
-
-                                                <button
-                                                    onClick={() => handleOpenApply(job)}
-                                                    className="w-full py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-[11px] sm:text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer"
-                                                >
-                                                    <span>Lamar</span>
-                                                    <ArrowRight className="w-3.5 h-3.5" />
-                                                </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleOpenApply(job)}
+                                                        className="w-full py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:bg-[#5c3a25] text-white font-black text-[11px] sm:text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                                                    >
+                                                        <span>Lamar</span>
+                                                        <ArrowRight className="w-3.5 h-3.5" />
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    );
-                                })}
+                                        );
+                                    })}
+                                </div>
+
                             </div>
                         )}
                     </div>

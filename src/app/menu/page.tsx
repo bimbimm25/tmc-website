@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
     Search, Star, Utensils, CupSoda, Cake,
     Info, ChevronRight, Coffee, X, MapPin, AlertCircle, RefreshCw,
-    SlidersHorizontal, Sparkles, ThumbsUp
+    SlidersHorizontal, Sparkles, ThumbsUp, ChevronDown
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
@@ -60,6 +60,7 @@ export default function DigitalMenuPage() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
     const [selectedProduct, setSelectedProduct] = useState<MenuItem | null>(null);
+    const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState<boolean>(false);
 
     // Kunci Scroll Halaman ketika Modal Pop-up Aktif
     useEffect(() => {
@@ -265,7 +266,7 @@ export default function DigitalMenuPage() {
             {/* 2. MAIN CONTENT AREA & UX KATEGORI MOBILE         */}
             {/* ================================================= */}
             <section id="menu-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-6">
-                <div className="bg-white p-4 sm:p-8 lg:p-10 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6 lg:space-y-8">
+                <div className="bg-white p-4 sm:p-8 lg:p-10 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-5 lg:space-y-8">
 
                     {/* Filter Tab Lokasi Outlet & Search Bar */}
                     <div className="space-y-3.5 lg:space-y-4">
@@ -278,8 +279,8 @@ export default function DigitalMenuPage() {
                                 <button
                                     onClick={() => setSelectedLocation('all')}
                                     className={`px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-[11px] lg:text-xs xl:text-[13px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'all'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                        ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                        : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
                                         }`}
                                 >
                                     Semua Outlet
@@ -287,8 +288,8 @@ export default function DigitalMenuPage() {
                                 <button
                                     onClick={() => setSelectedLocation('pondok_mutiara')}
                                     className={`px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-[11px] lg:text-xs xl:text-[13px] font-bold tracking-wider uppercase transition cursor-pointer shrink-0 ${selectedLocation === 'pondok_mutiara'
-                                            ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                            : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
+                                        ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                        : 'bg-white text-[#6c584c] border border-[#e6ccb2]/60 hover:bg-[#FAF0E6]'
                                         }`}
                                 >
                                     Pondok Mutiara
@@ -317,31 +318,106 @@ export default function DigitalMenuPage() {
                         </div>
                     </div>
 
-                    {/* UX Kategori Menu Mobile: Horizontal Pill Chips */}
-                    <div className="block lg:hidden">
-                        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none">
-                            {availableCategories.map((cat) => {
-                                const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
-                                let label = cat.toUpperCase();
-                                if (cat === 'all') label = 'SEMUA MENU';
-                                if (cat === 'bestseller') label = 'BEST SELLER';
-                                if (cat === 'recommended') label = 'RECOMMENDED';
+                    {/* UX KATEGORI MENU KHUSUS MOBILE: Custom Animated Dropdown (Tanpa Scroll Samping) */}
+                    <div className="block lg:hidden relative z-20">
+                        {/* Label Bar Kecil */}
+                        <div className="flex items-center justify-between px-1 pb-1.5">
+                            <span className="text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider flex items-center gap-1.5">
+                                <SlidersHorizontal className="w-3.5 h-3.5" />
+                                Kategori Menu
+                            </span>
+                            <span className="text-[10px] font-bold text-[#6c584c]">
+                                {availableCategories.length} Pilihan
+                            </span>
+                        </div>
 
-                                return (
-                                    <button
-                                        key={cat}
-                                        onClick={() => setSelectedCategory(cat)}
-                                        className={`px-3.5 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition shrink-0 cursor-pointer flex items-center gap-1.5 ${isSelected
-                                                ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                                : 'bg-[#FAF0E6]/70 text-[#3d2314] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
-                                            }`}
-                                    >
-                                        {cat === 'bestseller' && <Star className="w-3 h-3 fill-amber-400 text-amber-400" />}
-                                        {cat === 'recommended' && <Sparkles className="w-3 h-3 text-[#e85a4f] fill-current" />}
-                                        <span>{label}</span>
-                                    </button>
-                                );
-                            })}
+                        {/* Tombol Pemicu Dropdown Utama */}
+                        <button
+                            type="button"
+                            onClick={() => setIsCategoryDropdownOpen(prev => !prev)}
+                            className="w-full bg-[#FAF0E6]/70 hover:bg-[#FAF0E6] border border-[#e6ccb2] rounded-2xl px-4 py-3 flex items-center justify-between transition-all duration-300 shadow-2xs cursor-pointer text-left active:scale-[0.99]"
+                        >
+                            <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                                <div className="w-7 h-7 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs shrink-0 border border-[#e6ccb2]/50">
+                                    {selectedCategory === 'bestseller' ? (
+                                        <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                                    ) : selectedCategory === 'recommended' ? (
+                                        <Sparkles className="w-3.5 h-3.5 text-[#e85a4f] fill-current" />
+                                    ) : (
+                                        <Coffee className="w-3.5 h-3.5 text-[#8c5a3c]" />
+                                    )}
+                                </div>
+                                <div className="truncate">
+                                    
+                                    <span className="text-xs sm:text-[13px] font-black text-[#3d2314] uppercase tracking-wide block mt-0.5 truncate">
+                                        {selectedCategory === 'all'
+                                            ? 'SEMUA MENU'
+                                            : selectedCategory === 'bestseller'
+                                                ? 'BEST SELLER'
+                                                : selectedCategory === 'recommended'
+                                                    ? 'RECOMMENDED'
+                                                    : selectedCategory}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Chevron dengan Animasi Rotasi Halus */}
+                            <div className={`w-6 h-6 rounded-full bg-white/80 border border-[#e6ccb2]/60 flex items-center justify-center text-[#8c5a3c] transition-transform duration-300 shrink-0 ${isCategoryDropdownOpen ? 'rotate-180 bg-[#8c5a3c] text-white' : ''
+                                }`}>
+                                <ChevronDown className="w-3.5 h-3.5" />
+                            </div>
+                        </button>
+
+                        {/* List Menu Dropdown dengan Animasi Smooth Accordion */}
+                        <div
+                            className={`grid transition-all duration-300 ease-in-out ${isCategoryDropdownOpen
+                                    ? 'grid-rows-[1fr] opacity-100 mt-2'
+                                    : 'grid-rows-[0fr] opacity-0 mt-0 pointer-events-none'
+                                }`}
+                        >
+                            <div className="overflow-hidden">
+                                <div className="bg-white rounded-2xl border border-[#e6ccb2]/80 shadow-md p-2 space-y-1 max-h-64 overflow-y-auto overscroll-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                                    {availableCategories.map((cat) => {
+                                        const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
+                                        let label = cat.toUpperCase();
+                                        if (cat === 'all') label = 'SEMUA MENU';
+                                        if (cat === 'bestseller') label = 'BEST SELLER';
+                                        if (cat === 'recommended') label = 'RECOMMENDED';
+
+                                        return (
+                                            <button
+                                                key={cat}
+                                                type="button"
+                                                onClick={() => {
+                                                    setSelectedCategory(cat);
+                                                    setIsCategoryDropdownOpen(false);
+                                                }}
+                                                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-150 text-left cursor-pointer ${isSelected
+                                                        ? 'bg-[#8c5a3c] text-white shadow-2xs font-black'
+                                                        : 'text-[#3d2314] hover:bg-[#FAF0E6] font-bold text-xs'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-2.5">
+                                                    {cat === 'bestseller' ? (
+                                                        <Star className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'fill-white text-white' : 'fill-amber-400 text-amber-400'}`} />
+                                                    ) : cat === 'recommended' ? (
+                                                        <Sparkles className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'fill-white text-white' : 'fill-[#e85a4f] text-[#e85a4f]'}`} />
+                                                    ) : (
+                                                        <Coffee className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`} />
+                                                    )}
+                                                    <span className="text-[11.5px] uppercase tracking-wider">
+                                                        {label}
+                                                    </span>
+                                                </div>
+
+                                                {isSelected && (
+                                                    <div className="w-2 h-2 rounded-full bg-white shrink-0 shadow-xs" />
+                                                )}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -368,10 +444,11 @@ export default function DigitalMenuPage() {
                                     return (
                                         <button
                                             key={cat}
+                                            type="button"
                                             onClick={() => setSelectedCategory(cat)}
                                             className={`flex items-center justify-between px-3.5 lg:px-4 py-2.5 lg:py-3 rounded-2xl transition shrink-0 cursor-pointer text-left w-full ${isSelected
-                                                    ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                                    : 'bg-[#FAF0E6]/50 text-[#3d2314] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
+                                                ? 'bg-[#8c5a3c] text-white shadow-xs'
+                                                : 'bg-[#FAF0E6]/50 text-[#3d2314] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
                                                 }`}
                                         >
                                             <span className="flex items-center gap-2.5 min-w-0 pr-1">
@@ -424,6 +501,7 @@ export default function DigitalMenuPage() {
                                         </p>
                                     </div>
                                     <button
+                                        type="button"
                                         onClick={fetchMenuPageData}
                                         className="px-4 lg:px-5 py-2 lg:py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-bold text-xs lg:text-sm rounded-full transition inline-flex items-center gap-2 cursor-pointer shadow-xs"
                                     >

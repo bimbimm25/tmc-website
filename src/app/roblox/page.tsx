@@ -276,7 +276,7 @@ export default function RobloxPage() {
                                         href={playLink}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="px-4 sm:px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap"
+                                        className="px-2 sm:px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap"
                                     >
                                         <Gamepad2 className="w-3.5 h-3.5" />
                                         <span>{banner?.cta_text || 'PLAY ON ROBLOX'}</span>
@@ -285,7 +285,7 @@ export default function RobloxPage() {
 
                                     <a
                                         href="#map-gallery"
-                                        className="px-4 sm:px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full transition inline-flex items-center gap-1.5 shadow-md cursor-pointer uppercase tracking-wider whitespace-nowrap"
+                                        className="px-3 sm:px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full transition inline-flex items-center gap-1.5 shadow-md cursor-pointer uppercase tracking-wider whitespace-nowrap"
                                     >
                                         <Compass className="w-3.5 h-3.5" />
                                         <span>MAP PREVIEW</span>

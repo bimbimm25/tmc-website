@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import {
     MapPin, Clock, Car, Navigation,
@@ -11,6 +11,7 @@ import {
     CigaretteOff, Dices, Footprints, QrCode, Ban,
     CalendarCheck, Timer, AlertTriangle, ArrowRight, Waves
 } from 'lucide-react';
+
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
@@ -121,11 +122,34 @@ const GALLERY_PAGES = [
     ]
 ];
 
+const ALL_GALLERY_SPOTS = GALLERY_PAGES.flat();
+
 export default function PondokMutiaraPage() {
     // Inisialisasi awal langsung dari cache modul jika ada
     const [banner, setBanner] = useState<BannerItem | null>(() => cachedPondokMutiaraBanner);
     const [isBannerChecked, setIsBannerChecked] = useState<boolean>(() => cachedPondokMutiaraBanner !== null);
     const [currentPageIndex, setCurrentPageIndex] = useState<number>(0);
+
+    // State khusus slider mobile 1 per 1
+    const [mobilePhotoIndex, setMobilePhotoIndex] = useState(0);
+    const mobileGalleryRef = useRef<HTMLDivElement>(null);
+
+    const handleMobileGalleryScroll = () => {
+        if (!mobileGalleryRef.current) return;
+        const container = mobileGalleryRef.current;
+        const index = Math.round(container.scrollLeft / container.clientWidth);
+        setMobilePhotoIndex(index);
+    };
+
+    const scrollToMobilePhoto = (index: number) => {
+        if (!mobileGalleryRef.current) return;
+        const container = mobileGalleryRef.current;
+        container.scrollTo({
+            left: index * container.clientWidth,
+            behavior: 'smooth'
+        });
+        setMobilePhotoIndex(index);
+    };
 
     async function fetchBanner() {
         try {
@@ -180,9 +204,8 @@ export default function PondokMutiaraPage() {
             {/* 1. HERO SECTION (BANNER FULL 1 LAYAR DARI ADMIN)  */}
             {/* ================================================= */}
             <section
-                className={`relative w-full h-screen min-h-dvh flex items-center overflow-hidden transition-colors duration-500 ${
-                    heroImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
-                }`}
+                className={`relative w-full h-screen min-h-dvh flex items-center overflow-hidden transition-colors duration-500 ${heroImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
+                    }`}
             >
                 {/* 1. Background Cover Layer */}
                 <div className="absolute inset-0 z-0">
@@ -197,19 +220,20 @@ export default function PondokMutiaraPage() {
                                 (e.currentTarget as HTMLElement).classList.remove('opacity-0');
                                 (e.currentTarget as HTMLElement).classList.add('opacity-100');
                             }}
-                            className="w-full h-full object-cover object-[60%_center] lg:object-center opacity-0 transition-opacity duration-700 ease-out"
+                            className="w-full h-full object-cover object-[65%_center] lg:object-center opacity-0 transition-opacity duration-700 ease-out"
                         />
                     )}
-                    {/* Gradient Overlay Putih Sebelah Kiri */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent w-full sm:w-2/3 lg:w-1/2 pointer-events-none" />
+
+                    {/* Gradient Overlay Putih Sebelah Kiri:
+                        Di mobile disetel selebar w-[75%] agar pas menaungi teks tanpa menutup foto cafe */}
+                    <div className="absolute inset-0 bg-linear-to-r from-white/95 via-white/70 to-transparent w-100 sm:w-2/3 lg:w-1/2 pointer-events-none" />
                 </div>
 
                 {/* 2. Konten Text Hero */}
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16">
                     <div
-                        className={`max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5 transition-all duration-700 ease-out ${
-                            isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-                        }`}
+                        className={`max-w-[72%] sm:max-w-md lg:max-w-lg space-y-3 sm:space-y-3.5 transition-all duration-700 ease-out ${isBannerChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                            }`}
                     >
 
                         {/* Pill Badge */}
@@ -230,22 +254,22 @@ export default function PondokMutiaraPage() {
                             ) : null}
                         </h1>
 
-                        {/* Subtitle: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
-                        <p className="text-xs sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
+                        {/* Subtitle: Lebar dibatasi otomatis (max-w-[70%] di mobile) agar sejajar dengan batas gradien putih */}
+                        <p className="text-xs sm:text-sm lg:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-[90%] sm:max-w-md">
                             {banner?.subtitle ? (
                                 renderFormattedText(banner.subtitle)
                             ) : isBannerChecked ? (
-                                'Suasana indoor yang luas, sejuk, dan nyaman dengan playground bertingkat, menu makanan berat lezat, serta ruang privat untuk keluarga Anda.'
+                                'Suasana indoor yang luas dan nyaman, dengan pilihan menu yang lezat serta area yang cocok untuk berkumpul bersama teman dan keluarga.'
                             ) : null}
                         </p>
 
                         {/* Tombol Aksi */}
-                        <div className="pt-1.5 flex flex-wrap items-center gap-2.5">
+                        <div className="pt-1.5 flex flex-col sm:flex-row items-start sm:items-center gap-2.5 max-w-xs sm:max-w-none">
                             <a
                                 href={banner?.cta_link || reservationWaUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer"
+                                className="w-full sm:w-auto px-5 py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:bg-[#c33d34] text-white font-black text-[11px] sm:text-xs rounded-full shadow-md shadow-rose-500/20 transition inline-flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap"
                             >
                                 <Phone className="w-3.5 h-3.5 fill-current" />
                                 <span>{banner?.cta_text || 'RESERVASI SEKARANG'}</span>
@@ -253,7 +277,7 @@ export default function PondokMutiaraPage() {
 
                             <a
                                 href="#guidelines"
-                                className="px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] rounded-full transition inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md"
+                                className="w-full sm:w-auto px-5 py-2.5 bg-[#3d2314] hover:bg-[#2a170d] text-white font-black text-[11px] sm:text-xs rounded-full transition inline-flex items-center justify-center gap-1.5 uppercase tracking-wider cursor-pointer shadow-md whitespace-nowrap"
                             >
                                 <Compass className="w-3.5 h-3.5" />
                                 <span>PANDUAN KUNJUNGAN</span>
@@ -512,34 +536,128 @@ export default function PondokMutiaraPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 5. SEE YOU SOON! (SLIDING TRACK PER 4 FOTO)       */}
+            {/* 5. SEE YOU SOON! (1 FOTO DI MOBILE, PER 4 DESKTOP) */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+
+                {/* Header Section */}
                 <div className="flex items-center justify-between border-b border-[#e6ccb2]/60 pb-3">
                     <div className="flex items-center gap-2">
                         <Camera className="w-4 h-4 text-[#8c5a3c]" />
-                        <h2 className="text-base sm:text-lg font-black text-[#3d2314] uppercase tracking-wide">
+                        <h2 className="text-sm sm:text-base lg:text-lg font-black text-[#3d2314] uppercase tracking-wide">
                             SEE YOU SOON AT PONDOK MUTIARA!
                         </h2>
                     </div>
-                    <span className="text-[11px] font-bold text-[#8c5a3c]">
-                        Halaman {currentPageIndex + 1} dari {totalPages}
-                    </span>
+
+                    {/* Counter Halaman */}
+                    <div className="text-[11px] font-bold text-[#8c5a3c] shrink-0">
+                        <span className="sm:hidden">
+                            Foto {mobilePhotoIndex + 1} dari {ALL_GALLERY_SPOTS.length}
+                        </span>
+                        <span className="hidden sm:inline">
+                            Halaman {currentPageIndex + 1} dari {totalPages}
+                        </span>
+                    </div>
                 </div>
 
-                {/* Container Carousel dengan Tombol Panah Melayang */}
-                <div className="relative overflow-hidden">
-
-                    {/* Tombol Panah Kiri (Floating) */}
+                {/* ================================================= */}
+                {/* A. TAMPILAN MOBILE: SLIDER 1 PER 1 (PANAH KE POJOK)*/}
+                {/* ================================================= */}
+                <div className="block sm:hidden relative px-1">
+                    {/* Tombol Panah Kiri Melayang (Dipojokkan ke tepi kiri) */}
                     <button
+                        type="button"
+                        onClick={() => scrollToMobilePhoto(Math.max(0, mobilePhotoIndex - 1))}
+                        disabled={mobilePhotoIndex === 0}
+                        className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#8c5a3c] flex items-center justify-center transition border border-[#e6ccb2] shadow-md disabled:opacity-20 disabled:pointer-events-none active:scale-90 cursor-pointer"
+                        aria-label="Foto Sebelumnya"
+                    >
+                        <ChevronLeft className="w-4 h-4" />
+                    </button>
+
+                    {/* Sliding Track Mobile: Bebas Batang Scrollbar Total */}
+                    <div
+                        ref={mobileGalleryRef}
+                        onScroll={handleMobileGalleryScroll}
+                        className="flex items-stretch overflow-x-auto snap-x snap-mandatory gap-3 pb-1 scroll-smooth scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-0"
+                        style={{
+                            scrollbarWidth: 'none',
+                            msOverflowStyle: 'none',
+                        }}
+                    >
+                        {ALL_GALLERY_SPOTS.map((spot, spotIdx) => (
+                            <div
+                                key={spot.id || spotIdx}
+                                className="w-full shrink-0 snap-center bg-white p-3 rounded-3xl border border-[#e6ccb2]/70 space-y-2.5 text-center shadow-2xs flex flex-col justify-between"
+                            >
+                                {/* Foto Tunggal */}
+                                <div className="w-full aspect-4/3 rounded-2xl overflow-hidden bg-stone-100 border border-[#e6ccb2]/50 shadow-2xs">
+                                    <img
+                                        src={spot.image}
+                                        alt={spot.title}
+                                        loading="lazy"
+                                        className="w-full h-full object-cover object-center"
+                                    />
+                                </div>
+
+                                {/* Deskripsi Foto */}
+                                <div className="space-y-0.5 pb-1">
+                                    <h4 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">
+                                        {spot.title}
+                                    </h4>
+                                    {spot.desc && (
+                                        <p className="text-[11px] text-[#6c584c] font-semibold leading-relaxed">
+                                            {spot.desc}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Tombol Panah Kanan Melayang (Dipojokkan ke tepi kanan) */}
+                    <button
+                        type="button"
+                        onClick={() => scrollToMobilePhoto(Math.min(ALL_GALLERY_SPOTS.length - 1, mobilePhotoIndex + 1))}
+                        disabled={mobilePhotoIndex === ALL_GALLERY_SPOTS.length - 1}
+                        className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#8c5a3c] flex items-center justify-center transition border border-[#e6ccb2] shadow-md disabled:opacity-20 disabled:pointer-events-none active:scale-90 cursor-pointer"
+                        aria-label="Foto Berikutnya"
+                    >
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+
+                    {/* Dot Pagination Mobile */}
+                    <div className="flex items-center justify-center gap-1.5 pt-3">
+                        {ALL_GALLERY_SPOTS.map((_, idx) => (
+                            <button
+                                key={idx}
+                                type="button"
+                                onClick={() => scrollToMobilePhoto(idx)}
+                                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${mobilePhotoIndex === idx
+                                        ? 'w-5 bg-[#8c5a3c]'
+                                        : 'w-1.5 bg-[#e6ccb2] hover:bg-[#8c5a3c]/50'
+                                    }`}
+                                aria-label={`Ke foto ${idx + 1}`}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {/* ================================================= */}
+                {/* B. TAMPILAN DESKTOP: CAROUSEL PER 4 FOTO          */}
+                {/* ================================================= */}
+                <div className="hidden sm:block relative overflow-hidden">
+                    {/* Tombol Panah Kiri Desktop (Merapat ke Pojok) */}
+                    <button
+                        type="button"
                         onClick={prevSlide}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/95 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition border border-[#e6ccb2] shadow-md cursor-pointer active:scale-90"
+                        className="absolute left-1.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/95 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition border border-[#e6ccb2] shadow-md cursor-pointer active:scale-90"
                         aria-label="Previous 4 Photos"
                     >
                         <ChevronLeft className="w-5 h-5" />
                     </button>
 
-                    {/* Sliding Track Viewport */}
+                    {/* Sliding Track Desktop */}
                     <div
                         className="flex transition-transform duration-500 ease-in-out"
                         style={{ transform: `translateX(-${currentPageIndex * 100}%)` }}
@@ -547,7 +665,7 @@ export default function PondokMutiaraPage() {
                         {GALLERY_PAGES.map((pageItems, pageIdx) => (
                             <div
                                 key={pageIdx}
-                                className="w-full shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 px-0.5"
+                                className="w-full shrink-0 grid grid-cols-2 lg:grid-cols-4 gap-3.5 px-0.5"
                             >
                                 {pageItems.map((spot) => (
                                     <div
@@ -577,30 +695,33 @@ export default function PondokMutiaraPage() {
                         ))}
                     </div>
 
-                    {/* Tombol Panah Kanan (Floating) */}
+                    {/* Tombol Panah Kanan Desktop (Merapat ke Pojok) */}
                     <button
+                        type="button"
                         onClick={nextSlide}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/95 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition border border-[#e6ccb2] shadow-md cursor-pointer active:scale-90"
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/95 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition border border-[#e6ccb2] shadow-md cursor-pointer active:scale-90"
                         aria-label="Next 4 Photos"
                     >
                         <ChevronRight className="w-5 h-5" />
                     </button>
+
+                    {/* Indikator Dot Pagination Desktop */}
+                    <div className="flex items-center justify-center gap-2 pt-3">
+                        {GALLERY_PAGES.map((_, idx) => (
+                            <button
+                                key={idx}
+                                type="button"
+                                onClick={() => setCurrentPageIndex(idx)}
+                                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${currentPageIndex === idx
+                                        ? 'w-6 bg-[#8c5a3c]'
+                                        : 'w-2 bg-[#e6ccb2] hover:bg-[#8c5a3c]/60'
+                                    }`}
+                                aria-label={`Go to slide ${idx + 1}`}
+                            />
+                        ))}
+                    </div>
                 </div>
 
-                {/* Indikator Dot Pagination */}
-                <div className="flex items-center justify-center gap-2 pt-1">
-                    {GALLERY_PAGES.map((_, idx) => (
-                        <button
-                            key={idx}
-                            onClick={() => setCurrentPageIndex(idx)}
-                            className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${currentPageIndex === idx
-                                ? 'w-6 bg-[#8c5a3c]'
-                                : 'w-2 bg-[#e6ccb2] hover:bg-[#8c5a3c]/60'
-                                }`}
-                            aria-label={`Go to slide ${idx + 1}`}
-                        />
-                    ))}
-                </div>
             </section>
 
             {/* ================================================= */}
@@ -672,9 +793,6 @@ export default function PondokMutiaraPage() {
                                 HOUSE RULES CABANG PONDOK MUTIARA
                             </h2>
                         </div>
-                        <span className="text-[10px] font-black text-[#8c5a3c] uppercase">
-                            DEMI KENYAMANAN BERSAMA
-                        </span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

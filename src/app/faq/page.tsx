@@ -6,7 +6,7 @@ import {
     Search, ChevronDown, ChevronUp, MessageCircle,
     Coffee, Utensils, Calendar, Sparkles, Building2,
     ShoppingBag, MapPin, Clock, ArrowRight, HelpCircle,
-    Mail, X, Phone
+    Mail, X, Phone, SlidersHorizontal
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
@@ -378,9 +378,13 @@ export default function FAQPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [expandedIds, setExpandedIds] = useState<string[]>(['gen-1']);
 
+
     // Inisialisasi awal langsung dari cache modul jika ada
     const [banner, setBanner] = useState<BannerItem | null>(() => cachedFaqBanner);
     const [isBannerChecked, setIsBannerChecked] = useState<boolean>(() => cachedFaqBanner !== null);
+
+    //dropdown
+    const [isFaqCategoryDropdownOpen, setIsFaqCategoryDropdownOpen] = useState(false);
 
     useEffect(() => {
         async function fetchBanner() {
@@ -516,14 +520,123 @@ export default function FAQPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 2. CATEGORY NAVIGATION HORIZONTAL TABS            */}
+            {/* 2. CATEGORY NAVIGATION (DROPDOWN MOBILE & GRID DESKTOP) */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-0">
-                <div className="bg-white p-3.5 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                    <div className="flex items-stretch gap-3 min-w-max lg:min-w-0 lg:grid lg:grid-cols-6">
+
+                {/* A. TAMPILAN KHUSUS MOBILE: ELEGANT ACCORDION DROPDOWN */}
+                <div className="block lg:hidden relative z-20">
+                    <div className="bg-white p-3.5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-2">
+                        {/* Header Mini Keterangan */}
+                        <div className="flex items-center justify-between px-1.5 pt-0.5">
+                            <span className="text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider flex items-center gap-1.5">
+                                <SlidersHorizontal className="w-3.5 h-3.5" />
+                                Kategori FAQ
+                            </span>
+                            <span className="text-[10px] font-bold text-[#6c584c]">
+                                {CATEGORIES.length} Topik
+                            </span>
+                        </div>
+
+                        {/* Tombol Pemicu Dropdown Utama */}
+                        {(() => {
+                            const activeCat = CATEGORIES.find(c => c.id === selectedCategory) || CATEGORIES[0];
+                            const ActiveIcon = activeCat.icon;
+
+                            return (
+                                <button
+                                    type="button"
+                                    onClick={() => setIsFaqCategoryDropdownOpen(prev => !prev)}
+                                    className="w-full bg-[#FAF0E6]/70 hover:bg-[#FAF0E6] border border-[#e6ccb2] rounded-2xl px-3.5 py-2.5 flex items-center justify-between transition-all duration-200 shadow-2xs cursor-pointer text-left active:scale-[0.99]"
+                                >
+                                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                                        <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs shrink-0 border border-[#e6ccb2]/60">
+                                            <ActiveIcon className="w-4 h-4" />
+                                        </div>
+                                        <div className="truncate">
+                                            <span className="text-[9.5px] uppercase font-bold text-[#8c5a3c] block leading-none">
+                                                Topik Pilihan:
+                                            </span>
+                                            <span className="text-xs sm:text-sm font-black text-[#3d2314] uppercase tracking-wide block mt-0.5 truncate">
+                                                {activeCat.name}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Indikator Panah Berputar Halus */}
+                                    <div className={`w-6 h-6 rounded-full bg-white/80 border border-[#e6ccb2]/60 flex items-center justify-center text-[#8c5a3c] transition-transform duration-300 shrink-0 ${isFaqCategoryDropdownOpen ? 'rotate-180 bg-[#8c5a3c] text-white' : ''
+                                        }`}>
+                                        <ChevronDown className="w-3.5 h-3.5" />
+                                    </div>
+                                </button>
+                            );
+                        })()}
+
+                        {/* List Opsi Dropdown Beranimasi Smooth */}
+                        <div
+                            className={`grid transition-all duration-300 ease-in-out ${isFaqCategoryDropdownOpen
+                                ? 'grid-rows-[1fr] opacity-100 mt-2'
+                                : 'grid-rows-[0fr] opacity-0 mt-0 pointer-events-none'
+                                }`}
+                        >
+                            <div className="overflow-hidden">
+                                <div className="bg-[#FAF0E6]/30 rounded-2xl border border-[#e6ccb2]/70 p-1.5 space-y-1 max-h-64 overflow-y-auto overscroll-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                                    {CATEGORIES.map((cat) => {
+                                        const IconComponent = cat.icon;
+                                        const isActive = selectedCategory === cat.id && searchQuery.trim() === '';
+
+                                        return (
+                                            <button
+                                                key={cat.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    setSelectedCategory(cat.id);
+                                                    setSearchQuery('');
+                                                    setIsFaqCategoryDropdownOpen(false);
+                                                }}
+                                                className={`w-full flex items-center justify-between p-2.5 rounded-xl transition-all text-left cursor-pointer ${isActive
+                                                    ? 'bg-[#8c5a3c] text-white shadow-2xs'
+                                                    : 'hover:bg-white text-[#3d2314]'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                                                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isActive
+                                                        ? 'bg-white/20 text-white'
+                                                        : 'bg-white text-[#8c5a3c] border border-[#e6ccb2]/60'
+                                                        }`}>
+                                                        <IconComponent className="w-3.5 h-3.5" />
+                                                    </div>
+                                                    <div className="truncate">
+                                                        <span className={`text-[11.5px] font-black uppercase tracking-wider block truncate ${isActive ? 'text-white' : 'text-[#3d2314]'
+                                                            }`}>
+                                                            {cat.name}
+                                                        </span>
+                                                        <span className={`text-[10px] font-semibold block leading-tight truncate ${isActive ? 'text-white/80' : 'text-[#6c584c]'
+                                                            }`}>
+                                                            {cat.desc}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                {isActive && (
+                                                    <div className="w-2 h-2 rounded-full bg-white shrink-0 shadow-xs" />
+                                                )}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* B. TAMPILAN KHUSUS DESKTOP (TETAP HORIZONTAL GRID RAPI SEPERTI SEMULA) */}
+                <div className="hidden lg:block bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
+                    <div className="grid grid-cols-6 gap-3">
                         {CATEGORIES.map((cat) => {
                             const IconComponent = cat.icon;
                             const isActive = selectedCategory === cat.id && searchQuery.trim() === '';
+
                             return (
                                 <button
                                     key={cat.id}
@@ -532,29 +645,28 @@ export default function FAQPage() {
                                         setSelectedCategory(cat.id);
                                         setSearchQuery('');
                                     }}
-                                    className={`p-3.5 sm:p-4 rounded-2xl transition flex flex-col items-center justify-center text-center space-y-2 cursor-pointer w-36 sm:w-40 lg:w-full shrink-0 ${isActive
+                                    className={`p-4 rounded-2xl transition flex flex-col items-center justify-center text-center space-y-2 cursor-pointer w-full ${isActive
                                         ? 'bg-[#FAF0E6] border border-[#e6ccb2] shadow-2xs'
                                         : 'hover:bg-[#FAF0E6]/50 border border-transparent'
                                         }`}
                                 >
                                     <div
-                                        className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-colors shadow-2xs ${isActive
+                                        className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors shadow-2xs ${isActive
                                             ? 'bg-[#8c5a3c] text-white'
                                             : 'bg-[#FAF0E6] text-[#8c5a3c]'
                                             }`}
                                     >
-                                        <IconComponent className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                                        <IconComponent className="w-4.5 h-4.5" />
                                     </div>
 
                                     <div className="space-y-0.5 w-full px-1">
                                         <div
-                                            className={`text-xs sm:text-[13px] font-black tracking-wider uppercase leading-tight ${isActive ? 'text-[#8c5a3c]' : 'text-[#3d2314]'
+                                            className={`text-[13px] font-black tracking-wider uppercase leading-tight ${isActive ? 'text-[#8c5a3c]' : 'text-[#3d2314]'
                                                 }`}
                                         >
                                             {cat.name}
                                         </div>
-                                        {/* Deskripsi Kategori: Patokan text-xs sm:text-sm */}
-                                        <div className="text-xs sm:text-[12.5px] text-[#6c584c] font-semibold leading-relaxed break-words">
+                                        <div className="text-[12px] text-[#6c584c] font-semibold leading-relaxed break-words">
                                             {cat.desc}
                                         </div>
                                     </div>
@@ -563,6 +675,7 @@ export default function FAQPage() {
                         })}
                     </div>
                 </div>
+
             </section>
 
             {/* ================================================= */}
@@ -760,8 +873,8 @@ export default function FAQPage() {
                             </div>
                         </div>
 
-                        {/* CARD 3: JAM BUKA CAFE */}
-                        <div className="bg-white p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
+                        {/* {jam buka operasional} */}
+                        <div className="bg-white p-4 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4">
                             <div className="flex items-center gap-2 border-b border-[#e6ccb2]/50 pb-3">
                                 <Clock className="w-4 h-4 text-[#8c5a3c]" />
                                 <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wider">
@@ -769,36 +882,36 @@ export default function FAQPage() {
                                 </h3>
                             </div>
 
-                            <div className="space-y-3.5">
+                            <div className="space-y-3">
                                 {/* Cabang 1: Heavenland Park */}
                                 <div className="bg-[#FAF0E6]/50 p-3.5 rounded-2xl border border-[#e6ccb2]/60 space-y-2">
                                     <div className="flex items-center justify-between gap-2">
-                                        <span className="text-[11px] sm:text-xs font-black text-[#e85a4f] uppercase tracking-wider">
+                                        <span className="text-[11px] sm:text-xs font-black text-[#e85a4f] uppercase tracking-wider whitespace-nowrap">
                                             HEAVENLAND PARK
                                         </span>
-                                        <span className="text-[10px] sm:text-[10.5px] font-black uppercase tracking-wide text-red-700 bg-red-100 border border-red-300 px-2 py-0.5 rounded-full shadow-2xs">
-                                            Sedang Direnovasi
+                                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-tight text-red-700 bg-red-100/90 border border-red-300 px-2.5 py-0.5 rounded-full shadow-2xs whitespace-nowrap shrink-0">
+                                            Sedang Renovasi
                                         </span>
                                     </div>
-                                    <div className="flex items-center justify-between text-[#3d2314]">
-                                        <span className="text-xs sm:text-sm text-[#6c584c] font-semibold">Saat ini belum buka</span>
-                                        <span className="font-black text-xs sm:text-sm">Pantau info terbaru</span>
+                                    <div className="flex items-center justify-between gap-2 text-[#3d2314]">
+                                        <span className="text-xs sm:text-sm text-[#6c584c] font-semibold whitespace-nowrap">Saat ini belum buka</span>
+                                        <span className="font-black text-xs sm:text-sm whitespace-nowrap">Pantau info terbaru</span>
                                     </div>
                                 </div>
 
                                 {/* Cabang 2: Pondok Mutiara */}
                                 <div className="bg-[#FAF0E6]/50 p-3.5 rounded-2xl border border-[#e6ccb2]/60 space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-[11px] sm:text-xs font-black text-[#8c5a3c] uppercase tracking-wider">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <span className="text-[11px] sm:text-xs font-black text-[#8c5a3c] uppercase tracking-wider whitespace-nowrap">
                                             PONDOK MUTIARA
                                         </span>
-                                        <span className="text-[10px] sm:text-[10.5px] font-black uppercase tracking-wide text-rose-600 bg-rose-50 border border-rose-200/80 px-2 py-0.5 rounded-full shadow-2xs">
+                                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-tight text-rose-600 bg-rose-50 border border-rose-200/80 px-2.5 py-0.5 rounded-full shadow-2xs whitespace-nowrap shrink-0">
                                             Senin Libur
                                         </span>
                                     </div>
-                                    <div className="flex items-center justify-between text-[#3d2314]">
-                                        <span className="text-xs sm:text-sm text-[#6c584c] font-semibold">Selasa – Minggu</span>
-                                        <span className="font-black text-xs sm:text-sm">12.00 – 22.00 WIB</span>
+                                    <div className="flex items-center justify-between gap-2 text-[#3d2314]">
+                                        <span className="text-xs sm:text-sm text-[#6c584c] font-semibold whitespace-nowrap">Selasa – Minggu</span>
+                                        <span className="font-black text-xs sm:text-sm whitespace-nowrap">12.00 – 22.00 WIB</span>
                                     </div>
                                 </div>
                             </div>

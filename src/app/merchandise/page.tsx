@@ -327,38 +327,75 @@ export default function MerchandisePage() {
             {/* 2. MAIN MERCHANDISE SECTION                       */}
             {/* ================================================= */}
             <section id="catalog" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-14 pt-20 sm:pt-24 lg:pt-6">
-                <div className="bg-white p-4 sm:p-8 lg:p-10 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-6 lg:space-y-8">
+                <div className="bg-white p-4 sm:p-8 lg:p-10 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-5 lg:space-y-8">
+
+                    {/* SEARCH INPUT BAR */}
+                    <div className="relative">
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Cari produk merchandise..."
+                            className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-2xl pl-10 lg:pl-12 pr-9 lg:pr-11 py-2.5 lg:py-3.5 text-xs lg:text-sm text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
+                        />
+                        <Search className="w-4 h-4 lg:w-5 lg:h-5 text-[#8c5a3c] absolute left-3.5 lg:left-4 top-3 lg:top-3.5" />
+                        {searchQuery && (
+                            <button
+                                type="button"
+                                onClick={() => setSearchQuery('')}
+                                className="absolute right-3 lg:right-4 top-3 lg:top-3.5 text-[#8c5a3c] hover:text-[#3d2314] cursor-pointer"
+                            >
+                                <X className="w-4 h-4 lg:w-5 lg:h-5" />
+                            </button>
+                        )}
+                    </div>
+
+                    {/* KATEGORI VERSI MOBILE: Horizontal Scroll Pill Chips (Bersih Tanpa Scrollbar Menabrak) */}
+                    <div className="block lg:hidden">
+                        <div className="flex items-center gap-2 overflow-x-auto pt-1 pb-3 scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                            {availableCategories.map((cat) => {
+                                const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
+                                const isBestSellerOption = cat === 'best_seller';
+                                const label = cat === 'all' ? 'All Products' : isBestSellerOption ? 'Best Seller' : cat;
+
+                                return (
+                                    <button
+                                        key={cat}
+                                        type="button"
+                                        onClick={() => {
+                                            setSelectedCategory(cat);
+                                            setDisplayCount(8);
+                                        }}
+                                        className={`px-3.5 py-2 rounded-2xl text-[11px] font-black uppercase tracking-wider transition shrink-0 cursor-pointer flex items-center gap-1.5 whitespace-nowrap shadow-2xs ${isSelected
+                                            ? isBestSellerOption
+                                                ? 'bg-[#e85a4f] text-white shadow-xs'
+                                                : 'bg-[#8c5a3c] text-white shadow-xs'
+                                            : isBestSellerOption
+                                                ? 'bg-rose-50 text-rose-700 border border-rose-200/80 hover:bg-rose-100'
+                                                : 'bg-[#FAF0E6]/80 text-[#3d2314] border border-[#e6ccb2]/80 hover:bg-[#FAF0E6]'
+                                            }`}
+                                    >
+                                        {isBestSellerOption ? (
+                                            <Flame className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-white' : 'text-rose-600'}`} />
+                                        ) : (
+                                            <BearPawIcon className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`} />
+                                        )}
+                                        <span>{label}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
-                        {/* SIDEBAR FILTER (KIRI) */}
-                        <aside className="lg:col-span-3 space-y-4 lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:flex lg:flex-col lg:min-h-0">
-                            {/* Search Box */}
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Cari produk merchandise..."
-                                    className="w-full bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-2xl pl-10 lg:pl-12 pr-9 lg:pr-11 py-2.5 lg:py-3.5 text-xs lg:text-sm text-[#3d2314] font-semibold focus:outline-none focus:bg-white focus:border-[#8c5a3c] transition placeholder:text-[#a08a7b]"
-                                />
-                                <Search className="w-4 h-4 lg:w-5 lg:h-5 text-[#8c5a3c] absolute left-3.5 lg:left-4 top-3 lg:top-3.5" />
-                                {searchQuery && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setSearchQuery('')}
-                                        className="absolute right-3 lg:right-4 top-3 lg:top-3.5 text-[#8c5a3c] hover:text-[#3d2314] cursor-pointer"
-                                    >
-                                        <X className="w-4 h-4 lg:w-5 lg:h-5" />
-                                    </button>
-                                )}
-                            </div>
-
+                        {/* SIDEBAR FILTER (KIRI - HANYA DESKTOP) */}
+                        <aside className="hidden lg:flex lg:col-span-3 lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:flex-col lg:min-h-0 space-y-4">
                             <div className="text-xs lg:text-sm font-black text-[#3d2314] uppercase tracking-wider px-1 flex items-center gap-2 border-b border-[#e6ccb2]/60 pb-2.5">
                                 <BearPawIcon className="w-4 h-4 text-[#8c5a3c]" />
                                 <span>Kategori Merchandise</span>
                             </div>
 
-                            {/* Navigasi Kategori */}
                             <div className="bg-[#FAF0E6]/40 p-2 sm:p-2.5 rounded-2xl border border-[#e6ccb2]/60 lg:flex-1 lg:min-h-0 lg:flex lg:flex-col">
                                 <nav
                                     onWheel={(e) => e.stopPropagation()}
@@ -367,6 +404,7 @@ export default function MerchandisePage() {
                                     {availableCategories.map((cat) => {
                                         const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
                                         const isBestSellerOption = cat === 'best_seller';
+                                        const label = cat === 'all' ? 'All Products' : isBestSellerOption ? 'Best Seller' : cat;
 
                                         return (
                                             <button
@@ -392,11 +430,7 @@ export default function MerchandisePage() {
                                                         <BearPawIcon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`} />
                                                     )}
                                                     <span className="text-[10.5px] lg:text-xs xl:text-[13px] font-black uppercase tracking-tight leading-none truncate whitespace-nowrap">
-                                                        {cat === 'all'
-                                                            ? 'All Products'
-                                                            : isBestSellerOption
-                                                                ? 'Best Seller'
-                                                                : cat}
+                                                        {label}
                                                     </span>
                                                 </span>
 
@@ -410,7 +444,7 @@ export default function MerchandisePage() {
                             </div>
 
                             {/* Promo Card Chat WA */}
-                            <div className="hidden lg:block bg-[#fdf3f1] p-4.5 rounded-2xl border border-rose-100 space-y-2.5 text-center mt-auto">
+                            <div className="bg-[#fdf3f1] p-4.5 rounded-2xl border border-rose-100 space-y-2.5 text-center mt-auto">
                                 <h4 className="font-black text-xs sm:text-sm text-[#3d2314] leading-snug">
                                     Can&apos;t find what you&apos;re looking for?
                                 </h4>
@@ -430,35 +464,35 @@ export default function MerchandisePage() {
                         </aside>
 
                         {/* PRODUCT GRID & SORTING (KANAN) */}
-                        <main className="lg:col-span-9 space-y-6">
+                        <main className="lg:col-span-9 space-y-5 lg:space-y-6">
 
-                            {/* Header Sort & Counter */}
-                            <div className="flex items-center justify-between border-b border-[#e6ccb2]/60 pb-3">
-                                <div className="flex items-center gap-2.5 text-base lg:text-lg xl:text-xl font-black text-[#3d2314] uppercase tracking-wide">
-                                    <BearPawIcon className="w-4.5 h-4.5 lg:w-5 lg:h-5 text-[#8c5a3c]" />
-                                    <h2>{categoryTitle}</h2>
-                                    <span className="text-xs lg:text-sm font-semibold text-[#6c584c] lowercase">
+                            {/* Header Sort & Counter: Rapi & Fleksibel di Mobile */}
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-[#e6ccb2]/60 pb-3">
+                                <div className="flex items-center gap-2 text-sm sm:text-base lg:text-lg font-black text-[#3d2314] uppercase tracking-wide">
+                                    <BearPawIcon className="w-4 h-4 lg:w-5 lg:h-5 text-[#8c5a3c] shrink-0" />
+                                    <h2 className="whitespace-nowrap">{categoryTitle}</h2>
+                                    <span className="text-xs font-semibold text-[#6c584c] lowercase shrink-0">
                                         ({filteredAndSortedItems.length} item)
                                     </span>
                                 </div>
 
-                                <div className="flex items-center gap-2">
-                                    <label htmlFor="sortBy" className="text-xs lg:text-sm font-bold text-[#6c584c] hidden sm:block">
+                                <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
+                                    <label htmlFor="sortBy" className="text-xs font-bold text-[#6c584c] sm:hidden">
                                         Urutkan:
                                     </label>
-                                    <div className="relative">
+                                    <div className="relative flex-1 sm:flex-none">
                                         <select
                                             id="sortBy"
                                             value={sortBy}
                                             onChange={(e) => setSortBy(e.target.value)}
-                                            className="bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-xl px-3.5 py-2 text-xs lg:text-sm text-[#3d2314] font-black focus:outline-none appearance-none pr-8 cursor-pointer"
+                                            className="w-full sm:w-auto bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-xl px-3 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs lg:text-sm text-[#3d2314] font-black focus:outline-none appearance-none pr-8 cursor-pointer"
                                         >
                                             <option value="featured">Paling Populer (Featured)</option>
                                             <option value="newest">Produk Terbaru</option>
                                             <option value="price-low">Harga: Termurah</option>
                                             <option value="price-high">Harga: Tertinggi</option>
                                         </select>
-                                        <ChevronDown className="w-4 h-4 text-[#8c5a3c] absolute right-2.5 top-3 pointer-events-none" />
+                                        <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8c5a3c] absolute right-2.5 top-2.5 sm:top-3 pointer-events-none" />
                                     </div>
                                 </div>
                             </div>
@@ -511,9 +545,9 @@ export default function MerchandisePage() {
                                 </div>
                             )}
 
-                            {/* Grid 4 Kolom Produk */}
+                            {/* Grid Produk: Gap lebih presisi untuk layar HP */}
                             {!isLoading && !isError && displayedItems.length > 0 && (
-                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4 lg:gap-5">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
                                     {displayedItems.map((item) => (
                                         <MerchandiseProductCard
                                             key={item.id}
@@ -605,66 +639,81 @@ export default function MerchandisePage() {
             {/* 4. ORDER / WHATSAPP CTA SECTION                   */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="relative w-full aspect-16/5 sm:aspect-16/4 lg:aspect-1920/420 rounded-2xl sm:rounded-[2.5rem] overflow-hidden shadow-md border border-[#e6ccb2]/60">
+                <div className="relative w-full rounded-2xl sm:rounded-[2.5rem] overflow-hidden shadow-md border border-[#e6ccb2]/60 sm:aspect-16/4 lg:aspect-1920/420 flex items-center">
+
+                    {/* 1. Background Image Banner: Di-zoom pas agar bagian bawah tertutup penuh */}
                     <img
                         src="/img/banner-section-merch.png"
                         alt="To Meet Cafe Merchandise Banner"
-                        className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none scale-[1.05]"
-                        style={{ objectPosition: 'center 60%' }}
+                        className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none scale-y-160 scale-x-150 sm:scale-100"
+                        style={{ objectPosition: 'center 55%' }}
                     />
 
-                    <div className="relative z-10 w-full h-full flex items-center justify-between px-4 sm:px-8 lg:px-12">
-                        <div className="max-w-[55%] sm:max-w-md lg:max-w-xl space-y-1 sm:space-y-2 text-left">
-                            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-[#ffd6a5] text-[8px] sm:text-[10px] font-black tracking-widest uppercase border border-white/20">
+                    {/* 2. Konten Teks & Polaroid */}
+                    <div className="relative z-10 w-full flex items-center justify-between px-3.5 sm:px-8 lg:px-12 py-3.5 sm:py-0 gap-2 sm:gap-4">
+
+                        {/* Sisi Kiri: Teks & Tombol */}
+                        <div className="max-w-[56%] sm:max-w-md lg:max-w-xl space-y-1 sm:space-y-2 text-left">
+
+                            {/* Pill Badge */}
+                            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-[#ffd6a5] text-[9.5px] sm:text-xs font-black tracking-widest uppercase border border-white/20">
                                 <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-300" />
                                 <span>ORDER DIRECTLY</span>
                             </div>
 
+                            {/* Heading */}
                             <h2 className="text-xs sm:text-xl lg:text-3xl font-black text-white tracking-tight uppercase leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                                 Want to order or ask more?
                             </h2>
 
-                            <p className="text-[8.5px] sm:text-xs lg:text-sm text-stone-100 font-semibold leading-tight drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)] line-clamp-1 sm:line-clamp-2">
+                            {/* Deskripsi */}
+                            <p className="text-[10px] sm:text-sm text-stone-100 font-semibold leading-tight drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)] line-clamp-2">
                                 Chat with us on WhatsApp to check stock and place your order!
                             </p>
 
+                            {/* Tombol WhatsApp */}
                             <div className="pt-0.5 sm:pt-1">
                                 <a
                                     href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20order%20merchandise"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="px-3 sm:px-5 lg:px-6 py-1 sm:py-2 lg:py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-[8px] sm:text-xs rounded-full shadow-lg shadow-black/40 transition duration-200 inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer border border-white/20"
+                                    className="px-3 sm:px-5 lg:px-6 py-1.5 sm:py-2 lg:py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full shadow-lg shadow-black/40 transition duration-200 inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer border border-white/20 whitespace-nowrap"
                                 >
                                     <span>CHAT VIA WHATSAPP</span>
-                                    <Phone className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 fill-current" />
+                                    <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />
                                 </a>
                             </div>
                         </div>
 
-                        {/* Sisi Kanan: 2 Foto Polaroid */}
-                        <div className="flex items-center gap-2 sm:gap-3.5 lg:gap-4 shrink-0">
-                            <div className="w-16 sm:w-24 lg:w-32 aspect-3/4 bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform -rotate-3 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border sm:border-2 border-white">
+                        {/* Sisi Kanan: 2 Foto Polaroid (Pas di Dalam Frame & Tidak Terpotong) */}
+                        <div className="flex items-center gap-1.5 sm:gap-3.5 lg:gap-4 shrink-0 pr-0.5 sm:pr-0">
+
+                            {/* Polaroid 1 */}
+                            <div className="w-[62px] sm:w-24 lg:w-32 aspect-3/4 bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform -rotate-2 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border border-white">
                                 <img
                                     src="/img/mc-1.png"
                                     alt="Merchandise 1"
                                     className="w-full flex-1 object-cover rounded-lg sm:rounded-xl"
                                 />
-                                <span className="text-[6.5px] sm:text-[8.5px] lg:text-[10px] font-black uppercase tracking-wider text-[#8c5a3c] pt-0.5">
+                                <span className="text-[7.5px] sm:text-[9.5px] lg:text-[10px] font-black uppercase tracking-wider text-[#8c5a3c] pt-0.5 whitespace-nowrap">
                                     For You
                                 </span>
                             </div>
 
-                            <div className="w-16 sm:w-24 lg:w-32 aspect-3/4 bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform rotate-3 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border sm:border-2 border-white">
+                            {/* Polaroid 2 */}
+                            <div className="w-[62px] sm:w-24 lg:w-32 aspect-3/4 bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform rotate-2 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border border-white">
                                 <img
                                     src="/img/mc-2.png"
                                     alt="Merchandise 2"
                                     className="w-full flex-1 object-cover rounded-lg sm:rounded-xl"
                                 />
-                                <span className="text-[6.5px] sm:text-[8.5px] lg:text-[10px] font-black uppercase tracking-wider text-[#8c5a3c] pt-0.5">
-                                    For Your Friend
+                                <span className="text-[7.5px] sm:text-[9.5px] lg:text-[10px] font-black uppercase tracking-wider text-[#8c5a3c] pt-0.5 whitespace-nowrap">
+                                    For Friend
                                 </span>
                             </div>
+
                         </div>
+
                     </div>
                 </div>
             </section>
@@ -794,11 +843,11 @@ function MerchandiseProductCard({ item, onSelect }: MerchandiseProductCardProps)
     return (
         <div
             onClick={() => onSelect && onSelect(item)}
-            className="group bg-[#FAF0E6]/40 hover:bg-[#FAF0E6]/60 rounded-3xl border border-[#e6ccb2]/80 hover:border-[#8c5a3c]/60 shadow-2xs hover:shadow-xs transition-all duration-200 p-3 sm:p-3.5 flex flex-col justify-between cursor-pointer space-y-3 overflow-hidden"
+            className="group bg-[#FAF0E6]/40 hover:bg-[#FAF0E6]/60 rounded-3xl border border-[#e6ccb2]/80 hover:border-[#8c5a3c]/60 shadow-2xs hover:shadow-xs transition-all duration-200 p-2.5 sm:p-3.5 flex flex-col justify-between cursor-pointer space-y-2.5 sm:space-y-3 overflow-hidden"
         >
-            <div className="space-y-2.5">
-                {/* 1. Foto Merchandise */}
-                <div className="relative aspect-4/3 sm:aspect-square w-full rounded-2xl overflow-hidden bg-white border border-[#e6ccb2]/50 shadow-2xs">
+            <div className="space-y-2 sm:space-y-2.5">
+                {/* 1. Wadah Foto Merchandise: Persegi Penuh (aspect-square 1:1) */}
+                <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-white border border-[#e6ccb2]/50 shadow-2xs">
                     <img
                         src={imageUrl}
                         alt={item.name}
@@ -807,8 +856,8 @@ function MerchandiseProductCard({ item, onSelect }: MerchandiseProductCardProps)
                     />
 
                     {Boolean(item.is_bestseller ?? item.is_best_seller) && (
-                        <div className="absolute top-2 left-2">
-                            <span className="px-2 py-0.5 rounded-full bg-[#e85a4f] text-white text-[8px] sm:text-[8.5px] font-black uppercase tracking-wider shadow-2xs">
+                        <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2">
+                            <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-[#e85a4f] text-white text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-wider shadow-2xs">
                                 BEST SELLER
                             </span>
                         </div>
@@ -816,7 +865,7 @@ function MerchandiseProductCard({ item, onSelect }: MerchandiseProductCardProps)
 
                     {!isAvailable && (
                         <div className="absolute inset-0 bg-black/45 backdrop-blur-[1px] flex items-center justify-center">
-                            <span className="px-2.5 py-1 bg-white/95 text-[#e85a4f] font-black text-[10px] uppercase tracking-wider rounded-full shadow-md">
+                            <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-white/95 text-[#e85a4f] font-black text-[9px] sm:text-[10px] uppercase tracking-wider rounded-full shadow-md">
                                 HABIS
                             </span>
                         </div>
@@ -824,35 +873,35 @@ function MerchandiseProductCard({ item, onSelect }: MerchandiseProductCardProps)
                 </div>
 
                 {/* 2. Kategori & Badge Outlet */}
-                <div className="flex items-center justify-between gap-1.5 pt-0.5">
-                    <span className="text-[10px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider truncate">
+                <div className="flex items-center justify-between gap-1 pt-0.5">
+                    <span className="text-[9.5px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider truncate">
                         {categoryName}
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-white text-[#8c5a3c] text-[8.5px] sm:text-[9px] font-bold tracking-tight border border-[#e6ccb2]/80 shrink-0 whitespace-nowrap">
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-white text-[#8c5a3c] text-[8px] sm:text-[9px] font-bold tracking-tight border border-[#e6ccb2]/80 shrink-0 whitespace-nowrap">
                         To Meet
                     </span>
                 </div>
 
                 {/* 3. Nama & Deskripsi */}
-                <div className="space-y-1">
+                <div className="space-y-0.5 sm:space-y-1">
                     <h3 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight leading-snug line-clamp-1 uppercase group-hover:text-[#8c5a3c] transition-colors">
                         {item.name}
                     </h3>
-                    <p className="text-[11px] sm:text-xs text-[#6c584c] font-medium leading-relaxed line-clamp-2 min-h-8">
+                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-medium leading-relaxed line-clamp-2 min-h-7 sm:min-h-8">
                         {item.description || '-'}
                     </p>
                 </div>
             </div>
 
-            {/* 4. Footer */}
-            <div className="pt-2 flex items-center justify-between gap-1.5 border-t border-[#e6ccb2]/40 min-w-0">
+            {/* 4. Footer: Info Harga & Status Stok */}
+            <div className="pt-2 flex items-center justify-between gap-1 border-t border-[#e6ccb2]/40 min-w-0">
                 <span className="font-black text-xs sm:text-sm text-[#3d2314] whitespace-nowrap tabular-nums shrink-0">
                     {formattedPrice}
                 </span>
 
                 <span
                     title={statusLabel}
-                    className={`px-2 py-0.5 rounded-full text-[8px] sm:text-[8.5px] font-black uppercase tracking-wider border shadow-2xs shrink-0 whitespace-nowrap ${isAvailable
+                    className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-tight sm:tracking-wider border shadow-2xs shrink-0 whitespace-nowrap ${isAvailable
                         ? 'bg-white text-[#3d2314] border-[#e6ccb2]/80'
                         : 'bg-rose-50 text-rose-600 border-rose-200'
                         }`}
