@@ -348,7 +348,7 @@ export default function DigitalMenuPage() {
                                     )}
                                 </div>
                                 <div className="truncate">
-                                    
+
                                     <span className="text-xs sm:text-[13px] font-black text-[#3d2314] uppercase tracking-wide block mt-0.5 truncate">
                                         {selectedCategory === 'all'
                                             ? 'SEMUA MENU'
@@ -371,8 +371,8 @@ export default function DigitalMenuPage() {
                         {/* List Menu Dropdown dengan Animasi Smooth Accordion */}
                         <div
                             className={`grid transition-all duration-300 ease-in-out ${isCategoryDropdownOpen
-                                    ? 'grid-rows-[1fr] opacity-100 mt-2'
-                                    : 'grid-rows-[0fr] opacity-0 mt-0 pointer-events-none'
+                                ? 'grid-rows-[1fr] opacity-100 mt-2'
+                                : 'grid-rows-[0fr] opacity-0 mt-0 pointer-events-none'
                                 }`}
                         >
                             <div className="overflow-hidden">
@@ -393,8 +393,8 @@ export default function DigitalMenuPage() {
                                                     setIsCategoryDropdownOpen(false);
                                                 }}
                                                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-150 text-left cursor-pointer ${isSelected
-                                                        ? 'bg-[#8c5a3c] text-white shadow-2xs font-black'
-                                                        : 'text-[#3d2314] hover:bg-[#FAF0E6] font-bold text-xs'
+                                                    ? 'bg-[#8c5a3c] text-white shadow-2xs font-black'
+                                                    : 'text-[#3d2314] hover:bg-[#FAF0E6] font-bold text-xs'
                                                     }`}
                                             >
                                                 <div className="flex items-center gap-2.5">
@@ -703,7 +703,7 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                         </span>
                     )}
                 </div>
-                <h4 className="font-black text-[#3d2314] text-md leading-snug line-clamp-1">{item.name}</h4>
+                <h4 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight leading-snug line-clamp-1 uppercase group-hover:text-[#8c5a3c] transition-colors">{item.name}</h4>
                 <p className="text-[13px] text-[#6c584c] font-semibold line-clamp-2 leading-tight">
                     {item.description}
                 </p>
