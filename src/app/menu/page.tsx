@@ -719,7 +719,7 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                     <h4 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight leading-snug line-clamp-1 uppercase group-hover:text-[#8c5a3c] transition-colors">
                         {item.name}
                     </h4>
-                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-medium leading-relaxed line-clamp-2 min-h-7 sm:min-h-8">
+                    <p className="text-[13px] text-[#6c584c] font-medium leading-relaxed line-clamp-2 min-h-7 sm:min-h-8">
                         {item.description || '-'}
                     </p>
                 </div>
