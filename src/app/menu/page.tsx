@@ -693,7 +693,7 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
             </div>
 
             <div className="space-y-0.5">
-                <div className="flex items-center justify-between gap-1">
+                <div className="flex items-center justify-between gap-1 pt-0.5">
                     <span className="text-[9.5px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider truncate">
                         {item.category || 'MENU'}
                     </span>
