@@ -694,17 +694,17 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
 
             <div className="space-y-0.5">
                 <div className="flex items-center justify-between gap-1">
-                    <span className="text-[8px] sm:text-[9px] font-black text-[#8c5a3c] uppercase tracking-wider truncate">
+                    <span className="text-[9.5px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider truncate">
                         {item.category || 'MENU'}
                     </span>
                     {item.location && item.location !== 'all' && (
-                        <span className="text-[7px] font-bold px-1.5 py-0.2 bg-white text-[#8c5a3c] rounded border border-[#e6ccb2]/60 shrink-0">
+                        <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-white text-[#8c5a3c] text-[8px] sm:text-[9px] font-bold tracking-tight border border-[#e6ccb2]/80 shrink-0 whitespace-nowrap">
                             {item.location === 'heavenland' ? 'Heavenland' : 'P. Mutiara'}
                         </span>
                     )}
                 </div>
                 <h4 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight leading-snug line-clamp-1 uppercase group-hover:text-[#8c5a3c] transition-colors">{item.name}</h4>
-                <p className="text-[13px] text-[#6c584c] font-semibold line-clamp-2 leading-tight">
+                <p className="text-[13px] text-[#6c584c] font-medium leading-relaxed line-clamp-2 min-h-7 sm:min-h-8">
                     {item.description}
                 </p>
             </div>
@@ -713,7 +713,7 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                 <div className="font-black text-[#3d2314] text-xs">
                     Rp {new Intl.NumberFormat('id-ID').format(item.price)}
                 </div>
-                <span className="px-2 py-0.5 bg-white text-[#8c5a3c] text-[8px] font-black uppercase rounded-md border border-[#e6ccb2]/50">
+                <span className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-tight sm:tracking-wider border shadow-2xs shrink-0 whitespace-nowrap">
                     {item.purchase_option || 'In Store'}
                 </span>
             </div>
