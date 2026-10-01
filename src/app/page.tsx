@@ -524,20 +524,20 @@ export default function Home() {
             alt="To Meet Cafe Events & Workshops"
             className="absolute inset-0 h-full w-full scale-[1.08] object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1b110d]/90 via-[#1b110d]/70 to-[#1b110d]/35 lg:to-[#1b110d]/20" />
+          
 
           <div className="relative z-10 grid grid-cols-1 gap-8 px-5 py-6 sm:px-8 sm:py-8 lg:grid-cols-12 lg:items-center lg:px-12 lg:py-12">
             <div className="lg:col-span-7 space-y-4 text-center lg:text-left">
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-[#f9d8ac] backdrop-blur-sm">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-[#251303] backdrop-blur-sm">
                 <Calendar className="h-3.5 w-3.5" />
                 <span>EVENTS & WORKSHOPS</span>
               </div>
 
-              <h2 className="text-2xl font-black uppercase tracking-tight text-white sm:text-3xl lg:text-4xl">
+              <h2 className="text-2xl font-black uppercase tracking-tight text-white [text-shadow:0_4px_6px_rgba(0,0,0,0.7)] sm:text-3xl lg:text-4xl">
                 Temukan Keseruan Event & Workshop Menarik
               </h2>
 
-              <p className="mx-auto max-w-xl text-xs font-semibold leading-relaxed text-stone-100 sm:text-sm lg:mx-0">
+              <p className="mx-auto max-w-xl text-xs font-semibold leading-relaxed text-stone-100 [text-shadow:0_2px_3px_rgba(0,0,0,0.95),0_4px_10px_rgba(0,0,0,0.8)] sm:text-sm lg:mx-0">
                 Mulai dari kelas kreasi seni edukatif hingga perayaan ulang tahun spesial keluarga. Cek jadwal kegiatan seru terbaru dan reservasi tempatmu sekarang!
               </p>
 
@@ -567,12 +567,12 @@ export default function Home() {
                 <div className="border-b border-white/20 pb-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#f9d8ac]">
                   <span className="flex items-center gap-1.5">
                     <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                    <span>COMING SOON</span>
+                    <span className="text-[#251303]">COMING SOON</span>
                   </span>
                 </div>
 
                 <div className="space-y-3 pt-3">
-                  <p className="text-xs font-black uppercase leading-snug text-white sm:text-sm">
+                  <p className="text-xs font-black uppercase leading- [text-shadow:0_4px_6px_rgba(0,0,0,0.7)] text-white sm:text-sm">
                     Belum ada event tersedia. Tunggu kegiatan selanjutnya di To Meet.
                   </p>
                 </div>
@@ -591,23 +591,23 @@ export default function Home() {
           style={{ backgroundImage: "url('/img/BANNER-ROBLOX.png')" }}
         >
           {/* Overlay agar teks terbaca tajam */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/30 lg:to-transparent" />
+          
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
             {/* Sisi Kiri: Headline & Tombol Aksi */}
             <div className="lg:col-span-7 space-y-3.5 text-center lg:text-left">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] sm:text-xs font-black tracking-widest uppercase border border-white/30 text-amber-300">
-                <Sparkles className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] sm:text-xs font-black tracking-widest uppercase border border-white/30 text-white">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300 font-semibold" />
                 <span>ROBLOX UNIVERSE</span>
               </div>
 
-              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight uppercase drop-shadow-md">
+              <h2 className="text-2xl sm:text-4xl [text-shadow:0_4px_6px_rgba(0,0,0,0.7)] lg:text-5xl font-black tracking-tight leading-tight uppercase drop-shadow-md">
                 PLAY TO MEET<br />
                 <span className="text-amber-300">ON ROBLOX!</span>
               </h2>
 
-              <p className="text-xs sm:text-sm text-stone-100 font-semibold leading-relaxed max-w-xl drop-shadow-xs">
+              <p className="text-xs sm:text-sm text-stone-100 font-semibold leading-relaxed max-w-xl drop-shadow-md [text-shadow:0_2px_4px_rgba(0,0,0,0.95),0_5px_12px_rgba(0,0,0,0.85)]">
                 Jelajahi dunia virtual cafe kami, selesaikan misi mingguan, dan kumpulkan reward menarik bersama teman-teman!
               </p>
 

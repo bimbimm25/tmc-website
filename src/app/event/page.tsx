@@ -636,72 +636,82 @@ export default function EventPage() {
             {/* 5. BENEFITS SECTION                               */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="bg-white p-4 sm:p-5 lg:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-4 text-center">
+                <div className="bg-white p-4 sm:p-5 lg:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-5 sm:gap-4 text-center items-start">
 
-            {/* Feature 1 */}
-            <div className="flex flex-col items-center space-y-1.5 p-2 rounded-2xl transition-colors">
-                <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shadow-2xs">
-                    <Smile className="w-4 h-4" />
-                </div>
-                <div className="space-y-0.5">
-                    <h4 className="font-black text-sm text-[#3d2314] tracking-tight uppercase">
-                        All Ages Welcome
-                    </h4>
-                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                        Fun activities for all
-                    </p>
-                </div>
-            </div>
+                        {/* Feature 1 */}
+                        <div className="flex flex-col items-center p-1 sm:p-2 rounded-2xl transition-colors">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shadow-2xs mb-2">
+                                <Smile className="w-4 h-4" />
+                            </div>
+                            {/* Judul: min-h memastikan 1 baris maupun 2 baris tetap sama tinggi */}
+                            <div className="w-full min-h-[2.25rem] md:min-h-0 flex items-center justify-center">
+                                <h4 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight uppercase leading-snug">
+                                    All Ages Welcome
+                                </h4>
+                            </div>
+                            {/* Deskripsi: min-h memastikan baseline kalimat sejajar rata */}
+                            <div className="w-full min-h-[2rem] md:min-h-0 flex items-start justify-center mt-0.5">
+                                <p className="text-[12px] sm:text-xs md:text-sm text-[#6c584c] font-semibold leading-relaxed">
+                                    Fun activities for all
+                                </p>
+                            </div>
+                        </div>
 
-            {/* Feature 2 */}
-            <div className="flex flex-col items-center space-y-1.5 p-2 rounded-2xl transition-colors">
-                <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shadow-2xs">
-                    <Palette className="w-4 h-4" />
-                </div>
-                <div className="space-y-0.5">
-                    <h4 className="font-black text-sm text-[#3d2314] tracking-tight uppercase">
-                        Materials Provided
-                    </h4>
-                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                        Safe & non-toxic
-                    </p>
-                </div>
-            </div>
+                        {/* Feature 2 */}
+                        <div className="flex flex-col items-center p-1 sm:p-2 rounded-2xl transition-colors">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shadow-2xs mb-2">
+                                <Palette className="w-4 h-4" />
+                            </div>
+                            <div className="w-full min-h-[2.25rem] md:min-h-0 flex items-center justify-center">
+                                <h4 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight uppercase leading-snug">
+                                    Materials Provided
+                                </h4>
+                            </div>
+                            <div className="w-full min-h-[2rem] md:min-h-0 flex items-start justify-center mt-0.5">
+                                <p className="text-[12px] sm:text-xs md:text-sm text-[#6c584c] font-semibold leading-relaxed">
+                                    Safe & non-toxic
+                                </p>
+                            </div>
+                        </div>
 
-            {/* Feature 3 */}
-            <div className="flex flex-col items-center space-y-1.5 p-2 rounded-2xl transition-colors">
-                <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shadow-2xs">
-                    <Users className="w-4 h-4" />
-                </div>
-                <div className="space-y-0.5">
-                    <h4 className="font-black text-sm text-[#3d2314] tracking-tight uppercase">
-                        Small Groups
-                    </h4>
-                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                        Engaging & cozy
-                    </p>
-                </div>
-            </div>
+                        {/* Feature 3 */}
+                        <div className="flex flex-col items-center p-1 sm:p-2 rounded-2xl transition-colors">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center shadow-2xs mb-2">
+                                <Users className="w-4 h-4" />
+                            </div>
+                            <div className="w-full min-h-[2.25rem] md:min-h-0 flex items-center justify-center">
+                                <h4 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight uppercase leading-snug">
+                                    Small Groups
+                                </h4>
+                            </div>
+                            <div className="w-full min-h-[2rem] md:min-h-0 flex items-start justify-center mt-0.5">
+                                <p className="text-[12px] sm:text-xs md:text-sm text-[#6c584c] font-semibold leading-relaxed">
+                                    Engaging & cozy
+                                </p>
+                            </div>
+                        </div>
 
-            {/* Feature 4 */}
-            <div className="flex flex-col items-center space-y-1.5 p-2 rounded-2xl transition-colors">
-                <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#e85a4f] flex items-center justify-center shadow-2xs">
-                    <Heart className="w-4 h-4 fill-current" />
-                </div>
-                <div className="space-y-0.5">
-                    <h4 className="font-black text-sm text-[#3d2314] tracking-tight uppercase">
-                        Sweet Memories
-                    </h4>
-                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                        Precious moments
-                    </p>
-                </div>
-            </div>
+                        {/* Feature 4 */}
+                        <div className="flex flex-col items-center p-1 sm:p-2 rounded-2xl transition-colors">
+                            <div className="w-8 h-8 rounded-xl bg-[#FAF0E6] text-[#e85a4f] flex items-center justify-center shadow-2xs mb-2">
+                                <Heart className="w-4 h-4 fill-current" />
+                            </div>
+                            <div className="w-full min-h-[2.25rem] md:min-h-0 flex items-center justify-center">
+                                <h4 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight uppercase leading-snug">
+                                    Sweet Memories
+                                </h4>
+                            </div>
+                            <div className="w-full min-h-[2rem] md:min-h-0 flex items-start justify-center mt-0.5">
+                                <p className="text-[12px] sm:text-xs md:text-sm text-[#6c584c] font-semibold leading-relaxed">
+                                    Precious moments
+                                </p>
+                            </div>
+                        </div>
 
-        </div>
-    </div>
-</section>
+                    </div>
+                </div>
+            </section>
         </div>
     );
 }

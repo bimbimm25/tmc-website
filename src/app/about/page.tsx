@@ -632,59 +632,67 @@ export default function AboutPage() {
                     </div>
 
                     {/* Stats Counter Card */}
-                    <div className="bg-[#fdf3f1] p-6 sm:p-8 rounded-3xl border border-rose-100 text-center shadow-2xs">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                            <div className="space-y-1">
+                    <div className="bg-[#fdf3f1] p-5 sm:p-6 md:p-8 rounded-3xl border border-rose-100 text-center shadow-2xs">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6 sm:gap-6 items-start">
+
+                            {/* Kolom 1 */}
+                            <div className="space-y-1.5 flex flex-col justify-start">
                                 <div className="flex items-center justify-center gap-1.5 text-[#e85a4f]">
-                                    <Star className="w-4 h-4 fill-current" />
+                                    <Star className="w-4 h-4 fill-current shrink-0" />
                                     <span className="text-2xl sm:text-3xl font-black tracking-tight">2+</span>
                                 </div>
-                                <div className="text-xs sm:text-[12.5px] font-black text-[#3d2314] uppercase tracking-wide">
+                                {/* Judul: min-h agar tinggi 1 baris & 2 baris tetap sejajar */}
+                                <div className="text-xs sm:text-[13px] font-black text-[#3d2314] uppercase tracking-wide min-h-[2.25rem] md:min-h-0 flex items-center justify-center leading-tight px-1">
                                     YEARS OF HAPPINESS
                                 </div>
-                                <p className="text-[11px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                {/* Deskripsi: min-h agar garis baris berikutnya selalu sejajar rata */}
+                                <p className="text-xs sm:text-[12.5px] text-[#6c584c] font-semibold leading-relaxed min-h-[2.75rem] md:min-h-0 flex items-start justify-center">
                                     Thank you for being part of our journey!
                                 </p>
                             </div>
 
-                            <div className="space-y-1">
+                            {/* Kolom 2 */}
+                            <div className="space-y-1.5 flex flex-col justify-start">
                                 <div className="flex items-center justify-center gap-1.5 text-[#e85a4f]">
-                                    <Smile className="w-4 h-4" />
+                                    <Smile className="w-4 h-4 shrink-0" />
                                     <span className="text-2xl sm:text-3xl font-black tracking-tight">50K+</span>
                                 </div>
-                                <div className="text-xs sm:text-[12.5px] font-black text-[#3d2314] uppercase tracking-wide">
+                                <div className="text-xs sm:text-[13px] font-black text-[#3d2314] uppercase tracking-wide min-h-[2.25rem] md:min-h-0 flex items-center justify-center leading-tight px-1">
                                     HAPPY CUSTOMERS
                                 </div>
-                                <p className="text-[11px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                <p className="text-xs sm:text-[12.5px] text-[#6c584c] font-semibold leading-relaxed min-h-[2.75rem] md:min-h-0 flex items-start justify-center">
                                     We&apos;re grateful for all your love & support!
                                 </p>
                             </div>
 
-                            <div className="space-y-1">
+                            {/* Kolom 3 */}
+                            <div className="space-y-1.5 flex flex-col justify-start">
                                 <div className="flex items-center justify-center gap-1.5 text-[#e85a4f]">
-                                    <BearPawIcon className="w-4 h-4 fill-current" />
+                                    <BearPawIcon className="w-4 h-4 fill-current shrink-0" />
                                     <span className="text-2xl sm:text-3xl font-black tracking-tight">10+</span>
                                 </div>
-                                <div className="text-xs sm:text-[12.5px] font-black text-[#3d2314] uppercase tracking-wide">
+                                <div className="text-xs sm:text-[13px] font-black text-[#3d2314] uppercase tracking-wide min-h-[2.25rem] md:min-h-0 flex items-center justify-center leading-tight px-1">
                                     EVENTS EACH MONTH
                                 </div>
-                                <p className="text-[11px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                <p className="text-xs sm:text-[12.5px] text-[#6c584c] font-semibold leading-relaxed min-h-[2.75rem] md:min-h-0 flex items-start justify-center">
                                     Creating fun and memorable experiences!
                                 </p>
                             </div>
 
-                            <div className="space-y-1">
+                            {/* Kolom 4 */}
+                            <div className="space-y-1.5 flex flex-col justify-start">
                                 <div className="flex items-center justify-center gap-1.5 text-[#e85a4f]">
-                                    <Heart className="w-4 h-4 fill-current" />
+                                    <Heart className="w-4 h-4 fill-current shrink-0" />
                                     <span className="text-2xl sm:text-3xl font-black tracking-tight">1</span>
                                 </div>
-                                <div className="text-xs sm:text-[12.5px] font-black text-[#3d2314] uppercase tracking-wide">
+                                <div className="text-xs sm:text-[13px] font-black text-[#3d2314] uppercase tracking-wide min-h-[2.25rem] md:min-h-0 flex items-center justify-center leading-tight px-1">
                                     BIG FAMILY
                                 </div>
-                                <p className="text-[11px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
+                                <p className="text-xs sm:text-[12.5px] text-[#6c584c] font-semibold leading-relaxed min-h-[2.75rem] md:min-h-0 flex items-start justify-center">
                                     Because To Meet is more than just a place.
                                 </p>
                             </div>
+
                         </div>
                     </div>
 

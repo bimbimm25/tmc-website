@@ -384,35 +384,41 @@ export default function BirthdayPage() {
                             ) : null}
                         </p>
 
-                        {/* 3 Mini Feature Cards: Sejajar Rapi & Konsisten */}
-                        <div className="grid grid-cols-3 gap-3 pt-1 max-w-md">
+                        {/* 3 Mini Feature Cards: Sejajar Rapi & Konsisten di Semua HP */}
+                        <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-1 max-w-md">
                             {/* Card 1 */}
-                            <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-3 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1.5 shadow-2xs">
-                                <div className="w-8 h-8 rounded-xl bg-white text-[#e85a4f] flex items-center justify-center shadow-2xs">
-                                    <Heart className="w-4 h-4 fill-current" />
+                            <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2.5 sm:p-3 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1.5 shadow-2xs">
+                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white text-[#e85a4f] flex items-center justify-center shadow-2xs">
+                                    <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
                                 </div>
-                                <div className="leading-none">
-                                    <span className="text-sm font-black text-[#3d2314] block tracking-tight">Cute Bear Theme</span>
+                                <div className="w-full h-7 sm:h-8 flex items-center justify-center">
+                                    <span className="text-[12px] sm:text-sm font-black text-[#3d2314] block tracking-tight leading-tight">
+                                        Cute Bear <br className="sm:hidden" />Theme
+                                    </span>
                                 </div>
                             </div>
 
                             {/* Card 2 */}
-                            <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-3 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1.5 shadow-2xs">
-                                <div className="w-8 h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs">
-                                    <Utensils className="w-4 h-4" />
+                            <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2.5 sm:p-3 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1.5 shadow-2xs">
+                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs">
+                                    <Utensils className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                 </div>
-                                <div className="leading-none">
-                                    <span className="text-sm font-black text-[#3d2314] block tracking-tight">Yummy Treats</span>
+                                <div className="w-full h-7 sm:h-8 flex items-center justify-center">
+                                    <span className="text-[12px] sm:text-sm font-black text-[#3d2314] block tracking-tight leading-tight">
+                                        Yummy <br className="sm:hidden" />Treats
+                                    </span>
                                 </div>
                             </div>
 
                             {/* Card 3 */}
-                            <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-3 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1.5 shadow-2xs">
-                                <div className="w-8 h-8 rounded-xl bg-white text-amber-500 flex items-center justify-center shadow-2xs">
-                                    <Camera className="w-4 h-4" />
+                            <div className="bg-[#FAF0E6]/80 backdrop-blur-xs p-2.5 sm:p-3 rounded-2xl border border-[#e6ccb2]/70 text-center flex flex-col items-center justify-center space-y-1.5 shadow-2xs">
+                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white text-amber-500 flex items-center justify-center shadow-2xs">
+                                    <Camera className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                 </div>
-                                <div className="leading-none">
-                                    <span className="text-sm font-black text-[#3d2314] block tracking-tight">Photo Spots</span>
+                                <div className="w-full h-7 sm:h-8 flex items-center justify-center">
+                                    <span className="text-[12px] sm:text-sm font-black text-[#3d2314] block tracking-tight leading-tight">
+                                        Photo <br className="sm:hidden" />Spots
+                                    </span>
                                 </div>
                             </div>
                         </div>
