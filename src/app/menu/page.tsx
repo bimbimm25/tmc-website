@@ -654,67 +654,88 @@ export default function DigitalMenuPage() {
 function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: MenuItem) => void }) {
     const isBestseller = Boolean(item.is_bestseller);
     const isRecommended = Boolean(item.is_recommended);
+    const rawNumber = Number(item.price) || 0;
+    const formattedPrice = `Rp.${rawNumber.toLocaleString('id-ID')}`;
+
+    const imageUrl = item.image
+        ? (item.image.startsWith('http') || item.image.startsWith('/img')
+            ? item.image
+            : `${API_BASE_URL}/storage/${item.image}`)
+        : '/img/placeholder-food.png';
+
+    const categoryName = item.category || 'MENU';
+    const locationName = item.location && item.location !== 'all'
+        ? (item.location === 'heavenland' ? 'Heavenland' : 'P. Mutiara')
+        : 'To Meet';
 
     return (
         <div
             onClick={() => onSelect(item)}
-            className="bg-[#FAF0E6]/60 rounded-3xl p-3 border border-[#e6ccb2]/60 shadow-2xs flex flex-col justify-between space-y-2.5 relative group hover:shadow-md hover:border-[#8c5a3c] transition duration-200 cursor-pointer"
+            className="group bg-[#FAF0E6]/40 hover:bg-[#FAF0E6]/60 rounded-3xl border border-[#e6ccb2]/80 hover:border-[#8c5a3c]/60 shadow-2xs hover:shadow-xs transition-all duration-200 p-2.5 sm:p-3.5 flex flex-col justify-between cursor-pointer space-y-2.5 sm:space-y-3 overflow-hidden"
         >
-            <div className="absolute top-4 left-4 flex flex-col gap-1 z-10">
-                {isBestseller && (
-                    <span className="px-2.5 py-0.5 bg-[#d4a373] text-white text-[8px] font-black uppercase rounded-full shadow-2xs tracking-wider">
-                        BEST SELLER
-                    </span>
-                )}
-                {isRecommended && (
-                    <span className="px-2.5 py-0.5 bg-[#e85a4f] text-white text-[8px] font-black uppercase rounded-full shadow-2xs tracking-wider">
-                        RECOMMENDED
-                    </span>
-                )}
-            </div>
+            <div className="space-y-2 sm:space-y-2.5">
+                {/* 1. Wadah Foto: Persegi Penuh (aspect-square 1:1) */}
+                <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-white border border-[#e6ccb2]/50 shadow-2xs">
+                    {item.image ? (
+                        <img
+                            src={imageUrl}
+                            alt={item.name}
+                            loading="lazy"
+                            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                        />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-[#FAF0E6]/50">
+                            <Coffee className="w-8 h-8 text-[#e6ccb2]" />
+                        </div>
+                    )}
 
-            <div className="w-full aspect-square bg-white rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center relative">
-                {item.image ? (
-                    <img
-                        src={
-                            item.image.startsWith('http')
-                                ? item.image
-                                : item.image.startsWith('/img')
-                                    ? item.image
-                                    : `${API_BASE_URL}/storage/${item.image}`
-                        }
-                        alt={item.name}
-                        loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                    />
-                ) : (
-                    <Coffee className="w-8 h-8 text-[#e6ccb2]" />
-                )}
-            </div>
+                    {/* Badge Badging di Kiri Atas Foto */}
+                    <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 flex flex-col gap-1 z-10">
+                        {isBestseller && (
+                            <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-[#d4a373] text-white text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-wider shadow-2xs whitespace-nowrap">
+                                BEST SELLER
+                            </span>
+                        )}
+                        {isRecommended && (
+                            <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-[#e85a4f] text-white text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-wider shadow-2xs whitespace-nowrap">
+                                RECOMMENDED
+                            </span>
+                        )}
+                    </div>
+                </div>
 
-            <div className="space-y-0.5">
+                {/* 2. Kategori & Badge Outlet */}
                 <div className="flex items-center justify-between gap-1 pt-0.5">
                     <span className="text-[9.5px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider truncate">
-                        {item.category || 'MENU'}
+                        {categoryName}
                     </span>
-                    {item.location && item.location !== 'all' && (
-                        <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-white text-[#8c5a3c] text-[8px] sm:text-[9px] font-bold tracking-tight border border-[#e6ccb2]/80 shrink-0 whitespace-nowrap">
-                            {item.location === 'heavenland' ? 'Heavenland' : 'P. Mutiara'}
-                        </span>
-                    )}
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-white text-[#8c5a3c] text-[8px] sm:text-[9px] font-bold tracking-tight border border-[#e6ccb2]/80 shrink-0 whitespace-nowrap">
+                        {locationName}
+                    </span>
                 </div>
-                <h4 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight leading-snug line-clamp-1 uppercase group-hover:text-[#8c5a3c] transition-colors">{item.name}</h4>
-                <p className="text-[13px] text-[#6c584c] font-medium leading-relaxed line-clamp-2 min-h-7 sm:min-h-8">
-                    {item.description}
-                </p>
+
+                {/* 3. Nama & Deskripsi (Ukuran, Line-clamp, & Tinggi Min Sama Persis) */}
+                <div className="space-y-0.5 sm:space-y-1">
+                    <h4 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight leading-snug line-clamp-1 uppercase group-hover:text-[#8c5a3c] transition-colors">
+                        {item.name}
+                    </h4>
+                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-medium leading-relaxed line-clamp-2 min-h-7 sm:min-h-8">
+                        {item.description || '-'}
+                    </p>
+                </div>
             </div>
 
-            <div className="flex items-center justify-between pt-1 border-t border-[#e6ccb2]/40">
-                <div className="font-black text-[#3d2314] text-xs">
-                    Rp {new Intl.NumberFormat('id-ID').format(item.price)}
-                </div>
-                <span className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-tight sm:tracking-wider border shadow-2xs shrink-0 whitespace-nowrap">
-                    {item.purchase_option || 'In Store'}
+            {/* 4. Footer: Info Harga & Opsi Pembelian (Satu Baris, Tabular, Tidak Patah) */}
+            <div className="pt-2 flex items-center justify-between gap-1 border-t border-[#e6ccb2]/40 min-w-0">
+                <span className="font-black text-xs sm:text-sm text-[#3d2314] whitespace-nowrap tabular-nums shrink-0">
+                    {formattedPrice}
+                </span>
+
+                <span
+                    title={item.purchase_option || 'DINE IN'}
+                    className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-tight sm:tracking-wider border border-[#e6ccb2]/80 bg-white text-[#3d2314] shadow-2xs shrink-0 whitespace-nowrap truncate max-w-[100px]"
+                >
+                    {item.purchase_option || 'Dine In'}
                 </span>
             </div>
         </div>
