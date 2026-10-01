@@ -522,15 +522,15 @@ export default function Home() {
           <img
             src="/img/HEADER-CLAY-ART.png"
             alt="To Meet Cafe Events & Workshops"
-            className="absolute inset-0 h-full w-full scale-[1.08] object-cover object-center"
+            className="absolute inset-0 h-full w-full scale-[2] object-cover object-center"
           />
           
 
           <div className="relative z-10 grid grid-cols-1 gap-8 px-5 py-6 sm:px-8 sm:py-8 lg:grid-cols-12 lg:items-center lg:px-12 lg:py-12">
             <div className="lg:col-span-7 space-y-4 text-center lg:text-left">
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-[#251303] backdrop-blur-sm">
-                <Calendar className="h-3.5 w-3.5" />
-                <span>EVENTS & WORKSHOPS</span>
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-[#251303] [text-shadow:0_4px_6px_rgba(0,0,0,0.7)] backdrop-blur-sm">
+                <Calendar className="h-3.5 w-3.5 text-white" />
+                <span className="text-white shadow-amber-300">EVENTS & WORKSHOPS</span>
               </div>
 
               <h2 className="text-2xl font-black uppercase tracking-tight text-white [text-shadow:0_4px_6px_rgba(0,0,0,0.7)] sm:text-3xl lg:text-4xl">
