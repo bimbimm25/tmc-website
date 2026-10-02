@@ -524,7 +524,7 @@ export default function Home() {
             alt="To Meet Cafe Events & Workshops"
             className="absolute inset-0 h-full w-full scale-[2] object-cover object-center"
           />
-          
+
 
           <div className="relative z-10 grid grid-cols-1 gap-8 px-5 py-6 sm:px-8 sm:py-8 lg:grid-cols-12 lg:items-center lg:px-12 lg:py-12">
             <div className="lg:col-span-7 space-y-4 text-center lg:text-left">
@@ -537,7 +537,10 @@ export default function Home() {
                 Temukan Keseruan Event & Workshop Menarik
               </h2>
 
-              <p className="mx-auto max-w-xl text-xs font-semibold leading-relaxed text-stone-100 [text-shadow:0_2px_3px_rgba(0,0,0,0.95),0_4px_10px_rgba(0,0,0,0.8)] sm:text-sm lg:mx-0">
+              <p className="text-xs sm:text-sm text-stone-100 font-extrabold leading-relaxed tracking-[0.04em] max-w-xl [text-shadow:0_1px_2px_rgb(0_0_0/90%),0_2px_6px_rgb(0_0_0/95%),0_0_8px_rgb(0_0_0/90%)]"
+                style={{
+                  textShadow: '0 1px 2px #000, 0 2px 6px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.85)'
+                }}>
                 Mulai dari kelas kreasi seni edukatif hingga perayaan ulang tahun spesial keluarga. Cek jadwal kegiatan seru terbaru dan reservasi tempatmu sekarang!
               </p>
 
@@ -591,7 +594,7 @@ export default function Home() {
           style={{ backgroundImage: "url('/img/BANNER-ROBLOX.png')" }}
         >
           {/* Overlay agar teks terbaca tajam */}
-          
+
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
@@ -607,7 +610,12 @@ export default function Home() {
                 <span className="text-amber-300">ON ROBLOX!</span>
               </h2>
 
-              <p className="text-xs sm:text-sm text-stone-100 font-semibold leading-relaxed max-w-xl drop-shadow-md [text-shadow:0_2px_4px_rgba(0,0,0,0.95),0_5px_12px_rgba(0,0,0,0.85)]">
+              <p
+                className="text-xs sm:text-sm text-stone-100 font-extrabold leading-relaxed tracking-[0.04em] max-w-xl [text-shadow:0_1px_2px_rgb(0_0_0/90%),0_2px_6px_rgb(0_0_0/95%),0_0_8px_rgb(0_0_0/90%)]"
+                style={{
+                  textShadow: '0 1px 2px #000, 0 2px 6px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.85)'
+                }}
+              >
                 Jelajahi dunia virtual cafe kami, selesaikan misi mingguan, dan kumpulkan reward menarik bersama teman-teman!
               </p>
 

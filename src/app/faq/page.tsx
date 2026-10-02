@@ -630,9 +630,9 @@ export default function FAQPage() {
                     </div>
                 </div>
 
-                {/* B. TAMPILAN KHUSUS DESKTOP (TETAP HORIZONTAL GRID RAPI SEPERTI SEMULA) */}
-                <div className="hidden lg:block bg-white p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
-                    <div className="grid grid-cols-6 gap-3">
+                {/* B. TAMPILAN KHUSUS DESKTOP (SEJAJAR RAPI & RATA) */}
+                <div className="hidden lg:block bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
+                    <div className="grid grid-cols-6 gap-2 xl:gap-3 items-stretch">
                         {CATEGORIES.map((cat) => {
                             const IconComponent = cat.icon;
                             const isActive = selectedCategory === cat.id && searchQuery.trim() === '';
@@ -645,29 +645,40 @@ export default function FAQPage() {
                                         setSelectedCategory(cat.id);
                                         setSearchQuery('');
                                     }}
-                                    className={`p-4 rounded-2xl transition flex flex-col items-center justify-center text-center space-y-2 cursor-pointer w-full ${isActive
-                                        ? 'bg-[#FAF0E6] border border-[#e6ccb2] shadow-2xs'
-                                        : 'hover:bg-[#FAF0E6]/50 border border-transparent'
+                                    className={`p-3 xl:p-4 rounded-2xl transition flex flex-col items-center justify-between text-center cursor-pointer w-full h-full ${isActive
+                                            ? 'bg-[#FAF0E6] border border-[#e6ccb2] shadow-2xs'
+                                            : 'hover:bg-[#FAF0E6]/50 border border-transparent'
                                         }`}
                                 >
-                                    <div
-                                        className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors shadow-2xs ${isActive
-                                            ? 'bg-[#8c5a3c] text-white'
-                                            : 'bg-[#FAF0E6] text-[#8c5a3c]'
-                                            }`}
-                                    >
-                                        <IconComponent className="w-4.5 h-4.5" />
-                                    </div>
-
-                                    <div className="space-y-0.5 w-full px-1">
+                                    {/* 1. Slot Icon: Tinggi tetap agar sejajar horizontal */}
+                                    <div className="h-9 flex items-center justify-center">
                                         <div
-                                            className={`text-[13px] font-black tracking-wider uppercase leading-tight ${isActive ? 'text-[#8c5a3c]' : 'text-[#3d2314]'
+                                            className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors shadow-2xs ${isActive
+                                                    ? 'bg-[#8c5a3c] text-white'
+                                                    : 'bg-[#FAF0E6] text-[#8c5a3c]'
                                                 }`}
                                         >
-                                            {cat.name}
+                                            <IconComponent className="w-4.5 h-4.5" />
                                         </div>
-                                        <div className="text-[12px] text-[#6c584c] font-semibold leading-relaxed break-words">
-                                            {cat.desc}
+                                    </div>
+
+                                    {/* 2. Slot Teks: Judul & Deskripsi terkunci tingginya */}
+                                    <div className="w-full space-y-1 pt-2 flex-1 flex flex-col justify-center">
+                                        {/* Judul: h-10 dengan flex items-center agar teks 1 atau 2 baris tetap tepat di tengah */}
+                                        <div className="h-10 flex items-center justify-center">
+                                            <span
+                                                className={`text-[13px] font-black tracking-wider uppercase leading-tight px-1 ${isActive ? 'text-[#8c5a3c]' : 'text-[#3d2314]'
+                                                    }`}
+                                            >
+                                                {cat.name}
+                                            </span>
+                                        </div>
+
+                                        {/* Deskripsi: h-9 dengan flex items-start agar posisi awal teks sama rata */}
+                                        <div className="h-9 flex items-start justify-center">
+                                            <span className="text-[12px] text-[#6c584c] font-semibold leading-snug line-clamp-2 px-1">
+                                                {cat.desc}
+                                            </span>
                                         </div>
                                     </div>
                                 </button>

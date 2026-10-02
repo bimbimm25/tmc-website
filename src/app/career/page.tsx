@@ -617,7 +617,7 @@ export default function CareerPage() {
                         <div className="p-3.5 bg-[#FAF0E6]/60 rounded-2xl border border-[#e6ccb2]/70 text-center space-y-1">
                             <div className="text-xs sm:text-sm font-black text-[#8c5a3c]">Pertanyaan Rekrutmen?</div>
                             <div className="text-[13px] text-[#6c584c]">
-                                Hubungi HR kami di <span className="font-bold text-[#3d2314]">tmc.rekrutmen@gmail.com</span>
+                                Hubungi HR kami di <a href="mailto:tmc.rekrutmen@gmail.com" className="font-bold text-[#3d2314] transition hover:text-[#8c5a3c]">tmc.rekrutmen@gmail.com</a>
                             </div>
                         </div>
                     </div>
@@ -870,7 +870,7 @@ export default function CareerPage() {
                                                         <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                                                             <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-lg border text-[10.5px] font-black uppercase tracking-wide ${locInfo.badgeColor}`}>
                                                                 <MapPin className="w-3 h-3 shrink-0" />
-                                                                <span className="truncate max-w-[130px]">{locInfo.label}</span>
+                                                                <span className="truncate max-w-32.5">{locInfo.label}</span>
                                                             </div>
 
                                                             {job.salary_range && (
@@ -1142,7 +1142,7 @@ export default function CareerPage() {
             {detailJob && (
                 <div
                     onClick={() => setDetailJob(null)}
-                    className="fixed inset-0 z-[99999] w-screen h-[100dvh] flex items-center justify-center bg-black/65 backdrop-blur-md p-4 overscroll-contain overflow-y-auto"
+                    className="fixed inset-0 z-99999 w-screen h-[100dvh] flex items-center justify-center bg-black/65 backdrop-blur-md p-4 overscroll-contain overflow-y-auto"
                     onWheel={(e) => e.stopPropagation()}
                     onTouchMove={(e) => e.stopPropagation()}
                 >
@@ -1254,7 +1254,7 @@ export default function CareerPage() {
             {isApplyModalOpen && selectedJob && (
                 <div
                     onClick={() => setIsApplyModalOpen(false)}
-                    className="fixed inset-0 z-[99999] w-screen h-[100dvh] flex items-center justify-center bg-black/65 backdrop-blur-md p-4 overscroll-contain overflow-y-auto"
+                    className="fixed inset-0 z-[99999] w-screen h-dvh flex items-center justify-center bg-black/65 backdrop-blur-md p-4 overscroll-contain overflow-y-auto"
                     onWheel={(e) => e.stopPropagation()}
                     onTouchMove={(e) => e.stopPropagation()}
                 >
