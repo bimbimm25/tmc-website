@@ -537,7 +537,7 @@ export default function Home() {
                 Temukan Keseruan Event & Workshop Menarik
               </h2>
 
-              <p className="text-xs sm:text-sm text-stone-100 font-extrabold leading-relaxed tracking-[0.04em] max-w-xl [text-shadow:0_1px_2px_rgb(0_0_0/90%),0_2px_6px_rgb(0_0_0/95%),0_0_8px_rgb(0_0_0/90%)]"
+              <p className="text-sm sm:text-sm text-stone-100 font-bold leading-relaxed max-w-xl [text-shadow:0_1px_2px_rgb(0_0_0/90%),0_2px_6px_rgb(0_0_0/95%),0_0_8px_rgb(0_0_0/90%)]"
                 style={{
                   textShadow: '0 1px 2px #000, 0 2px 6px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.85)'
                 }}>
@@ -611,7 +611,7 @@ export default function Home() {
               </h2>
 
               <p
-                className="text-xs sm:text-sm text-stone-100 font-extrabold leading-relaxed tracking-[0.04em] max-w-xl [text-shadow:0_1px_2px_rgb(0_0_0/90%),0_2px_6px_rgb(0_0_0/95%),0_0_8px_rgb(0_0_0/90%)]"
+                className="text-sm sm:text-sm text-stone-100 font-bold leading-relaxed max-w-xl [text-shadow:0_1px_2px_rgb(0_0_0/90%),0_2px_6px_rgb(0_0_0/95%),0_0_8px_rgb(0_0_0/90%)]"
                 style={{
                   textShadow: '0 1px 2px #000, 0 2px 6px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.85)'
                 }}
