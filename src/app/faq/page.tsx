@@ -154,6 +154,12 @@ const FAQ_DATA: FAQItem[] = [
         question: 'Apakah To Meet Cafe  membuka peluang kemitraan atau franchise?',
         answer: 'Saat ini, To Meet Cafe belum membuka peluang kemitraan atau franchise. Semoga program kemitraan dapat segera tersedia dalam waktu dekat.'
     },
+    {
+        id: 'gen-18',
+        category: 'general',
+        question: 'Apakah To Meet Cafe sudah bersertifikasi halal?',
+        answer: 'Ya, To Meet Cafe telah bersertifikasi halal dan berkomitmen untuk menjaga kehalalan produk melalui pemilihan bahan baku dan proses pengolahan yang sesuai dengan ketentuan halal.'
+    },
 
     // Reservasi
     {

@@ -566,23 +566,25 @@ export default function DigitalMenuPage() {
             {selectedProduct && (
                 <div
                     onClick={handleCloseModal}
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 overscroll-contain overflow-hidden"
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-3.5 sm:p-4 overscroll-contain overflow-hidden"
                     onWheel={(e) => e.stopPropagation()}
                     onTouchMove={(e) => e.stopPropagation()}
                 >
                     <div
                         id="menu-modal-card"
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white w-full max-w-md rounded-3xl p-5 sm:p-6 border border-[#e6ccb2] shadow-2xl space-y-4 relative animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto"
+                        className="bg-white w-full max-w-sm sm:max-w-md rounded-3xl p-4 sm:p-5 border border-[#e6ccb2] shadow-2xl space-y-3.5 relative animate-in fade-in zoom-in-95 duration-150 max-h-[92dvh] overflow-y-auto scrollbar-none"
                     >
+                        {/* Tombol Tutup Modal */}
                         <button
                             onClick={handleCloseModal}
-                            className="absolute right-4 top-4 w-8 h-8 rounded-full bg-[#FAF0E6] hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition cursor-pointer z-10"
+                            className="absolute right-3.5 top-3.5 w-8 h-8 rounded-full bg-white/90 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition border border-[#e6ccb2]/80 shadow-md cursor-pointer z-20 active:scale-95"
                         >
                             <X className="w-4 h-4" />
                         </button>
 
-                        <div className="w-full aspect-[4/3] bg-stone-50 rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center">
+                        {/* Wadah Foto 1080x1080 Persegi Penuh (1:1 Aspect Ratio) */}
+                        <div className="w-full aspect-square bg-stone-50 rounded-2xl overflow-hidden border border-[#e6ccb2]/60 flex items-center justify-center relative shadow-2xs">
                             {selectedProduct.image ? (
                                 <img
                                     src={
@@ -593,43 +595,45 @@ export default function DigitalMenuPage() {
                                                 : `${API_BASE_URL}/storage/${selectedProduct.image}`
                                     }
                                     alt={selectedProduct.name}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-contain sm:object-cover bg-white"
                                 />
                             ) : (
                                 <Coffee className="w-12 h-12 text-[#e6ccb2]" />
                             )}
                         </div>
 
+                        {/* Info Kategori & Lokasi */}
                         <div className="space-y-1.5">
                             <div className="flex items-center justify-between">
                                 <span className="text-[10px] font-black text-[#8c5a3c] uppercase tracking-wider">
                                     {selectedProduct.category || 'MENU'}
                                 </span>
                                 <div className="flex items-center gap-1.5">
-                                    <span className="px-2 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9px] font-black uppercase rounded-md">
+                                    <span className="px-2 py-0.5 bg-[#FAF0E6] text-[#8c5a3c] text-[9px] font-black uppercase rounded-md border border-[#e6ccb2]/60">
                                         {selectedProduct.purchase_option || 'In Store'}
                                     </span>
                                     {selectedProduct.location && selectedProduct.location !== 'all' && (
-                                        <span className="px-2 py-0.5 bg-amber-100 text-amber-900 text-[9px] font-black uppercase rounded-md">
+                                        <span className="px-2 py-0.5 bg-amber-100 text-amber-900 text-[9px] font-black uppercase rounded-md border border-amber-200">
                                             {selectedProduct.location === 'heavenland' ? 'Heavenland' : 'Pondok Mutiara'}
                                         </span>
                                     )}
                                 </div>
                             </div>
 
-                            <h3 className="font-black text-[#3d2314] text-lg leading-tight">
+                            <h3 className="font-black text-[#3d2314] text-base sm:text-lg leading-tight uppercase">
                                 {selectedProduct.name}
                             </h3>
 
-                            <p className="text-xs text-[#6c584c] font-semibold leading-relaxed">
+                            <p className="text-xs sm:text-[13px] text-[#6c584c] font-semibold leading-relaxed">
                                 {selectedProduct.description || 'Nikmati sajian lezat spesial To Meet Cafe.'}
                             </p>
                         </div>
 
-                        <div className="pt-3 border-t border-[#e6ccb2]/60 flex items-center justify-between">
+                        {/* Footer Modal: Harga & CTA Button */}
+                        <div className="pt-2.5 border-t border-[#e6ccb2]/60 flex items-center justify-between">
                             <div>
-                                <span className="text-[10px] font-bold text-[#8c5a3c] block">Harga Menu</span>
-                                <span className="font-black text-[#3d2314] text-base">
+                                <span className="text-[9.5px] font-bold text-[#8c5a3c] uppercase tracking-wider block">Harga Menu</span>
+                                <span className="font-black text-[#3d2314] text-sm sm:text-base tabular-nums">
                                     Rp {new Intl.NumberFormat('id-ID').format(selectedProduct.price)}
                                 </span>
                             </div>
@@ -637,7 +641,7 @@ export default function DigitalMenuPage() {
                             <Link
                                 href="/visit-us"
                                 onClick={handleCloseModal}
-                                className="px-4 py-2 bg-[#8c5a3c] hover:bg-[#73482f] text-white font-black text-xs rounded-full transition flex items-center gap-1.5 uppercase cursor-pointer"
+                                className="px-4 py-2 bg-[#8c5a3c] hover:bg-[#73482f] active:scale-95 text-white font-black text-xs rounded-full transition flex items-center gap-1.5 uppercase cursor-pointer shadow-xs"
                             >
                                 <MapPin className="w-3.5 h-3.5" />
                                 <span>VISIT CAFE</span>

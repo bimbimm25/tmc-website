@@ -719,21 +719,31 @@ export default function MerchandisePage() {
             </section>
 
             {/* ================================================= */}
-            {/* MODAL DETAIL PRODUK MERCHANDISE (BEBAS SCROLL)    */}
+            {/* MODAL DETAIL PRODUK MERCHANDISE (1:1 FULL UTUH)   */}
             {/* ================================================= */}
             {selectedProduct && (
                 <div
                     onClick={() => setSelectedProduct(null)}
                     onWheel={(e) => e.stopPropagation()}
                     onTouchMove={(e) => e.stopPropagation()}
-                    className="fixed inset-0 z-50 w-screen h-[100dvh] flex items-center justify-center bg-black/65 backdrop-blur-xs p-3 sm:p-4 overscroll-none"
+                    className="fixed inset-0 z-50 w-screen h-[100dvh] flex items-center justify-center bg-black/60 backdrop-blur-xs p-3.5 sm:p-4 overscroll-none"
                 >
                     <div
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white w-full max-w-[340px] sm:max-w-[380px] rounded-[2.2rem] p-4 sm:p-5 border border-[#e6ccb2]/80 shadow-2xl space-y-3 relative my-auto overflow-hidden"
+                        className="bg-white w-full max-w-sm sm:max-w-md rounded-3xl p-4 sm:p-5 border border-[#e6ccb2] shadow-2xl space-y-3.5 relative my-auto max-h-[92dvh] overflow-y-auto scrollbar-none animate-in fade-in zoom-in-95 duration-150"
                     >
-                        {/* 1. Foto Persegi (1:1) Proporsional & Tombol Close Melayang */}
-                        <div className="relative w-full aspect-square max-h-56 sm:max-h-64 rounded-[1.75rem] overflow-hidden bg-[#FAF0E6]/50 border border-[#e6ccb2]/50 shadow-2xs mx-auto">
+                        {/* Tombol Tutup Melayang di Luar Gambar */}
+                        <button
+                            type="button"
+                            onClick={() => setSelectedProduct(null)}
+                            className="absolute right-3.5 top-3.5 w-8 h-8 rounded-full bg-white/90 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition border border-[#e6ccb2]/80 shadow-md cursor-pointer z-20 active:scale-95"
+                            aria-label="Tutup Detail Produk"
+                        >
+                            <X className="w-4 h-4 stroke-[2.5]" />
+                        </button>
+
+                        {/* 1. Wadah Foto Persegi Penuh 1:1 (Tanpa max-h yang memotong foto) */}
+                        <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-stone-50 border border-[#e6ccb2]/60 shadow-2xs flex items-center justify-center">
                             <img
                                 src={
                                     selectedProduct.image
@@ -743,33 +753,26 @@ export default function MerchandisePage() {
                                         : '/img/placeholder-food.png'
                                 }
                                 alt={selectedProduct.name}
-                                className="w-full h-full object-cover object-center"
+                                className="w-full h-full object-contain sm:object-cover object-center bg-white"
                             />
-
-                            {/* Tombol Tutup Melayang di Pojok Kanan Atas Gambar */}
-                            <button
-                                type="button"
-                                onClick={() => setSelectedProduct(null)}
-                                className="absolute right-3 top-3 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/85 hover:bg-white text-[#3d2314] shadow-md backdrop-blur-xs flex items-center justify-center transition cursor-pointer z-10"
-                                aria-label="Tutup Detail Produk"
-                            >
-                                <X className="w-4 h-4 stroke-[2.5]" />
-                            </button>
                         </div>
 
                         {/* 2. Informasi Produk */}
                         <div className="space-y-1.5 pt-0.5 text-left">
                             {/* Kategori di Kiri & Pill Badges di Kanan */}
                             <div className="flex items-center justify-between gap-1.5">
-                                <span className="text-[11px] sm:text-xs font-black text-[#8c5a3c] uppercase tracking-wider truncate">
+                                <span className="text-[10px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider truncate">
                                     {selectedProduct.category || 'OFFICIAL MERCHANDISE'}
                                 </span>
 
                                 <div className="flex items-center gap-1.5 shrink-0">
-                                    <span className="px-2 py-0.5 rounded-full bg-[#FAF0E6] text-[#8c5a3c] text-[8.5px] sm:text-[9px] font-black uppercase tracking-wider border border-[#e6ccb2]/60 shadow-2xs">
+                                    <span className="px-2 py-0.5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] text-[9px] font-black uppercase tracking-wider border border-[#e6ccb2]/60">
                                         TO MEET
                                     </span>
-                                    <span className="px-2 py-0.5 rounded-full bg-[#FAF0E6] text-[#8c5a3c] text-[8.5px] sm:text-[9px] font-black uppercase tracking-wider border border-[#e6ccb2]/60 shadow-2xs">
+                                    <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider border ${(selectedProduct.stock !== undefined ? selectedProduct.stock > 0 : selectedProduct.is_active !== false)
+                                            ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                                            : 'bg-rose-50 text-rose-700 border-rose-200'
+                                        }`}>
                                         {(selectedProduct.stock !== undefined ? selectedProduct.stock > 0 : selectedProduct.is_active !== false)
                                             ? 'READY STOCK'
                                             : 'HABIS'}
@@ -778,25 +781,23 @@ export default function MerchandisePage() {
                             </div>
 
                             {/* Nama Produk */}
-                            <h2 className="text-base sm:text-lg font-black text-[#3d2314] tracking-tight leading-snug line-clamp-1">
+                            <h3 className="text-base sm:text-lg font-black text-[#3d2314] tracking-tight leading-tight uppercase">
                                 {selectedProduct.name}
-                            </h2>
+                            </h3>
 
-                            {/* Deskripsi: Scroll Hanya Aktif Jika Teks Sangat Panjang */}
-                            <div className="max-h-16 sm:max-h-20 overflow-y-auto pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                                <p className="text-xs sm:text-sm text-[#6c584c] font-medium leading-relaxed">
-                                    {selectedProduct.description || 'Koleksi merchandise resmi berkualitas dari To Meet Cafe & Playground.'}
-                                </p>
-                            </div>
+                            {/* Deskripsi */}
+                            <p className="text-xs sm:text-[13px] text-[#6c584c] font-semibold leading-relaxed">
+                                {selectedProduct.description || 'Koleksi merchandise resmi berkualitas dari To Meet Cafe & Playground.'}
+                            </p>
                         </div>
 
-                        {/* 3. Footer: Info Harga di Kiri & Tombol Pesan Melengkung di Kanan */}
-                        <div className="pt-2 border-t border-[#e6ccb2]/60 flex items-center justify-between gap-2">
+                        {/* 3. Footer: Info Harga di Kiri & Tombol Pesan WA di Kanan */}
+                        <div className="pt-2.5 border-t border-[#e6ccb2]/60 flex items-center justify-between gap-2">
                             <div className="text-left">
-                                <span className="text-[9.5px] sm:text-[10px] font-bold text-[#8c5a3c] uppercase tracking-wider block leading-none">
+                                <span className="text-[9.5px] font-bold text-[#8c5a3c] uppercase tracking-wider block leading-none">
                                     Harga Produk
                                 </span>
-                                <span className="text-sm sm:text-base font-black text-[#3d2314] tracking-tight mt-0.5 block whitespace-nowrap">
+                                <span className="text-sm sm:text-base font-black text-[#3d2314] tracking-tight mt-0.5 block whitespace-nowrap tabular-nums">
                                     Rp {(Number(selectedProduct.price) || 0).toLocaleString('id-ID')}
                                 </span>
                             </div>
@@ -807,7 +808,7 @@ export default function MerchandisePage() {
                                 )}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-4 sm:px-5 py-2 sm:py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:scale-95 text-white font-black text-[11px] sm:text-xs rounded-full shadow-md shadow-[#8c5a3c]/20 transition flex items-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap shrink-0"
+                                className="px-4 sm:px-5 py-2 sm:py-2.5 bg-[#8c5a3c] hover:bg-[#73482f] active:scale-95 text-white font-black text-xs rounded-full shadow-md shadow-[#8c5a3c]/20 transition flex items-center gap-1.5 uppercase tracking-wider cursor-pointer whitespace-nowrap shrink-0"
                             >
                                 <MessageCircle className="w-3.5 h-3.5 fill-current" />
                                 <span>PESAN VIA WA</span>
