@@ -5,19 +5,30 @@ import Link from 'next/link';
 import {
     Search, Star, Utensils, CupSoda, Cake,
     Info, ChevronRight, Coffee, X, MapPin, AlertCircle, RefreshCw,
-    SlidersHorizontal, Sparkles, ThumbsUp, ChevronDown
+    SlidersHorizontal, Sparkles, ChevronDown
 } from 'lucide-react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 // Cache in-memory level modul agar saat navigasi page langsung instan tanpa glitch hero-home
 let cachedMenuBanner: BannerItem | null = null;
+let cachedCategories: string[] = [];
 
-// Custom SVG Icon
+// Custom SVG Icons
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     return (
         <svg className={className} viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 14c-2.8 0-5 1.8-5 4 0 1.2.7 2 1.8 2 1.3 0 2.2-.6 3.2-.6s1.9.6 3.2.6c1.1 0 1.8-.8 1.8-2 0-2.2-2.2-4-5-4zm-5.5-3.5c.8 0 1.5-.9 1.5-2s-.7-2-1.5-2S5 7.4 5 8.5s.7 2 1.5 2zm11 0c.8 0 1.5-.9 1.5-2s-.7-2-1.5-2-1.5.9-1.5 2 .7 2 1.5 2zm-7.5-3c.9 0 1.6-1.1 1.6-2.5S10.9 2.5 10 2.5 8.4 3.6 8.4 5s.7 2.5 1.6 2.5zm4 0c.9 0 1.6-1.1 1.6-2.5s-.7-2.5-1.6-2.5.7 2.5 1.6 2.5z" />
+        </svg>
+    );
+}
+
+function BearFaceIcon({ className = "w-4 h-4" }: { className?: string }) {
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 8a3 3 0 100-6 3 3 0 000 6zm16 0a3 3 0 100-6 3 3 0 000 6z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 8z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15a2 2 0 100-4 2 2 0 000 4z" />
         </svg>
     );
 }
@@ -47,10 +58,34 @@ export interface BannerItem {
     is_active: boolean | number;
 }
 
+// Helper untuk menampilkan icon kategori yang tepat dan variatif
+function getCategoryIcon(cat: string, isSelected: boolean) {
+    const key = (cat || '').toLowerCase();
+
+    if (key === 'bestseller') {
+        return <Star className={`w-3.5 h-3.5 lg:w-4 lg:h-4 shrink-0 ${isSelected ? 'fill-white text-white' : 'fill-amber-400 text-amber-400'}`} />;
+    }
+    if (key === 'recommended') {
+        return <Sparkles className={`w-3.5 h-3.5 lg:w-4 lg:h-4 shrink-0 ${isSelected ? 'fill-white text-white' : 'fill-[#e85a4f] text-[#e85a4f]'}`} />;
+    }
+    if (key.includes('teddy') || key.includes('bear')) {
+        return <BearFaceIcon className="w-3.5 h-3.5 lg:w-4 lg:h-4 shrink-0" />;
+    }
+    if (key.includes('cake') || key.includes('dessert') || key.includes('cookie') || key.includes('treat')) {
+        return <Cake className="w-3.5 h-3.5 lg:w-4 lg:h-4 shrink-0" />;
+    }
+    if (key.includes('snack') || key.includes('meal') || key.includes('food')) {
+        return <Utensils className="w-3.5 h-3.5 lg:w-4 lg:h-4 shrink-0" />;
+    }
+    if (key.includes('tea') || key.includes('fruit') || key.includes('drink') || key.includes('pop') || key.includes('soda')) {
+        return <CupSoda className="w-3.5 h-3.5 lg:w-4 lg:h-4 shrink-0" />;
+    }
+    return <Coffee className="w-3.5 h-3.5 lg:w-4 lg:h-4 shrink-0" />;
+}
+
 export default function DigitalMenuPage() {
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-
-    // Inisialisasi banner langsung dari cache bila sudah pernah dimuat
+    const [backendCategories, setBackendCategories] = useState<string[]>(() => cachedCategories);
     const [menuBanner, setMenuBanner] = useState<BannerItem | null>(() => cachedMenuBanner);
     const [isBannerResolved, setIsBannerResolved] = useState<boolean>(() => cachedMenuBanner !== null);
 
@@ -99,8 +134,10 @@ export default function DigitalMenuPage() {
             setIsLoading(true);
             setIsError(false);
 
-            const [resMenu, resBanner] = await Promise.all([
+            // Fetch menu, categories terurut dari DB, dan banner secara paralel
+            const [resMenu, resCat, resBanner] = await Promise.all([
                 fetch(`${API_BASE_URL}/api/menus`, { cache: 'no-store' }),
+                fetch(`${API_BASE_URL}/api/categories?type=menu`, { cache: 'no-store' }).catch(() => null),
                 fetch(`${API_BASE_URL}/api/banners/menu`, { cache: 'default' }).catch(() => null)
             ]);
 
@@ -115,7 +152,18 @@ export default function DigitalMenuPage() {
                 setMenuItems([]);
             }
 
-            // Utamakan banner langsung dari dashboard
+            // Simpan kategori yang sudah tersusun dari backend Laravel
+            if (resCat && resCat.ok) {
+                const jsonCat = await resCat.json();
+                if (jsonCat && Array.isArray(jsonCat.data)) {
+                    const names = jsonCat.data
+                        .map((c: any) => (typeof c === 'string' ? c : c.name || c.title))
+                        .filter(Boolean);
+                    cachedCategories = names;
+                    setBackendCategories(names);
+                }
+            }
+
             if (resBanner && resBanner.ok) {
                 const jsonBanner = await resBanner.json();
                 if (jsonBanner?.data) {
@@ -137,17 +185,50 @@ export default function DigitalMenuPage() {
         fetchMenuPageData();
     }, []);
 
-    // Kategori dinamis dari database + default: all, bestseller, dan recommended
+    // SINKRONISASI KATEGORI BEBAS DUPLIKASI (KEY ANTI-ERROR & TERURUT PERSIS DARI DASHBOARD)
     const availableCategories = useMemo(() => {
         const base = ['all', 'bestseller', 'recommended'];
-        if (menuItems.length === 0) return base;
+        const excluded = ['all', 'bestseller', 'best seller', 'recommended', 'recommend', 'rekomendasi'];
 
-        const unique = Array.from(new Set(menuItems.map(m => m.category).filter(Boolean)));
-        const excluded = ['bestseller', 'best seller', 'recommended', 'recommend', 'rekomendasi'];
-        const cleanDynamic = unique.filter(c => !excluded.includes(c.toLowerCase()));
+        // Ambil semua kategori dari menu aktif
+        const menuCategorySet = new Set(
+            menuItems
+                .filter(item => item.is_active !== false)
+                .map(item => (item.category || '').trim())
+                .filter(c => Boolean(c) && !excluded.includes(c.toLowerCase()))
+        );
 
-        return [...base, ...cleanDynamic];
-    }, [menuItems]);
+        const orderedDynamicList: string[] = [];
+
+        // 1. Urutkan berdasarkan urutan backend jika ada
+        if (backendCategories.length > 0) {
+            backendCategories.forEach((dbCat) => {
+                if (!dbCat) return;
+                const trimmed = dbCat.trim();
+                const matched = Array.from(menuCategorySet).find(
+                    mc => mc.toLowerCase() === trimmed.toLowerCase()
+                );
+                if (matched) {
+                    orderedDynamicList.push(matched);
+                    menuCategorySet.delete(matched);
+                }
+            });
+        }
+
+        // 2. Kategori menu yang belum masuk di database disisipkan di belakang
+        const remainingList = Array.from(menuCategorySet);
+        const combined = [...base, ...orderedDynamicList, ...remainingList];
+
+        // 3. Sanitasi case-insensitive agar key tidak pernah kembar/duplikat
+        const seen = new Set<string>();
+        return combined.filter((cat) => {
+            if (!cat) return false;
+            const lower = cat.toLowerCase();
+            if (seen.has(lower)) return false;
+            seen.add(lower);
+            return true;
+        });
+    }, [backendCategories, menuItems]);
 
     const filteredMenuItems = useMemo(() => {
         return menuItems.filter((item) => {
@@ -174,7 +255,6 @@ export default function DigitalMenuPage() {
         });
     }, [menuItems, selectedCategory, selectedLocation, searchQuery]);
 
-    // Langsung arahkan ke gambar dashboard admin, fallback ke hero-home hanya jika pengecekan tuntas dan dashboard tidak memiliki gambar
     const heroBackgroundImage = useMemo(() => {
         if (menuBanner?.image) {
             return menuBanner.image.startsWith('http')
@@ -194,13 +274,12 @@ export default function DigitalMenuPage() {
         <div className="min-h-screen pb-16 space-y-4 lg:space-y-8">
 
             {/* ================================================= */}
-            {/* 1. HERO SECTION (SMOOTH & ANTI-GLITCH DASHBOARD)  */}
+            {/* 1. HERO SECTION                                   */}
             {/* ================================================= */}
             <section
                 className={`hidden lg:flex w-full relative h-screen max-h-[750px] items-center border-b border-[#e6ccb2]/60 pt-20 pb-6 overflow-hidden transition-colors duration-500 ${heroBackgroundImage ? 'bg-transparent' : 'bg-[#FAF0E6]/30'
                     }`}
             >
-                {/* Background Image Layer dengan Transisi Halus (Smooth Fade-In) */}
                 <div className="absolute inset-0 z-0">
                     {heroBackgroundImage && (
                         <img
@@ -216,7 +295,6 @@ export default function DigitalMenuPage() {
                             className="w-full h-full object-cover object-right opacity-0 transition-opacity duration-700 ease-out"
                         />
                     )}
-                    {/* Gradien Pelindung Kontras Teks */}
                     <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent max-w-2xl lg:max-w-3xl pointer-events-none" />
                 </div>
 
@@ -231,7 +309,6 @@ export default function DigitalMenuPage() {
                             <span className="text-[#3d2314] font-black">DIGITAL MENU</span>
                         </div>
 
-                        {/* Title: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <h1 className="text-4xl lg:text-4xl font-black text-[#3d2314] tracking-tight leading-tight">
                             {menuBanner?.title
                                 ? menuBanner.title
@@ -240,7 +317,6 @@ export default function DigitalMenuPage() {
                                     : null}
                         </h1>
 
-                        {/* Subtitle: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
                         <p className="text-sm sm:text-[15px] text-[#5a4232] font-semibold leading-relaxed max-w-md">
                             {menuBanner?.subtitle
                                 ? menuBanner.subtitle
@@ -263,7 +339,7 @@ export default function DigitalMenuPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 2. MAIN CONTENT AREA & UX KATEGORI MOBILE         */}
+            {/* 2. MAIN CONTENT AREA & KATEGORI HASIL REORDERING  */}
             {/* ================================================= */}
             <section id="menu-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-6">
                 <div className="bg-white p-4 sm:p-8 lg:p-10 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-5 lg:space-y-8">
@@ -309,6 +385,7 @@ export default function DigitalMenuPage() {
                             <Search className="w-4 h-4 lg:w-5 lg:h-5 text-[#8c5a3c] absolute left-3.5 lg:left-4 top-3 lg:top-3.5" />
                             {searchQuery && (
                                 <button
+                                    type="button"
                                     onClick={() => setSearchQuery('')}
                                     className="absolute right-3 lg:right-4 top-3 lg:top-3.5 text-[#8c5a3c] hover:text-[#3d2314] cursor-pointer"
                                 >
@@ -318,9 +395,8 @@ export default function DigitalMenuPage() {
                         </div>
                     </div>
 
-                    {/* UX KATEGORI MENU KHUSUS MOBILE: Custom Animated Dropdown (Tanpa Scroll Samping) */}
+                    {/* UX KATEGORI MENU KHUSUS MOBILE: Custom Animated Dropdown (Bebas Key Kembar) */}
                     <div className="block lg:hidden relative z-20">
-                        {/* Label Bar Kecil */}
                         <div className="flex items-center justify-between px-1 pb-1.5">
                             <span className="text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider flex items-center gap-1.5">
                                 <SlidersHorizontal className="w-3.5 h-3.5" />
@@ -331,7 +407,6 @@ export default function DigitalMenuPage() {
                             </span>
                         </div>
 
-                        {/* Tombol Pemicu Dropdown Utama */}
                         <button
                             type="button"
                             onClick={() => setIsCategoryDropdownOpen(prev => !prev)}
@@ -339,17 +414,10 @@ export default function DigitalMenuPage() {
                         >
                             <div className="flex items-center gap-2.5 min-w-0 pr-2">
                                 <div className="w-7 h-7 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shadow-2xs shrink-0 border border-[#e6ccb2]/50">
-                                    {selectedCategory === 'bestseller' ? (
-                                        <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                                    ) : selectedCategory === 'recommended' ? (
-                                        <Sparkles className="w-3.5 h-3.5 text-[#e85a4f] fill-current" />
-                                    ) : (
-                                        <Coffee className="w-3.5 h-3.5 text-[#8c5a3c]" />
-                                    )}
+                                    {getCategoryIcon(selectedCategory, false)}
                                 </div>
                                 <div className="truncate">
-
-                                    <span className="text-xs sm:text-[13px] font-black text-[#3d2314] uppercase tracking-wide block mt-0.5 truncate">
+                                    <span className="text-xs sm:text-[13px] font-black text-[#3d2314] uppercase tracking-wide block truncate">
                                         {selectedCategory === 'all'
                                             ? 'SEMUA MENU'
                                             : selectedCategory === 'bestseller'
@@ -361,14 +429,12 @@ export default function DigitalMenuPage() {
                                 </div>
                             </div>
 
-                            {/* Chevron dengan Animasi Rotasi Halus */}
                             <div className={`w-6 h-6 rounded-full bg-white/80 border border-[#e6ccb2]/60 flex items-center justify-center text-[#8c5a3c] transition-transform duration-300 shrink-0 ${isCategoryDropdownOpen ? 'rotate-180 bg-[#8c5a3c] text-white' : ''
                                 }`}>
                                 <ChevronDown className="w-3.5 h-3.5" />
                             </div>
                         </button>
 
-                        {/* List Menu Dropdown dengan Animasi Smooth Accordion */}
                         <div
                             className={`grid transition-all duration-300 ease-in-out ${isCategoryDropdownOpen
                                 ? 'grid-rows-[1fr] opacity-100 mt-2'
@@ -376,8 +442,8 @@ export default function DigitalMenuPage() {
                                 }`}
                         >
                             <div className="overflow-hidden">
-                                <div className="bg-white rounded-2xl border border-[#e6ccb2]/80 shadow-md p-2 space-y-1 max-h-64 overflow-y-auto overscroll-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                                    {availableCategories.map((cat) => {
+                                <div className="bg-white rounded-2xl border border-[#e6ccb2]/80 shadow-md p-2 space-y-1 max-h-64 overflow-y-auto overscroll-contain scrollbar-none">
+                                    {availableCategories.map((cat, idx) => {
                                         const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
                                         let label = cat.toUpperCase();
                                         if (cat === 'all') label = 'SEMUA MENU';
@@ -386,7 +452,7 @@ export default function DigitalMenuPage() {
 
                                         return (
                                             <button
-                                                key={cat}
+                                                key={`mobile-cat-${cat}-${idx}`}
                                                 type="button"
                                                 onClick={() => {
                                                     setSelectedCategory(cat);
@@ -397,15 +463,11 @@ export default function DigitalMenuPage() {
                                                     : 'text-[#3d2314] hover:bg-[#FAF0E6] font-bold text-xs'
                                                     }`}
                                             >
-                                                <div className="flex items-center gap-2.5">
-                                                    {cat === 'bestseller' ? (
-                                                        <Star className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'fill-white text-white' : 'fill-amber-400 text-amber-400'}`} />
-                                                    ) : cat === 'recommended' ? (
-                                                        <Sparkles className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'fill-white text-white' : 'fill-[#e85a4f] text-[#e85a4f]'}`} />
-                                                    ) : (
-                                                        <Coffee className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`} />
-                                                    )}
-                                                    <span className="text-[11.5px] uppercase tracking-wider">
+                                                <div className="flex items-center gap-2.5 truncate">
+                                                    <div className={`shrink-0 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`}>
+                                                        {getCategoryIcon(cat, isSelected)}
+                                                    </div>
+                                                    <span className="text-[11.5px] uppercase tracking-wider truncate">
                                                         {label}
                                                     </span>
                                                 </div>
@@ -423,9 +485,9 @@ export default function DigitalMenuPage() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
-                        {/* SIDEBAR FILTER (KIRI - HANYA DESKTOP) */}
+                        {/* SIDEBAR FILTER (KIRI - HANYA DESKTOP, URUT SESUAI HASIL REORDERING DASHBOARD) */}
                         <aside className="hidden lg:block lg:col-span-3 lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:flex lg:flex-col gap-3.5">
-                            <div className="text-xs lg:text-sm font-black text-[#3d2314] uppercase tracking-wider px-1 flex items-center gap-2">
+                            <div className="text-xs lg:text-sm font-black text-[#3d2314] uppercase tracking-wider px-1 flex items-center gap-2 border-b border-[#e6ccb2]/60 pb-2">
                                 <SlidersHorizontal className="w-4 h-4 text-[#8c5a3c]" />
                                 <span>Kategori Menu</span>
                             </div>
@@ -434,7 +496,7 @@ export default function DigitalMenuPage() {
                                 onWheel={(e) => e.stopPropagation()}
                                 className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto lg:flex-1 lg:min-h-0 overscroll-contain pr-1.5 pb-3 scrollbar-thin scrollbar-thumb-[#8c5a3c]/30 scrollbar-track-transparent"
                             >
-                                {availableCategories.map((cat) => {
+                                {availableCategories.map((cat, idx) => {
                                     const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
                                     let label = cat.toUpperCase();
                                     if (cat === 'all') label = 'SEMUA MENU';
@@ -443,23 +505,19 @@ export default function DigitalMenuPage() {
 
                                     return (
                                         <button
-                                            key={cat}
+                                            key={`desktop-cat-${cat}-${idx}`}
                                             type="button"
                                             onClick={() => setSelectedCategory(cat)}
                                             className={`flex items-center justify-between px-3.5 lg:px-4 py-2.5 lg:py-3 rounded-2xl transition shrink-0 cursor-pointer text-left w-full ${isSelected
-                                                ? 'bg-[#8c5a3c] text-white shadow-xs'
-                                                : 'bg-[#FAF0E6]/50 text-[#3d2314] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60'
+                                                ? 'bg-[#8c5a3c] text-white shadow-xs font-black'
+                                                : 'bg-[#FAF0E6]/50 text-[#3d2314] hover:bg-[#FAF0E6] border border-[#e6ccb2]/60 font-bold'
                                                 }`}
                                         >
                                             <span className="flex items-center gap-2.5 min-w-0 pr-1">
-                                                {cat === 'bestseller' ? (
-                                                    <Star className="w-4 h-4 text-amber-400 fill-amber-400 shrink-0" />
-                                                ) : cat === 'recommended' ? (
-                                                    <Sparkles className="w-4 h-4 text-[#e85a4f] fill-[#e85a4f] shrink-0" />
-                                                ) : (
-                                                    <Coffee className="w-4 h-4 shrink-0 text-current" />
-                                                )}
-                                                <span className="text-[10.5px] lg:text-xs xl:text-[13px] font-black uppercase tracking-tight leading-none truncate whitespace-nowrap">
+                                                <div className={`shrink-0 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`}>
+                                                    {getCategoryIcon(cat, isSelected)}
+                                                </div>
+                                                <span className="text-[10.5px] lg:text-xs xl:text-[13px] uppercase tracking-tight leading-none truncate whitespace-nowrap">
                                                     {label}
                                                 </span>
                                             </span>
@@ -670,7 +728,19 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
     const categoryName = item.category || 'MENU';
     const locationName = item.location && item.location !== 'all'
         ? (item.location === 'heavenland' ? 'Heavenland' : 'P. Mutiara')
-        : 'To Meet';
+        : 'Semua Outlet';
+
+    // Format teks opsi pembelian: ubah Take Away menjadi TA
+    const formatPurchaseOption = (opt?: string) => {
+        if (!opt) return 'DINE IN & TA';
+        const upper = opt.toUpperCase();
+        if (upper.includes('TAKE AWAY') || upper.includes('TAKEAWAY')) {
+            return 'DINE IN & TA';
+        }
+        return opt.toUpperCase();
+    };
+
+    const displayPurchaseOption = formatPurchaseOption(item.purchase_option);
 
     return (
         <div
@@ -693,7 +763,7 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                         </div>
                     )}
 
-                    {/* Badge Badging di Kiri Atas Foto */}
+                    {/* Badge di Kiri Atas Foto */}
                     <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 flex flex-col gap-1 z-10">
                         {isBestseller && (
                             <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-[#d4a373] text-white text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-wider shadow-2xs whitespace-nowrap">
@@ -718,28 +788,28 @@ function MenuProductCard({ item, onSelect }: { item: MenuItem; onSelect: (item: 
                     </span>
                 </div>
 
-                {/* 3. Nama & Deskripsi (Ukuran, Line-clamp, & Tinggi Min Sama Persis) */}
+                {/* 3. Nama & Deskripsi */}
                 <div className="space-y-0.5 sm:space-y-1">
                     <h4 className="font-black text-xs sm:text-sm text-[#3d2314] tracking-tight leading-snug line-clamp-1 uppercase group-hover:text-[#8c5a3c] transition-colors">
                         {item.name}
                     </h4>
-                    <p className="text-[13px] text-[#6c584c] font-medium leading-relaxed line-clamp-2 min-h-7 sm:min-h-8">
+                    <p className="text-[10.5px] sm:text-xs text-[#6c584c] font-medium leading-relaxed line-clamp-2 min-h-7 sm:min-h-8">
                         {item.description || '-'}
                     </p>
                 </div>
             </div>
 
-            {/* 4. Footer: Info Harga & Opsi Pembelian (Satu Baris, Tabular, Tidak Patah) */}
-            <div className="pt-2 flex items-center justify-between gap-1 border-t border-[#e6ccb2]/40 min-w-0">
+            {/* 4. Footer: Info Harga & DINE IN & TA (Rapi, Sejajar, Tidak Tembus) */}
+            <div className="pt-2 border-t border-[#e6ccb2]/40 flex items-center justify-between gap-1 min-w-0">
                 <span className="font-black text-xs sm:text-sm text-[#3d2314] whitespace-nowrap tabular-nums shrink-0">
                     {formattedPrice}
                 </span>
 
                 <span
-                    title={item.purchase_option || 'DINE IN'}
-                    className="px-1.5 sm:px-2 py-0.5 rounded-full text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-tight sm:tracking-wider border border-[#e6ccb2]/80 bg-white text-[#3d2314] shadow-2xs shrink-0 whitespace-nowrap truncate max-w-[100px]"
+                    title={item.purchase_option || 'Dine In & Take Away'}
+                    className="px-2 py-0.5 rounded-full text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-wider border border-[#e6ccb2]/80 bg-white text-[#3d2314] shadow-2xs shrink-0 whitespace-nowrap"
                 >
-                    {item.purchase_option || 'Dine In'}
+                    {displayPurchaseOption}
                 </span>
             </div>
         </div>

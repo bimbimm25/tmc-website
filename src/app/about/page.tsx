@@ -464,7 +464,7 @@ export default function AboutPage() {
                                 </div>
                                 <div className="flex-1 flex items-start justify-center pt-1.5">
                                     <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                                        Nikmati hidangan lezat dan area playground ramah anak.
+                                        Cek lokasi To meet terdekat
                                     </p>
                                 </div>
                             </div>
@@ -489,7 +489,7 @@ export default function AboutPage() {
                                 </div>
                                 <div className="flex-1 flex items-start justify-center pt-1.5">
                                     <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                                        Kue, makanan, dan minuman lezat bertema beruang.
+                                        Makanan dan minuman lucu yang dibuat dengan penuh cinta.
                                     </p>
                                 </div>
                             </div>
@@ -514,7 +514,7 @@ export default function AboutPage() {
                                 </div>
                                 <div className="flex-1 flex items-start justify-center pt-1.5">
                                     <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                                        Aktivitas edukatif dan kelas kreatif mengasah bakat.
+                                        Aktivitas seru dan workshop interaktif 
                                     </p>
                                 </div>
                             </div>
@@ -539,7 +539,7 @@ export default function AboutPage() {
                                 </div>
                                 <div className="flex-1 flex items-start justify-center pt-1.5">
                                     <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                                        Koleksi boneka dan suvenir lucu khas To Meet.
+                                        Bawa pulang item spesial dari To Meet 
                                     </p>
                                 </div>
                             </div>

@@ -516,7 +516,7 @@ export default function FAQPage() {
                             <div className="w-5 h-5 rounded-lg bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
                                 <BearFaceIcon className="w-3.5 h-3.5" />
                             </div>
-                            <span className="text-[10.5px] font-black text-[#3d2314]">
+                            <span className="text-[13px] font-black text-[#3d2314]">
                                 Punya pertanyaan lain? Kami siap menjawab!
                             </span>
                         </div>

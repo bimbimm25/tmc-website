@@ -9,7 +9,6 @@ import {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
-// Cache memori modul agar saat navigasi rute langsung instan tanpa glitch
 let cachedMerchBanner: BannerItem | null = null;
 
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
@@ -44,6 +43,47 @@ function renderFormattedText(text?: string | null, fallback?: React.ReactNode) {
     ));
 }
 
+// Helper cerdas untuk mengecek status ketersediaan stok dari dashboard admin secara akurat
+export function checkMerchandiseStock(item?: any): boolean {
+    if (!item) return false;
+
+    // 1. Jika ada kolom stock / stok berbentuk angka atau string angka
+    if (item.stock !== undefined && item.stock !== null && item.stock !== '') {
+        const stockNum = Number(item.stock);
+        if (!isNaN(stockNum)) {
+            return stockNum > 0;
+        }
+    }
+    if (item.stok !== undefined && item.stok !== null && item.stok !== '') {
+        const stokNum = Number(item.stok);
+        if (!isNaN(stokNum)) {
+            return stokNum > 0;
+        }
+    }
+
+    // 2. Jika ada kolom status teks seperti status / stock_status / availability
+    const statusVal = String(item.status || item.stock_status || item.availability || '').toLowerCase().trim();
+    if (['habis', 'out_of_stock', 'sold_out', 'empty', 'unavailable', 'kosong', '0'].includes(statusVal)) {
+        return false;
+    }
+    if (['ready', 'ready_stock', 'available', 'in_stock', 'ada', '1'].includes(statusVal)) {
+        return true;
+    }
+
+    // 3. Jika menggunakan boolean is_active / is_ready / in_stock
+    if (item.is_ready !== undefined && item.is_ready !== null) {
+        return item.is_ready === true || item.is_ready === 1 || item.is_ready === '1';
+    }
+    if (item.is_available !== undefined && item.is_available !== null) {
+        return item.is_available === true || item.is_available === 1 || item.is_available === '1';
+    }
+    if (item.is_active !== undefined && item.is_active !== null) {
+        return item.is_active === true || item.is_active === 1 || item.is_active === '1';
+    }
+
+    return true;
+}
+
 export interface MerchandiseItem {
     id: number;
     category?: string;
@@ -52,14 +92,20 @@ export interface MerchandiseItem {
     description: string;
     price: number;
     image?: string | null;
-    stock?: number;
-    is_new?: boolean | number;
-    is_best_seller?: boolean | number;
-    is_bestseller?: boolean | number;
-    is_featured?: boolean | number;
-    is_active?: boolean | number;
+    stock?: number | string;
+    stok?: number | string;
+    status?: string;
+    stock_status?: string;
+    is_ready?: boolean | number | string;
+    is_available?: boolean | number | string;
+    is_new?: boolean | number | string;
+    is_best_seller?: boolean | number | string;
+    is_bestseller?: boolean | number | string;
+    is_featured?: boolean | number | string;
+    is_active?: boolean | number | string;
     purchase_type?: string;
     purchase_option?: string;
+    location?: string;
 }
 
 export interface BannerItem {
@@ -70,7 +116,7 @@ export interface BannerItem {
     image?: string | null;
     cta_text?: string | null;
     cta_link?: string | null;
-    is_active: boolean | number;
+    is_active: boolean | number | string;
 }
 
 export default function MerchandisePage() {
@@ -86,13 +132,12 @@ export default function MerchandisePage() {
     const [displayCount, setDisplayCount] = useState<number>(8);
     const [selectedProduct, setSelectedProduct] = useState<MerchandiseItem | null>(null);
 
-    // Kunci skrol halaman belakang sepenuhnya apabila modal dibuka
+    // Kunci scroll halaman belakang sepenuhnya apabila modal dibuka
     useEffect(() => {
         if (selectedProduct) {
             const originalHtmlOverflow = document.documentElement.style.overflow;
             const originalBodyOverflow = document.body.style.overflow;
 
-            // Kunci kedua-dua html dan body agar halaman belakang pegun (diam)
             document.documentElement.style.overflow = 'hidden';
             document.body.style.overflow = 'hidden';
 
@@ -154,7 +199,7 @@ export default function MerchandisePage() {
 
     const filteredAndSortedItems = useMemo(() => {
         let result = merchItems.filter(item => {
-            if (item.is_active === false) return false;
+            if (item.is_active === false || item.is_active === 0 || item.is_active === '0') return false;
 
             let matchesCategory = false;
             if (selectedCategory === 'all') {
@@ -206,6 +251,8 @@ export default function MerchandisePage() {
         if (selectedCategory === 'best_seller') return 'BEST SELLER PRODUCTS';
         return selectedCategory.toUpperCase();
     }, [selectedCategory]);
+
+    const isSelectedProductReady = selectedProduct ? checkMerchandiseStock(selectedProduct) : false;
 
     return (
         <div className="min-h-screen pb-16 space-y-6 sm:space-y-10">
@@ -350,7 +397,7 @@ export default function MerchandisePage() {
                         )}
                     </div>
 
-                    {/* KATEGORI VERSI MOBILE: Horizontal Scroll Pill Chips (Bersih Tanpa Scrollbar Menabrak) */}
+                    {/* KATEGORI VERSI MOBILE */}
                     <div className="block lg:hidden">
                         <div className="flex items-center gap-2 overflow-x-auto pt-1 pb-3 scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             {availableCategories.map((cat) => {
@@ -466,7 +513,7 @@ export default function MerchandisePage() {
                         {/* PRODUCT GRID & SORTING (KANAN) */}
                         <main className="lg:col-span-9 space-y-5 lg:space-y-6">
 
-                            {/* Header Sort & Counter: Rapi & Fleksibel di Mobile */}
+                            {/* Header Sort & Counter */}
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-[#e6ccb2]/60 pb-3">
                                 <div className="flex items-center gap-2 text-sm sm:text-base lg:text-lg font-black text-[#3d2314] uppercase tracking-wide">
                                     <BearPawIcon className="w-4 h-4 lg:w-5 lg:h-5 text-[#8c5a3c] shrink-0" />
@@ -545,7 +592,7 @@ export default function MerchandisePage() {
                                 </div>
                             )}
 
-                            {/* Grid Produk: Gap lebih presisi untuk layar HP */}
+                            {/* Grid Produk */}
                             {!isLoading && !isError && displayedItems.length > 0 && (
                                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
                                     {displayedItems.map((item) => (
@@ -641,7 +688,6 @@ export default function MerchandisePage() {
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="relative w-full rounded-2xl sm:rounded-[2.5rem] overflow-hidden shadow-md border border-[#e6ccb2]/60 sm:aspect-16/4 lg:aspect-1920/420 flex items-center">
 
-                    {/* 1. Background Image Banner: Di-zoom pas agar bagian bawah tertutup penuh */}
                     <img
                         src="/img/banner-section-merch.png"
                         alt="To Meet Cafe Merchandise Banner"
@@ -649,29 +695,22 @@ export default function MerchandisePage() {
                         style={{ objectPosition: 'center 55%' }}
                     />
 
-                    {/* 2. Konten Teks & Polaroid */}
                     <div className="relative z-10 w-full flex items-center justify-between px-3.5 sm:px-8 lg:px-12 py-3.5 sm:py-0 gap-2 sm:gap-4">
 
-                        {/* Sisi Kiri: Teks & Tombol */}
                         <div className="max-w-[56%] sm:max-w-md lg:max-w-xl space-y-1 sm:space-y-2 text-left">
-
-                            {/* Pill Badge */}
                             <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-[#ffd6a5] text-[9.5px] sm:text-xs font-black tracking-widest uppercase border border-white/20">
                                 <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-300" />
                                 <span>ORDER DIRECTLY</span>
                             </div>
 
-                            {/* Heading */}
                             <h2 className="text-xs sm:text-xl lg:text-3xl font-black text-white tracking-tight uppercase leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                                 Want to order or ask more?
                             </h2>
 
-                            {/* Deskripsi */}
                             <p className="text-[10px] sm:text-sm text-stone-100 font-semibold leading-tight drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)] line-clamp-2">
                                 Chat with us on WhatsApp to check stock and place your order!
                             </p>
 
-                            {/* Tombol WhatsApp */}
                             <div className="pt-0.5 sm:pt-1">
                                 <a
                                     href="https://wa.me/6282141609328?text=Halo%20To%20Meet%20Cafe,%20saya%20mau%20order%20merchandise"
@@ -685,10 +724,7 @@ export default function MerchandisePage() {
                             </div>
                         </div>
 
-                        {/* Sisi Kanan: 2 Foto Polaroid (Pas di Dalam Frame & Tidak Terpotong) */}
                         <div className="flex items-center gap-1.5 sm:gap-3.5 lg:gap-4 shrink-0 pr-0.5 sm:pr-0">
-
-                            {/* Polaroid 1 */}
                             <div className="w-[62px] sm:w-24 lg:w-32 aspect-3/4 bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform -rotate-2 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border border-white">
                                 <img
                                     src="/img/mc-1.png"
@@ -700,7 +736,6 @@ export default function MerchandisePage() {
                                 </span>
                             </div>
 
-                            {/* Polaroid 2 */}
                             <div className="w-[62px] sm:w-24 lg:w-32 aspect-3/4 bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl shadow-xl transform rotate-2 hover:rotate-0 transition duration-300 text-center flex flex-col justify-between border border-white">
                                 <img
                                     src="/img/mc-2.png"
@@ -711,7 +746,6 @@ export default function MerchandisePage() {
                                     For Friend
                                 </span>
                             </div>
-
                         </div>
 
                     </div>
@@ -742,7 +776,7 @@ export default function MerchandisePage() {
                             <X className="w-4 h-4 stroke-[2.5]" />
                         </button>
 
-                        {/* 1. Wadah Foto Persegi Penuh 1:1 (Tanpa max-h yang memotong foto) */}
+                        {/* 1. Wadah Foto Persegi Penuh 1:1 */}
                         <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-stone-50 border border-[#e6ccb2]/60 shadow-2xs flex items-center justify-center">
                             <img
                                 src={
@@ -759,23 +793,24 @@ export default function MerchandisePage() {
 
                         {/* 2. Informasi Produk */}
                         <div className="space-y-1.5 pt-0.5 text-left">
-                            {/* Kategori di Kiri & Pill Badges di Kanan */}
                             <div className="flex items-center justify-between gap-1.5">
                                 <span className="text-[10px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider truncate">
                                     {selectedProduct.category || 'OFFICIAL MERCHANDISE'}
                                 </span>
 
                                 <div className="flex items-center gap-1.5 shrink-0">
+                                    {/* BADGE LOKASI: Menampilkan P. Mutiara */}
                                     <span className="px-2 py-0.5 rounded-md bg-[#FAF0E6] text-[#8c5a3c] text-[9px] font-black uppercase tracking-wider border border-[#e6ccb2]/60">
-                                        TO MEET
+                                        {selectedProduct.location && selectedProduct.location !== 'all'
+                                            ? (selectedProduct.location.toLowerCase().includes('heaven') ? 'Heavenland' : 'P. Mutiara')
+                                            : 'P. Mutiara'}
                                     </span>
-                                    <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider border ${(selectedProduct.stock !== undefined ? selectedProduct.stock > 0 : selectedProduct.is_active !== false)
+
+                                    <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider border ${isSelectedProductReady
                                             ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
                                             : 'bg-rose-50 text-rose-700 border-rose-200'
                                         }`}>
-                                        {(selectedProduct.stock !== undefined ? selectedProduct.stock > 0 : selectedProduct.is_active !== false)
-                                            ? 'READY STOCK'
-                                            : 'HABIS'}
+                                        {isSelectedProductReady ? 'READY STOCK' : 'HABIS'}
                                     </span>
                                 </div>
                             </div>
@@ -838,8 +873,15 @@ function MerchandiseProductCard({ item, onSelect }: MerchandiseProductCardProps)
         : '/img/placeholder-food.png';
 
     const categoryName = item.category || 'MERCHANDISE';
-    const isAvailable = item.stock !== undefined ? item.stock > 0 : item.is_active !== false;
-    const statusLabel = isAvailable ? 'READY STOCK' : 'HABIS';
+
+    // Pengecekan status ketersediaan stok yang presisi sesuai inputan admin dashboard
+    const isAvailable = checkMerchandiseStock(item);
+    const statusLabel = isAvailable ? 'READY STOCK' : 'TIDAK TERSEDIA';
+
+    // Badge Lokasi: Menampilkan P. Mutiara secara default atau sesuai data item
+    const locationName = item.location && item.location !== 'all'
+        ? (item.location.toLowerCase().includes('heaven') ? 'Heavenland' : 'P. Mutiara')
+        : 'P. Mutiara';
 
     return (
         <div
@@ -867,19 +909,19 @@ function MerchandiseProductCard({ item, onSelect }: MerchandiseProductCardProps)
                     {!isAvailable && (
                         <div className="absolute inset-0 bg-black/45 backdrop-blur-[1px] flex items-center justify-center">
                             <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-white/95 text-[#e85a4f] font-black text-[9px] sm:text-[10px] uppercase tracking-wider rounded-full shadow-md">
-                                HABIS
+                                TIDAK TERSEDIA
                             </span>
                         </div>
                     )}
                 </div>
 
-                {/* 2. Kategori & Badge Outlet */}
+                {/* 2. Kategori & Badge Outlet (Menampilkan P. Mutiara) */}
                 <div className="flex items-center justify-between gap-1 pt-0.5">
                     <span className="text-[9.5px] sm:text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider truncate">
                         {categoryName}
                     </span>
                     <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-white text-[#8c5a3c] text-[8px] sm:text-[9px] font-bold tracking-tight border border-[#e6ccb2]/80 shrink-0 whitespace-nowrap">
-                        To Meet
+                        {locationName}
                     </span>
                 </div>
 
@@ -903,8 +945,8 @@ function MerchandiseProductCard({ item, onSelect }: MerchandiseProductCardProps)
                 <span
                     title={statusLabel}
                     className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-tight sm:tracking-wider border shadow-2xs shrink-0 whitespace-nowrap ${isAvailable
-                        ? 'bg-white text-[#3d2314] border-[#e6ccb2]/80'
-                        : 'bg-rose-50 text-rose-600 border-rose-200'
+                            ? 'bg-white text-[#3d2314] border-[#e6ccb2]/80'
+                            : 'bg-rose-50 text-rose-600 border-rose-200'
                         }`}
                 >
                     {statusLabel}

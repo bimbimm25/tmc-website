@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, ReactNode } from 'react';
+import { useEffect, useRef, ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
 
 interface SmoothScrollProps {
@@ -8,31 +9,57 @@ interface SmoothScrollProps {
 }
 
 export default function SmoothScroll({ children }: SmoothScrollProps) {
+    const pathname = usePathname();
+    const lenisRef = useRef<Lenis | null>(null);
+
+    // 1. Inisialisasi Lenis dengan RAF Loop yang Bersih & Anti-Stutter
     useEffect(() => {
-        // Inisialisasi Lenis dengan konfigurasi animasi scroll yang super mulus
         const lenis = new Lenis({
-            duration: 1.2, // Durasi inersia (makin tinggi makin mulus)
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing curve murni khas Apple/Mac
+            duration: 1.15,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             orientation: 'vertical',
             gestureOrientation: 'vertical',
-            smoothWheel: true, // Mengaktifkan smooth scroll untuk mouse wheel & trackpad
-            wheelMultiplier: 1.0, // Kecepatan gulir mouse
-            touchMultiplier: 1.5, // Kecepatan gulir di layar HP/touchscreen
+            smoothWheel: true,
+            wheelMultiplier: 0.95, // Kecepatan scroll natural, tidak lompat-lompat
+            touchMultiplier: 1.0,
+            syncTouch: false,      // Jaga scroll mobile tetap natural tanpa lag input
         });
 
-        // Loop animasi menggunakan requestAnimationFrame
+        lenisRef.current = lenis;
+
+        let rafId: number;
         function raf(time: number) {
             lenis.raf(time);
-            requestAnimationFrame(raf);
+            rafId = requestAnimationFrame(raf);
         }
 
-        requestAnimationFrame(raf);
+        rafId = requestAnimationFrame(raf);
 
-        // Cleanup saat komponen di-unmount
         return () => {
+            cancelAnimationFrame(rafId);
             lenis.destroy();
+            lenisRef.current = null;
         };
     }, []);
+
+    // 2. Paksa Scroll Kembali ke Paling Atas Saat Pindah Halaman (Route Change)
+    useEffect(() => {
+        if (!lenisRef.current) return;
+
+        // Hentikan inersia/momentum yang sedang berjalan
+        lenisRef.current.stop();
+
+        // Paksa scroll langsung ke puncak halaman secara instan (tanpa animasi transisi)
+        lenisRef.current.scrollTo(0, { immediate: true });
+        window.scrollTo(0, 0);
+
+        // Lanjutkan kembali engine scroll Lenis
+        const timer = setTimeout(() => {
+            lenisRef.current?.start();
+        }, 50);
+
+        return () => clearTimeout(timer);
+    }, [pathname]);
 
     return <>{children}</>;
 }

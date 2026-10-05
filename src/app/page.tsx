@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
@@ -90,7 +91,7 @@ export default function Home() {
   const latestEvent: Event | null = homeData?.latest_event || null;
   const activeMission: RobloxMission | null = homeData?.active_mission || null;
 
-  // Utamakan gambar dari dashboard. Jika tuntas dicek dan tidak ada, baru fallback ke hero-home
+  // Utamakan gambar dari dashboard
   const heroBackgroundImage = useMemo(() => {
     if (homeBanner?.image) {
       return homeBanner.image.startsWith('http')
@@ -105,24 +106,28 @@ export default function Home() {
   return (
     <div className="space-y-12 lg:space-y-16 pb-16">
 
+      {/* Preload Browser Hint untuk kecepatan download gambar instan */}
+      {heroBackgroundImage && (
+        <link rel="preload" as="image" href={heroBackgroundImage} fetchPriority="high" />
+      )}
+
       {/* ================================================= */}
-      {/* 1. HERO SECTION (SMOOTH & ANTI-GLITCH DASHBOARD)  */}
+      {/* 1. HERO SECTION (HIGH PERFORMANCE + NEXT/IMAGE)  */}
       {/* ================================================= */}
-      <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50 bg-[#FAF0E6]/30 transition-colors duration-500">
+      <section className="relative w-full h-screen min-h-dvh flex items-center overflow-hidden border-b border-[#e6ccb2]/50 bg-[#FAF0E6]/30">
+
         {/* 1. Background Cover Layer */}
         <div className="absolute inset-0 z-0">
           {heroBackgroundImage && (
-            <img
+            <Image
               src={heroBackgroundImage}
               alt="To Meet Cafe Atmosphere"
-              loading="eager"
+              fill
+              priority
               fetchPriority="high"
-              decoding="async"
-              onLoad={(e) => {
-                (e.currentTarget as HTMLElement).classList.remove('opacity-0');
-                (e.currentTarget as HTMLElement).classList.add('opacity-100');
-              }}
-              className="w-full h-full object-cover object-[75%_center] lg:object-right xl:object-center opacity-0 transition-opacity duration-700 ease-out"
+              quality={80}
+              sizes="100vw"
+              className="object-cover object-[75%_center] lg:object-right xl:object-center"
             />
           )}
 
@@ -144,7 +149,7 @@ export default function Home() {
               <Sparkles className="w-3 h-3 text-amber-500" />
             </div>
 
-            {/* Title: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
+            {/* Title: Utamakan Dashboard -> Fallback Default */}
             <h1 className="text-2xl sm:text-3xl lg:text-[2.6rem] font-black text-[#2e170c] tracking-tight leading-[1.18]">
               {homeBanner?.title ? (
                 <FormatTextWithBreak text={homeBanner.title} />
@@ -157,7 +162,7 @@ export default function Home() {
               ) : null}
             </h1>
 
-            {/* Subtitle: Utamakan Dashboard -> Fallback Default jika tuntas & kosong */}
+            {/* Subtitle: Utamakan Dashboard -> Fallback Default */}
             <p className="text-sm sm:text-[14px] text-[#4a3427] font-semibold leading-relaxed max-w-md">
               {homeBanner?.subtitle ? (
                 <FormatTextWithBreak text={homeBanner.subtitle} />
@@ -190,7 +195,7 @@ export default function Home() {
       </section>
 
       {/* ================================================= */}
-      {/* SECTION: CHOOSE YOUR ADVENTURE                    */}
+      {/* 2. CHOOSE YOUR ADVENTURE                          */}
       {/* ================================================= */}
       <section id="adventure" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
 
@@ -211,7 +216,6 @@ export default function Home() {
             href="/visit-us"
             className="bg-white p-4 sm:p-5 rounded-3xl border border-[#e6ccb2]/80 shadow-xs hover:shadow-md hover:border-[#8c5a3c] transition duration-200 text-center flex flex-col items-center justify-between group cursor-pointer h-full"
           >
-            {/* Slot Gambar Konsisten */}
             <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shrink-0 mb-3.5">
               <img
                 src="/img/icon-visit-cafe.png"
@@ -220,7 +224,6 @@ export default function Home() {
               />
             </div>
 
-            {/* Container Teks Rata & Sejajar */}
             <div className="w-full flex flex-col flex-1 justify-between items-center text-center">
               <div className="min-h-[2.5rem] flex items-center justify-center">
                 <h3 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide leading-snug">
@@ -229,7 +232,7 @@ export default function Home() {
               </div>
               <div className="flex-1 flex items-start justify-center pt-1.5">
                 <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                  Cek lokasi makan enak, playground, dan santai bareng keluarga.
+                  Cek lokasi To meet terdekat
                 </p>
               </div>
             </div>
@@ -256,7 +259,7 @@ export default function Home() {
               </div>
               <div className="flex-1 flex items-start justify-center pt-1.5">
                 <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                  Makanan dan minuman lezat yang dibuat penuh cinta.
+                  Makanan dan minuman lucu yang dibuat dengan penuh cinta
                 </p>
               </div>
             </div>
@@ -283,7 +286,7 @@ export default function Home() {
               </div>
               <div className="flex-1 flex items-start justify-center pt-1.5">
                 <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                  Aktivitas seru, kreasi manis, dan workshop interaktif.
+                  Aktivitas seru dan workshop interaktif
                 </p>
               </div>
             </div>
@@ -310,7 +313,7 @@ export default function Home() {
               </div>
               <div className="flex-1 flex items-start justify-center pt-1.5">
                 <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
-                  Bawa pulang suvenir dan boneka beruang lucu To Meet.
+                  Bawa pulang item spesial dari To Meet
                 </p>
               </div>
             </div>
@@ -525,7 +528,6 @@ export default function Home() {
             className="absolute inset-0 h-full w-full scale-[2] object-cover object-center"
           />
 
-
           <div className="relative z-10 grid grid-cols-1 gap-8 px-5 py-6 sm:px-8 sm:py-8 lg:grid-cols-12 lg:items-center lg:px-12 lg:py-12">
             <div className="lg:col-span-7 space-y-4 text-center lg:text-left">
               <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-[#251303] [text-shadow:0_4px_6px_rgba(0,0,0,0.7)] backdrop-blur-sm">
@@ -537,10 +539,12 @@ export default function Home() {
                 Temukan Keseruan Event & Workshop Menarik
               </h2>
 
-              <p className="text-sm sm:text-sm text-stone-100 font-bold leading-relaxed max-w-xl [text-shadow:0_1px_2px_rgb(0_0_0/90%),0_2px_6px_rgb(0_0_0/95%),0_0_8px_rgb(0_0_0/90%)]"
+              <p
+                className="text-sm sm:text-sm text-stone-100 font-bold leading-relaxed max-w-xl [text-shadow:0_1px_2px_rgb(0_0_0/90%),0_2px_6px_rgb(0_0_0/95%),0_0_8px_rgb(0_0_0/90%)]"
                 style={{
                   textShadow: '0 1px 2px #000, 0 2px 6px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.85)'
-                }}>
+                }}
+              >
                 Mulai dari kelas kreasi seni edukatif hingga perayaan ulang tahun spesial keluarga. Cek jadwal kegiatan seru terbaru dan reservasi tempatmu sekarang!
               </p>
 
@@ -575,7 +579,7 @@ export default function Home() {
                 </div>
 
                 <div className="space-y-3 pt-3">
-                  <p className="text-xs font-black uppercase leading- [text-shadow:0_4px_6px_rgba(0,0,0,0.7)] text-white sm:text-sm">
+                  <p className="text-xs font-black uppercase leading-relaxed [text-shadow:0_4px_6px_rgba(0,0,0,0.7)] text-white sm:text-sm">
                     Belum ada event tersedia. Tunggu kegiatan selanjutnya di To Meet.
                   </p>
                 </div>
@@ -593,9 +597,6 @@ export default function Home() {
           className="relative overflow-hidden rounded-[2.5rem] p-6 sm:p-10 lg:p-12 border border-[#e6ccb2]/60 shadow-md bg-cover bg-center text-white"
           style={{ backgroundImage: "url('/img/BANNER-ROBLOX.png')" }}
         >
-          {/* Overlay agar teks terbaca tajam */}
-
-
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
             {/* Sisi Kiri: Headline & Tombol Aksi */}
@@ -673,12 +674,12 @@ export default function Home() {
       </section>
 
       {/* ================================================= */}
-      {/* SECTION: VISIT US (LOCATIONS & CONTACT)           */}
+      {/* 7. VISIT US (LOCATIONS & CONTACT)                 */}
       {/* ================================================= */}
       <section id="locations" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-12 sm:pb-16 scroll-mt-24">
         <div className="space-y-6 sm:space-y-8">
 
-          {/* Title Section dengan Spacing Lega */}
+          {/* Title Section */}
           <div className="flex items-center gap-2.5">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#3d2314] tracking-tight uppercase">
               VISIT US
@@ -693,7 +694,6 @@ export default function Home() {
             <div className="bg-[#f8f1ea] p-6 sm:p-7 rounded-[2rem] border border-[#d8b598]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-6 opacity-95">
               <div className="grid grid-cols-12 gap-4 items-center">
 
-                {/* Teks Kiri */}
                 <div className="col-span-7 space-y-2.5">
                   <h3 className="font-black text-[#3d2314] text-base sm:text-lg uppercase tracking-wide leading-tight">
                     HEAVENLAND PARK
@@ -711,7 +711,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Foto Kanan */}
                 <div className="col-span-5 aspect-square bg-[#f4ece1] rounded-2xl overflow-hidden border border-[#e6ccb2]/70 shadow-2xs relative">
                   <img
                     src="/img/tmc-heaveland-park.png"
@@ -723,7 +722,6 @@ export default function Home() {
 
               </div>
 
-              {/* Tombol Direction */}
               <div className="pt-2">
                 <button
                   type="button"
@@ -740,7 +738,6 @@ export default function Home() {
             <div className="bg-white p-6 sm:p-7 rounded-[2rem] border border-[#e6ccb2]/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between space-y-6">
               <div className="grid grid-cols-12 gap-4 items-center">
 
-                {/* Teks Kiri */}
                 <div className="col-span-7 space-y-2.5">
                   <h3 className="font-black text-[#3d2314] text-base sm:text-lg uppercase tracking-wide leading-tight">
                     PONDOK MUTIARA
@@ -758,7 +755,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Foto Kanan */}
                 <div className="col-span-5 aspect-square bg-[#f4ece1] rounded-2xl overflow-hidden border border-[#e6ccb2]/70 shadow-2xs">
                   <img
                     src="/img/tmc-pondok-mutiara.png"
@@ -769,7 +765,6 @@ export default function Home() {
 
               </div>
 
-              {/* Tombol Direction */}
               <div className="pt-2">
                 <a
                   href="https://maps.app.goo.gl/8mZuEJCFvSwbcALe7"
@@ -788,7 +783,6 @@ export default function Home() {
 
               {/* Follow Us */}
               <div className="space-y-3.5 w-full min-w-0">
-                {/* Header Title */}
                 <div className="flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-xl bg-[#FAF0E6] flex items-center justify-center text-[#e85a4f] shrink-0 shadow-2xs">
                     <Share2 className="w-3.5 h-3.5" />
@@ -798,14 +792,12 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* Description */}
                 <p className="text-xs sm:text-sm text-[#6c584c] font-medium leading-relaxed break-words max-w-sm">
                   Ikuti update menu baru, keseruan workshop, dan promo spesial kami.
                 </p>
 
                 {/* Social Media Links */}
                 <div className="flex flex-wrap items-center gap-2.5 pt-1">
-                  {/* Instagram */}
                   <a
                     href="https://www.instagram.com/tomeet.cafe?stkn=NnBva3lubWk5OHFk"
                     target="_blank"
@@ -819,7 +811,6 @@ export default function Home() {
                     <span className="text-xs sm:text-[12.5px] font-black tracking-tight whitespace-nowrap">Instagram</span>
                   </a>
 
-                  {/* TikTok */}
                   <a
                     href="https://www.tiktok.com/@tomeet.cafe?_r=1&_t=ZS-99dEumOyfiS"
                     target="_blank"
@@ -833,7 +824,6 @@ export default function Home() {
                     <span className="text-xs sm:text-[12.5px] font-black tracking-tight whitespace-nowrap">TikTok</span>
                   </a>
 
-                  {/* YouTube */}
                   <a
                     href="https://youtube.com/@tomeetcafe"
                     target="_blank"
