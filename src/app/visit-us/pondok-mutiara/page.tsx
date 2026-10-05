@@ -66,8 +66,9 @@ export interface BannerItem {
     cta_link?: string | null;
 }
 
-// 8 Spot Foto untuk Galeri Carousel (Dibagi 2 Slide: 4 & 4)
+// 9 Spot Foto untuk Galeri Carousel (Dibagi 3 Slide: masing-masing 3 foto di Desktop)
 const GALLERY_PAGES = [
+    // Slide 1 (3 Foto)
     [
         {
             id: 1,
@@ -86,15 +87,16 @@ const GALLERY_PAGES = [
             title: 'Seating Area LT 3',
             desc: '',
             image: '/img/visit-us-pm/seating-area-lt3.png'
-        },
+        }
+    ],
+    // Slide 2 (3 Foto)
+    [
         {
             id: 4,
             title: 'Playground',
             desc: '',
             image: '/img/visit-us-pm/playground.png'
-        }
-    ],
-    [
+        },
         {
             id: 5,
             title: 'Spot foto Teddy Bear',
@@ -103,18 +105,27 @@ const GALLERY_PAGES = [
         },
         {
             id: 6,
+            title: 'Spot foto dinding Teddy Bear',
+            desc: '',
+            image: '/img/visit-us-pm/spot-foto-teddy-bear-lt2.png'
+        }
+    ],
+    // Slide 3 (3 Foto)
+    [
+        {
+            id: 7,
             title: 'Kolam Pancing',
             desc: '',
             image: '/img/visit-us-pm/kolam-pancing.png'
         },
         {
-            id: 7,
+            id: 8,
             title: 'Merchandise Corner',
             desc: '',
             image: '/img/visit-us-pm/merchandise-corner.png'
         },
         {
-            id: 8,
+            id: 9,
             title: 'Boardgame',
             desc: '',
             image: '/img/visit-us-pm/boardgame.png'
@@ -536,7 +547,7 @@ export default function PondokMutiaraPage() {
             </section>
 
             {/* ================================================= */}
-            {/* 5. SEE YOU SOON! (1 FOTO DI MOBILE, PER 4 DESKTOP) */}
+            {/* 5. SEE YOU SOON! (ANIMASI SUPER SMOOTH & 60FPS)   */}
             {/* ================================================= */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
 
@@ -561,46 +572,46 @@ export default function PondokMutiaraPage() {
                 </div>
 
                 {/* ================================================= */}
-                {/* A. TAMPILAN MOBILE: SLIDER 1 PER 1 (PANAH KE POJOK)*/}
+                {/* A. TAMPILAN MOBILE: SLIDER 1 PER 1 (ULTRA SMOOTH) */}
                 {/* ================================================= */}
                 <div className="block sm:hidden relative px-1">
-                    {/* Tombol Panah Kiri Melayang (Dipojokkan ke tepi kiri) */}
+                    {/* Tombol Panah Kiri Melayang */}
                     <button
                         type="button"
                         onClick={() => scrollToMobilePhoto(Math.max(0, mobilePhotoIndex - 1))}
                         disabled={mobilePhotoIndex === 0}
-                        className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#8c5a3c] flex items-center justify-center transition border border-[#e6ccb2] shadow-md disabled:opacity-20 disabled:pointer-events-none active:scale-90 cursor-pointer"
+                        className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#8c5a3c] flex items-center justify-center transition-all duration-300 border border-[#e6ccb2] shadow-md disabled:opacity-0 disabled:pointer-events-none active:scale-90 cursor-pointer"
                         aria-label="Foto Sebelumnya"
                     >
                         <ChevronLeft className="w-4 h-4" />
                     </button>
 
-                    {/* Sliding Track Mobile: Bebas Batang Scrollbar Total */}
+                    {/* Sliding Track Mobile dengan Hardware Acceleration */}
                     <div
                         ref={mobileGalleryRef}
                         onScroll={handleMobileGalleryScroll}
-                        className="flex items-stretch overflow-x-auto snap-x snap-mandatory gap-3 pb-1 scroll-smooth scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-0"
+                        className="flex items-stretch overflow-x-auto snap-x snap-mandatory gap-3 pb-2 scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden will-change-scroll transform-gpu"
                         style={{
                             scrollbarWidth: 'none',
                             msOverflowStyle: 'none',
+                            WebkitOverflowScrolling: 'touch',
                         }}
                     >
                         {ALL_GALLERY_SPOTS.map((spot, spotIdx) => (
                             <div
                                 key={spot.id || spotIdx}
-                                className="w-full shrink-0 snap-center bg-white p-3 rounded-3xl border border-[#e6ccb2]/70 space-y-2.5 text-center shadow-2xs flex flex-col justify-between"
+                                className="w-full shrink-0 snap-center bg-white p-3 rounded-3xl border border-[#e6ccb2]/70 space-y-2.5 text-center shadow-2xs flex flex-col justify-between transform-gpu transition-transform duration-300"
                             >
-                                {/* Foto Tunggal */}
                                 <div className="w-full aspect-4/3 rounded-2xl overflow-hidden bg-stone-100 border border-[#e6ccb2]/50 shadow-2xs">
                                     <img
                                         src={spot.image}
                                         alt={spot.title}
                                         loading="lazy"
-                                        className="w-full h-full object-cover object-center"
+                                        decoding="async"
+                                        className="w-full h-full object-cover object-center transform-gpu hover:scale-105 transition-transform duration-500 ease-out"
                                     />
                                 </div>
 
-                                {/* Deskripsi Foto */}
                                 <div className="space-y-0.5 pb-1">
                                     <h4 className="font-black text-xs text-[#3d2314] uppercase tracking-wide">
                                         {spot.title}
@@ -615,25 +626,25 @@ export default function PondokMutiaraPage() {
                         ))}
                     </div>
 
-                    {/* Tombol Panah Kanan Melayang (Dipojokkan ke tepi kanan) */}
+                    {/* Tombol Panah Kanan Melayang */}
                     <button
                         type="button"
                         onClick={() => scrollToMobilePhoto(Math.min(ALL_GALLERY_SPOTS.length - 1, mobilePhotoIndex + 1))}
                         disabled={mobilePhotoIndex === ALL_GALLERY_SPOTS.length - 1}
-                        className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#8c5a3c] flex items-center justify-center transition border border-[#e6ccb2] shadow-md disabled:opacity-20 disabled:pointer-events-none active:scale-90 cursor-pointer"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 text-[#8c5a3c] flex items-center justify-center transition-all duration-300 border border-[#e6ccb2] shadow-md disabled:opacity-0 disabled:pointer-events-none active:scale-90 cursor-pointer"
                         aria-label="Foto Berikutnya"
                     >
                         <ChevronRight className="w-4 h-4" />
                     </button>
 
                     {/* Dot Pagination Mobile */}
-                    <div className="flex items-center justify-center gap-1.5 pt-3">
+                    <div className="flex items-center justify-center gap-1.5 pt-2">
                         {ALL_GALLERY_SPOTS.map((_, idx) => (
                             <button
                                 key={idx}
                                 type="button"
                                 onClick={() => scrollToMobilePhoto(idx)}
-                                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${mobilePhotoIndex === idx
+                                className={`h-1.5 rounded-full transition-all duration-500 ease-out cursor-pointer ${mobilePhotoIndex === idx
                                         ? 'w-5 bg-[#8c5a3c]'
                                         : 'w-1.5 bg-[#e6ccb2] hover:bg-[#8c5a3c]/50'
                                     }`}
@@ -644,47 +655,51 @@ export default function PondokMutiaraPage() {
                 </div>
 
                 {/* ================================================= */}
-                {/* B. TAMPILAN DESKTOP: CAROUSEL PER 4 FOTO          */}
+                {/* B. TAMPILAN DESKTOP: CAROUSEL 3 FOTO (GPU ENGINE) */}
                 {/* ================================================= */}
-                <div className="hidden sm:block relative overflow-hidden">
-                    {/* Tombol Panah Kiri Desktop (Merapat ke Pojok) */}
+                <div className="hidden sm:block relative overflow-hidden group">
+                    {/* Tombol Panah Kiri Desktop */}
                     <button
                         type="button"
                         onClick={prevSlide}
-                        className="absolute left-1.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/95 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition border border-[#e6ccb2] shadow-md cursor-pointer active:scale-90"
-                        aria-label="Previous 4 Photos"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/95 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition-all duration-300 ease-out border border-[#e6ccb2] shadow-lg cursor-pointer active:scale-90 transform-gpu hover:scale-105"
+                        aria-label="Previous 3 Photos"
                     >
                         <ChevronLeft className="w-5 h-5" />
                     </button>
 
-                    {/* Sliding Track Desktop */}
+                    {/* Sliding Track Desktop Menggunakan Hardware GPU Acceleration */}
                     <div
-                        className="flex transition-transform duration-500 ease-in-out"
-                        style={{ transform: `translateX(-${currentPageIndex * 100}%)` }}
+                        className="flex will-change-transform transform-gpu transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
+                        style={{
+                            transform: `translate3d(-${currentPageIndex * 100}%, 0px, 0px)`,
+                        }}
                     >
                         {GALLERY_PAGES.map((pageItems, pageIdx) => (
                             <div
                                 key={pageIdx}
-                                className="w-full shrink-0 grid grid-cols-2 lg:grid-cols-4 gap-3.5 px-0.5"
+                                className="w-full shrink-0 grid grid-cols-3 gap-4.5 px-1 py-1"
                             >
                                 {pageItems.map((spot) => (
                                     <div
                                         key={spot.id}
-                                        className="bg-white p-3 rounded-3xl border border-[#e6ccb2]/70 space-y-2.5 text-center shadow-2xs flex flex-col justify-between"
+                                        className="bg-white p-3.5 rounded-3xl border border-[#e6ccb2]/70 space-y-3 text-center shadow-2xs hover:shadow-md hover:border-[#8c5a3c]/50 flex flex-col justify-between transition-all duration-300 ease-out transform-gpu"
                                     >
-                                        <div className="w-full aspect-4/3 rounded-2xl overflow-hidden bg-stone-100 border border-[#e6ccb2]/50">
+                                        <div className="w-full aspect-4/3 rounded-2xl overflow-hidden bg-stone-100 border border-[#e6ccb2]/50 relative group/img">
                                             <img
                                                 src={spot.image}
                                                 alt={spot.title}
-                                                className="w-full h-full object-cover"
+                                                loading="lazy"
+                                                decoding="async"
+                                                className="w-full h-full object-cover transform-gpu group-hover/img:scale-105 transition-transform duration-700 ease-out"
                                             />
                                         </div>
                                         <div className="space-y-0.5 pb-1">
-                                            <h4 className="font-black text-xs text-[#3d2314] uppercase">
+                                            <h4 className="font-black text-xs sm:text-sm text-[#3d2314] uppercase tracking-wide">
                                                 {spot.title}
                                             </h4>
                                             {spot.desc && (
-                                                <p className="text-[10.5px] text-[#6c584c] font-semibold">
+                                                <p className="text-[11px] text-[#6c584c] font-semibold">
                                                     {spot.desc}
                                                 </p>
                                             )}
@@ -695,12 +710,12 @@ export default function PondokMutiaraPage() {
                         ))}
                     </div>
 
-                    {/* Tombol Panah Kanan Desktop (Merapat ke Pojok) */}
+                    {/* Tombol Panah Kanan Desktop */}
                     <button
                         type="button"
                         onClick={nextSlide}
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/95 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition border border-[#e6ccb2] shadow-md cursor-pointer active:scale-90"
-                        aria-label="Next 4 Photos"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/95 hover:bg-[#8c5a3c] text-[#8c5a3c] hover:text-white flex items-center justify-center transition-all duration-300 ease-out border border-[#e6ccb2] shadow-lg cursor-pointer active:scale-90 transform-gpu hover:scale-105"
+                        aria-label="Next 3 Photos"
                     >
                         <ChevronRight className="w-5 h-5" />
                     </button>
@@ -712,8 +727,8 @@ export default function PondokMutiaraPage() {
                                 key={idx}
                                 type="button"
                                 onClick={() => setCurrentPageIndex(idx)}
-                                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${currentPageIndex === idx
-                                        ? 'w-6 bg-[#8c5a3c]'
+                                className={`h-2 rounded-full transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] cursor-pointer ${currentPageIndex === idx
+                                        ? 'w-7 bg-[#8c5a3c]'
                                         : 'w-2 bg-[#e6ccb2] hover:bg-[#8c5a3c]/60'
                                     }`}
                                 aria-label={`Go to slide ${idx + 1}`}
