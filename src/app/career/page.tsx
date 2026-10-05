@@ -124,7 +124,7 @@ function FormatRichContent({ text, maxItems }: { text?: string | null; maxItems?
 
                 return (
                     <div key={idx} className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#8c5a3c] shrink-0 mt-[6px]" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#8c5a3c] shrink-0 mt-[9px]" />
                         <span className="text-xs sm:text-sm text-[#5a4232] font-semibold leading-relaxed">
                             {content}
                         </span>
@@ -628,12 +628,12 @@ export default function CareerPage() {
                         {/* Kanan: Filter Lokasi & Daftar Kartu Lowongan */}
                         <div className="lg:col-span-8 space-y-6">
 
-                            {/* Header + Tabs Filter Lokasi Outlet */}
-                            <div className="bg-white p-4 sm:p-5 lg:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-3 lg:space-y-0">
-                                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-6">
+                            {/* Header + Dropdown Filter Kategori Penempatan (Mobile & Desktop) */}
+                            <div className="bg-white p-4 sm:p-5 lg:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 sm:gap-4">
 
-                                    {/* Kiri: Title & Badge Jumlah Lowongan */}
-                                    <div className="flex items-center justify-between lg:justify-start gap-2.5 sm:gap-3 shrink-0">
+                                    {/* Kiri: Title & Counter Lowongan */}
+                                    <div className="flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3 shrink-0">
                                         <div className="flex items-center gap-2.5">
                                             <Briefcase className="w-5 h-5 text-[#8c5a3c] shrink-0" />
                                             <h2 className="text-sm sm:text-base font-black text-[#3d2314] uppercase tracking-wide whitespace-nowrap">
@@ -645,20 +645,23 @@ export default function CareerPage() {
                                         </span>
                                     </div>
 
-                                    {/* A. KHUSUS MOBILE: ELEGANT DROPDOWN */}
-                                    <div className="block lg:hidden relative z-20 pt-1">
+                                    {/* Kanan: Modern Unified Dropdown Filter (Mobile & Desktop) */}
+                                    <div className="relative z-20 w-full sm:w-64 md:w-72">
+                                        {/* Tombol Pemicu Dropdown */}
                                         <button
                                             type="button"
                                             onClick={() => setIsLocationDropdownOpen(prev => !prev)}
-                                            className="w-full bg-[#FAF0E6]/60 hover:bg-[#FAF0E6] border border-[#e6ccb2]/80 rounded-2xl px-3.5 py-2.5 flex items-center justify-between transition-all duration-200 shadow-2xs cursor-pointer text-left active:scale-[0.99]"
+                                            className="w-full bg-[#FAF0E6]/60 hover:bg-[#FAF0E6] border border-[#e6ccb2] rounded-2xl px-3.5 py-2.5 flex items-center justify-between transition-all duration-200 shadow-2xs cursor-pointer text-left active:scale-[0.99]"
                                         >
-                                            <div className="flex items-center gap-2.5 min-w-0">
-                                                <span className="w-2 h-2 rounded-full bg-[#8c5a3c] shrink-0" />
+                                            <div className="flex items-center gap-2.5 min-w-0 pr-1">
+                                                <div className="w-7 h-7 rounded-xl bg-white text-[#8c5a3c] flex items-center justify-center shrink-0 border border-[#e6ccb2]/60 shadow-2xs">
+                                                    <MapPin className="w-3.5 h-3.5" />
+                                                </div>
                                                 <div className="truncate">
-                                                    <span className="text-[9.5px] uppercase font-bold text-[#8c5a3c]/80 tracking-widest block leading-none">
-                                                        Lokasi Penempatan:
+                                                    <span className="text-[9.5px] uppercase font-bold text-[#8c5a3c]/90 tracking-widest block leading-none">
+                                                        Kategori Lokasi:
                                                     </span>
-                                                    <span className="text-xs sm:text-sm font-black text-[#3d2314] tracking-wide block mt-0.5 truncate">
+                                                    <span className="text-xs sm:text-[13px] font-black text-[#3d2314] tracking-wide block mt-0.5 truncate">
                                                         {selectedLocationFilter === 'all'
                                                             ? 'Semua Lokasi'
                                                             : selectedLocationFilter === 'mutiara'
@@ -670,74 +673,55 @@ export default function CareerPage() {
                                                 </div>
                                             </div>
 
-                                            <div className={`w-6 h-6 rounded-full bg-white/80 border border-[#e6ccb2]/60 flex items-center justify-center text-[#8c5a3c] transition-transform duration-300 shrink-0 ${isLocationDropdownOpen ? 'rotate-180 bg-[#8c5a3c] text-white' : ''
+                                            <div className={`w-6 h-6 rounded-full bg-white/90 border border-[#e6ccb2]/60 flex items-center justify-center text-[#8c5a3c] transition-transform duration-300 shrink-0 ${isLocationDropdownOpen ? 'rotate-180 bg-[#8c5a3c] text-white' : ''
                                                 }`}>
                                                 <ChevronDown className="w-3.5 h-3.5" />
                                             </div>
                                         </button>
 
+                                        {/* Menu Pilihan Dropdown dengan Animasi Halus */}
                                         <div
-                                            className={`grid transition-all duration-300 ease-in-out ${isLocationDropdownOpen
-                                                ? 'grid-rows-[1fr] opacity-100 mt-2'
-                                                : 'grid-rows-[0fr] opacity-0 mt-0 pointer-events-none'
+                                            className={`absolute left-0 right-0 top-full mt-2 transition-all duration-200 ease-out origin-top z-30 ${isLocationDropdownOpen
+                                                ? 'opacity-100 scale-100 pointer-events-auto'
+                                                : 'opacity-0 scale-95 pointer-events-none'
                                                 }`}
                                         >
-                                            <div className="overflow-hidden">
-                                                <div className="bg-white rounded-2xl border border-[#e6ccb2]/70 shadow-md p-1.5 space-y-0.5">
-                                                    {[
-                                                        { id: 'all', label: 'Semua Lokasi' },
-                                                        { id: 'mutiara', label: 'Pondok Mutiara' },
-                                                        { id: 'central_kitchen', label: 'Central Kitchen' },
-                                                        { id: 'office', label: 'Office' }
-                                                    ].map((loc) => {
-                                                        const isSelected = selectedLocationFilter === loc.id;
-                                                        return (
-                                                            <button
-                                                                key={loc.id}
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    setSelectedLocationFilter(loc.id);
-                                                                    setIsLocationDropdownOpen(false);
-                                                                }}
-                                                                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition text-left cursor-pointer ${isSelected
-                                                                    ? 'bg-[#FAF0E6] text-[#8c5a3c] font-black'
-                                                                    : 'text-[#5a4232] hover:bg-stone-50 font-bold text-xs'
-                                                                    }`}
-                                                            >
-                                                                <span className="text-xs tracking-wide">
+                                            <div className="bg-white rounded-2xl border border-[#e6ccb2]/80 shadow-xl p-1.5 space-y-1">
+                                                {[
+                                                    { id: 'all', label: 'Semua Lokasi' },
+                                                    { id: 'mutiara', label: 'Pondok Mutiara' },
+                                                    { id: 'central_kitchen', label: 'Central Kitchen' },
+                                                    { id: 'office', label: 'Office' }
+                                                ].map((loc) => {
+                                                    const isSelected = selectedLocationFilter === loc.id;
+                                                    return (
+                                                        <button
+                                                            key={loc.id}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setSelectedLocationFilter(loc.id);
+                                                                setIsLocationDropdownOpen(false);
+                                                            }}
+                                                            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition text-left cursor-pointer ${isSelected
+                                                                ? 'bg-[#8c5a3c] text-white font-black shadow-2xs'
+                                                                : 'text-[#3d2314] hover:bg-[#FAF0E6] font-bold text-xs'
+                                                                }`}
+                                                        >
+                                                            <div className="flex items-center gap-2 truncate">
+                                                                <MapPin className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-white' : 'text-[#8c5a3c]'}`} />
+                                                                <span className="text-xs tracking-wide truncate">
                                                                     {loc.label}
                                                                 </span>
-                                                                {isSelected && (
-                                                                    <span className="w-1.5 h-1.5 rounded-full bg-[#8c5a3c] shrink-0" />
-                                                                )}
-                                                            </button>
-                                                        );
-                                                    })}
-                                                </div>
+                                                            </div>
+
+                                                            {isSelected && (
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0 shadow-xs" />
+                                                            )}
+                                                        </button>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
-                                    </div>
-
-                                    {/* B. KHUSUS DESKTOP: HORIZONTAL TABS */}
-                                    <div className="hidden lg:flex items-center gap-2 sm:gap-2.5 overflow-x-auto py-1">
-                                        {[
-                                            { id: 'all', label: 'Semua' },
-                                            { id: 'mutiara', label: 'Pondok Mutiara' },
-                                            { id: 'central_kitchen', label: 'Central Kitchen' },
-                                            { id: 'office', label: 'Office' }
-                                        ].map((tab) => (
-                                            <button
-                                                key={tab.id}
-                                                type="button"
-                                                onClick={() => setSelectedLocationFilter(tab.id)}
-                                                className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider transition cursor-pointer shrink-0 whitespace-nowrap ${selectedLocationFilter === tab.id
-                                                    ? 'bg-[#8c5a3c] text-white shadow-2xs'
-                                                    : 'bg-stone-50 text-[#6c584c] border border-[#e6ccb2]/70 hover:bg-[#FAF0E6]'
-                                                    }`}
-                                            >
-                                                {tab.label}
-                                            </button>
-                                        ))}
                                     </div>
 
                                 </div>
