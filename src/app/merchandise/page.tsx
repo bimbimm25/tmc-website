@@ -10,6 +10,7 @@ import {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 let cachedMerchBanner: BannerItem | null = null;
+let cachedMerchCategories: string[] = [];
 
 function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     return (
@@ -121,12 +122,13 @@ export interface BannerItem {
 
 export default function MerchandisePage() {
     const [merchItems, setMerchItems] = useState<MerchandiseItem[]>([]);
+    const [backendCategories, setBackendCategories] = useState<string[]>(() => cachedMerchCategories);
     const [merchBanner, setMerchBanner] = useState<BannerItem | null>(() => cachedMerchBanner);
     const [isBannerChecked, setIsBannerChecked] = useState<boolean>(() => cachedMerchBanner !== null);
 
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [sortBy, setSortBy] = useState<string>('featured');
+    const [sortBy, setSortBy] = useState<string>('newest');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
     const [displayCount, setDisplayCount] = useState<number>(8);
@@ -153,8 +155,10 @@ export default function MerchandisePage() {
             setIsLoading(true);
             setIsError(false);
 
-            const [resMerch, resBanner] = await Promise.all([
+            // Fetch merchandise, kategori terurut dari database (type=merchandise), dan banner
+            const [resMerch, resCat, resBanner] = await Promise.all([
                 fetch(`${API_BASE_URL}/api/merchandise`, { cache: 'no-store' }),
+                fetch(`${API_BASE_URL}/api/categories?type=merchandise`, { cache: 'no-store' }).catch(() => null),
                 fetch(`${API_BASE_URL}/api/banners/merchandise`, { cache: 'default' }).catch(() => null)
             ]);
 
@@ -167,6 +171,18 @@ export default function MerchandisePage() {
                 setMerchItems(jsonMerch.data);
             } else {
                 setMerchItems([]);
+            }
+
+            // Simpan urutan kategori merchandise dari database
+            if (resCat && resCat.ok) {
+                const jsonCat = await resCat.json();
+                if (jsonCat && Array.isArray(jsonCat.data)) {
+                    const names = jsonCat.data
+                        .map((c: any) => (typeof c === 'string' ? c : c.name || c.title))
+                        .filter(Boolean);
+                    cachedMerchCategories = names;
+                    setBackendCategories(names);
+                }
             }
 
             if (resBanner && resBanner.ok) {
@@ -190,12 +206,50 @@ export default function MerchandisePage() {
         fetchMerchandiseData();
     }, []);
 
+    // SINKRONISASI KATEGORI SESUAI URUTAN DRAG & DROP DASHBOARD (ORDER ASC)
     const availableCategories = useMemo(() => {
-        const unique = Array.from(new Set(
-            merchItems.map(m => m.category || m.category_slug).filter(Boolean)
-        )) as string[];
-        return ['all', 'best_seller', ...unique];
-    }, [merchItems]);
+        const base = ['all', 'best_seller'];
+        const excluded = ['all', 'best_seller', 'bestseller', 'best seller'];
+
+        // Kategori yang ada di list item aktif
+        const itemCatSet = new Set(
+            merchItems
+                .filter(m => m.is_active !== false && m.is_active !== 0 && m.is_active !== '0')
+                .map(m => (m.category || m.category_slug || '').trim())
+                .filter(c => Boolean(c) && !excluded.includes(c.toLowerCase()))
+        );
+
+        const orderedDynamicList: string[] = [];
+
+        // 1. Urutkan berdasarkan urutan kolom order dari database
+        if (backendCategories.length > 0) {
+            backendCategories.forEach((dbCat) => {
+                if (!dbCat) return;
+                const trimmed = dbCat.trim();
+                const matched = Array.from(itemCatSet).find(
+                    ic => ic.toLowerCase() === trimmed.toLowerCase()
+                );
+                if (matched) {
+                    orderedDynamicList.push(matched);
+                    itemCatSet.delete(matched);
+                }
+            });
+        }
+
+        // 2. Kategori sisa yang belum ada di tabel categories
+        const remainingList = Array.from(itemCatSet);
+        const combined = [...base, ...orderedDynamicList, ...remainingList];
+
+        // 3. Sanitasi case-insensitive agar key tidak pernah kembar/duplikat
+        const seen = new Set<string>();
+        return combined.filter((cat) => {
+            if (!cat) return false;
+            const lower = cat.toLowerCase();
+            if (seen.has(lower)) return false;
+            seen.add(lower);
+            return true;
+        });
+    }, [backendCategories, merchItems]);
 
     const filteredAndSortedItems = useMemo(() => {
         let result = merchItems.filter(item => {
@@ -218,9 +272,7 @@ export default function MerchandisePage() {
             return matchesCategory && matchesSearch;
         });
 
-        if (sortBy === 'featured') {
-            result = [...result].sort((a, b) => (Boolean(b.is_featured) ? 1 : 0) - (Boolean(a.is_featured) ? 1 : 0));
-        } else if (sortBy === 'price-low') {
+        if (sortBy === 'price-low') {
             result = [...result].sort((a, b) => a.price - b.price);
         } else if (sortBy === 'price-high') {
             result = [...result].sort((a, b) => b.price - a.price);
@@ -397,17 +449,17 @@ export default function MerchandisePage() {
                         )}
                     </div>
 
-                    {/* KATEGORI VERSI MOBILE */}
+                    {/* KATEGORI VERSI MOBILE: Horizontal Scroll Pill Chips */}
                     <div className="block lg:hidden">
                         <div className="flex items-center gap-2 overflow-x-auto pt-1 pb-3 scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                            {availableCategories.map((cat) => {
+                            {availableCategories.map((cat, idx) => {
                                 const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
                                 const isBestSellerOption = cat === 'best_seller';
                                 const label = cat === 'all' ? 'All Products' : isBestSellerOption ? 'Best Seller' : cat;
 
                                 return (
                                     <button
-                                        key={cat}
+                                        key={`mobile-merch-cat-${cat}-${idx}`}
                                         type="button"
                                         onClick={() => {
                                             setSelectedCategory(cat);
@@ -436,7 +488,7 @@ export default function MerchandisePage() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
-                        {/* SIDEBAR FILTER (KIRI - HANYA DESKTOP) */}
+                        {/* SIDEBAR FILTER (KIRI - HANYA DESKTOP, URUT SESUAI DRAG & DROP DASHBOARD) */}
                         <aside className="hidden lg:flex lg:col-span-3 lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)] lg:flex-col lg:min-h-0 space-y-4">
                             <div className="text-xs lg:text-sm font-black text-[#3d2314] uppercase tracking-wider px-1 flex items-center gap-2 border-b border-[#e6ccb2]/60 pb-2.5">
                                 <BearPawIcon className="w-4 h-4 text-[#8c5a3c]" />
@@ -448,14 +500,14 @@ export default function MerchandisePage() {
                                     onWheel={(e) => e.stopPropagation()}
                                     className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto lg:flex-1 lg:min-h-0 overscroll-contain pr-1 scrollbar-thin scrollbar-thumb-[#8c5a3c]/30 scrollbar-track-transparent text-xs font-black uppercase tracking-wide"
                                 >
-                                    {availableCategories.map((cat) => {
+                                    {availableCategories.map((cat, idx) => {
                                         const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
                                         const isBestSellerOption = cat === 'best_seller';
                                         const label = cat === 'all' ? 'All Products' : isBestSellerOption ? 'Best Seller' : cat;
 
                                         return (
                                             <button
-                                                key={cat}
+                                                key={`desktop-merch-cat-${cat}-${idx}`}
                                                 type="button"
                                                 onClick={() => {
                                                     setSelectedCategory(cat);
@@ -718,7 +770,7 @@ export default function MerchandisePage() {
                                     className="px-3 sm:px-5 lg:px-6 py-1.5 sm:py-2 lg:py-2.5 bg-[#e85a4f] hover:bg-[#d4483e] active:scale-95 text-white font-black text-[10.5px] sm:text-xs rounded-full shadow-lg shadow-black/40 transition duration-200 inline-flex items-center gap-1.5 uppercase tracking-wider cursor-pointer border border-white/20 whitespace-nowrap"
                                 >
                                     <span>CHAT VIA WHATSAPP</span>
-                                    <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />
+                                    <Phone className="w-3.5 h-3.5 fill-current" />
                                 </a>
                             </div>
                         </div>
@@ -944,8 +996,8 @@ function MerchandiseProductCard({ item, onSelect }: MerchandiseProductCardProps)
                 <span
                     title={statusLabel}
                     className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-tight sm:tracking-wider border shadow-2xs shrink-0 whitespace-nowrap ${isAvailable
-                            ? 'bg-white text-[#3d2314] border-[#e6ccb2]/80'
-                            : 'bg-rose-50 text-rose-600 border-rose-200'
+                        ? 'bg-white text-[#3d2314] border-[#e6ccb2]/80'
+                        : 'bg-rose-50 text-rose-600 border-rose-200'
                         }`}
                 >
                     {statusLabel}
