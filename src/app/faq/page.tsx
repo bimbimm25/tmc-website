@@ -514,7 +514,7 @@ export default function FAQPage() {
                         {/* Badge Sambutan */}
                         <div className="inline-flex items-center gap-2 py-1.5 px-3 rounded-xl bg-white/90 border border-[#e6ccb2]/80 shadow-2xs backdrop-blur-xs">
                             <div className="w-5 h-5 rounded-lg bg-[#FAF0E6] text-[#8c5a3c] flex items-center justify-center">
-                                <BearFaceIcon className="w-3.5 h-3.5" />
+                                <BearFaceIcon className="w-5 h-5" />
                             </div>
                             <span className="text-[13px] font-black text-[#3d2314]">
                                 Punya pertanyaan lain? Kami siap menjawab!

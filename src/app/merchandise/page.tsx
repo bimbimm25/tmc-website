@@ -534,12 +534,11 @@ export default function MerchandisePage() {
                                             onChange={(e) => setSortBy(e.target.value)}
                                             className="w-full sm:w-auto bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-xl px-3 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs lg:text-sm text-[#3d2314] font-black focus:outline-none appearance-none pr-8 cursor-pointer"
                                         >
-                                            <option value="featured">Paling Populer (Featured)</option>
                                             <option value="newest">Produk Terbaru</option>
                                             <option value="price-low">Harga: Termurah</option>
                                             <option value="price-high">Harga: Tertinggi</option>
                                         </select>
-                                        <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8c5a3c] absolute right-2.5 top-2.5 sm:top-3 pointer-events-none" />
+                                        <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8c5a3c] absolute right-1.5 top-2.5 sm:top-3 pointer-events-none" />
                                     </div>
                                 </div>
                             </div>

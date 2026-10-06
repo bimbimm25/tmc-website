@@ -184,7 +184,7 @@ export default function AboutPage() {
                             ) : null}
                         </h1>
 
-                        <p className="text-xs sm:text-sm lg:text-[15px] text-[#4a3427] font-bold leading-relaxed max-w-sm sm:max-w-md">
+                        <p className="text-xs sm:text-sm lg:text-[15px] text-[#4a3427] font-semibold leading-relaxed max-w-sm sm:max-w-md">
                             {aboutBanner?.subtitle ? (
                                 renderFormattedText(aboutBanner.subtitle)
                             ) : isBannerChecked ? (
