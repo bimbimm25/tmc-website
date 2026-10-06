@@ -584,7 +584,7 @@ export default function MerchandisePage() {
                                             id="sortBy"
                                             value={sortBy}
                                             onChange={(e) => setSortBy(e.target.value)}
-                                            className="w-full sm:w-auto bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-xl px-3 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs lg:text-sm text-[#3d2314] font-black focus:outline-none appearance-none pr-8 cursor-pointer"
+                                            className="w-full sm:w-auto bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-xl px-3 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs lg:text-sm text-[#3d2314] font-black focus:outline-none appearance-none pr-10 cursor-pointer"
                                         >
                                             <option value="newest">Produk Terbaru</option>
                                             <option value="price-low">Harga: Termurah</option>
