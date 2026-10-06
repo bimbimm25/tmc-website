@@ -584,13 +584,13 @@ export default function MerchandisePage() {
                                             id="sortBy"
                                             value={sortBy}
                                             onChange={(e) => setSortBy(e.target.value)}
-                                            className="w-full sm:w-auto bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-xl px-3 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-xs lg:text-sm text-[#3d2314] font-black focus:outline-none appearance-none pr-10 cursor-pointer"
+                                            className="w-full sm:w-auto min-w-[150px] sm:min-w-[165px] bg-[#FAF0E6]/50 border border-[#e6ccb2]/80 rounded-xl pl-3 sm:pl-3.5 pr-8 sm:pr-9 py-1.5 sm:py-2 text-[11px] sm:text-xs lg:text-sm text-[#3d2314] font-black focus:outline-none focus:bg-white focus:border-[#8c5a3c] appearance-none cursor-pointer shadow-2xs transition"
                                         >
                                             <option value="newest">Produk Terbaru</option>
                                             <option value="price-low">Harga: Termurah</option>
                                             <option value="price-high">Harga: Tertinggi</option>
                                         </select>
-                                        <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8c5a3c] absolute right-1.5 top-2.5 sm:top-3 pointer-events-none" />
+                                        <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#8c5a3c] absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 pointer-events-none shrink-0" />
                                     </div>
                                 </div>
                             </div>
@@ -858,8 +858,8 @@ export default function MerchandisePage() {
                                     </span>
 
                                     <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider border ${isSelectedProductReady
-                                            ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                                            : 'bg-rose-50 text-rose-700 border-rose-200'
+                                        ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                                        : 'bg-rose-50 text-rose-700 border-rose-200'
                                         }`}>
                                         {isSelectedProductReady ? 'READY STOCK' : 'HABIS'}
                                     </span>
