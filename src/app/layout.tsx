@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SmoothScroll from '@/components/SmoothScroll';
 import ScrollToTop from '@/components/ScrollToTop';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const jakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -208,6 +209,9 @@ export default function RootLayout({
           <main className="bg-[#fffaf1] flex-1">{children}</main>
           <Footer />
         </SmoothScroll>
+        {process.env.GOOGLE_ANALYSTICS_TRACKING_ID && (
+          <GoogleAnalytics gaId={process.env.GOOGLE_ANALYSTICS_TRACKING_ID} />
+        )}
       </body>
     </html>
   );
