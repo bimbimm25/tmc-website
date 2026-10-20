@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SmoothScroll from '@/components/SmoothScroll';
 import ScrollToTop from '@/components/ScrollToTop';
-import { GoogleAnalytics } from '@next/third-parties/google';
+import Script from 'next/script';
 
 const jakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -209,7 +209,20 @@ export default function RootLayout({
           <main className="bg-[#fffaf1] flex-1">{children}</main>
           <Footer />
         </SmoothScroll>
-        <GoogleAnalytics gaId="G-40E5JR4WGD" />
+        {/* Google tag (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-40E5JR4WGD"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-40E5JR4WGD');
+        `}
+        </Script>
       </body>
     </html>
   );
