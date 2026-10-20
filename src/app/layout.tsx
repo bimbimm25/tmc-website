@@ -215,13 +215,10 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
-          {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
+          {`window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
           gtag('js', new Date());
-
-          gtag('config', 'G-40E5JR4WGD');
-        `}
+          gtag('config', 'G-40E5JR4WGD');`}
         </Script>
       </body>
     </html>
