@@ -187,7 +187,7 @@ export default function RootLayout({
       },
     ],
   };
-  
+
 
   return (
     <html
@@ -203,15 +203,13 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-[#fffaf1] text-[#3d2314] font-sans antialiased selection:bg-[#8c5a3c] selection:text-white min-h-screen flex flex-col">
-        <ScrollToTop/>
+        <ScrollToTop />
         <SmoothScroll>
           <Navbar />
           <main className="bg-[#fffaf1] flex-1">{children}</main>
           <Footer />
         </SmoothScroll>
-        {process.env.GOOGLE_ANALYSTICS_TRACKING_ID && (
-          <GoogleAnalytics gaId={process.env.GOOGLE_ANALYSTICS_TRACKING_ID} />
-        )}
+        <GoogleAnalytics gaId="G-40E5JR4WGD" />
       </body>
     </html>
   );
