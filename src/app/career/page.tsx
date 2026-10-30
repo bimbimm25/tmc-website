@@ -34,7 +34,6 @@ function BearPawIcon({ className = "w-4 h-4" }: { className?: string }) {
     );
 }
 
-// Ornamen Pemisah Section yang Bersih & Berkarakter
 function SectionDivider() {
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex items-center justify-center gap-3">
@@ -338,8 +337,20 @@ export default function CareerPage() {
 
     const handleSubmitApplication = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!selectedJob || !resumeFile) {
+
+        if (!selectedJob) {
+            setFormError('Lowongan pekerjaan tidak valid.');
+            return;
+        }
+
+        if (!resumeFile) {
             setFormError('Harap lampirkan berkas CV / Resume Anda.');
+            return;
+        }
+
+        // Validasi ukuran berkas di frontend (Maksimal 5MB)
+        if (resumeFile.size > 5 * 1024 * 1024) {
+            setFormError('Ukuran file CV melebihi batas maksimal 5MB. Silakan kompres atau pilih file lain.');
             return;
         }
 
@@ -349,18 +360,30 @@ export default function CareerPage() {
 
             const formData = new FormData();
             formData.append('career_id', selectedJob.id.toString());
-            formData.append('full_name', fullName);
-            formData.append('email', email);
-            formData.append('phone', phone);
-            formData.append('cover_letter', coverLetter);
+            formData.append('full_name', fullName.trim());
+            formData.append('email', email.trim());
+            formData.append('phone', phone.trim());
+            formData.append('cover_letter', coverLetter.trim());
             formData.append('resume', resumeFile);
 
+            // Fetch tanpa manual Content-Type agar browser otomatis menyisipkan boundary
             const res = await fetch(`${API_BASE_URL}/api/careers/apply`, {
                 method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                },
                 body: formData,
             });
 
-            if (!res.ok) throw new Error('Gagal mengirim lamaran.');
+            const data = await res.json().catch(() => null);
+
+            if (!res.ok) {
+                if (data?.errors) {
+                    const firstErr = Object.values(data.errors)[0];
+                    throw new Error(Array.isArray(firstErr) ? firstErr[0] : String(firstErr));
+                }
+                throw new Error(data?.message || 'Gagal mengirim berkas lamaran. Silakan periksa kembali formulir Anda.');
+            }
 
             setSubmitSuccess(true);
             setTimeout(() => {
@@ -373,7 +396,8 @@ export default function CareerPage() {
                 setSubmitSuccess(false);
             }, 2500);
         } catch (err: any) {
-            setFormError(err.message || 'Terjadi kesalahan sistem saat mengirim form.');
+            console.error('Submission error:', err);
+            setFormError(err.message || 'Terjadi gangguan jaringan saat menghubungi server. Pastikan koneksi stabil.');
         } finally {
             setIsSubmitting(false);
         }
@@ -487,7 +511,6 @@ export default function CareerPage() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 items-stretch">
-                        {/* Value 1 */}
                         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-2 text-center flex flex-col justify-between hover:border-[#8c5a3c] hover:shadow-xs transition duration-200">
                             <div className="space-y-2.5">
                                 <div className="w-11 h-11 rounded-2xl bg-[#FAF0E6] text-[#e85a4f] mx-auto flex items-center justify-center shadow-2xs">
@@ -502,7 +525,6 @@ export default function CareerPage() {
                             </div>
                         </div>
 
-                        {/* Value 2 */}
                         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-2 text-center flex flex-col justify-between hover:border-[#8c5a3c] hover:shadow-xs transition duration-200">
                             <div className="space-y-2.5">
                                 <div className="w-11 h-11 rounded-2xl bg-[#FAF0E6] text-[#8c5a3c] mx-auto flex items-center justify-center shadow-2xs">
@@ -517,7 +539,6 @@ export default function CareerPage() {
                             </div>
                         </div>
 
-                        {/* Value 3 */}
                         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-2 text-center flex flex-col justify-between hover:border-[#8c5a3c] hover:shadow-xs transition duration-200">
                             <div className="space-y-2.5">
                                 <div className="w-11 h-11 rounded-2xl bg-[#FAF0E6] text-amber-600 mx-auto flex items-center justify-center shadow-2xs">
@@ -532,7 +553,6 @@ export default function CareerPage() {
                             </div>
                         </div>
 
-                        {/* Value 4 */}
                         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-2 text-center flex flex-col justify-between hover:border-[#8c5a3c] hover:shadow-xs transition duration-200">
                             <div className="space-y-2.5">
                                 <div className="w-11 h-11 rounded-2xl bg-[#FAF0E6] text-emerald-600 mx-auto flex items-center justify-center shadow-2xs">
@@ -550,7 +570,6 @@ export default function CareerPage() {
                 </div>
             </section>
 
-            {/* PEMISAH SECTION 1 KE SECTION 2 */}
             <SectionDivider />
 
             {/* ================================================= */}
@@ -645,9 +664,8 @@ export default function CareerPage() {
                                         </span>
                                     </div>
 
-                                    {/* Kanan: Modern Unified Dropdown Filter (Mobile & Desktop) */}
+                                    {/* Kanan: Modern Unified Dropdown Filter */}
                                     <div className="relative z-20 w-full sm:w-64 md:w-72">
-                                        {/* Tombol Pemicu Dropdown */}
                                         <button
                                             type="button"
                                             onClick={() => setIsLocationDropdownOpen(prev => !prev)}
@@ -679,7 +697,6 @@ export default function CareerPage() {
                                             </div>
                                         </button>
 
-                                        {/* Menu Pilihan Dropdown dengan Animasi Halus */}
                                         <div
                                             className={`absolute left-0 right-0 top-full mt-2 transition-all duration-200 ease-out origin-top z-30 ${isLocationDropdownOpen
                                                 ? 'opacity-100 scale-100 pointer-events-auto'
@@ -968,7 +985,6 @@ export default function CareerPage() {
                 </div>
             </section>
 
-            {/* PEMISAH SECTION 2 KE SECTION 3 */}
             <SectionDivider />
 
             {/* ================================================= */}
@@ -991,7 +1007,6 @@ export default function CareerPage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        {/* Testimonial 1 */}
                         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4 flex flex-col justify-between hover:border-[#8c5a3c] hover:shadow-xs transition duration-200">
                             <div className="space-y-2.5">
                                 <Quote className="w-6 h-6 text-[#8c5a3c]/30" />
@@ -1010,7 +1025,6 @@ export default function CareerPage() {
                             </div>
                         </div>
 
-                        {/* Testimonial 2 */}
                         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4 flex flex-col justify-between hover:border-[#8c5a3c] hover:shadow-xs transition duration-200">
                             <div className="space-y-2.5">
                                 <Quote className="w-6 h-6 text-[#8c5a3c]/30" />
@@ -1029,7 +1043,6 @@ export default function CareerPage() {
                             </div>
                         </div>
 
-                        {/* Testimonial 3 */}
                         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-4 flex flex-col justify-between hover:border-[#8c5a3c] hover:shadow-xs transition duration-200">
                             <div className="space-y-2.5">
                                 <Quote className="w-6 h-6 text-[#8c5a3c]/30" />
@@ -1051,7 +1064,6 @@ export default function CareerPage() {
                 </div>
             </section>
 
-            {/* PEMISAH SECTION 3 KE SECTION 4 */}
             <SectionDivider />
 
             {/* ================================================= */}
