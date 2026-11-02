@@ -10,7 +10,8 @@ import {
     FileText, Gift, Check, Building, Mail, ChevronDown, ChevronLeft,
 } from 'lucide-react';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+// Fallback langsung ke domain produksi HTTPS agar tidak menembak localhost di browser pengguna
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.tomeetcafe.id';
 
 // Cache in-memory level modul agar saat navigasi page langsung instan tanpa glitch
 let cachedCareerBanner: BannerItem | null = null;
@@ -153,6 +154,24 @@ function renderFormattedText(text?: string | null, fallback?: React.ReactNode) {
         </span>
     ));
 }
+
+// Helper untuk membaca file cloud (Google Drive / iCloud) ke memori lokal
+const readFileAsBlob = (file: File): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            if (reader.result) {
+                resolve(new Blob([reader.result], { type: file.type || 'application/pdf' }));
+            } else {
+                reject(new Error('Berkas kosong atau gagal dimuat dari cloud.'));
+            }
+        };
+        reader.onerror = () => {
+            reject(new Error('Gagal mengakses file dari penyimpanan cloud perangkat.'));
+        };
+        reader.readAsArrayBuffer(file);
+    });
+};
 
 export interface CareerItem {
     id: number;
@@ -348,9 +367,15 @@ export default function CareerPage() {
             return;
         }
 
-        // Validasi ukuran berkas di frontend (Maksimal 5MB)
-        if (resumeFile.size > 5 * 1024 * 1024) {
-            setFormError('Ukuran file CV melebihi batas maksimal 5MB. Silakan kompres atau pilih file lain.');
+        const fileNameLower = resumeFile.name.toLowerCase();
+        if (fileNameLower.endsWith('.gdoc') || fileNameLower.endsWith('.pages')) {
+            setFormError('Format berkas Google Docs (.gdoc) atau Apple Pages (.pages) tidak didukung. Harap unduh/ekspor sebagai PDF terlebih dahulu.');
+            return;
+        }
+
+        // Batas maksimal 10MB
+        if (resumeFile.size > 10 * 1024 * 1024) {
+            setFormError('Ukuran file CV melebihi batas maksimal 10MB. Silakan kompres atau pilih file lain.');
             return;
         }
 
@@ -358,22 +383,41 @@ export default function CareerPage() {
             setIsSubmitting(true);
             setFormError('');
 
+            // Baca berkas ke dalam memory Blob untuk memutus sinkronisasi streaming lambat dari cloud
+            let safeBlob: Blob;
+            try {
+                safeBlob = await readFileAsBlob(resumeFile);
+            } catch (err: any) {
+                throw new Error('Gagal memuat isi berkas dari penyimpanan perangkat/cloud. Pastikan file sudah tersimpan di HP atau coba pilih file lain.');
+            }
+
+            // Bersihkan nama berkas dari simbol/karakter asing agar multipart header aman
+            const cleanName = (resumeFile.name || 'CV_Pelamar.pdf')
+                .replace(/[^a-zA-Z0-9._-]/g, '_')
+                .replace(/_+/g, '_');
+
             const formData = new FormData();
             formData.append('career_id', selectedJob.id.toString());
             formData.append('full_name', fullName.trim());
             formData.append('email', email.trim());
             formData.append('phone', phone.trim());
             formData.append('cover_letter', coverLetter.trim());
-            formData.append('resume', resumeFile);
+            formData.append('resume', safeBlob, cleanName);
 
-            // Fetch tanpa manual Content-Type agar browser otomatis menyisipkan boundary
+            // Abort controller dengan batas waktu 60 detik untuk koneksi HP yang lambat
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 60000);
+
             const res = await fetch(`${API_BASE_URL}/api/careers/apply`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                 },
                 body: formData,
+                signal: controller.signal,
             });
+
+            clearTimeout(timeoutId);
 
             const data = await res.json().catch(() => null);
 
@@ -397,7 +441,13 @@ export default function CareerPage() {
             }, 2500);
         } catch (err: any) {
             console.error('Submission error:', err);
-            setFormError(err.message || 'Terjadi gangguan jaringan saat menghubungi server. Pastikan koneksi stabil.');
+            if (err.name === 'AbortError') {
+                setFormError('Waktu pengiriman habis karena koneksi lambat. Pastikan internet Anda stabil atau kompres ukuran berkas.');
+            } else if (err.message && err.message.toLowerCase().includes('fetch')) {
+                setFormError('Gagal tersambung ke server. Jika Anda menggunakan VPN, Adblocker, atau Private DNS di HP, matikan sementara atau kirim CV via email.');
+            } else {
+                setFormError(err.message || 'Terjadi gangguan jaringan saat menghubungi server. Pastikan koneksi stabil.');
+            }
         } finally {
             setIsSubmitting(false);
         }
@@ -579,7 +629,7 @@ export default function CareerPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
 
-                        {/* Kiri: Alasan Bergabung (Sticky Sidebar Ringkas) */}
+                        {/* Kiri: Alasan Bergabung */}
                         <div className="lg:col-span-4 bg-white p-6 sm:p-7 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-5 lg:sticky lg:top-24">
                             <div className="space-y-1.5">
                                 <div className="inline-flex items-center gap-1.5 text-xs font-black text-[#8c5a3c] uppercase">
@@ -647,11 +697,9 @@ export default function CareerPage() {
                         {/* Kanan: Filter Lokasi & Daftar Kartu Lowongan */}
                         <div className="lg:col-span-8 space-y-6">
 
-                            {/* Header + Dropdown Filter Kategori Penempatan (Mobile & Desktop) */}
                             <div className="bg-white p-4 sm:p-5 lg:p-6 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs">
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 sm:gap-4">
 
-                                    {/* Kiri: Title & Counter Lowongan */}
                                     <div className="flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3 shrink-0">
                                         <div className="flex items-center gap-2.5">
                                             <Briefcase className="w-5 h-5 text-[#8c5a3c] shrink-0" />
@@ -664,7 +712,6 @@ export default function CareerPage() {
                                         </span>
                                     </div>
 
-                                    {/* Kanan: Modern Unified Dropdown Filter */}
                                     <div className="relative z-20 w-full sm:w-64 md:w-72">
                                         <button
                                             type="button"
@@ -765,11 +812,11 @@ export default function CareerPage() {
                                 </div>
                             )}
 
-                            {/* DAFTAR PEKERJAAN: SLIDER DI MOBILE & GRID DI DESKTOP */}
+                            {/* DAFTAR PEKERJAAN */}
                             {!isLoading && filteredCareers.length > 0 && (
                                 <div className="space-y-4">
 
-                                    {/* A. TAMPILAN MOBILE: SLIDE SATU PER SATU */}
+                                    {/* A. TAMPILAN MOBILE */}
                                     <div className="block sm:hidden relative">
                                         <div className="flex items-center justify-between px-1 pb-2">
                                             <span className="text-[11px] font-black text-[#8c5a3c] uppercase tracking-wider">
@@ -900,7 +947,7 @@ export default function CareerPage() {
                                         )}
                                     </div>
 
-                                    {/* B. TAMPILAN DESKTOP/TABLET: GRID 2 KOLOM */}
+                                    {/* B. TAMPILAN DESKTOP */}
                                     <div className="hidden sm:grid sm:grid-cols-2 gap-4 sm:gap-5">
                                         {filteredCareers.map((job) => {
                                             const rawLocation = (job as any).location_name || (job as any).location || (job as any).branch;
@@ -1223,7 +1270,7 @@ export default function CareerPage() {
                     <div
                         id="career-apply-modal-card"
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-[#e6ccb2] overflow-hidden my-auto max-h-[90vh] overflow-y-auto"
+                        className="bg-white w-full max-w-lg rounded-3xl border border-[#e6ccb2] overflow-hidden my-auto max-h-[90vh] overflow-y-auto shadow-2xl"
                     >
                         <div className="px-6 py-4.5 border-b border-[#e6ccb2]/60 flex items-center justify-between bg-[#FAF0E6]/60">
                             <div>
@@ -1255,9 +1302,23 @@ export default function CareerPage() {
                         ) : (
                             <form onSubmit={handleSubmitApplication} className="p-6 space-y-4">
                                 {formError && (
-                                    <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm rounded-xl flex items-center gap-2">
-                                        <AlertCircle className="w-4 h-4 shrink-0" />
-                                        <span>{formError}</span>
+                                    <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm rounded-xl space-y-2">
+                                        <div className="flex items-start gap-2">
+                                            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                                            <span>{formError}</span>
+                                        </div>
+
+                                        {/* Alternatif kirim via email jika kendala jaringan berulang */}
+                                        <div className="pt-2 border-t border-rose-200/60 flex items-center justify-between text-[11px] text-stone-600 font-semibold">
+                                            <span>Masih berkendala upload?</span>
+                                            <a
+                                                href={`mailto:tmc.rekrutmen@gmail.com?subject=Lamaran%20Posisi%20${encodeURIComponent(selectedJob.title)}%20-%20${encodeURIComponent(fullName || 'Kandidat')}`}
+                                                className="inline-flex items-center gap-1 text-[#8c5a3c] font-black underline hover:text-[#73482f]"
+                                            >
+                                                <Mail className="w-3 h-3" />
+                                                Kirim Langsung via Email
+                                            </a>
+                                        </div>
                                     </div>
                                 )}
 
@@ -1270,7 +1331,7 @@ export default function CareerPage() {
                                         required
                                         value={fullName}
                                         onChange={(e) => setFullName(e.target.value)}
-                                        placeholder="Contoh: Bima Ardiansyah"
+                                        placeholder="Contoh: Maulana Qisan Santang"
                                         className="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
                                     />
                                 </div>
@@ -1320,15 +1381,18 @@ export default function CareerPage() {
 
                                 <div>
                                     <label className="block text-[11px] sm:text-xs font-bold text-stone-800 uppercase tracking-wider mb-1">
-                                        Upload Berkas CV / Resume (PDF/DOCX, Max 5MB) <span className="text-rose-500">*</span>
+                                        Upload Berkas CV / Resume (PDF/DOCX, Max 10MB) <span className="text-rose-500">*</span>
                                     </label>
                                     <input
                                         type="file"
                                         required
-                                        accept=".pdf,.doc,.docx"
+                                        accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                                         onChange={(e) => setResumeFile(e.target.files ? e.target.files[0] : null)}
                                         className="w-full text-xs sm:text-sm text-stone-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-[#FAF0E6] file:text-[#8c5a3c] hover:file:bg-[#e6ccb2] transition cursor-pointer"
                                     />
+                                    <p className="text-[10.5px] text-stone-400 mt-1">
+                                        *Mendukung dokumen langsung dari memori HP, Google Drive, atau iCloud.
+                                    </p>
                                 </div>
 
                                 <div className="pt-3 flex justify-end gap-2.5 border-t border-stone-100">
