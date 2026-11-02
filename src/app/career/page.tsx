@@ -1331,7 +1331,7 @@ export default function CareerPage() {
                                         required
                                         value={fullName}
                                         onChange={(e) => setFullName(e.target.value)}
-                                        placeholder="Contoh: Maulana Qisan Santang"
+                                        placeholder="Masukkan nama lengkap Anda"
                                         className="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
                                     />
                                 </div>
@@ -1346,7 +1346,7 @@ export default function CareerPage() {
                                             required
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            placeholder="nama@email.com"
+                                            placeholder="Masukkan Email Anda"
                                             className="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
                                         />
                                     </div>
@@ -1360,7 +1360,7 @@ export default function CareerPage() {
                                             required
                                             value={phone}
                                             onChange={(e) => setPhone(e.target.value)}
-                                            placeholder="08123456789"
+                                            placeholder="Masukkan nomor WhatsApp / HP Anda"
                                             className="w-full border border-stone-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-stone-800 focus:outline-none focus:border-[#8c5a3c] font-semibold"
                                         />
                                     </div>
