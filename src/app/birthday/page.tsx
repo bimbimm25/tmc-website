@@ -587,7 +587,7 @@ export default function BirthdayPage() {
                                     <div className="p-3.5 pt-0 border-t border-[#e6ccb2]/40 space-y-2 mt-0.5">
                                         <div className="flex items-baseline justify-between pt-1.5">
                                             <div>
-                                                <span className="text-[10px] sm:text-xs font-bold text-[#8c5a3c] uppercase block">Start from</span>
+                                                <span className="text-[10px] sm:text-xs font-bold text-[#8c5a3c] uppercase block">Price</span>
                                                 <span className="font-black text-sm sm:text-base text-[#3d2314]">
                                                     Rp {new Intl.NumberFormat('id-ID').format(pkg.price)}
                                                 </span>
