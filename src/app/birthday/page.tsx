@@ -20,7 +20,7 @@ const OFFICIAL_ADDONS = [
     {
         id: 1,
         name: 'TABLE DEKOR\nSTANDARD',
-        desc: 'Dekorasi meja sederhana namun tetap cantik, dilengkapi dengan perlengkapan makan untuk melengkapi momen spesial (khusus untuk Birthday Package 40 pax)',
+        desc: 'Dekorasi meja yang sederhana namun tetap cantik yang dilengkapi dengan perlengkapan makan untuk menyempurnakan momen spesial (khusus untuk Birthday Package 40 pax)',
         price: 'Rp 80.000 / pax'
     },
     {
