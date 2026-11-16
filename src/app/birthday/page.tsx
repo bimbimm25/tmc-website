@@ -18,28 +18,34 @@ let cachedBirthdayPackages: BirthdayPackageItem[] | null = null;
 // Add-Ons Resmi Otomatis (Built-in)
 const OFFICIAL_ADDONS = [
     {
-        id: 'addon-1',
-        name: 'Table Dekor',
-        price: 'Rp 80.000 / pax',
-        desc: 'Dekorasi meja tematik beruang cantik lengkap dengan perlengkapan makan spesial.'
+        id: 1,
+        name: 'TABLE DEKOR\nSTANDARD',
+        desc: 'Dekorasi meja sederhana namun tetap cantik, dilengkapi dengan perlengkapan makan untuk melengkapi momen spesial (khusus untuk Birthday Package 40 pax)',
+        price: 'Rp 80.000 / pax'
     },
     {
-        id: 'addon-2',
-        name: 'Full Private Access Playground',
-        price: 'Rp 3.500.000',
-        desc: 'Sewa privat eksklusif seluruh area playground tanpa bercampur pengunjung umum.'
+        id: 2,
+        name: 'TABLE DEKOR\nPREMIUM',
+        desc: 'Dekorasi meja eksklusif dengan detail yang lebih lengkap dan tampilan lebih mewah untuk menciptakan momen acara yang istimewa (khusus untuk Birthday Package 40 pax)',
+        price: 'Rp 100.000 / pax'
     },
     {
-        id: 'addon-3',
-        name: 'Backdrop Eksklusif',
-        price: 'Rp 700.000',
-        desc: 'Backdrop foto 3D custom nama & karakter beruang To Meet untuk kenangan foto manis.'
+        id: 3,
+        name: 'FULL PRIVATE ACCESS\nPLAYGROUND',
+        desc: 'Sewa privat eksklusif seluruh area playground tanpa bercampur pengunjung umum.',
+        price: 'Rp 3.500.000'
     },
     {
-        id: 'addon-4',
-        name: 'Face Painting',
-        price: 'Rp 1.200.000 / 30 Anak',
-        desc: 'Layanan face painting profesional untuk anak-anak dengan tema beruang lucu dan aman.'
+        id: 4,
+        name: 'BACKDROP\nEKSKLUSIF',
+        desc: 'Backdrop foto 3D custom nama & karakter beruang To Meet untuk kenangan foto manis.',
+        price: 'Rp 700.000'
+    },
+    {
+        id: 5,
+        name: 'FACE\nPAINTING',
+        desc: 'Layanan face painting profesional untuk anak-anak dengan tema beruang lucu dan aman.',
+        price: 'Rp 1.200.000 / 30 Anak'
     }
 ];
 
@@ -615,9 +621,10 @@ export default function BirthdayPage() {
             {/* 3. OFFICIAL ADD-ONS */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white p-5 sm:p-8 rounded-3xl border border-[#e6ccb2]/80 shadow-2xs space-y-5">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#e6ccb2]/60 pb-3">
+                    {/* Header Section */}
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-[#e6ccb2]/60 pb-3.5">
                         <div className="space-y-0.5">
-                            <div className="inline-flex items-center gap-1.5 text-[9.5px] font-black text-[#e85a4f] uppercase tracking-wider">
+                            <div className="inline-flex items-center gap-1.5 text-[10px] font-black text-[#e85a4f] uppercase tracking-wider">
                                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                                 <span>OFFICIAL ADD-ONS</span>
                             </div>
@@ -630,26 +637,34 @@ export default function BirthdayPage() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                    {/* Grid 5 Kolom Sejajar Horizontal di Desktop */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5 sm:gap-4 items-stretch">
                         {OFFICIAL_ADDONS.map((addon) => (
                             <div
                                 key={addon.id}
-                                className="h-full bg-[#FAF0E6]/50 p-4 sm:p-5 rounded-2xl border border-[#e6ccb2]/70 space-y-3 flex flex-col justify-between"
+                                className="h-full bg-[#FAF0E6]/50 hover:bg-[#FAF0E6]/80 p-4 rounded-2xl border border-[#e6ccb2]/80 hover:border-[#8c5a3c]/50 transition-all duration-200 flex flex-col justify-between space-y-4"
                             >
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between gap-2">
-                                        <h3 className="font-black text-sm sm:text-base text-[#3d2314] uppercase leading-snug">
+                                {/* Bagian Atas: Judul 2 Baris Seragam & Deskripsi */}
+                                <div className="space-y-2.5">
+                                    <div className="flex items-start justify-between gap-2 min-h-10">
+                                        <h3 className="font-black text-xs sm:text-[13px] text-[#3d2314] uppercase leading-snug whitespace-pre-line">
                                             {addon.name}
                                         </h3>
-                                        <Layers className="w-4 h-4 text-[#8c5a3c] shrink-0" />
+                                        <Layers className="w-4 h-4 text-[#8c5a3c] shrink-0 mt-0.5" />
                                     </div>
-                                    <p className="text-xs sm:text-sm text-[#6c584c] font-semibold leading-relaxed">
+                                    <p className="text-[11.5px] sm:text-xs text-[#6c584c] font-semibold leading-relaxed">
                                         {addon.desc}
                                     </p>
                                 </div>
-                                <div className="pt-2 border-t border-[#e6ccb2]/50 flex items-center justify-between gap-2">
-                                    <span className="text-[9px] sm:text-[10px] font-bold text-[#8c5a3c] uppercase leading-none">Biaya Tambahan</span>
-                                    <span className="font-black text-[10.5px] sm:text-xs text-[#3d2314] leading-none">{addon.price}</span>
+
+                                {/* Bagian Bawah: Footer Biaya Tambahan */}
+                                <div className="pt-2.5 border-t border-[#e6ccb2]/60 flex items-center justify-between gap-1.5">
+                                    <span className="text-[9px] font-bold text-[#8c5a3c] uppercase tracking-wider shrink-0">
+                                        Biaya
+                                    </span>
+                                    <span className="font-black text-[11px] sm:text-xs text-[#3d2314] text-right whitespace-nowrap tabular-nums">
+                                        {addon.price}
+                                    </span>
                                 </div>
                             </div>
                         ))}
